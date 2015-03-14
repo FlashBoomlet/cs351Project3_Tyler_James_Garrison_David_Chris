@@ -22,6 +22,9 @@ public class World
   private Random random = new Random(44);
   private Collection<Region> world;
   private Calendar currentDate;
+  private int LONGITUDE_CELL_NUM = 40075/10 + 1; //40075 km = Circumference of the earth around the equator
+  private int LATITUDE_CELL_NUM = 40008/10 + 1;  //40008 km = Circumference from pole to pole
+  private WorldCell [][] worldCells = new WorldCell [LONGITUDE_CELL_NUM] [LATITUDE_CELL_NUM];
 
   /**
    * Class constructor. To build a world one must have a collection of regions.

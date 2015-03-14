@@ -1,4 +1,5 @@
 import IO.AreaXMLLoader;
+import IO.WorldDataParser;
 import IO.XMLparsers.KMLParser;
 import gui.*;
 import gui.displayconverters.EquirectangularConverter;
@@ -28,6 +29,7 @@ public class Game
 {
   public static final String MODEL_DATA_PATH = "resources/ne_10m_admin_1_states_provinces.kml";
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
+  public static final String PRECIP_DATA = "resources/data/precip2010.txt";
   private MapPane mapPane;
   private InfoPanel infoPanel;
   private WorldPresenter worldPresenter;
@@ -62,6 +64,7 @@ public class Game
     World world = new World(allRegions);
 
     MapConverter converter = new EquirectangularConverter();
+    WorldDataParser globalData = new WorldDataParser(world);
 
     worldPresenter = new WorldPresenter(converter, world);
     worldPresenter.setBackgroundRegions(background);
