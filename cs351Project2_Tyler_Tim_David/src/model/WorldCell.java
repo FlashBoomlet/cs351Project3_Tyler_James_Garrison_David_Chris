@@ -1,5 +1,6 @@
 package model;
 
+import model.World;
 /**
  * Created by Tim on 3/14/15.
  */
@@ -12,11 +13,11 @@ public class WorldCell
   private double annualHigh = 0;
   private double annualLow = 0;
   private double elevation = 0;
-  private double [] monthlyPrecip = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  private double [] monthlyPrecip = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
   private double [] monthlyDayAvg = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   private double [] monthlyNightAvg = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-  public WorldCell (double latIn, double lonIn)
+  public WorldCell (double lonIn, double latIn)
   {
     lat = latIn;
     lon = lonIn;
@@ -72,9 +73,19 @@ public class WorldCell
   {
     if (months.length == 12)
     {
-      for (int i = 0; i < 12; i++)
+      if (monthlyPrecip [0] == -1)
       {
-        monthlyPrecip[i] = months[i];
+        for (int i = 0; i < 12; i++)
+        {
+          monthlyPrecip[i] = months[i];
+        }
+      }
+      else
+      {
+        for (int i = 0; i < 12; i++)
+        {
+          monthlyPrecip[i] = (months[i] + monthlyPrecip[i]) / 2;
+        }
       }
     }
     else
