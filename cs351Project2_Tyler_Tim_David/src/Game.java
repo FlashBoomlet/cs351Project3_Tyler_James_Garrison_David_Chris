@@ -38,12 +38,28 @@ public class Game
   private final static int DEFAULT_TIME_SPEED = 2000;
   private Timer gameLoop;
   private JFrame frame;
-
+  int frameWidth = 1400;
+  int frameHeight = 700;
   /**
    * Constructor for game, handles all init logic.
    */
   public Game()
   {
+    frame = new JFrame();
+
+    Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    int SCREEN_WIDTH = (int) SCREEN_SIZE.getWidth();
+    int SCREEN_HEIGHT = (int) SCREEN_SIZE.getHeight();
+
+    if( frameWidth > SCREEN_WIDTH || frameHeight > SCREEN_HEIGHT )
+    {
+      frameWidth = (int) Math.floor(SCREEN_WIDTH*.95);
+      frameHeight = (int) Math.floor(frameWidth*.50);
+    }
+
+    frame.setPreferredSize(new Dimension(frameWidth, frameHeight) );
+    frame.setSize(frame.getPreferredSize());
+
     init();
   }
 
@@ -73,10 +89,10 @@ public class Game
     Camera cam = new Camera(converter);
     mapPane = new MapPane(cam, worldPresenter);
 
-    infoPanel = new InfoPanel();
+    infoPanel = new InfoPanel(frameWidth,frameHeight);
     infoPanel.setPresenter(worldPresenter);
 
-    worldFeedPanel = new WorldFeedPanel(worldPresenter);
+    worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,frameHeight);
     worldPresenter.addObserver(worldFeedPanel);
 
     initFrame();
@@ -195,14 +211,21 @@ public class Game
    * Handles constructing the frame and adding all the gui components in
    * their proper places.
    */
-  private void initFrame()
-  {
-    frame = new JFrame();
-    frame.setLayout(new BorderLayout());
+  private void initFrame() {
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+
+    frame.setLayout(new BorderLayout());
+
     frame.add(worldFeedPanel, BorderLayout.NORTH);
     frame.add(mapPane, BorderLayout.CENTER);
-    frame.add(infoPanel, BorderLayout.SOUTH);
+
+    // Side panel with all information
+    frame.add(infoPanel, BorderLayout.WEST);
+    //infoPanel.setVisible(false);
+
+
+
     frame.addKeyListener(mapPane);
     frame.pack();
     frame.setResizable(false);

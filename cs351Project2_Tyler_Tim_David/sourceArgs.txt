@@ -30,8 +30,10 @@
 ./src/IO/RegionValidator.java
 ./src/IO/XMLparsers/KMLParser.java
 ./src/IO/XMLparsers/RegionParserHandler.java
+./src/IO/WorldDataParser.java
 ./src/model/AtomicRegion.java
 ./src/model/MapPoint.java
 ./src/model/Region.java
 ./src/model/RegionAttributes.java
 ./src/model/World.java
+./src/model/WorldCell.java
