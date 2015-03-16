@@ -88,7 +88,7 @@ public class MiniViewBox extends JPanel
   }
 
 
-  
+
   /* constructs a JPanel whose paintComponent method is overridden with 
      a definition for displaying a nicely scaled and located aggregation of
      polygons representing region borders
@@ -103,8 +103,8 @@ public class MiniViewBox extends JPanel
         /* logical short circuiting not reliable here? */
         if (regions == null) return;
         if (regions.isEmpty()) return;
-        
-        
+
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHints(rh);
 
@@ -128,10 +128,10 @@ public class MiniViewBox extends JPanel
         */
         double scaleValue;
         int inset = 5;
-        
+
         double boxW = getWidth() - 2 * inset;
         double boxH = getHeight() - 2 * inset;
-        
+
         double boxAspect = boxW / boxH;
         double polyW, polyH;
         

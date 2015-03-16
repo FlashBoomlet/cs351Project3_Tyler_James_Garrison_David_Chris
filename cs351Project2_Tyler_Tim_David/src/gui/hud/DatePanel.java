@@ -27,7 +27,7 @@ public class DatePanel extends JPanel
   private static final int INSET = 5;
   private static final String DATE_PATTERN = "EEE, MMM d, YYYY";
   private static final Font DATE_FONT = ColorsAndFonts.TOP_FONT;
-  private static final Color guiBackground = ColorsAndFonts.GUI_BACKGROUND;
+  private static final Color guiBackground = ColorsAndFonts.OCEANS;
 
   private SimpleDateFormat formatter;
   private Date date;
@@ -42,12 +42,12 @@ public class DatePanel extends JPanel
     formatter = new SimpleDateFormat(DATE_PATTERN);
 
     setOpaque(true);
-    setBackground(ColorsAndFonts.GUI_BACKGROUND);
+    setBackground(guiBackground);
 
     FontMetrics metrics = getFontMetrics(DATE_FONT);
     int h = metrics.getHeight() + INSET*2;
     int w = metrics.stringWidth(DATE_PATTERN) + INSET * 2;
-    
+
     setPreferredSize(new Dimension(w, h));
     setMinimumSize(getPreferredSize());
     setMaximumSize(getPreferredSize());
@@ -70,10 +70,10 @@ public class DatePanel extends JPanel
 
     g2.setColor(guiBackground);
     g2.setFont(ColorsAndFonts.TOP_FONT);
-    
+
     String s = getDateString().toUpperCase();
     FontMetrics metrics = g2.getFontMetrics();
-    
+
     int w = metrics.stringWidth(s);
     int h = (int) metrics.getLineMetrics(s, g2).getHeight();
   

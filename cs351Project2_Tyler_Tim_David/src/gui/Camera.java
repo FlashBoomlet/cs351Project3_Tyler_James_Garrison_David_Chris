@@ -8,34 +8,51 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 /**
- 
+
  @author david
- 
+
  description:
-  Camera class describes an object that moves relative to a map or world projection.
-  It's primary use is in building an AffineTransform that takes everything within
-  its view in map-space (see viewBounds rect) and translate it to screen space
-  for viewing in some Window-type object.
-  It provides an interface for motion and zooming both in terms of the projection
-  and in terms of the window it is translating to.
+ Camera class describes an object that moves relative to a map or world projection.
+ It's primary use is in building an AffineTransform that takes everything within
+ its view in map-space (see viewBounds rect) and translate it to screen space
+ for viewing in some Window-type object.
+ It provides an interface for motion and zooming both in terms of the projection
+ and in terms of the window it is translating to.
  */
 
 public class Camera
 {
   private static final double ASPECT_RATIO = 2;
-  private static final double BASE_W = 1_000;
-  private static final double BASE_H = BASE_W / ASPECT_RATIO;
-  
+  private static double BASE_W = 1_200;
+  private static double BASE_H = BASE_W / ASPECT_RATIO;
+
   final double MIN_HEIGHT = 0;
 
   /* determined by the scale of the Converter used to instantiate the Camera */
   final double MAX_HEIGHT;
-  
+
   private Rectangle2D viewBounds;
   private Rectangle2D limitingRect;
   private double height;
   private double scale;
 
+  /**
+   * sidePanelStateChange updates the ratio of the Camera to accomidate for more screen space
+   * @param trigger State of SideBar/InfoPanel Visibility
+   */
+  private void sidePanelStateChange(Boolean trigger)
+  {
+    if( trigger )
+    {
+      BASE_W = 1_200;
+      BASE_H = BASE_W / ASPECT_RATIO;
+    }
+    else
+    {
+      BASE_W = 1_400;
+      BASE_H = BASE_W / ASPECT_RATIO;
+    }
+  }
   /**
    Instantiate this Camera with a MapConverter upon which it will base its
    maximum height (according to the scale of the converter)
@@ -65,10 +82,10 @@ public class Camera
 
     double maxW = maxX - minX;
     double maxH = maxY - minY;
-    
+
     MAX_HEIGHT = Math.log(maxW/BASE_W)/Math.log(2);
     limitingRect = new Rectangle2D.Double(minX, minY, maxW, maxH);
-    
+
     setHeight(MAX_HEIGHT);
     viewBounds = new Rectangle2D.Double();
     setViewBounds(x, y, scale * BASE_W, scale * BASE_H);
@@ -130,7 +147,7 @@ public class Camera
     viewBounds.setFrame(x, y, w, h);
   }
 
-  
+
   /**
    Translate the camera, in absolute terms, a given differential in x and y
    @param dx
@@ -151,7 +168,7 @@ public class Camera
    Translate the camera in terms relative to the screen it is produces transforms
    for.  Scaling is handled automatically
    * @param dx
-   difference in x to move, in DisplaySpace
+  difference in x to move, in DisplaySpace
    @param dy
    difference in y to move, in DisplaySpace
    */
@@ -190,7 +207,7 @@ public class Camera
     zoomAbsolute(zoomDiff, centerX, centerY);
   }
 
-  
+
   /**
    Adjusts the camera height (depending on sign of dZoom) and sets its
    viewbounds such that the anchor coordinates provided remain in the same
@@ -221,8 +238,8 @@ public class Camera
 
 
   /**
-    Moves the camera closer to the map, with an anchor point relative to the 
-    screen's coordinate system
+   Moves the camera closer to the map, with an anchor point relative to the
+   screen's coordinate system
    @param dZoom     difference in the zoom or height of the camera
    @param anchorX   x coord of the anchor point
    @param anchorY   y coord of the anchor point 
@@ -232,15 +249,15 @@ public class Camera
     zoomAbsolute(dZoom, anchorX / scale, anchorY / scale);
   }
 
-  
+
   /**
    @return the AffineTransform that transforms the view of the map to the screen
-      based on this Camera's location
+   based on this Camera's location
    */
   public AffineTransform getTransform()
   {
     AffineTransform at = new AffineTransform();
-    
+
     double shiftX = -viewBounds.getX();
     double shiftY = -viewBounds.getY();
 
@@ -309,10 +326,10 @@ public class Camera
   {
     return new Dimension((int)BASE_W, (int)BASE_H);
   }
-  
-  
+
+
   /**
-    @return the CAM_DISTANCE enum based on the height or zoom of this camera
+   @return the CAM_DISTANCE enum based on the height or zoom of this camera
    */
   public CAM_DISTANCE getDistance()
   {

@@ -34,13 +34,13 @@ public class PlantingZoneView implements RegionView
   public void draw(Graphics g, GUIRegion gRegion)
   {
     double index = gRegion.getRegion()
-        .getAttributes()
-        .getAttribute(RegionAttributes.PLANTING_ATTRIBUTES.PLANTING_ZONE);
+      .getAttributes()
+      .getAttribute(RegionAttributes.PLANTING_ATTRIBUTES.PLANTING_ZONE);
 
 
     if (gRegion.isActive())
     {
-      g.setColor(getPlantingColor(index).brighter());
+      g.setColor(ColorsAndFonts.ACTIVE_REGION);
     }
     else
     {

@@ -1,5 +1,6 @@
 package gui.regionlooks;
 
+
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 
@@ -34,14 +35,27 @@ class RegionHappyView implements RegionView
     Color color;
     if (gRegion.isActive())
     {
-      color = ColorsAndFonts.ACTIVE_REGION;
+      color = Color.CYAN;
     }
     else
     {
-      double happinessLevel = gRegion.getRegion().getAttributes()
-                                                 .getAttribute(HAPPINESS);
+      double happinessLevel = gRegion.getRegion().getAttributes().getAttribute(HAPPINESS);
 
-      color = new Color((float)happinessLevel, (float)happinessLevel, 0.0f);
+      if  (happinessLevel<0.30)
+      {
+        color = new Color((float) (happinessLevel*3.3), (float) 0.0, (float) 0.0);
+        //color = Color.RED;
+      }
+      else if (happinessLevel<0.5)
+      {
+        color = new Color((float) (happinessLevel*2), (float) (happinessLevel*2), (float) 0.0);
+        //color = Color.YELLOW;
+      }
+      else
+      {
+        color = new Color((float) 0, (float) happinessLevel, (float) 0.0);
+        //color = Color.GREEN;
+      }
     }
 
     g.setColor(color);

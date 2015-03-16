@@ -31,15 +31,18 @@ public class InfoPanel extends JPanel implements Observer
   /* width = 1 allows panel to be resized intelligently upon container
      instantiation.  Height is important, however, to ensure the child components
      are able to display their info correctly */
-  private final static Dimension size = new Dimension(1, 220);
+  private final static Dimension size = new Dimension(220, 1);
   private MiniViewBox miniViewBox;
   private StatPane attributeStats;
   private StatPane cropStatPane;
   private DisplayUnitConverter converter;
   private WorldPresenter presenter;
-
-
-  public InfoPanel()
+  /**
+   Instantiate the InfoPanel
+   @param frameWidth width of main frame
+   @param frameHeight height of main frame
+   */
+  public InfoPanel(int frameWidth, int frameHeight)
   {
     // init
     miniViewBox = new MiniViewBox(" ");
@@ -47,9 +50,10 @@ public class InfoPanel extends JPanel implements Observer
     cropStatPane = new StatPane("CROPS:");
 
     //config
-    this.setLayout(new GridLayout(1, 3));
+    this.setLayout(new GridLayout(3, 1));
     this.setMinimumSize(size);
-    this.setPreferredSize(size);
+    this.setLocation(0,(frameHeight/25)*2 );
+    this.setPreferredSize(new Dimension(frameWidth/(6),frameHeight-(frameHeight/25)) );
     this.setBackground(GUI_BACKGROUND);
 
     //wire
@@ -415,7 +419,7 @@ public class InfoPanel extends JPanel implements Observer
     Map<String, Double> cropMap = new HashMap<>();
 
     int numRegions = regions.size();
-    
+
     for (GUIRegion gr : regions)
     {
       RegionAttributes attribs = gr.getRegion().getAttributes();

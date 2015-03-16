@@ -27,26 +27,30 @@ public class WorldFeedPanel extends JPanel implements Observer
  private DatePanel datePanel;
  private Ticker ticker;
  private GroupLayout layout;
+ private int localFrameWidth = 0;
 
  /**
   Instantiate the WorldFeedPanel with a WorldPresenter to poll from upon
   receipt of update notifications
   @param presenter WorldPresenter to observe
+  @param frameWidth width of main frame
+  @param frameHeight height of main frame
   */
- public WorldFeedPanel(WorldPresenter presenter)
+ public WorldFeedPanel(WorldPresenter presenter, int frameWidth, int frameHeight)
  {
+  localFrameWidth = frameWidth;
   datePanel = new DatePanel();
   datePanel.setDate(presenter.getWorldDate());
   ticker = new Ticker();
-  
-  setBackground(ColorsAndFonts.GUI_BACKGROUND);
+
+  setBackground(ColorsAndFonts.OCEANS);
 
   initLayout();
   int prefH = datePanel.getPreferredSize().height + PADDING*2;
   int prefW = datePanel.getPreferredSize().width + ticker.getPreferredSize().width+PADDING*2;
-  setMinimumSize(datePanel.getMinimumSize());
-  setPreferredSize(new Dimension(prefW, prefH));
-  
+  setLocation(0,0);
+  setPreferredSize(new Dimension(frameWidth, frameHeight/(25) ));
+
  }
 
  /*
@@ -61,20 +65,20 @@ public class WorldFeedPanel extends JPanel implements Observer
 
   layout.setHorizontalGroup(
     layout.createSequentialGroup()
-      .addComponent(ticker, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+      .addComponent(ticker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
       .addComponent(datePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
   );
-  
+
   layout.setVerticalGroup(
     layout.createParallelGroup(GroupLayout.Alignment.BASELINE, false)
-    .addComponent(ticker, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-    .addComponent(datePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+      .addComponent(ticker, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+      .addComponent(datePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
   );
  }
 
 
  /**
-  
+
   @param o
   @param arg
   */
@@ -86,8 +90,8 @@ public class WorldFeedPanel extends JPanel implements Observer
   /* update ticker text */
  }
 
-  public void setDate(Date date)
-  {
-    datePanel.setDate(date);
-  }
+ public void setDate(Date date)
+ {
+  datePanel.setDate(date);
+ }
 }

@@ -56,7 +56,7 @@ public class MapPane extends JPanel
 
   private boolean doMultiSelect;
   private boolean dynamicNameDrawing;
-  
+
   /* Actions associated with the KeyBinding mapping framework */
   private Action happyOverlay = new AbstractAction()
   {
@@ -108,14 +108,14 @@ public class MapPane extends JPanel
     addMouseWheelListener(this);
     addMouseMotionListener(this);
     addKeyListener(this);
-    
+
     setBackground(ColorsAndFonts.OCEANS);
     dynamicNameDrawing = true; /* more like sexyNameDrawing */
 
     setPreferredSize(cam.getTargetSize());
     setSize(getPreferredSize());
     setMinimumSize(getPreferredSize());
-    setDoubleBuffered(true); 
+    setDoubleBuffered(true);
 
     // set up keybindings.
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "default");
@@ -215,7 +215,7 @@ public class MapPane extends JPanel
 
 
   /**
-    Respond to any input events that may have triggered by input events
+   Respond to any input events that may have triggered by input events
    */
   public void update()
   {
@@ -379,7 +379,7 @@ public class MapPane extends JPanel
   public void mouseEntered(MouseEvent e)
   { /* do nothing */ }
 
-  
+
   /* create a rectangle defined by two corner points */
   private Rectangle2D rectFromCornerPoints(Point2D p1, Point2D p2)
   {

@@ -4,6 +4,7 @@ import gui.ColorsAndFonts;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.AlphaComposite;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -66,7 +67,7 @@ public class BarPanel extends JPanel
 
     // 6000 is just to make things too big! fighting with swing.
     // 16 is height of each individual bar.
-    Dimension size = new Dimension(6000, 16);
+    Dimension size = new Dimension(6000, 15);
     setMaximumSize(size);
 
 
@@ -135,24 +136,29 @@ public class BarPanel extends JPanel
       {
         int length = (int) (ratio * 100);
 
-        if (animationStep < length) animationStep += 3;
+        if (animationStep < length) animationStep += 2;
 
-        g.setColor(barColor);
+
+
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setColor(barColor);
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f));
 
         // position info, animation, and seize of bar, should correlate to font
         // size.
-        g.fillRect(10, 2, animationStep, 12);
+        g2d.fillRect(10, 2, animationStep, 12);
 
         // if over lay text has been specified => draw it.
         if (overLayText != null)
         {
-          ((Graphics2D) g).setRenderingHint(
+          g2d.setRenderingHint(
             RenderingHints.KEY_TEXT_ANTIALIASING,
             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-          g.setColor(overLayTextColor);
-          g.setFont(OVERLAY_FONT);
-          g.drawString(overLayText, 12, 12);
+          g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f));
+          g2d.setColor(overLayTextColor);
+          g2d.setFont(OVERLAY_FONT);
+          g2d.drawString(overLayText, 12, 12);
         }
       }
     };

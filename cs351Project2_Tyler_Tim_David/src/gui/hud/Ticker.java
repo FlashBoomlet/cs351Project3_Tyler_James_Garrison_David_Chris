@@ -51,14 +51,15 @@ public class Ticker extends JPanel
     setMinimumSize(new Dimension(0, h));
     setPreferredSize(new Dimension(w, h));
     setMaximumSize(getPreferredSize());
-    setBackground(ColorsAndFonts.GUI_BACKGROUND);
+    //setBackground(ColorsAndFonts.GUI_BACKGROUND);
+    setBackground(Color.red);
   }
 
   @Override
   protected void paintComponent(Graphics g)
   {
 
-    
+
   }
 
   /**

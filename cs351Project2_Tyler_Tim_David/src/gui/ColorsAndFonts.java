@@ -12,31 +12,31 @@ import java.awt.*;
 public interface ColorsAndFonts
 {
 
-  Color REGION_NAME_FONT_C = new Color(0x6C111C);
+  Color REGION_NAME_FONT_C = new Color(0xFF0000);
 
-  Color OCEANS = new Color(0x626060);
+  Color OCEANS = new Color(58, 56, 56);
 
-  Color ACTIVE_REGION = new Color(0xDEB564);
-  
+  Color ACTIVE_REGION = new Color(0x00CC00);
+
   /* changed from 0xE37956, now is same as PASSIVE_REGION_OUTLINE */
-  Color ACTIVE_REGION_OUTLINE = new Color(0x767979); 
+  Color ACTIVE_REGION_OUTLINE = new Color(58, 56, 56);
 
   Color SELECT_RECT_OUTLINE = new Color(94, 78, 114);
   Color SELECT_RECT_FILL = new Color(SELECT_RECT_OUTLINE.getRGB() & 0x50FFFFFF, true);
 
 
-  Color PASSIVE_REGION = new Color(0xCCB79B);
-  Color PASSIVE_REGION_OUTLINE = new Color(0x767979);
+  Color PASSIVE_REGION = new Color(0xDEB564);
+  Color PASSIVE_REGION_OUTLINE = new Color(58, 56, 56);
 
   Color XML_ERROR = new Color(255, 129, 78, 212);
 
   Color MAP_GRID = new Color(255, 255, 255, 70);
 
-  Color GUI_BACKGROUND = new Color(58, 56, 56);
+  Color GUI_BACKGROUND = new Color(0x626060);
   Color GUI_TEXT_COLOR = new Color(235, 235, 235);
 
   Font GUI_FONT = new Font("SansSerif", Font.PLAIN, 11);
-//  Font TOP_FONT = GUI_FONT.deriveFont(18f);
+  //  Font TOP_FONT = GUI_FONT.deriveFont(18f);
   Font TOP_FONT = new Font("SansSerif", Font.PLAIN, 14);
   Font HUD_TITLE = new Font("SansSerif", Font.PLAIN, 14);
   Font NAME_VIEW = new Font("SansSerif", Font.PLAIN, 12);
