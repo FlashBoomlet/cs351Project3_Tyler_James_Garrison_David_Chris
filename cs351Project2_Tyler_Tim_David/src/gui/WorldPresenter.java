@@ -215,6 +215,8 @@ public class WorldPresenter extends Observable
 
     switch (calcDistance(camera))
     {
+      /*
+       * This code is being saved for future implementation. This allows you to zoom into smaller areas than just countries
       case CLOSE_UP:
         regionsInView = getIntersectingRegions(inViewBox, modelRegions);
         break;
@@ -222,8 +224,9 @@ public class WorldPresenter extends Observable
       case MEDIUM:
         regionsInView = getIntersectingRegions(inViewBox, modelRegions);
         break;
+      */
 
-      case LONG:
+      case CLOSE_UP: case MEDIUM: case LONG:
         regionsInView = getIntersectingRegions(inViewBox, backgroundRegions);
         break;
 

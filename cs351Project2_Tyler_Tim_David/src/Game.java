@@ -9,6 +9,7 @@ import gui.hud.WorldFeedPanel;
 import model.Region;
 import model.World;
 import IO.AttributeGenerator;
+import java.io.*;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -17,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
+import javax.swing.JLayeredPane;
 
 /**
  * Main entry point for the 'game'. Handles loading data and all configurations.
@@ -31,7 +33,10 @@ public class Game
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
   public static final String PRECIP_DATA = "resources/data/precip2010.txt";
   private MapPane mapPane;
+  private JPanel mapJPanel;
   private InfoPanel infoPanel;
+  private JPanel worldFeedJPanel;
+  private JPanel infoJPanel;
   private WorldPresenter worldPresenter;
   private WorldFeedPanel worldFeedPanel;
   private Timer worldTime;
@@ -40,13 +45,13 @@ public class Game
   private JFrame frame;
   int frameWidth = 1400;
   int frameHeight = 700;
+
   /**
    * Constructor for game, handles all init logic.
    */
   public Game()
   {
     frame = new JFrame();
-
     Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     int SCREEN_WIDTH = (int) SCREEN_SIZE.getWidth();
     int SCREEN_HEIGHT = (int) SCREEN_SIZE.getHeight();
@@ -57,8 +62,10 @@ public class Game
       frameHeight = (int) Math.floor(frameWidth*.50);
     }
 
+    frame.setTitle("GAME");
     frame.setPreferredSize(new Dimension(frameWidth, frameHeight) );
     frame.setSize(frame.getPreferredSize());
+    frame.setLocation(0,0);
 
     init();
   }
@@ -214,21 +221,13 @@ public class Game
   private void initFrame() {
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-
-    frame.setLayout(new BorderLayout());
-
-    frame.add(worldFeedPanel, BorderLayout.NORTH);
-    frame.add(mapPane, BorderLayout.CENTER);
-
-    // Side panel with all information
-    frame.add(infoPanel, BorderLayout.WEST);
-    //infoPanel.setVisible(false);
-
-
+    frame.setResizable(false);
+    frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
+    frame.setContentPane(new CenterPanel(mapPane, infoPanel, worldFeedPanel));
 
     frame.addKeyListener(mapPane);
     frame.pack();
-    frame.setResizable(false);
+    frame.setVisible(true);
   }
 
   /**
@@ -271,5 +270,35 @@ public class Game
     Game gameManager = new Game();
     gameManager.show();
     gameManager.start();
+  }
+
+
+  /**
+   * Creates the content panel for the JPanels to be added to in a layered fashion
+   * Created by Lyncht on 3/17/15.
+   *
+   */
+  class CenterPanel extends JPanel
+  {
+    CenterPanel(MapPane mapPane,InfoPanel infoPanel,WorldFeedPanel worldFeedPanel)
+    {
+      super();
+      // Type cast panels to JPanels to be added to the Layered panel
+      mapJPanel = (JPanel) mapPane;
+      infoJPanel = (JPanel) infoPanel;
+      worldFeedJPanel = (JPanel) worldFeedPanel;
+
+      JLayeredPane layeredPane = frame.getLayeredPane();
+
+      mapJPanel.setBounds(0,0,frameWidth,frameHeight);
+      layeredPane.add(mapJPanel, new Integer(1));
+
+      worldFeedJPanel.setBounds(0,0,frameWidth,(frameHeight/25));
+      layeredPane.add(worldFeedJPanel, new Integer(2));
+
+      // Side panel with all information
+      infoJPanel.setBounds(0,(frameHeight/25),frameWidth/6,frameHeight-(frameHeight/25));
+      layeredPane.add(infoJPanel, new Integer(3)) ;
+    }
   }
 }

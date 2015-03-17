@@ -29,7 +29,7 @@ public class MapPane extends JPanel
   private final static double MAP_VISIBILITY_SCALE = 100;
   private final static int CAMERA_STEP = 10;
   private final static double ZOOM_STEP = .05;
-  private final static double SCROLL_FACTOR = .2;
+  private final static double SCROLL_FACTOR = .05;
 
   private final static int
     UP = 38,
@@ -113,6 +113,7 @@ public class MapPane extends JPanel
     dynamicNameDrawing = true; /* more like sexyNameDrawing */
 
     setPreferredSize(cam.getTargetSize());
+    setLocation(0, 0);
     setSize(getPreferredSize());
     setMinimumSize(getPreferredSize());
     setDoubleBuffered(true);
