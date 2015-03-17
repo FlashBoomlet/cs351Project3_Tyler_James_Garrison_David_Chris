@@ -1,5 +1,6 @@
 package gui.hud;
 
+import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.displayconverters.AmericanUniteConverter;
@@ -55,7 +56,7 @@ public class InfoPanel extends JPanel implements Observer
     this.setLocation(0,(frameHeight/25)*2 );
     this.setPreferredSize(new Dimension(frameWidth/(6),frameHeight-(frameHeight/25)) );
     this.setBackground(GUI_BACKGROUND);
-
+    this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
     //wire
     this.add(miniViewBox);
     this.add(attributeStats);
@@ -366,10 +367,14 @@ public class InfoPanel extends JPanel implements Observer
     List<GUIRegion> activeRegions = getPresenter().getActiveRegions();
     if (activeRegions == null)
     {
+      // HIDE PANEL
+      this.setVisible(false);
       clearDisplay();
     }
     else
     {
+      // SHOW PANEL
+      this.setVisible(true);
       displayAllGUIRegions(activeRegions);
     }
   }

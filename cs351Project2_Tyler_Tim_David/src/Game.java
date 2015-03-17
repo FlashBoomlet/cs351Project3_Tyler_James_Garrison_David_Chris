@@ -5,11 +5,11 @@ import gui.*;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
 import gui.hud.InfoPanel;
+import gui.hud.NavMap;
 import gui.hud.WorldFeedPanel;
 import model.Region;
 import model.World;
 import IO.AttributeGenerator;
-import java.io.*;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -37,6 +37,7 @@ public class Game
   private InfoPanel infoPanel;
   private JPanel worldFeedJPanel;
   private JPanel infoJPanel;
+  private NavMap navMap;
   private WorldPresenter worldPresenter;
   private WorldFeedPanel worldFeedPanel;
   private Timer worldTime;
@@ -45,6 +46,8 @@ public class Game
   private JFrame frame;
   int frameWidth = 1400;
   int frameHeight = 700;
+  final float NAV_HEIGHT_SCALE = (float) .25;
+  final float NAV_WIDTH_SCALE = (float) 1.6;
 
   /**
    * Constructor for game, handles all init logic.
@@ -58,7 +61,7 @@ public class Game
 
     if( frameWidth > SCREEN_WIDTH || frameHeight > SCREEN_HEIGHT )
     {
-      frameWidth = (int) Math.floor(SCREEN_WIDTH*.95);
+      frameWidth = (int) Math.floor(SCREEN_WIDTH*.93);
       frameHeight = (int) Math.floor(frameWidth*.50);
     }
 
@@ -101,6 +104,12 @@ public class Game
 
     worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,frameHeight);
     worldPresenter.addObserver(worldFeedPanel);
+
+    final int NAV_HEIGHT = (int) Math.floor(frameHeight*NAV_HEIGHT_SCALE);
+    final int NAV_WIDTH = (int) Math.floor(NAV_HEIGHT*NAV_WIDTH_SCALE);
+    final int NAV_X = frameWidth-NAV_WIDTH;
+    final int NAV_Y = frameHeight-NAV_HEIGHT;
+    navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT);
 
     initFrame();
     setupControlls();
@@ -299,6 +308,10 @@ public class Game
       // Side panel with all information
       infoJPanel.setBounds(0,(frameHeight/25),frameWidth/6,frameHeight-(frameHeight/25));
       layeredPane.add(infoJPanel, new Integer(3)) ;
+      infoJPanel.setVisible(false);
+
+      // Navigation in the lower right hand corner
+      layeredPane.add(navMap, new Integer(3) );
     }
   }
 }
