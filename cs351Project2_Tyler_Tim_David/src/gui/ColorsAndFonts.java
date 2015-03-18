@@ -16,7 +16,7 @@ public interface ColorsAndFonts
 
   Color OCEANS = new Color(58, 56, 56);
 
-  Color ACTIVE_REGION = new Color(0x00CC00);
+  Color ACTIVE_REGION = Color.CYAN;
 
   /* changed from 0xE37956, now is same as PASSIVE_REGION_OUTLINE */
   Color ACTIVE_REGION_OUTLINE = new Color(58, 56, 56);
@@ -25,7 +25,7 @@ public interface ColorsAndFonts
   Color SELECT_RECT_FILL = new Color(SELECT_RECT_OUTLINE.getRGB() & 0x50FFFFFF, true);
 
 
-  Color PASSIVE_REGION = new Color(0xDEB564);
+  Color PASSIVE_REGION = new Color(0xD1D1D1);
   Color PASSIVE_REGION_OUTLINE = new Color(58, 56, 56);
 
   Color XML_ERROR = new Color(255, 129, 78, 212);

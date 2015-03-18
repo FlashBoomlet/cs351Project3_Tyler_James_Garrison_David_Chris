@@ -23,17 +23,28 @@ public class RegionAttributes
   static
   {
     LIMITS.put(PLANTING_ATTRIBUTES.PLANTING_ZONE, 13.0);
+    LIMITS.put(PLANTING_ATTRIBUTES.POPULATION, 100_000.0);
+    LIMITS.put(PLANTING_ATTRIBUTES.MEDIAN_AGE, 150.0);
+    LIMITS.put(PLANTING_ATTRIBUTES.BIRTH_RATE, 1.0);
+    LIMITS.put(PLANTING_ATTRIBUTES.MORTALITY_RATE, 1.0);
+    LIMITS.put(PLANTING_ATTRIBUTES.MIGRATION_RATE, 1.0);
+    LIMITS.put(PLANTING_ATTRIBUTES.UNDERNOURISHMENT_RATE, 1.0);
+
+
     LIMITS.put(PLANTING_ATTRIBUTES.ANNUAL_RAINFALL, 460.0);
     LIMITS.put(PLANTING_ATTRIBUTES.MONTHLY_RAINFALL, 10.0);
-    LIMITS.put(PLANTING_ATTRIBUTES.POPULATION, 100_000.0);
+
     LIMITS.put(PLANTING_ATTRIBUTES.AVE_MONTH_TEMP_HI, 136.0);
     LIMITS.put(PLANTING_ATTRIBUTES.AVE_MONTH_TEMP_LO, -126.0);
     LIMITS.put(PLANTING_ATTRIBUTES.ELEVATION, 20_000.0);
     LIMITS.put(PLANTING_ATTRIBUTES.SOIL_TYPE, 14.0);
     LIMITS.put(PLANTING_ATTRIBUTES.PROFIT_FROM_CROPS, 1_000_000.0);
     LIMITS.put(PLANTING_ATTRIBUTES.COST_OF_CROPS, 1_000_000.0);
+
+
     LIMITS.put(PLANTING_ATTRIBUTES.HAPPINESS, 1.0);
   }
+
 
   private HashMap<PLANTING_ATTRIBUTES, Double> attSet = new HashMap<>();
   private HashMap<String, Double> crops = new HashMap<>();
@@ -119,6 +130,7 @@ public class RegionAttributes
   }
 
 
+
   /**
    * enum describing a set of potential planting-related attributes a region
    * might have.
@@ -126,16 +138,21 @@ public class RegionAttributes
   public enum PLANTING_ATTRIBUTES
   {
     PLANTING_ZONE("Planting Zone"),
+    POPULATION("Population"),
+    MEDIAN_AGE("Median Age"),
+    BIRTH_RATE("Birth Rate"),
+    MORTALITY_RATE("Mortality Rate"),
+    MIGRATION_RATE("Migration Rate"),
+    UNDERNOURISHMENT_RATE("Undernourishment Rate"),
     ANNUAL_RAINFALL("Annual Rainfall"),
     MONTHLY_RAINFALL("Monthly Rainfall"),
     AVE_MONTH_TEMP_HI("Average Month High temp"),
     AVE_MONTH_TEMP_LO("Average Month Low Temp"),
-    POPULATION("Population"),
     COST_OF_CROPS("Cost"),
     PROFIT_FROM_CROPS("Profit"),
     ELEVATION("Elevation"),
-    HAPPINESS("Happiness"),
-    SOIL_TYPE("Soil Type");
+    SOIL_TYPE("Soil Type"),
+    HAPPINESS("Happiness");
 
     private String prettyPrint;
 

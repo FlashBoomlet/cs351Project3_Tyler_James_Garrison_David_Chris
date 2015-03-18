@@ -151,6 +151,7 @@ public class NavMap extends JPanel
 
     Graphics2D g2 = (Graphics2D) g;
     g2.setColor(NAV_COLOR);
+    g2.setStroke(new BasicStroke(2));
     double localx = (double) width*Math.abs( localRect.getX()-baseX )/Math.abs(baseW);
     double localy = (double) height*Math.abs( localRect.getY()-baseY )/Math.abs(baseH);
     double localw = (double) width*(localRect.getWidth()/baseW);

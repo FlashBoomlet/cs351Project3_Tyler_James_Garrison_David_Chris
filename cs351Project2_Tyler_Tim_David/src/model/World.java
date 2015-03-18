@@ -45,7 +45,7 @@ public class World
   {
     this.world = world;
     this.currentDate = cal;
-    initCells();
+    //initCells();
   }
 
   private void initCells ()

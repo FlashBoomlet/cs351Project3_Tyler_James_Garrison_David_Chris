@@ -29,6 +29,7 @@ public class MiniViewBox extends JPanel
   );
 
   private boolean isHovered;
+  private boolean singleRegion = false;
 
   public static final EmptyBorder PADDING_BORDER = new EmptyBorder(5, 5, 5, 5);
   private JLabel titleLabel;
@@ -179,11 +180,18 @@ public class MiniViewBox extends JPanel
         g2d.translate(xTranslate, yTranslate);
         g2d.scale(scaleValue, scaleValue);
 
-        // currently there is no roll over behavior. but maybe someday...
-        if (isHovered) g2d.setColor(ColorsAndFonts.MINI_BOX_REGION);
-        else g2d.setColor(ColorsAndFonts.MINI_BOX_REGION);
+        if (isHovered) g2d.setColor(ColorsAndFonts.ACTIVE_REGION);
+        else g2d.setColor(ColorsAndFonts.PASSIVE_REGION);
 
-        for (GUIRegion gr : regions) g2d.fill(gr.getPoly());
+        for (GUIRegion gr : regions)
+        {
+          g2d.fill(gr.getPoly());
+          if( getTitle() != "AVERAGE:" )
+          {
+            g2d.fillRect(50,50,30,20);
+            //g2d.drawImage(gr.getFlag(), 0,0,30,20,null);
+          }
+        }
       }
     };
   }

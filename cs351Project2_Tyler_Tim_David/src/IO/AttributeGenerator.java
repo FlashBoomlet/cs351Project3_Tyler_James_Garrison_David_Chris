@@ -28,11 +28,8 @@ public class AttributeGenerator
   private static final double CROP_UNIT_LIMIT = 2000;
 
   private String[] crops = {
-    "corn", "wheat", "grapeNuts",
-    "coffee", "bread", "pudding",
-    "scones with chocolate chips",
-    "anti-rains", "apple sauce", "Soylent green",
-    "Soylent blue",
+    "Total Land", "Arable land","Organic Land", "Corn", "Wheat", "Rice",
+    "Soy", "Other",
   };
 
   /*

@@ -41,7 +41,7 @@ class RegionHappyView implements RegionView
     {
       double happinessLevel = gRegion.getRegion().getAttributes().getAttribute(HAPPINESS);
 
-      if  (happinessLevel<0.30)
+      if  (happinessLevel< 0.25)
       {
         color = new Color((float) (happinessLevel*3.3), (float) 0.0, (float) 0.0);
         //color = Color.RED;

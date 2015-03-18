@@ -54,6 +54,12 @@ public class AmericanUniteConverter extends DisplayUnitConverter
     return "F°";
   }
 
+  @Override
+  public String getPercentSymbol()
+  {
+    return "%";
+  }
+
 
   @Override
   public RegionAttributes convertAttributes(RegionAttributes originalSet)

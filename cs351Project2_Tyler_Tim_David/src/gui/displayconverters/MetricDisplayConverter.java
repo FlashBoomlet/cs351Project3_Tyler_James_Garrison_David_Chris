@@ -51,4 +51,10 @@ public class MetricDisplayConverter extends DisplayUnitConverter
   {
     return "C°";
   }
+
+  @Override
+  public String getPercentSymbol()
+  {
+    return "%";
+  }
 }

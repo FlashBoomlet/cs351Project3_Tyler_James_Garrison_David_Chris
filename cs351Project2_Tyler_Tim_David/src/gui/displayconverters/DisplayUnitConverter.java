@@ -73,6 +73,13 @@ public abstract class DisplayUnitConverter
    */
   public abstract String getTmpSymbol();
 
+  /**
+   * Returns the appropriate symbol for '%'
+   *
+   * @return string representing '%'
+   */
+  public abstract String getPercentSymbol();
+
 
   /**
    * Given a set of attributes this method generates a new set according the

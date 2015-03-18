@@ -38,6 +38,8 @@ public class InfoPanel extends JPanel implements Observer
   private StatPane cropStatPane;
   private DisplayUnitConverter converter;
   private WorldPresenter presenter;
+  private int fullHeight;
+  private int fullWidth;
   /**
    Instantiate the InfoPanel
    @param frameWidth width of main frame
@@ -47,15 +49,17 @@ public class InfoPanel extends JPanel implements Observer
   {
     // init
     miniViewBox = new MiniViewBox(" ",frameWidth, frameHeight);
-    attributeStats = new StatPane("ATTRIBUTES:");
-    cropStatPane = new StatPane("CROPS:");
+    attributeStats = new StatPane("REGION(S) DATA:");
+    cropStatPane = new StatPane("REGION(S) CROP DATA:");
 
     //config
     this.setLayout(new GridLayout(3, 1));
     // GridBagConstraints c = new GridBagConstraints();
     this.setMinimumSize(size);
-    this.setLocation(0,y );
-    this.setPreferredSize(new Dimension(frameWidth,frameHeight) );
+    this.setLocation(0, y);
+    this.setPreferredSize(new Dimension(frameWidth, frameHeight));
+    fullHeight = frameHeight;
+    fullWidth = frameWidth;
     this.setBackground(GUI_BACKGROUND);
     this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
     //wire
@@ -178,7 +182,7 @@ public class InfoPanel extends JPanel implements Observer
         BAR_GRAPH_NEG,
         atts.getCropP(cropName),
         cropName,
-        "%" + String.format("%.2f", atts.getCropP(cropName) * 100)
+        String.format("%.2f", atts.getCropP(cropName) * 100) + "% "
       );
       statPane.addBar(bp);
     }
@@ -202,7 +206,14 @@ public class InfoPanel extends JPanel implements Observer
     for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
     {
       BarPanel bp = getBarPanel(atts, att);
-      statPane.addBar(bp);
+      switch (att)
+      {
+        case SOIL_TYPE:case ELEVATION:case AVE_MONTH_TEMP_LO:case AVE_MONTH_TEMP_HI:case MONTHLY_RAINFALL:
+        case ANNUAL_RAINFALL:case COST_OF_CROPS:case PROFIT_FROM_CROPS:
+          break;
+        default:
+          statPane.addBar(bp);
+      }
     }
   }
 
@@ -229,59 +240,60 @@ public class InfoPanel extends JPanel implements Observer
         ratio = FULL_BAR;
         secondaryLabel = "ZONE: " + (int) (double) converted.getAttribute(att);
         break;
-
       case PROFIT_FROM_CROPS:
         barColor = Color.green;
         secondaryLabel = getConverter().getCurrencySymbol() + " " + secondaryLabel;
         break;
-
       case COST_OF_CROPS:
         barColor = Color.red;
         secondaryLabel = getConverter().getCurrencySymbol() + " " + secondaryLabel;
         break;
-
       case HAPPINESS:
         ratio = converted.getAttribute(att);
         barColor = getHappyColor(ratio);
         secondaryLabel = getHappyLabel(ratio);
         break;
-
       case ANNUAL_RAINFALL:
         secondaryLabel = secondaryLabel + " " + getConverter().getInchSymbol();
         break;
-
       case MONTHLY_RAINFALL:
         secondaryLabel = secondaryLabel + " " + getConverter().getInchSymbol();
         break;
-
       case POPULATION:
         secondaryLabel = "" + (int) (double) converted.getAttribute(att);
         break;
-
       case AVE_MONTH_TEMP_HI:
         secondaryLabel = secondaryLabel + " " + getConverter().getTmpSymbol();
         barColor = Color.red;
         break;
-
       case AVE_MONTH_TEMP_LO:
         ratio = Math.abs(ratio);
         secondaryLabel = secondaryLabel + " " + getConverter().getTmpSymbol();
         barColor = BAR_GRAPH_NEG;
         break;
-
       case ELEVATION:
         secondaryLabel = secondaryLabel + " " + getConverter().getFeetSymbol();
         break;
-
       case SOIL_TYPE:
         secondaryLabel += " ph";
         break;
-
+      case MEDIAN_AGE:
+        ratio =  attributesSet.getAttribute(att)*100 / RegionAttributes.LIMITS.get(att);
+        barColor = Color.YELLOW;
+        secondaryLabel = String.format("%.2f", converted.getAttribute(att) * 100);
+        break;
+      case BIRTH_RATE:
+      case MORTALITY_RATE:
+      case MIGRATION_RATE:
+      case UNDERNOURISHMENT_RATE:
+        ratio = Math.abs(ratio);
+        barColor = Color.GREEN;
+        secondaryLabel = String.format("%.2f", converted.getAttribute(att) * 100) + " " + getConverter().getPercentSymbol();
+        break;
       default:
         // no nothing, fall back on the above default values.
 
     }
-
     return new BarPanel(barColor, ratio, PrimaryLabel, secondaryLabel);
   }
 
@@ -343,7 +355,7 @@ public class InfoPanel extends JPanel implements Observer
     else  // multi region display logic.
     {
       clearDisplay();
-      setTitle("SPACIAL SUM:");
+      setTitle("AVERAGE:");
       miniViewBox.setAlph(1f);
       if (!presenter.isActivelyDragging()) // delays summation until drag is over.
       {
@@ -434,20 +446,32 @@ public class InfoPanel extends JPanel implements Observer
         switch (att)
         {
           /* averaged attributes */
+          case ANNUAL_RAINFALL:
+          case MEDIAN_AGE:
+          case BIRTH_RATE:
+          case MORTALITY_RATE:
+          case MIGRATION_RATE:
+          case UNDERNOURISHMENT_RATE:
+
           case AVE_MONTH_TEMP_LO:
           case AVE_MONTH_TEMP_HI:
-          case ANNUAL_RAINFALL:
+
           case MONTHLY_RAINFALL:
-          case HAPPINESS:
           case ELEVATION:
           case SOIL_TYPE:
+
             attribMap.put(att,
               attribMap.get(att) + attribs.getAttribute(att) / numRegions);
             break;
+
+          case HAPPINESS:
+
           
           /* summed attributes */
+
           case PROFIT_FROM_CROPS:
           case COST_OF_CROPS:
+
           case POPULATION:
             attribMap.put(att,
               attribMap.get(att) + attribs.getAttribute(att));
