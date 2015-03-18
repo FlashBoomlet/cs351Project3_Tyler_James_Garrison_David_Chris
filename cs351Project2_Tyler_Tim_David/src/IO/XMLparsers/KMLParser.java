@@ -22,11 +22,13 @@ import java.util.List;
 public class KMLParser extends RegionParserHandler
 {
   private List<Region> regions;
-  
+
   private String regName;
+  private String flagLocation;
   private String cleanCoordString;
-  
+
   private boolean nameTag;
+  private boolean flagTag;
   private boolean coordTag;
   
   
@@ -50,6 +52,9 @@ public class KMLParser extends RegionParserHandler
       case "name":
         nameTag = true;
         break;
+      case "Icon":
+        flagTag = true;
+        break;
       case "coordinates":
         coordTag = true;
         cleanCoordString = "";
@@ -63,6 +68,11 @@ public class KMLParser extends RegionParserHandler
     if(nameTag)
     {
       regName = new String(ch, start, length);
+    }
+    if(flagTag)
+    {
+      // Start 1 forward and 1 back to avoid quotes
+      if( ch[0] == '\"') flagLocation = new String(ch, start+1, length-2);
     }
     if(coordTag)
     {
@@ -78,10 +88,14 @@ public class KMLParser extends RegionParserHandler
       case "name":
         nameTag = false;
         break;
+      case "Icon":
+        flagTag = false;
+        break;
       case "coordinates":
         coordTag = false;
         Region r = new AtomicRegion();
         r.setName(regName);
+        r.setFlag(flagLocation);
         r.setPerimeter(parseCoordString());
         regions.add(r);
     }

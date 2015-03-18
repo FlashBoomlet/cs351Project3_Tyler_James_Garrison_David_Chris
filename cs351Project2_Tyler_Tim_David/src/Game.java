@@ -33,10 +33,7 @@ public class Game
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
   public static final String PRECIP_DATA = "resources/data/precip2010.txt";
   private MapPane mapPane;
-  private JPanel mapJPanel;
   private InfoPanel infoPanel;
-  private JPanel worldFeedJPanel;
-  private JPanel infoJPanel;
   private NavMap navMap;
   private WorldPresenter worldPresenter;
   private WorldFeedPanel worldFeedPanel;
@@ -45,7 +42,7 @@ public class Game
   private Timer gameLoop;
   private JFrame frame;
   int frameWidth = 1400;
-  int frameHeight = 700;
+  int frameHeight = 600;
   final float NAV_HEIGHT_SCALE = (float) .25;
   final float NAV_WIDTH_SCALE = (float) 1.6;
 
@@ -99,17 +96,18 @@ public class Game
     Camera cam = new Camera(converter);
     mapPane = new MapPane(cam, worldPresenter);
 
-    infoPanel = new InfoPanel(frameWidth,frameHeight);
+    infoPanel = new InfoPanel(frameWidth/(6),frameHeight-(frameHeight/25),(frameHeight/25));
     infoPanel.setPresenter(worldPresenter);
 
     worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,frameHeight);
     worldPresenter.addObserver(worldFeedPanel);
 
-    final int NAV_HEIGHT = (int) Math.floor(frameHeight*NAV_HEIGHT_SCALE);
-    final int NAV_WIDTH = (int) Math.floor(NAV_HEIGHT*NAV_WIDTH_SCALE);
+
+    final int NAV_WIDTH = (int) Math.floor(frameWidth/4);
+    final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
     final int NAV_X = frameWidth-NAV_WIDTH;
     final int NAV_Y = frameHeight-NAV_HEIGHT;
-    navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT);
+    navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
     initFrame();
     setupControlls();
@@ -293,22 +291,19 @@ public class Game
     {
       super();
       // Type cast panels to JPanels to be added to the Layered panel
-      mapJPanel = (JPanel) mapPane;
-      infoJPanel = (JPanel) infoPanel;
-      worldFeedJPanel = (JPanel) worldFeedPanel;
 
       JLayeredPane layeredPane = frame.getLayeredPane();
 
-      mapJPanel.setBounds(0,0,frameWidth,frameHeight);
-      layeredPane.add(mapJPanel, new Integer(1));
+      mapPane.setBounds(0,0,frameWidth,frameHeight);
+      layeredPane.add(mapPane, new Integer(1));
 
-      worldFeedJPanel.setBounds(0,0,frameWidth,(frameHeight/25));
-      layeredPane.add(worldFeedJPanel, new Integer(2));
+      worldFeedPanel.setBounds(0,0,frameWidth,(frameHeight/25));
+      layeredPane.add(worldFeedPanel, new Integer(2));
 
       // Side panel with all information
-      infoJPanel.setBounds(0,(frameHeight/25),frameWidth/6,frameHeight-(frameHeight/25));
-      layeredPane.add(infoJPanel, new Integer(3)) ;
-      infoJPanel.setVisible(false);
+      infoPanel.setBounds(0,(frameHeight/25),frameWidth/6,frameHeight-(frameHeight/25));
+      layeredPane.add(infoPanel, new Integer(3)) ;
+      infoPanel.setVisible(false);
 
       // Navigation in the lower right hand corner
       layeredPane.add(navMap, new Integer(3) );

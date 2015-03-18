@@ -240,6 +240,16 @@ public class WorldPresenter extends Observable
     return regionsInView;
   }
 
+  public Collection<GUIRegion> getAllRegions()
+  {
+    return backgroundRegions;
+  }
+
+  public Rectangle2D getViewBox(Camera camera)
+  {
+    return camera.getViewBounds();
+  }
+
   /**
    * Set the look of any Region View over lay.
    *

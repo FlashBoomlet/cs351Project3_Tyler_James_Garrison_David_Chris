@@ -43,18 +43,19 @@ public class InfoPanel extends JPanel implements Observer
    @param frameWidth width of main frame
    @param frameHeight height of main frame
    */
-  public InfoPanel(int frameWidth, int frameHeight)
+  public InfoPanel(int frameWidth, int frameHeight,int y)
   {
     // init
-    miniViewBox = new MiniViewBox(" ");
+    miniViewBox = new MiniViewBox(" ",frameWidth, frameHeight);
     attributeStats = new StatPane("ATTRIBUTES:");
     cropStatPane = new StatPane("CROPS:");
 
     //config
     this.setLayout(new GridLayout(3, 1));
+    // GridBagConstraints c = new GridBagConstraints();
     this.setMinimumSize(size);
-    this.setLocation(0,(frameHeight/25)*2 );
-    this.setPreferredSize(new Dimension(frameWidth/(6),frameHeight-(frameHeight/25)) );
+    this.setLocation(0,y );
+    this.setPreferredSize(new Dimension(frameWidth,frameHeight) );
     this.setBackground(GUI_BACKGROUND);
     this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
     //wire

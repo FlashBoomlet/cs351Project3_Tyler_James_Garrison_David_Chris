@@ -1,13 +1,22 @@
 package gui.hud;
 
+import gui.Camera;
 import gui.ColorsAndFonts;
+import gui.GUIRegion;
+import gui.WorldPresenter;
+import gui.regionlooks.RegionNameDraw;
+import model.World;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Random;
 
 /**
  * This class is the implementation for the Navigational Map on the bottom
@@ -35,23 +44,34 @@ public class NavMap extends JPanel
   private static int x;
   private static int y;
   private BufferedImage image;
-  private BufferedImage navImage;
-  private static double navX = 0;
-  private static double navY = 0;
-  private static double navW = 0;
-  private static double navH = 0;
-  private Color NAV_COLOR = Color.GREEN;
+  private static double baseX = 0;
+  private static double baseY = 0;
+  private static double baseW = 0;
+  private static double baseH = 0;
+  private static Color NAV_COLOR = Color.CYAN;
+  private static int frameWidth = 0;
+  private static int frameHeight = 0;
+  private WorldPresenter presenter;
+  private Camera cam;
+  private boolean dynamicNameDrawing;
+  private final static double MAP_VISIBILITY_SCALE = 100;
+  private static Rectangle2D localRect;
+  private static JLabel varsLabel;
+  private static boolean setBaseVars = true;
+  static final String IMAGE_PATH = "resources/images/world-map-background5.png";
 
   /**
    * This Constructor creates the JPanel as well as sets its location, color,
    * and size. It reads in a buffered image.
    *
-   * @param int x
-   * @param int y
-   * @param int width
-   * @param int height
+   * @param x location of navigation panel
+   * @param y location of navigation panel
+   * @param width of navigation panel
+   * @param height of navigation panel
+   * @param height of Game Frame
+   * @param height of Game Frame
    */
-  public NavMap(int x, int y, int width, int height)
+  public NavMap(int x, int y, int width, int height,int frameWidth, int frameHeight, Camera cam, WorldPresenter presenter)
   {
     super();
 
@@ -66,62 +86,76 @@ public class NavMap extends JPanel
     this.height = height;
     this.x = 1;
     this.y = 1;
+    this.frameHeight = frameHeight;
+    this.frameWidth = frameWidth;
+    this.cam = cam;
+    this.presenter = presenter;
+    dynamicNameDrawing = true;
 
-    navW = width;
-    navH = height;
+    /*
+     * This label is for check values
+     * Remove once it has served its purpose
+     */
+    varsLabel = new JLabel("");
+    varsLabel.setForeground(Color.WHITE);
+    add(varsLabel);
 
-    ClassLoader cl = getClass().getClassLoader();
-    InputStream in = cl.getResourceAsStream("resources/images/world-map-background5.png");
+    ClassLoader cl = this.getClass().getClassLoader();
+    InputStream in = cl.getResourceAsStream(IMAGE_PATH);
     try
     {
-      if( in != null )  image = ImageIO.read(in);
+      image = ImageIO.read(in);
     }
     catch(IOException ex)
     {
       System.out.println("ERROR: Cannot find Navigation image!");
     }
-    in = cl.getResourceAsStream("resources/images/navLeather.png");
-    try
-    {
-      if( in != null )  navImage = ImageIO.read(in);
-    }
-    catch(IOException ex)
-    {
-      System.out.println("ERROR: Cannot find nav background image!");
-    }
   }  //  End of Navigation constructor
 
   /**
-   * This method sets all values for repainting. It updates the width and
-   *   height, relative to the mouse location. It then update the x and y
-   *   in proportion to the mouse position to zoom in on that location.
+   * This method sets the local rect to the view area on the map.
    *
-   * This code zooms in on a point and zooms out on the same path.
+   * If being initialized, it will save the dimensions for reference later in determining ratios
+   *
+   * @param rect as a Rectangle2D
    */
-  static void updateLocation()
+  public static void updateLocation(Rectangle2D rect)
   {
-    /*
-    navX = width*( (Math.abs(Map.x)/Map.width) )*2;
-    navY = height*( (Math.abs(Map.y)/Map.height) )*2;
-
-    navW = width*(GameFrame.frameWidth/Map.width);
-    navH = height*(GameFrame.frameHeight/Map.height);
-    */
+    localRect = rect;
+    if( setBaseVars )
+    {
+      baseX = (double) localRect.getX();
+      baseY = (double) localRect.getY();
+      baseW = (double) localRect.getWidth();
+      baseH = (double) localRect.getHeight();
+      setBaseVars = false;
+    }
   }  //  End of updateLocation method
+
+  public static void updateLabel(String str)
+  {
+    varsLabel.setText(str);
+  }
 
   /**
    * The paintComponent method overrides the paintComponent method in the
    * JComponent class.
-   * @param Graphics g
+   * @param g Graphics
    */
   @Override
   protected void paintComponent(Graphics g)
   {
     super.paintComponent(g);
-    g.drawImage(navImage, 0, 0, width, height, null);
+
     g.drawImage(image, 0, 0, width, height, null);
-    g.setColor(NAV_COLOR);
-    g.drawRect( (int) navX, (int) navY, (int) navW, (int) navH );
+
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setColor(NAV_COLOR);
+    double localx = (double) width*Math.abs( localRect.getX()-baseX )/Math.abs(baseW);
+    double localy = (double) height*Math.abs( localRect.getY()-baseY )/Math.abs(baseH);
+    double localw = (double) width*(localRect.getWidth()/baseW);
+    double localh = (double) height*(localRect.getHeight()/baseH);
+    g2.drawRect((int) localx,(int) localy,(int) localw,(int) localh);
   } // End of paintComponent method
 } // End of Navigation class
 

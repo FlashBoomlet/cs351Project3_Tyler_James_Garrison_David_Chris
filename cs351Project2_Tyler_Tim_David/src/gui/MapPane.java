@@ -1,5 +1,6 @@
 package gui;
 
+import gui.hud.NavMap;
 import gui.regionlooks.RegionNameDraw;
 import gui.regionlooks.RegionViewFactory;
 
@@ -135,6 +136,7 @@ public class MapPane extends JPanel
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed 4"), "step");
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"), "step");
     getActionMap().put("step", stepWorld);
+
   }
 
   /**
@@ -173,8 +175,12 @@ public class MapPane extends JPanel
     g2.setTransform(cam.getTransform());
 
     Collection<GUIRegion> regionsToDraw = presenter.getRegionsInView(cam);
+    NavMap.updateLocation(presenter.getViewBox(cam));
 
-    for (GUIRegion region : regionsToDraw) region.draw(g2);
+    for (GUIRegion region : regionsToDraw)
+    {
+      region.draw(g2);
+    }
 
     if (dynamicNameDrawing)
     {

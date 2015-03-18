@@ -36,7 +36,7 @@ public class MiniViewBox extends JPanel
   private float alpha;
   private List<GUIRegion> regions = new ArrayList<>();
 
-  public MiniViewBox(String name)
+  public MiniViewBox(String name,int frameWidth, int frameHeight)
   {
     // init
     this.alpha = 0.0f;

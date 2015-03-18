@@ -61,7 +61,11 @@ public class RegionNameDraw
     }
 
     g2d.drawString(gRegion.getName(), dst.x, dst.y);
-    
+
+    if( gRegion.flag() )
+    {
+      g2d.drawImage(gRegion.getFlag(), dst.x+10,dst.y+10,30,30,null);
+    }
     /* reset the transform for any RegionViews depending on it for proper rendering */
     g2d.setTransform(at);
   }

@@ -14,6 +14,10 @@ public interface Region
 
   void setName(String name);
 
+  String getFlag();
+
+  void setFlag(String flagLocation);
+
   List<MapPoint> getPerimeter();
 
   void setPerimeter(List<MapPoint> perimeter);

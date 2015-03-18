@@ -15,6 +15,7 @@ public class AtomicRegion implements Region
   private List<MapPoint> perimeter;
   private String name;
   private RegionAttributes attributes;
+  private String flagLocation;
 
   @Override
   public RegionAttributes getAttributes()
@@ -32,6 +33,18 @@ public class AtomicRegion implements Region
   public String getName()
   {
     return name;
+  }
+
+  @Override
+  public void setFlag(String flagLocation)
+  {
+    this.flagLocation = flagLocation;
+  }
+
+  @Override
+  public String getFlag()
+  {
+    return flagLocation;
   }
 
 
