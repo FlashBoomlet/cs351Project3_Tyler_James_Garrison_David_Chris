@@ -74,14 +74,22 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.HAPPINESS);
     }
   };
-    private Action rainOverlay = new AbstractAction()
+  private Action nourishmentOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
     {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            presenter.setCurrentOverlay(RegionViewFactory.Overlay.YEARLY_RAIN_FALL);
-        }
-    };
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.NOURISHMENT);
+    }
+  };
+  private Action rainOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.YEARLY_RAIN_FALL);
+    }
+  };
   private Action defaultOverlay = new AbstractAction()
   {
     @Override
@@ -135,8 +143,11 @@ public class MapPane extends JPanel
     setDoubleBuffered(true);
 
     // set up keybindings. "KEY-BINDING-DOC"
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("6"), "nourishmentview");
+    getActionMap().put("nourishmentview", nourishmentOverlay);
+
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("5"), "rainview");
-      getActionMap().put("rainview", rainOverlay);
+    getActionMap().put("rainview", rainOverlay);
 
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "default");
     getActionMap().put("default", defaultOverlay);

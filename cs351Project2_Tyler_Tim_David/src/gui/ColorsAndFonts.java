@@ -75,6 +75,18 @@ public interface ColorsAndFonts
     new Color(0x08306b),
   };
 
+  Color[] NOURISHMENT = {
+      new Color(0x00A600),
+      new Color(0x00cc00),
+      new Color(0x33FF33),
+      new Color(0x5CE62E),
+      new Color(0xCCCC00),
+      new Color(0xFF7519),
+      new Color(0xFF3300),
+      new Color(0xFF2100),
+      new Color(0xFF0000),
+  };
+
   Color BAR_GRAPH_NEG = Color.cyan;
 
   class colorConverter
