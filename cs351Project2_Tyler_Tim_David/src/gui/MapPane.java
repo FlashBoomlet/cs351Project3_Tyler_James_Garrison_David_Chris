@@ -19,7 +19,10 @@ import java.util.Collection;
  *         MapPane is a Swing JPanel encapsulating the view through a Camera
  *         object and its user control interface.  The MapPane communicates
  *         input events corresponding to its domain to the WorldPresenter
- *         to allow regions to be selected and displayed properly         
+ *         to allow regions to be selected and displayed properly
+ *
+ *         Edited by David M on 3/19/2015
+ *         -updating overlays and documenting overlay process. SEARCH "OVERLAY-DOC"
  */
 
 
@@ -59,6 +62,10 @@ public class MapPane extends JPanel
   private boolean dynamicNameDrawing;
 
   /* Actions associated with the KeyBinding mapping framework */
+  //"OVERLAY-DOC" make sure to update and read RegionViewFactory.java
+  //Create an action for each overlay you would like
+  //and update key bindings below SEARCH "KEY-BINDING-DOC"
+
   private Action happyOverlay = new AbstractAction()
   {
     @Override
@@ -67,6 +74,14 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.HAPPINESS);
     }
   };
+    private Action rainOverlay = new AbstractAction()
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            presenter.setCurrentOverlay(RegionViewFactory.Overlay.YEARLY_RAIN_FALL);
+        }
+    };
   private Action defaultOverlay = new AbstractAction()
   {
     @Override
@@ -119,7 +134,10 @@ public class MapPane extends JPanel
     setMinimumSize(getPreferredSize());
     setDoubleBuffered(true);
 
-    // set up keybindings.
+    // set up keybindings. "KEY-BINDING-DOC"
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("5"), "rainview");
+      getActionMap().put("rainview", rainOverlay);
+
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "default");
     getActionMap().put("default", defaultOverlay);
 

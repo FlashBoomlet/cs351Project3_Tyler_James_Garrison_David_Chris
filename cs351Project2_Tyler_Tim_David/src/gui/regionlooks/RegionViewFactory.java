@@ -8,6 +8,11 @@ import gui.Camera;
  * <p/>
  * Class used to Generate various regions views. Basically a way to hide all the
  * specifics of this class from the calling context.
+ *
+ * Edited by David M on 3/19/2015
+ * For an overlay:
+ * -create Region_View for that particular view to gather data and draw (in regionlooks folder)
+ * -create Overlay enum corresponding to that view (at the end of this class)
  */
 public class RegionViewFactory
 {
@@ -16,7 +21,7 @@ public class RegionViewFactory
   private final static RegionView DEFAULT_LOOK = new defaultLook();
   private final static RegionView PLANTING_VIEW = new PlantingZoneView();
   private final static RegionView HAPPINESS_VIEW = new RegionHappyView();
-  private final static RegionView RAIN_VIEW = new RainView();
+  private final static RegionView RAIN_VIEW = new RegionRainView();
   private Overlay currentOverlay;
 
   /**
@@ -54,7 +59,7 @@ public class RegionViewFactory
       case HAPPINESS:
         return HAPPINESS_VIEW;
 
-      case YEARLY_RAIL_FALL:
+      case YEARLY_RAIN_FALL:
         return RAIN_VIEW;
 
       default:
@@ -68,6 +73,6 @@ public class RegionViewFactory
     NONE,
     PLANTING_ZONE,
     HAPPINESS,
-    YEARLY_RAIL_FALL
+    YEARLY_RAIN_FALL
   }
 }
