@@ -27,10 +27,24 @@ public class AttributeGenerator
   /* arbitrary */
   private static final double CROP_UNIT_LIMIT = 2000;
 
-  private String[] crops = {
+  private static String[] crops = {
     "Total Land", "Arable land","Organic Land", "Corn", "Wheat", "Rice",
     "Soy", "Other",
   };
+
+  public static int getCropsLength()
+  {
+    return crops.length;
+  }
+  public static boolean isAdjustableCrop(String labelText)
+  {
+    if( (labelText == "Corn") || (labelText == "Soy") || (labelText == "Wheat") || (labelText == "Other")
+      || (labelText == "Rice") || (labelText == "Organic Land") )
+    {
+      return true;
+    }
+    return false;
+  }
 
   /*
     Generates something resembling a normal distribution between 0 and limit

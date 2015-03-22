@@ -24,17 +24,7 @@ import java.util.Random;
  * you are in relative to the Map JPanel everytime the user scrolls in
  * GameFrame.
  *
- * The original leather pattern came from:
- *   http://www.bannerelkbarra.com/wp-content/uploads/2013/12/black-leather.jpg
- * I then change the original photo and created what I needed from it.
- *
- * The original world map pattern came from:
- *   http://www.world.tisparkle.com/assets/2D_map-mobile.jpg
- * I then used it to create a template and created what I needed from it.
- *
  * @Author Tyler Lynch <lyncht@unm.edu>
- * @Author Christopher Salinas <casjr13@unm.edu>
- * @Version 1.3.2
  * @Since 2015-02-10
  */
 public class NavMap extends JPanel
@@ -68,8 +58,8 @@ public class NavMap extends JPanel
    * @param y location of navigation panel
    * @param width of navigation panel
    * @param height of navigation panel
-   * @param height of Game Frame
-   * @param height of Game Frame
+   * @param height of main.Game Frame
+   * @param height of main.Game Frame
    */
   public NavMap(int x, int y, int width, int height,int frameWidth, int frameHeight, Camera cam, WorldPresenter presenter)
   {

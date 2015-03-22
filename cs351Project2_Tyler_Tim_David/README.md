@@ -20,11 +20,9 @@ find the following files `make.sh` and `run.sh` and...
 
 ### Inspecting
 * Meta (on mac command) click allows multiple region selection (as does click and drag).
-* d displays the default map look
-* w displays the 'happiness' index of regions
-* e displays the planting zone of each region.
-* r displays the anual rain fall of each region.
-* q displays the nourishment of each region.
+* num-key 1 displays the default map look
+* num-key 2 displays the 'happiness' index of regions
+* num-key 3 displays the planting zone of each region.
 
 ### Time
 

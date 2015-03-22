@@ -1,6 +1,7 @@
 package gui;
 
 import gui.displayconverters.MapConverter;
+import gui.hud.OverlaySelect;
 import gui.regionlooks.RegionView;
 import gui.regionlooks.RegionViewFactory;
 import model.Region;
@@ -30,7 +31,7 @@ public class WorldPresenter extends Observable
   private ActiveRegionList activeRegions;
   private World world;
   private boolean activelyDraging;
-  private RegionViewFactory regionViewFactory;
+  private static RegionViewFactory regionViewFactory;
 
 
   /**
@@ -252,12 +253,14 @@ public class WorldPresenter extends Observable
 
   /**
    * Set the look of any Region View over lay.
+   * Updates comboBox in the user controls
    *
    * @param currentOverlay over lay to be displayed.
    */
-  public void setCurrentOverlay(RegionViewFactory.Overlay currentOverlay)
+  public static void setCurrentOverlay(RegionViewFactory.Overlay currentOverlay)
   {
     regionViewFactory.setCurrentOverlay(currentOverlay);
+    OverlaySelect.updateOverlaySelect(currentOverlay);
   }
 
   /*

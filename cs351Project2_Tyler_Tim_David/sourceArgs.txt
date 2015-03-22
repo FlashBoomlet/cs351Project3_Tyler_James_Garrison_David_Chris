@@ -1,4 +1,4 @@
-./src/Game.java
+./src/main.Game.java
 ./src/gui/Camera.java
 ./src/gui/ColorsAndFonts.java
 ./src/gui/displayconverters/AmericanUniteConverter.java

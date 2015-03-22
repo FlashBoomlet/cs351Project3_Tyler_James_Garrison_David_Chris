@@ -1,0 +1,38 @@
+Check List for project Specs Milestone II
+
+Based on specs from Version 1.3
+-T Lynch
+
+
+[ ] Create data structure of valid countries based on project specs
+    [ ] Use this to display country names as they are the official names
+[ ] Raw data from Research
+    [ ] Move file in correct location
+    [ ] Collect data from other groups
+    [ ] Maybe input more accurate data that was collected by semesters end
+    [ ] Read in data properly and store for use
+[ ] Narrow down variable to be displayed to user
+[ ] Data structure of vars for each country with all inputs to model
+    [ ] Tie into sidebar
+[ ] Zero-Order approximation calculations class
+    [ ] Keep track of the data for future use somehow
+[ ] Country Flays
+    [ ] 23x15 pixels is the size required
+    [ ] Display in sidebar
+    [ ] Display under country name being displayed on screen
+[ ] Zoom scale indicator somewhere so we can prove we can zoom to the appropriate level of 1 pixel per 10 km?
+[ ] Sea Level overlay... Maybe a whole bunch of circles being displayed if they are bordered with sea?
+[ ] User Controls
+    [ ] data sliders to influence data
+    [ ] Fill in settings sheet with settings
+    [ ] Filter selection list? Maybe a drop down in upper panel
+        [ ] Display name of what the filter is showing
+    [ ] Timer Control buttons in upper panel (limited to 10 seconds per year)
+    [ ] Any hidden user features that are triggered off of buttons on the keyboard
+[ ] Randomize % Function
+[ ] Model Requirements:
+    [ ] Each year
+    [ ] add noise
+    [ ] annual values
+    [ ] + much more :/
+[ ] Set up VERY modular model structure so that we may have multiple inputs

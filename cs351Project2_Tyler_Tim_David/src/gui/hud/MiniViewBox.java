@@ -39,6 +39,7 @@ public class MiniViewBox extends JPanel
 
   public MiniViewBox(String name,int frameWidth, int frameHeight)
   {
+
     // init
     this.alpha = 0.0f;
     this.titleLabel = new JLabel(name);
@@ -55,6 +56,7 @@ public class MiniViewBox extends JPanel
       BorderFactory.createMatteBorder(0, 0, 2, 0, BORDER_COL),
       PADDING_BORDER));
 
+    regionViewer.setMinimumSize(new Dimension(frameWidth, frameHeight ));
     regionViewer.setBorder(PADDING_BORDER);
     regionViewer.addMouseListener(new MouseAdapter()
     {
@@ -73,6 +75,7 @@ public class MiniViewBox extends JPanel
 
 
     // wire-up
+    titleLabel.setMinimumSize(new Dimension(getWidth(), getHeight() * (1 / 4)));
     this.add(titleLabel, BorderLayout.NORTH);
     this.add(regionViewer, BorderLayout.CENTER);
 
@@ -96,6 +99,7 @@ public class MiniViewBox extends JPanel
    */
   private JPanel getRegionView()
   {
+    setSize(getWidth(),getHeight()*(3/4));
     return new JPanel()
     {
       @Override

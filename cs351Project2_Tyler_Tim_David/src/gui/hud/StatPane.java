@@ -1,6 +1,7 @@
 package gui.hud;
 
 
+import IO.AttributeGenerator;
 import gui.ColorsAndFonts;
 
 import javax.swing.*;
@@ -26,28 +27,40 @@ public class StatPane extends JPanel
    * Constructor. The specified name is what is printed as the title of the
    * Stat Panel.
    * @param name
+   * @param width of sideBar
+   * @param height of component
    */
-  public StatPane(String name)
+  public StatPane(String name,int width,int height)
   {
     //init
     barGraphsPanel = new JPanel();
     titleLable = new JLabel(name);
     JPanel titlePane = new JPanel();
+    setMaximumSize(new Dimension(width * 100, 9000));
 
     //config
     titlePane.setBackground(GUI_BACKGROUND);
     titlePane.setLayout(new FlowLayout(FlowLayout.LEFT));
-    titlePane.setBorder(
-      BorderFactory.createMatteBorder(0, 0, 2, 0, BORDER_COL));
+    titlePane.setMaximumSize(new Dimension(width, height));
+    titlePane.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, BORDER_COL));
 
     titleLable.setFont(TITLE_FONT);
     titleLable.setForeground(FOREGROUND_COL);
+    titleLable.setMaximumSize(new Dimension(width, height));
     titleLable.setHorizontalAlignment(SwingConstants.LEFT);
 
     barGraphsPanel.setBackground(GUI_BACKGROUND);
-    barGraphsPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+    barGraphsPanel.setBorder(new EmptyBorder(1, 1, 1, 1));
 
-    BoxLayout layout = new BoxLayout(barGraphsPanel, BoxLayout.Y_AXIS);
+    LayoutManager layout;
+    if( name == "REGION(S) CROP DATA:" )
+    {
+      layout = new GridLayout(AttributeGenerator.getCropsLength()+1,1);
+    }
+    else
+    {
+      layout = new BoxLayout(barGraphsPanel, BoxLayout.Y_AXIS);
+    }
     barGraphsPanel.setLayout(layout);
 
     //wire

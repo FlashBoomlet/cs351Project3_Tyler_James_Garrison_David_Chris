@@ -6,16 +6,16 @@ import model.World;
  */
 public class WorldCell
 {
-  public static double EDGE_X_LON = (180*2)/(40075/10);
-  public static double EDGE_Y_LAT = (90*2)/(40008/10);
   private double lon = 0;
   private double lat = 0;
+  private int x = 0;
+  private int y = 0;
   private double annualHigh = 0;
   private double annualLow = 0;
   private double elevation = 0;
-  private double [] monthlyPrecip = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
-  private double [] monthlyDayAvg = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  private double [] monthlyNightAvg = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  private double annualPrecip = -1;
+  private double monthlyDayAvg;
+  private double monthlyNightAvg;
 
   public WorldCell (double lonIn, double latIn)
   {
@@ -48,15 +48,6 @@ public class WorldCell
     return annualLow;
   }
 
-  public boolean pointInCell (double lonPoint, double latPoint)
-  {
-    if (latPoint >= lat && latPoint < (lat + EDGE_Y_LAT) && lonPoint >= lon && lonPoint < (lon + EDGE_X_LON))
-    {
-      return true;
-    }
-    return false;
-  }
-
   public void setElevation (double elev)
   {
     if (elev >= 0 && elev <= 8850)
@@ -71,21 +62,24 @@ public class WorldCell
 
   public void setAllPrecip (double[] months)
   {
+    double temp = 0;
     if (months.length == 12)
     {
-      if (monthlyPrecip [0] == -1)
+      if (annualPrecip == -1)
       {
         for (int i = 0; i < 12; i++)
         {
-          monthlyPrecip[i] = months[i];
+          temp = temp + months[i];
         }
+        annualPrecip = temp / 12;
       }
       else
       {
         for (int i = 0; i < 12; i++)
         {
-          monthlyPrecip[i] = (months[i] + monthlyPrecip[i]) / 2;
+          temp = temp + months[i];
         }
+        annualPrecip = (annualPrecip + temp) / 2;
       }
     }
     else
@@ -94,13 +88,8 @@ public class WorldCell
     }
   }
 
-  public double getMonthPrecip (int index)
+  public double getPrecip ()
   {
-    if (index < 13 && index > 0)
-    {
-      return monthlyPrecip[index - 1];
-    }
-    System.out.println(index + " is not a valid month for Precip");
-    return -1;
+    return annualPrecip;
   }
 }

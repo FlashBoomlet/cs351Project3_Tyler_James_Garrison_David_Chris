@@ -37,20 +37,17 @@ public class DatePanel extends JPanel
    Instantiates a DatePanel whose Dimension is dependent on FontMetrics and a
    default GUI font (see gui.ColorsAndFonts)
    */
-  public DatePanel()
+  public DatePanel(int x, int y, int width, int height)
   {
     formatter = new SimpleDateFormat(DATE_PATTERN);
 
     setOpaque(true);
     setBackground(guiBackground);
+    setLocation(x,y);
+    setPreferredSize(new Dimension(width,height));
+    setBorder(BorderFactory.createMatteBorder(0, 3, 1, 3, ColorsAndFonts.GUI_TEXT_COLOR.darker()  ));
 
     FontMetrics metrics = getFontMetrics(DATE_FONT);
-    int h = metrics.getHeight() + INSET*2;
-    int w = metrics.stringWidth(DATE_PATTERN) + INSET * 2;
-
-    setPreferredSize(new Dimension(w, h));
-    setMinimumSize(getPreferredSize());
-    setMaximumSize(getPreferredSize());
   }
 
   /**
@@ -76,12 +73,12 @@ public class DatePanel extends JPanel
 
     int w = metrics.stringWidth(s);
     int h = (int) metrics.getLineMetrics(s, g2).getHeight();
-  
+
   /* position given to Graphics context is lower left hand corner of text */
     int x = (getWidth() - w) / 2;
     int y = (getHeight() + h) / 2;
 
-    g2.setColor(ColorsAndFonts.GUI_TEXT_COLOR);
+    g2.setColor(ColorsAndFonts.REGION_NAME_FONT_C);
     g2.drawString(s, x, y);
   }
 

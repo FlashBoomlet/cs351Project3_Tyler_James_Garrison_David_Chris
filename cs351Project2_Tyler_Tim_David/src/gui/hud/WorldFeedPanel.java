@@ -22,35 +22,45 @@ import java.util.Observer;
  */
 public class WorldFeedPanel extends JPanel implements Observer
 {
-
- private static final int PADDING = 0;
+ /*
+  * Panel Components
+  */
  private DatePanel datePanel;
- private Ticker ticker;
- private GroupLayout layout;
- private int localFrameWidth = 0;
+ private OverlaySelect overlaySelect;
+ private ScalePanel scalePanel;
+ private GameplayControl gameplayControl;
+
+ private LayoutManager layout = new FlowLayout(FlowLayout.LEFT,0,0);
+ private static final int PADDING = 0;
+ private int componentWidth;
+ private int componentHeight;
 
  /**
   Instantiate the WorldFeedPanel with a WorldPresenter to poll from upon
   receipt of update notifications
   @param presenter WorldPresenter to observe
   @param frameWidth width of main frame
-  @param frameHeight height of main frame
+  @param height height of this particular panel
   */
- public WorldFeedPanel(WorldPresenter presenter, int frameWidth, int frameHeight)
+ public WorldFeedPanel(WorldPresenter presenter, int frameWidth, int height)
  {
-  localFrameWidth = frameWidth;
-  datePanel = new DatePanel();
+  componentWidth = (int) (frameWidth*(.20));
+  componentHeight = (int) (height*(0.95));
+  /*
+   * Component Initialization
+   */
+  datePanel = new DatePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
+  overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.25)),componentHeight);
+  scalePanel = new ScalePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
+  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.20))+(frameWidth*(.25))),componentHeight);
+
   datePanel.setDate(presenter.getWorldDate());
-  ticker = new Ticker();
 
   setBackground(ColorsAndFonts.OCEANS);
 
   initLayout();
-  int prefH = datePanel.getPreferredSize().height + PADDING*2;
-  int prefW = datePanel.getPreferredSize().width + ticker.getPreferredSize().width+PADDING*2;
-  setLocation(0,0);
-  setPreferredSize(new Dimension(frameWidth, frameHeight/(25) ));
-
+  setLocation(0, 0);
+  setPreferredSize(new Dimension(frameWidth, height));
  }
 
  /*
@@ -58,22 +68,14 @@ public class WorldFeedPanel extends JPanel implements Observer
   */
  private void initLayout()
  {
-  layout = new GroupLayout(this);
   setLayout(layout);
 
-  layout.setAutoCreateGaps(true);
+  add(scalePanel);
+  add(overlaySelect);
+  add(datePanel);
+  add(gameplayControl);
 
-  layout.setHorizontalGroup(
-    layout.createSequentialGroup()
-      .addComponent(ticker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-      .addComponent(datePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-  );
-
-  layout.setVerticalGroup(
-    layout.createParallelGroup(GroupLayout.Alignment.BASELINE, false)
-      .addComponent(ticker, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-      .addComponent(datePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-  );
+  setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, ColorsAndFonts.GUI_TEXT_COLOR.darker()  ));
  }
 
 

@@ -10,6 +10,7 @@ import gui.regionlooks.PlantingZoneView;
 import model.RegionAttributes;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
@@ -42,18 +43,18 @@ public class InfoPanel extends JPanel implements Observer
   private int fullWidth;
   /**
    Instantiate the InfoPanel
-   @param frameWidth width of main frame
-   @param frameHeight height of main frame
+   @param frameWidth width of this component
+   @param frameHeight height of this component
    */
   public InfoPanel(int frameWidth, int frameHeight,int y)
   {
     // init
     miniViewBox = new MiniViewBox(" ",frameWidth, frameHeight);
-    attributeStats = new StatPane("REGION(S) DATA:");
-    cropStatPane = new StatPane("REGION(S) CROP DATA:");
+    attributeStats = new StatPane("REGION(S) DATA:",frameWidth,frameHeight);
+    cropStatPane = new StatPane("REGION(S) CROP DATA:",frameWidth,frameHeight);
 
     //config
-    this.setLayout(new GridLayout(3, 1));
+    this.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
     // GridBagConstraints c = new GridBagConstraints();
     this.setMinimumSize(size);
     this.setLocation(0, y);
@@ -62,9 +63,16 @@ public class InfoPanel extends JPanel implements Observer
     fullWidth = frameWidth;
     this.setBackground(GUI_BACKGROUND);
     this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
+
     //wire
+    miniViewBox.setPreferredSize(new Dimension(frameWidth, (frameHeight / 4)));
     this.add(miniViewBox);
+
+    attributeStats.setPreferredSize(new Dimension(frameWidth, (frameHeight / 4)));
     this.add(attributeStats);
+
+    int whatsLeft = (frameHeight / 4)*2;
+    cropStatPane.setPreferredSize(new Dimension(frameWidth, frameHeight - whatsLeft));
     this.add(cropStatPane);
 
 
@@ -434,7 +442,7 @@ public class InfoPanel extends JPanel implements Observer
     }
     
     /* crops are summed separately in a map */
-    Map<String, Double> cropMap = new HashMap<>();
+    LinkedHashMap<String, Double> cropMap = new LinkedHashMap<>();
 
     int numRegions = regions.size();
 

@@ -22,11 +22,12 @@ public class World
   private Random random = new Random(44);
   private Collection<Region> world;
   private Calendar currentDate;
-  private int LONGITUDE_CELL_NUM = 40075/10 + 1; //40075 km = Circumference of the earth around the equator
-  private int LATITUDE_CELL_NUM = 40008/10 + 1;  //40008 km = Circumference from pole to pole
-  private WorldCell [][] worldCells = new WorldCell [LONGITUDE_CELL_NUM] [LATITUDE_CELL_NUM];
-  public static double EDGE_X_LON = (180*2)/(40075/10);
-  public static double EDGE_Y_LAT = (90*2)/(40008/10);
+  private static double EARTH_SURFACE_AREA = 510072000; //km squared
+  private static double EQUATORIAL_CIRC = 40075; //Circumference of the earth around the equator
+  private static double POLE_CIRC = 20004;  //Distance from pole to pole
+  private static int X_CELLS = (int) Math.sqrt((EARTH_SURFACE_AREA/100)*(EQUATORIAL_CIRC/POLE_CIRC));
+  private static int Y_CELLS = (int) Math.sqrt((EARTH_SURFACE_AREA/100)/(EQUATORIAL_CIRC/POLE_CIRC)) + 1;
+  private WorldArray worldArray;
 
   /**
    * Class constructor. To build a world one must have a collection of regions.
@@ -45,24 +46,12 @@ public class World
   {
     this.world = world;
     this.currentDate = cal;
-    //initCells();
+    worldArray = new WorldArray(X_CELLS, Y_CELLS);
   }
 
-  private void initCells ()
+  public WorldArray getWorldArray()
   {
-    //The last column of cells will be malformed, due to there not being 10km left. Need to watch for this.
-    for (int i = 0; i < LONGITUDE_CELL_NUM; i++)
-    {
-      for (int j = 0; j < LATITUDE_CELL_NUM; j++)
-      {
-        worldCells [i][j] = new WorldCell((-180 + EDGE_X_LON * i), (-90 + EDGE_Y_LAT * j));
-      }
-    }
-  }
-
-  public WorldCell [][] getWorldCells()
-  {
-    return worldCells;
+    return worldArray;
   }
 
   /**

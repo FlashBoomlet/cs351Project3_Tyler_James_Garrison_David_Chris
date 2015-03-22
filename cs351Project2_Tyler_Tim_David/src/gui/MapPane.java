@@ -34,6 +34,7 @@ public class MapPane extends JPanel
   private final static int CAMERA_STEP = 10;
   private final static double ZOOM_STEP = .05;
   private final static double SCROLL_FACTOR = .05;
+  private static int heightAdjust;
 
   private final static int
     UP = 38,
@@ -54,7 +55,7 @@ public class MapPane extends JPanel
   private Point2D multiSelectFrom;
   private Rectangle2D dragRect;
 
-  private WorldPresenter presenter;
+  public static WorldPresenter presenter;
   private Camera cam;
   private Point2D dragFrom;
 
@@ -107,7 +108,7 @@ public class MapPane extends JPanel
     }
   };
   // test key binding
-  private Action stepWorld = new AbstractAction()
+  public static Action stepWorld = new AbstractAction()
   {
     @Override
     public void actionPerformed(ActionEvent e)
@@ -118,15 +119,16 @@ public class MapPane extends JPanel
 
   /**
    * Instantiate this MapPane with a Camera to provide transforms and a
-   * WorldPresenter to provide an interface into the model space 
+   * WorldPresenter to provide an interface into the model space
    * @param cam   Camera controlling the map transformations
-   * @param presenter   WorldPresenter to 
+   * @param presenter   WorldPresenter to
    */
-  public MapPane(Camera cam, WorldPresenter presenter)
+  public MapPane(Camera cam, WorldPresenter presenter,Dimension dim,int feedPanelHeight)
   {
     this.cam = cam;
     this.presenter = presenter;
-    
+    this.heightAdjust = feedPanelHeight;
+
     /* 'this' handles most of its controls, for convenience */
     addMouseListener(this);
     addMouseWheelListener(this);
@@ -135,35 +137,32 @@ public class MapPane extends JPanel
 
     setBackground(ColorsAndFonts.OCEANS);
     dynamicNameDrawing = true; /* more like sexyNameDrawing */
-
-    setPreferredSize(cam.getTargetSize());
-    setLocation(0, 0);
-    setSize(getPreferredSize());
-    setMinimumSize(getPreferredSize());
+    setPreferredSize(dim);
+    setLocation(0,0);
     setDoubleBuffered(true);
 
     // set up keybindings. "KEY-BINDING-DOC"
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('q'), "nourishmentview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("6"), "nourishmentview");
     getActionMap().put("nourishmentview", nourishmentOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('r'), "rainview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("5"), "rainview");
     getActionMap().put("rainview", rainOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('d'), "default");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "default");
     getActionMap().put("default", defaultOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('w'), "happy");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"), "happy");
     getActionMap().put("happy", happyOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('e'), "planting");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"), "planting");
     getActionMap().put("planting", plantingZoneOverlay);
 
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.
        When modified by a "shift", holding will fire events repeatedly, and allow
        for world stepping (and demise) at an accelerated rate */
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed 7"), "step");
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("7"), "step");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed 4"), "step");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"), "step");
     getActionMap().put("step", stepWorld);
 
   }

@@ -1,9 +1,12 @@
+package main;
+
 import IO.AreaXMLLoader;
 import IO.WorldDataParser;
 import IO.XMLparsers.KMLParser;
 import gui.*;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
+import gui.hud.GameplayControl;
 import gui.hud.InfoPanel;
 import gui.hud.NavMap;
 import gui.hud.WorldFeedPanel;
@@ -24,27 +27,44 @@ import javax.swing.JLayeredPane;
  * Main entry point for the 'game'. Handles loading data and all configurations.
  * @author david winston
  *         created: 2015-02-04
- *         <p/>
- *         description:
+ *
+ * Heavily modified and restructured by
+ * @author Tyler Lynch <lyncht@unm.edu>
  */
 public class Game
 {
+  /*
+   * Frame variables
+   */
   public static final String MODEL_DATA_PATH = "resources/ne_10m_admin_1_states_provinces.kml";
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
   public static final String PRECIP_DATA = "resources/data/precip2010.txt";
-  private MapPane mapPane;
-  private InfoPanel infoPanel;
-  private NavMap navMap;
-  private WorldPresenter worldPresenter;
-  private WorldFeedPanel worldFeedPanel;
-  private Timer worldTime;
-  private final static int DEFAULT_TIME_SPEED = 2000;
-  private Timer gameLoop;
-  private JFrame frame;
-  int frameWidth = 1400;
-  int frameHeight = 600;
+  int frameWidth = 1200;
+  int frameHeight = 700;
   final float NAV_HEIGHT_SCALE = (float) .25;
   final float NAV_WIDTH_SCALE = (float) 1.6;
+  private final static int DEFAULT_TIME_SPEED = 2000;
+  private int feedPanelHeight;
+
+  /*
+   * Frame panels
+   */
+  private static MapPane mapPane;
+  private static InfoPanel infoPanel;
+  private static NavMap navMap;
+  private static WorldFeedPanel worldFeedPanel;
+  private static ButtonPanel buttonPanel;
+  private static StartScreen startPanel;
+  private static SettingsScreen settingsScreen;
+  private static JPanel defaultScreen;
+
+  /*
+   * Frame components
+   */
+  private WorldPresenter worldPresenter;
+  public static Timer worldTime;
+  public static Timer gameLoop;
+  private JFrame frame;
 
   /**
    * Constructor for game, handles all init logic.
@@ -66,15 +86,27 @@ public class Game
     frame.setPreferredSize(new Dimension(frameWidth, frameHeight) );
     frame.setSize(frame.getPreferredSize());
     frame.setLocation(0,0);
+    frame.setBackground(ColorsAndFonts.OCEANS);
 
     init();
   }
 
   /**
-   * set it ALL up, I mean all of it.
+   * This function now calls to create all components and panels used by the frame and game
+   * It then initializes the frame with all of this and sets up the controls after
+   *
+   * Modified heavily last by
+   * @author Tyler Lynch <lyncht@unm.edu>
    */
   private void init()
   {
+    startPanel = new StartScreen(frameWidth,frameHeight);
+
+    settingsScreen = new SettingsScreen(frameWidth,frameHeight);
+
+    defaultScreen = new JPanel();
+    defaultScreen.setBounds(0,0,frameWidth,frameHeight);
+    defaultScreen.setBackground(ColorsAndFonts.OCEANS);
 
     Random random = new Random(234);
     AttributeGenerator randoAtts = new AttributeGenerator();
@@ -93,15 +125,16 @@ public class Game
     worldPresenter.setBackgroundRegions(background);
     worldPresenter.setModelRegions(modelRegions);
 
+    feedPanelHeight = (int) (frameHeight/25);
     Camera cam = new Camera(converter);
-    mapPane = new MapPane(cam, worldPresenter);
+    Dimension dim = new Dimension(frameWidth,(int) (frameHeight-feedPanelHeight) );
+    mapPane = new MapPane(cam, worldPresenter,dim,feedPanelHeight);
 
-    infoPanel = new InfoPanel(frameWidth/(6),frameHeight-(frameHeight/25),(frameHeight/25));
-    infoPanel.setPresenter(worldPresenter);
-
-    worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,frameHeight);
+    worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight);
     worldPresenter.addObserver(worldFeedPanel);
 
+    infoPanel = new InfoPanel(frameWidth/(6),(frameHeight-feedPanelHeight),feedPanelHeight);
+    infoPanel.setPresenter(worldPresenter);
 
     final int NAV_WIDTH = (int) Math.floor(frameWidth/4);
     final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
@@ -109,12 +142,15 @@ public class Game
     final int NAV_Y = frameHeight-NAV_HEIGHT;
     navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
+    buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
+
     initFrame();
     setupControlls();
   }
 
   /**
    * sets the main game container to visible.
+   * Called by main should everything be set up properly
    */
   public void show()
   {
@@ -124,7 +160,7 @@ public class Game
   /**
    * Starts the game timers.
    */
-  public void start()
+  public static void start()
   {
     gameLoop.start();
     worldTime.start();
@@ -133,12 +169,11 @@ public class Game
   /**
    * pauses the game.
    */
-  public void pause()
+  public static void pause()
   {
     gameLoop.stop();
     worldTime.stop();
   }
-
 
   /**
    * @return true if the game loop is running.
@@ -149,7 +184,7 @@ public class Game
   }
 
   /**
-   * init and configures the timers and key bindings for the game.
+   * init and configures the timers and key bindings for the main game controls.
    */
   private void setupControlls()
   {
@@ -218,7 +253,7 @@ public class Game
         else start();
       }
     });
-
+    GameplayControl.updateDisplaySpeed();
   }
 
   /**
@@ -269,44 +304,124 @@ public class Game
     return BGRegions;
   }
 
-  //*******
-  // MAIN *
-  //*******
+  /**
+   * Main. Initializes and starts the game.
+   * It also shows the game should everything start properly without error.
+   *
+   * @param args
+   */
   public static void main(String[] args)
   {
     Game gameManager = new Game();
     gameManager.show();
-    gameManager.start();
   }
-
 
   /**
    * Creates the content panel for the JPanels to be added to in a layered fashion
-   * Created by Lyncht on 3/17/15.
    *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   * @since 3/17/15
    */
   class CenterPanel extends JPanel
   {
     CenterPanel(MapPane mapPane,InfoPanel infoPanel,WorldFeedPanel worldFeedPanel)
     {
       super();
-      // Type cast panels to JPanels to be added to the Layered panel
-
       JLayeredPane layeredPane = frame.getLayeredPane();
+
+      // Add Start Screen
+      layeredPane.add(startPanel, new Integer(99) );
+
+      // Add Settings Screen
+      layeredPane.add(settingsScreen, new Integer(100) );
+
+      layeredPane.add(defaultScreen, new Integer(0));
 
       mapPane.setBounds(0,0,frameWidth,frameHeight);
       layeredPane.add(mapPane, new Integer(1));
 
-      worldFeedPanel.setBounds(0,0,frameWidth,(frameHeight/25));
+      worldFeedPanel.setBounds(0,0,frameWidth,feedPanelHeight);
       layeredPane.add(worldFeedPanel, new Integer(2));
 
       // Side panel with all information
-      infoPanel.setBounds(0,(frameHeight/25),frameWidth/6,frameHeight-(frameHeight/25));
+      infoPanel.setBounds(0,feedPanelHeight,frameWidth/6,frameHeight-feedPanelHeight);
       layeredPane.add(infoPanel, new Integer(3)) ;
       infoPanel.setVisible(false);
 
       // Navigation in the lower right hand corner
       layeredPane.add(navMap, new Integer(3) );
+
+      // Button panel in the lower right hand corner
+      layeredPane.add(buttonPanel, new Integer(4) );
+
+      pauseGame();
+    }
+  }
+
+  /**
+   * Called by the startScreen to begin the game.
+   * Hides the settings and the start screen and shows all others.
+   *
+   * WARNING! This does not actually start the game timer(s)
+   *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   */
+  public static void startGame()
+  {
+    mapPane.setVisible(true);
+    worldFeedPanel.setVisible(true);
+    navMap.setVisible(true);
+    buttonPanel.setVisible(true);
+    startPanel.setVisible(false);
+    settingsScreen.setVisible(false);
+  }
+
+  /**
+   * Called by the buttonPanel to pause the game.
+   * Shows the startScreen and hides all others.
+   *
+   * WARNING! This does not actually pause the game timer(s)
+   *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   */
+  public static void pauseGame()
+  {
+    mapPane.setVisible(false);
+    worldFeedPanel.setVisible(false);
+    infoPanel.setVisible(false);
+    navMap.setVisible(false);
+    buttonPanel.setVisible(false);
+    startPanel.setVisible(true);
+    settingsScreen.setVisible(false);
+  }
+
+  /**
+   * A function to pause and start the game after the settings panel is invoked or
+   * the user is done messing with the settings. If invoked then it hides the map and
+   * infoPanel so that their action listeners are not invoked by accident
+   *
+   * WARNING! This does toggle the game timer(s)
+   *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   * @param display a boolean if you want to show the settings or not
+   */
+  public static void settingsDisplay(boolean display)
+  {
+    if( display ) {
+      mapPane.setVisible(false);
+      infoPanel.setVisible(false);
+
+      settingsScreen.showEverything();
+      settingsScreen.setVisible(true);
+      pause();
+    }
+    else
+    {
+      settingsScreen.hideEverything();
+      settingsScreen.setVisible(false);
+      start();
+      startGame();
     }
   }
 }
+

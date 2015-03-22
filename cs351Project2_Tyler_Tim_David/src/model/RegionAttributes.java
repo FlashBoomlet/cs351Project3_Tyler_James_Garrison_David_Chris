@@ -2,6 +2,7 @@ package model;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -46,8 +47,8 @@ public class RegionAttributes
   }
 
 
-  private HashMap<PLANTING_ATTRIBUTES, Double> attSet = new HashMap<>();
-  private HashMap<String, Double> crops = new HashMap<>();
+  private LinkedHashMap<PLANTING_ATTRIBUTES, Double> attSet = new LinkedHashMap<>();
+  private LinkedHashMap<String, Double> crops = new LinkedHashMap<>();
 
   /**
    * Produces the value associated with the given attribute.
@@ -143,10 +144,10 @@ public class RegionAttributes
     BIRTH_RATE("Birth Rate"),
     MORTALITY_RATE("Mortality Rate"),
     MIGRATION_RATE("Migration Rate"),
-    UNDERNOURISHMENT_RATE("Undernourishment Rate"),
+    UNDERNOURISHMENT_RATE("Undernourishment"),
     ANNUAL_RAINFALL("Annual Rainfall"),
     MONTHLY_RAINFALL("Monthly Rainfall"),
-    AVE_MONTH_TEMP_HI("Average Month High Temp"),
+    AVE_MONTH_TEMP_HI("Average Month High temp"),
     AVE_MONTH_TEMP_LO("Average Month Low Temp"),
     COST_OF_CROPS("Cost"),
     PROFIT_FROM_CROPS("Profit"),
