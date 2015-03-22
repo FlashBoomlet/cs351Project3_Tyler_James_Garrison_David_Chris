@@ -161,8 +161,8 @@ public class MapPane extends JPanel
        modifiers (e.g. "pressed"). This holds for all single keys tested.
        When modified by a "shift", holding will fire events repeatedly, and allow
        for world stepping (and demise) at an accelerated rate */
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed 4"), "step");
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"), "step");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed 7"), "step");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("7"), "step");
     getActionMap().put("step", stepWorld);
 
   }

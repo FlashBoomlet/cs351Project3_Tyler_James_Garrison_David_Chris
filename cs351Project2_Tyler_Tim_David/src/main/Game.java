@@ -71,6 +71,27 @@ public class Game
    */
   public Game()
   {
+    try {
+      // Uses System setting for the look of the game
+      //Go to http://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html#steps for more info
+
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+      // Sets the look of the game to "Metal", the normal look
+      //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+    }
+    catch (UnsupportedLookAndFeelException e) {
+      // handle exception
+    }
+    catch (ClassNotFoundException e) {
+      // handle exception
+    }
+    catch (InstantiationException e) {
+      // handle exception
+    }
+    catch (IllegalAccessException e) {
+      // handle exception
+    }
     frame = new JFrame();
     Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     int SCREEN_WIDTH = (int) SCREEN_SIZE.getWidth();
