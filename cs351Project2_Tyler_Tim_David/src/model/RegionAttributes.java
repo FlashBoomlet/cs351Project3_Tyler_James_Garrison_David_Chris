@@ -146,7 +146,7 @@ public class RegionAttributes
     UNDERNOURISHMENT_RATE("Undernourishment Rate"),
     ANNUAL_RAINFALL("Annual Rainfall"),
     MONTHLY_RAINFALL("Monthly Rainfall"),
-    AVE_MONTH_TEMP_HI("Average Month High temp"),
+    AVE_MONTH_TEMP_HI("Average Month High Temp"),
     AVE_MONTH_TEMP_LO("Average Month Low Temp"),
     COST_OF_CROPS("Cost"),
     PROFIT_FROM_CROPS("Profit"),
