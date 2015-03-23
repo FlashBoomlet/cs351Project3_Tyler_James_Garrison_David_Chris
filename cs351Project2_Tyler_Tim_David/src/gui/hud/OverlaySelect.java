@@ -2,18 +2,12 @@ package gui.hud;
 
 import gui.ColorsAndFonts;
 import gui.MapPane;
-import gui.WorldPresenter;
 import gui.regionlooks.RegionViewFactory;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.util.Map;
 
 /**
  * OverlaySelect extends JPanel and creates the guts for selecting
@@ -32,7 +26,8 @@ public class OverlaySelect extends JPanel
       "PLANTING_ZONE",
       "YEARLY_RAIN_FALL",
       "NOURISHMENT",
-      "SOIL_TYPE"
+      "SOIL_TYPE",
+      "POPULATION"
     };
 
   /**
@@ -85,6 +80,9 @@ public class OverlaySelect extends JPanel
           case 5:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOIL_TYPE);
             break;
+          case 6:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.POPULATION);
+            break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
         }
@@ -107,6 +105,7 @@ public class OverlaySelect extends JPanel
     else if( overlay == "YEARLY_RAIN_FALL") overlaySelector.setSelectedIndex(3);
     else if( overlay == "NOURISHMENT" ) overlaySelector.setSelectedIndex(4);
     else if( overlay == "SOIL_TYPE" ) overlaySelector.setSelectedIndex(5);
+    else if( overlay == "POPULATION" ) overlaySelector.setSelectedIndex(6);
     else overlaySelector.setSelectedIndex(0);
   }
 }

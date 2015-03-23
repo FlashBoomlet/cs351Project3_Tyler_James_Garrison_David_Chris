@@ -15,10 +15,10 @@ import gui.Camera;
  * -create Region_View for that particular view to gather data and draw (in regionlooks folder)
  * -create Overlay enum corresponding to that view (at the end of this class)
  * -make changes in MapPane as well
+ * -make changes in OverlaySelect too
  */
 public class RegionViewFactory
 {
-
   /* view currently correspond to camera angles */
   private final static RegionView DEFAULT_LOOK = new defaultLook();
   private final static RegionView PLANTING_VIEW = new PlantingZoneView();
@@ -26,6 +26,7 @@ public class RegionViewFactory
   private final static RegionView RAIN_VIEW = new RegionRainView();
   private final static RegionView NOURISHMENT_VIEW = new RegionMalnourishmentView();
   private final static RegionView SOIL_TYPE_VIEW = new RegionSoilTypeView();
+  private final static RegionView POPULATION_VIEW = new RegionPopulationView();
   private Overlay currentOverlay;
 
   /**
@@ -52,7 +53,6 @@ public class RegionViewFactory
     return DEFAULT_LOOK;
   }
 
-
   public RegionView getViewFromDistance(Camera.CAM_DISTANCE distance)
   {
     switch (currentOverlay)
@@ -72,11 +72,13 @@ public class RegionViewFactory
       case SOIL_TYPE:
         return SOIL_TYPE_VIEW;
 
+      case POPULATION:
+        return POPULATION_VIEW;
+
       default:
         return DEFAULT_LOOK;
     }
   }
-
 
   public enum Overlay
   {
@@ -85,6 +87,7 @@ public class RegionViewFactory
     HAPPINESS,
     YEARLY_RAIN_FALL,
     NOURISHMENT,
-    SOIL_TYPE
+    SOIL_TYPE,
+    POPULATION
   }
 }

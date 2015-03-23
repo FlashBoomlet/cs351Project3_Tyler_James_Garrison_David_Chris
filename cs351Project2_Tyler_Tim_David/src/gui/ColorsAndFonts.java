@@ -64,7 +64,6 @@ public interface ColorsAndFonts
 
 
   Color[] RAIN_FALL = {
-    new Color(0xf7fbff),
     new Color(0xdeebf7),
     new Color(0xc6dbef),
     new Color(0x9ecae1),
@@ -96,6 +95,27 @@ public interface ColorsAndFonts
       new Color(0xA3A385), //silt loam
       new Color(0x996633) //loam
   };
+
+  Color[] POPULATION = {
+      new Color(0xB2FFFF),
+      new Color(0x80FFFF),
+      new Color(0x4DFFFF),
+      new Color(0x00FFFF),
+      new Color(0x00E6E6),
+      new Color(0x00B2B2),
+      new Color(0x2166ac)
+  };
+
+//  Color[] POPULATION = {
+//      new Color(0x80CC80),
+//      new Color(0x44CC00),
+//      new Color(0x33AD33),
+//      new Color(0x009900),
+//      new Color(0x006600),
+//      new Color(0xCCCC00),
+//      new Color(0xFF5500),
+//      new Color(0xFF1100)
+//  };
 
   Color BAR_GRAPH_NEG = Color.cyan;
 

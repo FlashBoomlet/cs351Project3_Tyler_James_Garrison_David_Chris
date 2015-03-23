@@ -115,6 +115,14 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOIL_TYPE);
     }
   };
+  private Action populationOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.POPULATION);
+    }
+  };
   // test key binding
   public static Action stepWorld = new AbstractAction()
   {
@@ -168,12 +176,15 @@ public class MapPane extends JPanel
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"), "soiltypeview");
     getActionMap().put("soiltypeview", soilTypeOverlay);
 
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("7"), "populationview");
+    getActionMap().put("populationview", populationOverlay);
+
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.
        When modified by a "shift", holding will fire events repeatedly, and allow
        for world stepping (and demise) at an accelerated rate */
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed 7"), "step");
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("7"), "step");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed s"), "step");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('s'), "step");
     getActionMap().put("step", stepWorld);
 
   }

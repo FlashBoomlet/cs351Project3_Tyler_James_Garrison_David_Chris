@@ -25,7 +25,7 @@ class RegionRainView implements RegionView
     Color color;
     if (gRegion.isActive())
     {
-      color = Color.CYAN;
+      color = new Color(0x00EE00);
     }
     else
     {
