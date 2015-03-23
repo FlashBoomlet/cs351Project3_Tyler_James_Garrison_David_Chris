@@ -25,6 +25,7 @@ public class RegionViewFactory
   private final static RegionView HAPPINESS_VIEW = new RegionHappyView();
   private final static RegionView RAIN_VIEW = new RegionRainView();
   private final static RegionView NOURISHMENT_VIEW = new RegionMalnourishmentView();
+  private final static RegionView SOIL_TYPE_VIEW = new RegionSoilTypeView();
   private Overlay currentOverlay;
 
   /**
@@ -68,6 +69,9 @@ public class RegionViewFactory
       case NOURISHMENT:
         return NOURISHMENT_VIEW;
 
+      case SOIL_TYPE:
+        return SOIL_TYPE_VIEW;
+
       default:
         return DEFAULT_LOOK;
     }
@@ -80,6 +84,7 @@ public class RegionViewFactory
     PLANTING_ZONE,
     HAPPINESS,
     YEARLY_RAIN_FALL,
-    NOURISHMENT
+    NOURISHMENT,
+    SOIL_TYPE
   }
 }

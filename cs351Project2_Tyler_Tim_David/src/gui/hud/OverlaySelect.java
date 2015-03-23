@@ -32,6 +32,7 @@ public class OverlaySelect extends JPanel
       "PLANTING_ZONE",
       "YEARLY_RAIN_FALL",
       "NOURISHMENT",
+      "SOIL_TYPE"
     };
 
   /**
@@ -81,6 +82,9 @@ public class OverlaySelect extends JPanel
           case 4:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NOURISHMENT);
             break;
+          case 5:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOIL_TYPE);
+            break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
         }
@@ -102,6 +106,7 @@ public class OverlaySelect extends JPanel
     else if( overlay == "PLANTING_ZONE") overlaySelector.setSelectedIndex(2);
     else if( overlay == "YEARLY_RAIN_FALL") overlaySelector.setSelectedIndex(3);
     else if( overlay == "NOURISHMENT" ) overlaySelector.setSelectedIndex(4);
+    else if( overlay == "SOIL_TYPE" ) overlaySelector.setSelectedIndex(5);
     else overlaySelector.setSelectedIndex(0);
   }
 }

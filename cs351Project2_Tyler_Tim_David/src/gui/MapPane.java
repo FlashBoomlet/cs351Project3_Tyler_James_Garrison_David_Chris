@@ -107,6 +107,14 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.PLANTING_ZONE);
     }
   };
+  private Action soilTypeOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOIL_TYPE);
+    }
+  };
   // test key binding
   public static Action stepWorld = new AbstractAction()
   {
@@ -156,6 +164,9 @@ public class MapPane extends JPanel
 
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"), "planting");
     getActionMap().put("planting", plantingZoneOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"), "soiltypeview");
+    getActionMap().put("soiltypeview", soilTypeOverlay);
 
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.

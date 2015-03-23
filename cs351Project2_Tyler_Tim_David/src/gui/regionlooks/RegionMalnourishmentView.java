@@ -16,7 +16,6 @@ class RegionMalnourishmentView implements RegionView
   private static Color[] colors = ColorsAndFonts.NOURISHMENT;
   private static double LIMIT = colors.length / RegionAttributes.LIMITS.get(UNDERNOURISHMENT_RATE);
 
-
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {

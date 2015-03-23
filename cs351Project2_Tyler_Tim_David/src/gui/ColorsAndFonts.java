@@ -87,6 +87,16 @@ public interface ColorsAndFonts
       new Color(0xFF0000),
   };
 
+  Color[] SOIL = {
+      new Color(0xFF4719), //clay
+      new Color(0x808080), //silt
+      new Color(0xFFFF99), //sand
+      new Color(0xAD5C5C), //clay loam
+      new Color(0x999966), //sand loam
+      new Color(0xA3A385), //silt loam
+      new Color(0x996633) //loam
+  };
+
   Color BAR_GRAPH_NEG = Color.cyan;
 
   class colorConverter

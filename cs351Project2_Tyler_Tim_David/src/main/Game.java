@@ -77,8 +77,11 @@ public class Game
 
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-      // Sets the look of the game to "Metal", the normal look
+      // Sets the look of the game to "Metal", the normal look for windows
       //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+
+      //GTK theme
+     // UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
     }
     catch (UnsupportedLookAndFeelException e) {
       // handle exception
@@ -92,6 +95,7 @@ public class Game
     catch (IllegalAccessException e) {
       // handle exception
     }
+
     frame = new JFrame();
     Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     int SCREEN_WIDTH = (int) SCREEN_SIZE.getWidth();
