@@ -16,6 +16,14 @@ import gui.Camera;
  * -create Overlay enum corresponding to that view (at the end of this class)
  * -make changes in MapPane as well
  * -make changes in OverlaySelect too
+ *
+ *
+ * TODO:
+ * crops overlay
+ * temperature overlay
+ * age
+ * birth rate
+ * % organic
  */
 public class RegionViewFactory
 {
@@ -27,6 +35,7 @@ public class RegionViewFactory
   private final static RegionView NOURISHMENT_VIEW = new RegionMalnourishmentView();
   private final static RegionView SOIL_TYPE_VIEW = new RegionSoilTypeView();
   private final static RegionView POPULATION_VIEW = new RegionPopulationView();
+  private final static RegionView AGE_VIEW = new RegionAgeView();
   private Overlay currentOverlay;
 
   /**
@@ -75,6 +84,9 @@ public class RegionViewFactory
       case POPULATION:
         return POPULATION_VIEW;
 
+      case AGE:
+        return AGE_VIEW;
+
       default:
         return DEFAULT_LOOK;
     }
@@ -88,6 +100,7 @@ public class RegionViewFactory
     YEARLY_RAIN_FALL,
     NOURISHMENT,
     SOIL_TYPE,
+    AGE,
     POPULATION
   }
 }

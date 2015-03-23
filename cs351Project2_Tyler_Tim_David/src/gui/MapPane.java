@@ -123,6 +123,14 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.POPULATION);
     }
   };
+  private Action ageOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.AGE);
+    }
+  };
   // test key binding
   public static Action stepWorld = new AbstractAction()
   {
@@ -178,6 +186,9 @@ public class MapPane extends JPanel
 
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("7"), "populationview");
     getActionMap().put("populationview", populationOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("8"), "ageview");
+    getActionMap().put("ageview", ageOverlay);
 
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.

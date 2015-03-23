@@ -97,25 +97,27 @@ public interface ColorsAndFonts
   };
 
   Color[] POPULATION = {
-      new Color(0xB2FFFF),
+      new Color(0xDDFFFF),
       new Color(0x80FFFF),
-      new Color(0x4DFFFF),
       new Color(0x00FFFF),
       new Color(0x00E6E6),
       new Color(0x00B2B2),
       new Color(0x2166ac)
   };
 
-//  Color[] POPULATION = {
-//      new Color(0x80CC80),
-//      new Color(0x44CC00),
-//      new Color(0x33AD33),
-//      new Color(0x009900),
-//      new Color(0x006600),
-//      new Color(0xCCCC00),
-//      new Color(0xFF5500),
-//      new Color(0xFF1100)
-//  };
+  Color[] AGE = {
+      new Color(0x00DD00),
+      new Color(0x4DFF4D),
+      new Color(0x99FF99),
+      new Color(0x4DFFFF),
+      new Color(0x00FFFF),
+      new Color(0x4DFFFF),
+      new Color(0x88AAFF),
+      new Color(0x9999FF),
+      new Color(0x4D4DFF),
+      new Color(0x0000FF),
+      new Color(0x000099)
+  };
 
   Color BAR_GRAPH_NEG = Color.cyan;
 

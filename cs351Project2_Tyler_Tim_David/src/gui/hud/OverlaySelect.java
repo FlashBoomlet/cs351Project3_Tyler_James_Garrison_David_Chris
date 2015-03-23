@@ -21,13 +21,14 @@ public class OverlaySelect extends JPanel
   private static JComboBox<String> overlaySelector;
   private JLabel title;
   private static String[] filters= {
-      "NONE",
-      "HAPPINESS",
-      "PLANTING_ZONE",
-      "YEARLY_RAIN_FALL",
-      "NOURISHMENT",
-      "SOIL_TYPE",
-      "POPULATION"
+      "None",
+      "Happiness",
+      "Planting Zone",
+      "Annual Rain Fall",
+      "Nourishment",
+      "Soil Type",
+      "Population",
+      "Median Age"
     };
 
   /**
@@ -83,6 +84,9 @@ public class OverlaySelect extends JPanel
           case 6:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.POPULATION);
             break;
+          case 7:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.AGE);
+            break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
         }
@@ -106,6 +110,7 @@ public class OverlaySelect extends JPanel
     else if( overlay == "NOURISHMENT" ) overlaySelector.setSelectedIndex(4);
     else if( overlay == "SOIL_TYPE" ) overlaySelector.setSelectedIndex(5);
     else if( overlay == "POPULATION" ) overlaySelector.setSelectedIndex(6);
+    else if( overlay == "AGE" ) overlaySelector.setSelectedIndex(7);
     else overlaySelector.setSelectedIndex(0);
   }
 }
