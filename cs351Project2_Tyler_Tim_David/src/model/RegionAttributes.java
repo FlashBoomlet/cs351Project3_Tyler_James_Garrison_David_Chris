@@ -1,5 +1,7 @@
 package model;
 
+import IO.AttributeGenerator;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -59,6 +61,33 @@ public class RegionAttributes
   public Double getAttribute(PLANTING_ATTRIBUTES att)
   {
     return attSet.get(att);
+  }
+
+  /**
+   * validateCropAdjustment is used to determine if you can make an adjustment in
+   * any of the crops.
+   *
+   * @param addition
+   * @return true if your request to restructure land is okay
+   */
+  public boolean validateCropAdjustment(int addition)
+  {
+    if(( currentTotalPercentCrops() + addition ) <= 100.00 )
+    {
+      return true;
+    }
+    return false;
+  }
+
+  private int currentTotalPercentCrops()
+  {
+    String[] localCrops = AttributeGenerator.getAdjustableCrops();
+    int totalPercentage =0;
+    for( int i = 0; i< localCrops.length; i++ )
+    {
+      totalPercentage += Integer.parseInt(localCrops[i]);
+    }
+    return totalPercentage;
   }
 
   /**

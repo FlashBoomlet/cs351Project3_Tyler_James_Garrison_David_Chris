@@ -8,10 +8,7 @@ import model.RegionAttributes;
 import static model.RegionAttributes.*;
 import static model.RegionAttributes.PLANTING_ATTRIBUTES.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  Created by winston on 1/26/15.
@@ -32,14 +29,24 @@ public class AttributeGenerator
     "Soy", "Other",
   };
 
+  private static String[] adjustableCrops = {
+    "Organic Land", "Corn", "Wheat", "Rice",
+    "Soy", "Other",
+  };
+
   public static int getCropsLength()
   {
     return crops.length;
   }
+
+  public static String[] getAdjustableCrops()
+  {
+    return crops;
+  }
+
   public static boolean isAdjustableCrop(String labelText)
   {
-    if( (labelText == "Corn") || (labelText == "Soy") || (labelText == "Wheat") || (labelText == "Other")
-      || (labelText == "Rice") || (labelText == "Organic Land") )
+    if( Arrays.asList(adjustableCrops).contains(labelText) )
     {
       return true;
     }
