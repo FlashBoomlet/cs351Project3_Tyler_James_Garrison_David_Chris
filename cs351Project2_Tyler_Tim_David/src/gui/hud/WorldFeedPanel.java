@@ -25,10 +25,10 @@ public class WorldFeedPanel extends JPanel implements Observer
  /*
   * Panel Components
   */
- private DatePanel datePanel;
- private OverlaySelect overlaySelect;
- private ScalePanel scalePanel;
- private GameplayControl gameplayControl;
+ private static DatePanel datePanel;
+ private static OverlaySelect overlaySelect;
+ private static ScalePanel scalePanel;
+ private static GameplayControl gameplayControl;
 
  private LayoutManager layout = new FlowLayout(FlowLayout.LEFT,0,0);
  private static final int PADDING = 0;
@@ -61,6 +61,15 @@ public class WorldFeedPanel extends JPanel implements Observer
   initLayout();
   setLocation(0, 0);
   setPreferredSize(new Dimension(frameWidth, height));
+ }
+
+ public void showAll(boolean trigger)
+ {
+  datePanel.setVisible(trigger);
+  overlaySelect.setVisible(trigger);
+  scalePanel.setVisible(trigger);
+  gameplayControl.setVisible(trigger);
+  this.setVisible(trigger);
  }
 
  /*

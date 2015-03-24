@@ -217,17 +217,27 @@ public class SettingsScreen extends JPanel
       }
       else if( name == "LTA" )
       {
+        lowestAccuracy.setSelected(true);
+        mediumAccuracy.setSelected(false);
+        highestAccuracy.setSelected(false);
+        selectAll.setSelected(false);
       }
       else if( name == "MTA" )
       {
+        lowestAccuracy.setSelected(false);
+        mediumAccuracy.setSelected(true);
+        highestAccuracy.setSelected(false);
+        selectAll.setSelected(false);
       }
       else if( name == "HTA" )
       {
+        lowestAccuracy.setSelected(false);
+        mediumAccuracy.setSelected(false);
+        highestAccuracy.setSelected(true);
+        selectAll.setSelected(false);
       }
     }
   }
-
-
 
   public void hideEverything()
   {
