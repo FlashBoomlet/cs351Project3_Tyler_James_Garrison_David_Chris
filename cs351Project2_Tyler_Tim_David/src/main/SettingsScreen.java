@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 
 /**
  * SettingsScreen creates a settings "pop up" display screen where the user can dominate the world
@@ -27,6 +28,11 @@ public class SettingsScreen extends JPanel
   private JButton reset;
   private TabbedPanel center;
   private SettingsButtonPanel buttons;
+  private algorithmInfluencePanel panelSimulator;
+  private JRadioButton selectAll;
+  private JRadioButton lowestAccuracy;
+  private JRadioButton mediumAccuracy;
+  private JRadioButton highestAccuracy;
 
   /**
    * Initializes a JPanel for all of the settings and adds the various components to it
@@ -88,8 +94,7 @@ public class SettingsScreen extends JPanel
       setSize(new Dimension(getWidth(), getHeight()));
       setOpaque(false);
 
-      JPanel panelSimulator = new JPanel();
-      panelSimulator.setOpaque(false);
+      panelSimulator = new algorithmInfluencePanel();
 
       JPanel otherPanel = new JPanel();
       otherPanel.setOpaque(false);
@@ -149,9 +154,80 @@ public class SettingsScreen extends JPanel
       else if( name == "RESET" )
       {
         main.Game.reset();
+        hideEverything();
+        Game.settingsDisplay(false);
       }
     }
   }
+
+  private class algorithmInfluencePanel extends JPanel implements ActionListener
+  {
+    algorithmInfluencePanel()
+    {
+      super();
+      setOpaque(false);
+      setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+
+      selectAll = new JRadioButton("Select All");
+      selectAll.setName("ALL");
+      selectAll.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
+      selectAll.addActionListener(this);
+
+      lowestAccuracy = new JRadioButton("Low Trading Accuracy");
+      lowestAccuracy.setName("LTA");
+      lowestAccuracy.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
+      lowestAccuracy.addActionListener(this);
+
+      mediumAccuracy = new JRadioButton("Normal Trading Accuracy");
+      mediumAccuracy.setName("MTA");
+      mediumAccuracy.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
+      mediumAccuracy.addActionListener(this);
+
+      highestAccuracy = new JRadioButton("High Trading Accuracy");
+      highestAccuracy.setName("HTA");
+      highestAccuracy.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
+      highestAccuracy.addActionListener(this);
+
+      add(lowestAccuracy);
+      add(mediumAccuracy);
+      add(highestAccuracy);
+      add(selectAll);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      JRadioButton tempBtn = (JRadioButton) e.getSource();
+      String name = tempBtn.getName();
+
+      if( name == "ALL" )
+      {
+        if( !tempBtn.isSelected() )
+        {
+          lowestAccuracy.setSelected(false);
+          mediumAccuracy.setSelected(false);
+          highestAccuracy.setSelected(false);
+        }
+        else
+        {
+          lowestAccuracy.setSelected(true);
+          mediumAccuracy.setSelected(true);
+          highestAccuracy.setSelected(true);
+        }
+
+      }
+      else if( name == "LTA" )
+      {
+      }
+      else if( name == "MTA" )
+      {
+      }
+      else if( name == "HTA" )
+      {
+      }
+    }
+  }
+
+
 
   public void hideEverything()
   {
