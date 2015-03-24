@@ -34,6 +34,7 @@ public class BarPanel extends JPanel
   private AdjustBox adjustBox;
   private JPanel dataPanel;
   private int adjustValue = 5;
+  private Component barGraph;
 
   private static boolean showAdjust = false;
   private int animationStep = 0; /* used to start and stop animation */
@@ -82,7 +83,7 @@ public class BarPanel extends JPanel
     else setLayout(new GridLayout(1,1));
 
     label = new JLabel(labelText);
-    Component barGraph = getBarPane();
+    barGraph = getBarPane();
 
     dataPanel = new JPanel();
     dataPanel.setOpaque(false);
@@ -285,7 +286,6 @@ public class BarPanel extends JPanel
         {
           JLabel tempBtn = (JLabel) e.getSource();
           String name = tempBtn.getName();
-          System.out.println(name);
           if( name == "+" )
           {
             up.setForeground(buttonColor);
@@ -305,15 +305,17 @@ public class BarPanel extends JPanel
         {
           JLabel tempBtn = (JLabel) e.getSource();
           String name = tempBtn.getName();
+          int changeBy = 5;
 
           if( name == "+" )
           {
-
+            //System.out.println(Double.toString(InfoPanel.adjustCrop(changeBy, label.getText())));
           }
           else if( name == "-" )
           {
-
+            //System.out.println(Double.toString(InfoPanel.adjustCrop((-changeBy), label.getText())));
           }
+          repaint();
         }
       };
     }

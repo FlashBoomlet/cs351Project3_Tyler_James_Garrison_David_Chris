@@ -67,25 +67,34 @@ public class RegionAttributes
    * validateCropAdjustment is used to determine if you can make an adjustment in
    * any of the crops.
    *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   *
    * @param addition
    * @return true if your request to restructure land is okay
    */
   public boolean validateCropAdjustment(int addition)
   {
-    if(( currentTotalPercentCrops() + addition ) <= 100.00 )
+    if( (currentTotalPercentCrops() + addition ) <= 100.00 &&
+      (currentTotalPercentCrops() + addition ) >= 0 )
     {
       return true;
     }
     return false;
   }
 
-  private int currentTotalPercentCrops()
+  /**
+   * Get the total percent of adjustable crops
+   *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   * @return what the total percent of adjustable crops is for a particular region
+   */
+  private double currentTotalPercentCrops()
   {
     String[] localCrops = AttributeGenerator.getAdjustableCrops();
-    int totalPercentage =0;
+    double totalPercentage =0;
     for( int i = 0; i< localCrops.length; i++ )
     {
-      totalPercentage += Integer.parseInt(localCrops[i]);
+      totalPercentage += getCropP(localCrops[i]);
     }
     return totalPercentage;
   }

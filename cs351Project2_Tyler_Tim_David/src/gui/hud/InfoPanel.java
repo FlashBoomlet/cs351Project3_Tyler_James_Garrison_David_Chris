@@ -41,6 +41,8 @@ public class InfoPanel extends JPanel implements Observer
   private WorldPresenter presenter;
   private int fullHeight;
   private int fullWidth;
+  private static RegionAttributes regionAttributes;
+
   /**
    Instantiate the InfoPanel
    @param frameWidth width of this component
@@ -166,6 +168,8 @@ public class InfoPanel extends JPanel implements Observer
    */
   public void showAttributes(RegionAttributes regionAttributes)
   {
+    this.regionAttributes = regionAttributes;
+
     attributeStats.clearBarPlots();
     displayAttributes(regionAttributes, attributeStats);
     attributeStats.revalidate();
@@ -326,6 +330,28 @@ public class InfoPanel extends JPanel implements Observer
     {
       return "ECSTATIC";
     }
+  }
+
+  /**
+   * @author Tyler Lynch <lyncht@unm.edu>
+   *
+   * @param amount you wish to adjust the crop by
+   * @param crop that you wish to adjust
+   * @return updated crop amount
+   */
+  public static double adjustCrop(int amount, String crop)
+  {
+    if( regionAttributes.validateCropAdjustment(amount) )
+    {
+      double current = regionAttributes.getCropP(crop);
+      regionAttributes.setCrop(crop,(current+amount));
+      //System.out.println("Valid adjustment for " + crop);
+    }
+    else
+    {
+      //System.out.println("Invalid adjustment for " + crop);
+    }
+    return regionAttributes.getCropP(crop);
   }
 
   /* display color as a function of happiness */

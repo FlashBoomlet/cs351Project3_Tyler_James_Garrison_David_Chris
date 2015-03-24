@@ -30,7 +30,7 @@ public class AttributeGenerator
   };
 
   private static String[] adjustableCrops = {
-    "Organic Land", "Corn", "Wheat", "Rice",
+    "Corn", "Wheat", "Rice",
     "Soy", "Other",
   };
 
@@ -39,11 +39,21 @@ public class AttributeGenerator
     return crops.length;
   }
 
+  /**
+   * @author Tyler Lynch <lyncht@unm.edu>
+   * @return a list the the adjustable crops
+   */
   public static String[] getAdjustableCrops()
   {
     return crops;
   }
 
+  /**
+   * @author Tyler Lynch <lyncht@unm.edu>
+   *
+   * @param labelText of the crop you wish to adjust
+   * @return whether the crop is an adjustable crop
+   */
   public static boolean isAdjustableCrop(String labelText)
   {
     if( Arrays.asList(adjustableCrops).contains(labelText) )
