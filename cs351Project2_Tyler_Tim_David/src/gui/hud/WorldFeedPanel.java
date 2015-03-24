@@ -96,4 +96,10 @@ public class WorldFeedPanel extends JPanel implements Observer
  {
   datePanel.setDate(date);
  }
+
+ public void resetDate()
+ {
+  datePanel.resetDate();
+ }
 }
+

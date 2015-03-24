@@ -6,10 +6,7 @@ import IO.XMLparsers.KMLParser;
 import gui.*;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
-import gui.hud.GameplayControl;
-import gui.hud.InfoPanel;
-import gui.hud.NavMap;
-import gui.hud.WorldFeedPanel;
+import gui.hud.*;
 import model.Region;
 import model.World;
 import IO.AttributeGenerator;
@@ -61,7 +58,7 @@ public class Game
   /*
    * Frame components
    */
-  private WorldPresenter worldPresenter;
+  private static WorldPresenter worldPresenter;
   public static Timer worldTime;
   public static Timer gameLoop;
   private JFrame frame;
@@ -198,6 +195,17 @@ public class Game
   {
     gameLoop.stop();
     worldTime.stop();
+  }
+
+  /**
+   * Reset the game
+   */
+  public static void reset()
+  {
+    gameLoop.restart();
+    worldTime.restart();
+    worldPresenter.resetWorldDate();
+    worldFeedPanel.resetDate();
   }
 
   /**

@@ -24,7 +24,8 @@ public class SettingsScreen extends JPanel
   protected int height;
   private final int SCALE_IN_FACTOR = 32;
   private JButton close;
-  private SettingsCenterPanel center;
+  private JButton reset;
+  private TabbedPanel center;
   private SettingsButtonPanel buttons;
 
   /**
@@ -41,47 +42,32 @@ public class SettingsScreen extends JPanel
     super();
     x = frameWidth/SCALE_IN_FACTOR;
     y = frameHeight/SCALE_IN_FACTOR;
-    width = frameWidth-(x*2);
-    height = frameHeight-(y*2);
+    width = frameWidth-(x*4);
+    height = frameHeight-(y*5);
 
     setLayout(new BorderLayout(0,0));
+    y*=3;
+    x*=2;
     setLocation(x,y);
-    setSize(width, height);
-    setOpaque(false);
+    setSize(new Dimension(width, height));
+    setOpaque(true);
+    setBackground(ColorsAndFonts.GUI_BACKGROUND);
 
     buttons = new SettingsButtonPanel();
     add(buttons, BorderLayout.PAGE_END);
 
-    center = new SettingsCenterPanel();
+    center = new TabbedPanel();
     add(center, BorderLayout.CENTER);
   }
 
   /**
-   * Overrides the paint Components because I can, to set the opacity of the panel
-   * The call to super is purposely left out because I am fighting with the side panel updating
-   *
-   * @author Tyler Lynch <lyncht@unm.edu>
-   *
-   * @param g
-   */
-  @Override
-  protected void paintComponent(Graphics g)
-  {
-    // Apply our own painting effect
-    Graphics2D g2d = (Graphics2D) g.create();
-    // 50% transparent Alpha
-    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
-    g2d.setColor(ColorsAndFonts.OCEANS);
-    g2d.fillRect(x,y,width,height);
-  }
-
-  /**
-   * SettingsCenterPanel creates guts to the settings panel.
+   * SettingsCenterPanel creates guts to the settings TabbedPane.
+   * <Tabbed panel
    *
    * @author Tyler Lynch <lyncht@unm.edu>
    * @since 3/20/15
    */
-  private class SettingsCenterPanel extends JPanel
+  private class TabbedPanel extends JTabbedPane
   {
     private int xC;
     private int yC;
@@ -94,17 +80,22 @@ public class SettingsScreen extends JPanel
      *
      * @author Tyler Lynch <lyncht@unm.edu>
      */
-    SettingsCenterPanel()
+    TabbedPanel()
     {
       super();
-      widthC = (int) (width*(.90));
-      heightC = (int) (height*(.90));
-      this.xC = (width-widthC)/2;
-      this.yC = (height-heightC)/2;
 
-      setLocation(xC,yC);
-      setSize(widthC, heightC);
-      setBackground(Color.cyan);
+      setLocation(getX(), getY());
+      setSize(new Dimension(getWidth(), getHeight()));
+      setOpaque(false);
+
+      JPanel panelSimulator = new JPanel();
+      panelSimulator.setOpaque(false);
+
+      JPanel otherPanel = new JPanel();
+      otherPanel.setOpaque(false);
+
+      addTab("Choose world influences", null, panelSimulator, "Influence Simulator");
+      addTab("Other, does nothing at all right now but in the future.", null, otherPanel, "Does nothing");
     }
   }
 
@@ -127,16 +118,21 @@ public class SettingsScreen extends JPanel
       super();
       setLayout(new GridLayout(1, 5));
       setOpaque(false);
-      close = new JButton("CLOSE");
+      close = new JButton("Close");
       close.setName("CLOSE");
       close.addActionListener(this);
 
-      for( int i = 0; i <4; i++)
+      reset = new JButton("Reset");
+      reset.setName("RESET");
+      reset.addActionListener(this);
+
+      for( int i = 0; i <3; i++)
       {
         JPanel tempPanel = new JPanel();
         tempPanel.setOpaque(false);
         add(tempPanel);
       }
+      add(reset);
       add(close);
     }
 
@@ -150,12 +146,18 @@ public class SettingsScreen extends JPanel
         hideEverything();
         Game.settingsDisplay(false);
       }
+      else if( name == "RESET" )
+      {
+        main.Game.reset();
+      }
     }
   }
 
   public void hideEverything()
   {
     close.setVisible(false);
+    reset.setVisible(false);
+
     center.setVisible(false);
     buttons.setVisible(false);
     this.setVisible(false);
@@ -164,6 +166,8 @@ public class SettingsScreen extends JPanel
   public void showEverything()
   {
     close.setVisible(true);
+    reset.setVisible(true);
+
     center.setVisible(true);
     buttons.setVisible(true);
     this.setVisible(true);

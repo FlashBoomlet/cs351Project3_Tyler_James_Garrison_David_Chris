@@ -106,4 +106,8 @@ public class DatePanel extends JPanel
     return s.toString();
   }
 
+  public static void resetDate()
+  {
+
+  }
 }

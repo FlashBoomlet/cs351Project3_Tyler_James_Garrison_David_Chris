@@ -29,7 +29,7 @@ public class WorldPresenter extends Observable
   private Collection<GUIRegion> modelRegions;
   private Collection<GUIRegion> backgroundRegions;
   private ActiveRegionList activeRegions;
-  private World world;
+  private static World world;
   private boolean activelyDraging;
   private static RegionViewFactory regionViewFactory;
 
@@ -348,9 +348,15 @@ public class WorldPresenter extends Observable
     }
   }
 
-  public Date getWorldDate()
+  public static Date getWorldDate()
   {
     return world.getCurrentDate().getTime();
+  }
+
+  public static Date resetWorldDate()
+  {
+    world.setCurrentDate(Calendar.getInstance());
+    return getWorldDate();
   }
 
   /**

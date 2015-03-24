@@ -101,23 +101,26 @@ public class GameplayControl extends JPanel implements ActionListener
     JButton tempBtn = (JButton) e.getSource();
     String name = tempBtn.getText();
 
-    if( (main.Game.worldTime.getDelay()-(TIMER_ADJUST)) > 0.0 )
+
+    if( name == "Next Year" )
     {
-      if( name == "Next Year" )
-      {
-        MapPane.presenter.setWorldForward(365);
-      }
-      else if( name == "-" )
-      {
-        main.Game.worldTime.setDelay( (int) (main.Game.worldTime.getDelay()+(TIMER_ADJUST)) );
-      }
-      else if( name == "+" )
-      {
-        main.Game.worldTime.setDelay( (int) (main.Game.worldTime.getDelay()-(TIMER_ADJUST)) );
-      }
+      MapPane.presenter.setWorldForward(365);
+    }
+    else if( name == "-" )
+    {
+      main.Game.worldTime.setDelay( (int) (main.Game.worldTime.getDelay()+(TIMER_ADJUST)) );
+
       updateDisplaySpeed();
     }
-    else speed.setText("MAX" + " (sec./Day)");
+    else if( name == "+" )
+    {
+      if( (main.Game.worldTime.getDelay()-(TIMER_ADJUST)) > 0.0 ) {
+        main.Game.worldTime.setDelay((int) (main.Game.worldTime.getDelay() - (TIMER_ADJUST)));
+
+        updateDisplaySpeed();
+      }
+      else speed.setText("MAX" + " (sec./Day)");
+    }
   }
 
   /**
