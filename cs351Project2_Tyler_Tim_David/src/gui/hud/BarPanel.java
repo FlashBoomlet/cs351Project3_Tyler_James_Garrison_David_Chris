@@ -30,11 +30,11 @@ public class BarPanel extends JPanel
   private Color barColor;
   private final JLabel label;
   private final double ratio;
-  private final String overLayText;
+  private String overLayText;
   private AdjustBox adjustBox;
   private JPanel dataPanel;
   private int adjustValue = 5;
-  private Component barGraph;
+  private BarPane barGraph;
 
   private static boolean showAdjust = false;
   private int animationStep = 0; /* used to start and stop animation */
@@ -83,7 +83,7 @@ public class BarPanel extends JPanel
     else setLayout(new GridLayout(1,1));
 
     label = new JLabel(labelText);
-    barGraph = getBarPane();
+    barGraph = new BarPane();
 
     dataPanel = new JPanel();
     dataPanel.setOpaque(false);
@@ -155,40 +155,41 @@ public class BarPanel extends JPanel
    * Generates an inner class to handle the custom drawing of the
    * bar.
    */
-  private Component getBarPane()
+  private class BarPane extends JPanel
   {
-    return new JPanel()
+    int length = 0;
+    BarPane()
     {
-      @Override
-      protected void paintComponent(Graphics g)
+      length = (int) (ratio * 100);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+      if (animationStep < length) animationStep += 2;
+      Graphics2D g2d = (Graphics2D)g;
+      g2d.setColor(barColor);
+      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f));
+
+      // position info, animation, and seize of bar, should correlate to font
+      // size.
+      g2d.fillRect(10, 2, animationStep, 12);
+
+      // if over lay text has been specified => draw it.
+      if (overLayText != null)
       {
-        int length = (int) (ratio * 100);
+        g2d.setRenderingHint(
+          RenderingHints.KEY_TEXT_ANTIALIASING,
+          RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        if (animationStep < length) animationStep += 2;
-
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(barColor);
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f));
-
-        // position info, animation, and seize of bar, should correlate to font
-        // size.
-        g2d.fillRect(10, 2, animationStep, 12);
-
-        // if over lay text has been specified => draw it.
-        if (overLayText != null)
-        {
-          g2d.setRenderingHint(
-            RenderingHints.KEY_TEXT_ANTIALIASING,
-            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-          g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f));
-          g2d.setColor(overLayTextColor);
-          g2d.setFont(OVERLAY_FONT);
-          g2d.drawString(overLayText, 12, 12);
-        }
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f));
+        g2d.setColor(overLayTextColor);
+        g2d.setFont(OVERLAY_FONT);
+        g2d.drawString(overLayText, 12, 12);
       }
-    };
+    }
   }
+
 
   /**
    * AdjustBox creates guts adjusting the variable tied with it.
@@ -305,17 +306,17 @@ public class BarPanel extends JPanel
         {
           JLabel tempBtn = (JLabel) e.getSource();
           String name = tempBtn.getName();
-          int changeBy = 5;
+          double changeBy = 0.05;
 
           if( name == "+" )
           {
-            //System.out.println(Double.toString(InfoPanel.adjustCrop(changeBy, label.getText())));
+            overLayText = String.format("%.2f", InfoPanel.adjustCrop(changeBy, label.getText()) * 100) + "% ";
           }
           else if( name == "-" )
           {
-            //System.out.println(Double.toString(InfoPanel.adjustCrop((-changeBy), label.getText())));
+            overLayText = String.format("%.2f", InfoPanel.adjustCrop((-changeBy), label.getText()) * 100) + "% ";
           }
-          repaint();
+          barGraph.repaint();
         }
       };
     }

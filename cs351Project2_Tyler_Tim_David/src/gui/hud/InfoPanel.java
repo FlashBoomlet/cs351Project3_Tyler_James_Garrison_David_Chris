@@ -339,17 +339,43 @@ public class InfoPanel extends JPanel implements Observer
    * @param crop that you wish to adjust
    * @return updated crop amount
    */
-  public static double adjustCrop(int amount, String crop)
+  public static double adjustCrop(double amount, String crop)
   {
-    if( regionAttributes.validateCropAdjustment(amount) )
+    boolean error = false;
+
+    if( amount > 0 && regionAttributes.getCropP(crop) <= Math.abs(1 - amount) )
     {
-      double current = regionAttributes.getCropP(crop);
-      regionAttributes.setCrop(crop,(current+amount));
-      //System.out.println("Valid adjustment for " + crop);
+      // Must be less than 0.95 for example if amount == 0.05
+      if( !regionAttributes.validateCropAdjustment( 1 + amount ) )
+      {
+        error = true;
+      }
+    }
+    else if( amount < 0 && regionAttributes.getCropP(crop) >= Math.abs(amount) )
+    {
+      //Because amount is negative, + -1 = --1
+      if( !regionAttributes.validateCropAdjustment( 1 + amount ) )
+      {
+        error = true;
+      }
+    }
+    else error = true;
+
+    if( error )
+    {
+      String errMsg;
+      if( amount > 0 ) errMsg = "You can't add more land to this area. You have reached 100% use. Take away use.";
+      else errMsg = "You can't subtract more land to this area. You have reached 0% use. Add more use.";
+
+      String msg = "Invalid adjustment for " + crop + "\n" + errMsg;
+
+      JOptionPane.showMessageDialog(main.Game.frame,msg,"Invalid crop adjustment",
+        JOptionPane.ERROR_MESSAGE);
     }
     else
     {
-      //System.out.println("Invalid adjustment for " + crop);
+      //Because if amount is negative, +-1 == --1
+      regionAttributes.setCropByPercent(crop, (1 + amount));
     }
     return regionAttributes.getCropP(crop);
   }

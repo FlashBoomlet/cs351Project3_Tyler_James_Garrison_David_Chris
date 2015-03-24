@@ -69,15 +69,20 @@ public class RegionAttributes
    *
    * @author Tyler Lynch <lyncht@unm.edu>
    *
-   * @param addition
+   * @param factor by which you wish to adjust by
    * @return true if your request to restructure land is okay
    */
-  public boolean validateCropAdjustment(int addition)
+  public boolean validateCropAdjustment(double factor)
   {
-    if( (currentTotalPercentCrops() + addition ) <= 100.00 &&
-      (currentTotalPercentCrops() + addition ) >= 0 )
+    double total = currentTotalPercentCrops();
+    //System.out.println( "Total: " + String.format("%.2f", total ));
+    if( factor > 1 )
     {
-      return true;
+      if ((total * factor) <= 1.0000) return true;
+    }
+    else
+    {
+      if( (total * factor ) >= 0.0000 ) return  true;
     }
     return false;
   }
@@ -120,6 +125,17 @@ public class RegionAttributes
   public void setCrop(String name, double amount)
   {
     crops.put(name, amount);
+  }
+
+  /**
+   * Set crop growth by name
+   *
+   * @param name   name of crop
+   * @param amount amount of crop grown, units arbitrary
+   */
+  public void setCropByPercent(String name, double amount)
+  {
+    crops.put(name, crops.get(name)*amount );
   }
 
   /**

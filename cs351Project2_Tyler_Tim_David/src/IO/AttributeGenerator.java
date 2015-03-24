@@ -34,6 +34,10 @@ public class AttributeGenerator
     "Soy", "Other",
   };
 
+  /**
+   *
+   * @return return the size of the crops array
+   */
   public static int getCropsLength()
   {
     return crops.length;

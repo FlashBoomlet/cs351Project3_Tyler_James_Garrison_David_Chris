@@ -61,7 +61,7 @@ public class Game
   private static WorldPresenter worldPresenter;
   public static Timer worldTime;
   public static Timer gameLoop;
-  private JFrame frame;
+  public static JFrame frame;
 
   /**
    * Constructor for game, handles all init logic.
