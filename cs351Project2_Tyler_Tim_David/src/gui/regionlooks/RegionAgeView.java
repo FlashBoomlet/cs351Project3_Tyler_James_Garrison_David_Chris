@@ -24,7 +24,7 @@ class RegionAgeView implements RegionView
     Color color;
     if (gRegion.isActive())
     {
-      color = new Color(0xFFCC00);
+      color = Color.CYAN;
     }
     else
     {

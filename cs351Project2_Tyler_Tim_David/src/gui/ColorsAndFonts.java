@@ -45,7 +45,6 @@ public interface ColorsAndFonts
   Color MINI_BOX_REGION = new Color(222, 183, 106);
 
   Color[] PlantingZoneColors = {
-    new Color(0x36F03A),
     new Color(0x67001f),
     new Color(0x67001f),
     new Color(0x67001f),
@@ -97,7 +96,7 @@ public interface ColorsAndFonts
   };
 
   Color[] POPULATION = {
-      new Color(0xDDFFFF),
+      new Color(0xBBFFFF),
       new Color(0x80FFFF),
       new Color(0x00FFFF),
       new Color(0x00E6E6),
@@ -106,17 +105,17 @@ public interface ColorsAndFonts
   };
 
   Color[] AGE = {
-      new Color(0x00DD00),
-      new Color(0x4DFF4D),
-      new Color(0x99FF99),
-      new Color(0x4DFFFF),
-      new Color(0x00FFFF),
-      new Color(0x4DFFFF),
-      new Color(0x88AAFF),
-      new Color(0x9999FF),
-      new Color(0x4D4DFF),
-      new Color(0x0000FF),
-      new Color(0x000099)
+      new Color(0xE0CCE0),
+      new Color(0xD1B2D1),
+      new Color(0xC299C2),
+      new Color(0xB280B2),
+      new Color(0xA366A3),
+      new Color(0x944D94),
+      new Color(0x853385),
+      new Color(0x751975),
+      new Color(0x660066),
+      new Color(0x5C005C),
+      new Color(0x520052)
   };
 
   Color BAR_GRAPH_NEG = Color.cyan;
