@@ -402,7 +402,7 @@ public class Game
   public static void startGame()
   {
     mapPane.setVisible(true);
-    worldFeedPanel.setVisible(true);
+    worldFeedPanel.showAll(true);
     navMap.setVisible(true);
     buttonPanel.setVisible(true);
     startPanel.setVisible(false);
@@ -420,7 +420,7 @@ public class Game
   public static void pauseGame()
   {
     mapPane.setVisible(false);
-    worldFeedPanel.setVisible(false);
+    worldFeedPanel.showAll(false);
     infoPanel.setVisible(false);
     navMap.setVisible(false);
     buttonPanel.setVisible(false);
@@ -441,12 +441,11 @@ public class Game
   public static void settingsDisplay(boolean display)
   {
     if( display ) {
-      mapPane.setVisible(false);
-      infoPanel.setVisible(false);
-
+      pause();
+      pauseGame();
       settingsScreen.showEverything();
       settingsScreen.setVisible(true);
-      pause();
+      startPanel.setVisible(false);
     }
     else
     {
