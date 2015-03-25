@@ -29,6 +29,7 @@ public class RegionParserHandler extends DefaultHandler
   private Region tmpRegion;
   private List<MapPoint> tmpPerimeterSet;
   private boolean nameTag;
+  private String regName;
 
 
   /**
@@ -107,7 +108,7 @@ public class RegionParserHandler extends DefaultHandler
         tmpPerimeterSet.add(new MapPoint(lat, lon));
         break;
 
-      case "region":  // no nothing, this is a just a container tag.
+      case "country":  // no nothing, this is a just a container tag.
         break;
 
       default:
@@ -123,6 +124,7 @@ public class RegionParserHandler extends DefaultHandler
     if (nameTag && tmpRegion != null)
     {
       nameTag = false;
+      regName = new String(ch, start, length);
       tmpRegion.setName(new String(ch, start, length));
     }
   }
@@ -135,6 +137,7 @@ public class RegionParserHandler extends DefaultHandler
     {
       // save and reset....
       tmpRegion.setPerimeter(new ArrayList<MapPoint>(tmpPerimeterSet));
+      tmpRegion.setName(regName);
       regionList.add(tmpRegion);
       tmpPerimeterSet.clear();
     }

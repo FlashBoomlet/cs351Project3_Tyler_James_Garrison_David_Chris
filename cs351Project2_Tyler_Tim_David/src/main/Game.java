@@ -2,7 +2,6 @@ package main;
 
 import IO.AreaXMLLoader;
 import IO.WorldDataParser;
-import IO.XMLparsers.KMLParser;
 import gui.*;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
@@ -42,6 +41,7 @@ public class Game
   final float NAV_WIDTH_SCALE = (float) 1.6;
   private final static int DEFAULT_TIME_SPEED = 2000;
   private int feedPanelHeight;
+  private Collection<Region> xmlRegions = new LinkedList<>();
 
   /*
    * Frame panels
@@ -122,6 +122,8 @@ public class Game
    */
   private void init()
   {
+    xmlRegions = new AreaXMLLoader().getRegions();
+
     startPanel = new StartScreen(frameWidth,frameHeight);
 
     settingsScreen = new SettingsScreen(frameWidth,frameHeight);
@@ -312,10 +314,10 @@ public class Game
   private Collection<Region> initModelRegions(Random random,
                                               AttributeGenerator randoAtts)
   {
-    Collection<Region> modelMap = KMLParser.getRegionsFromFile(MODEL_DATA_PATH);
-
+    Collection<Region> modelMap = new LinkedList<>();
     // adds XML regions for area folder...
-    modelMap.addAll(new AreaXMLLoader().getRegions());
+    modelMap.addAll(xmlRegions);
+
     for (Region r : modelMap)
     {
       randoAtts.setRegionAttributes(r, random);
@@ -329,7 +331,8 @@ public class Game
   private Collection<Region> initBackgroundRegions(Random random,
                                                    AttributeGenerator randoAtts)
   {
-    Collection<Region> BGRegions = KMLParser.getRegionsFromFile(BG_DATA_PATH);
+    Collection<Region> BGRegions = new LinkedList<>();
+    BGRegions.addAll(xmlRegions);
     for (Region r : BGRegions)
     {
       randoAtts.setRegionAttributes(r, random);

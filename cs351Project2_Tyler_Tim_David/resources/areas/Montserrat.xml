@@ -1,0 +1,12 @@
+<country>
+  <name>Montserrat</name>
+  <area>
+    <vertex lat="16.74032217" lon="-62.14844906"/>
+    <vertex lat="16.68120433" lon="-62.15426266"/>
+    <vertex lat="16.69949779" lon="-62.22162289"/>
+    <vertex lat="16.75158763" lon="-62.22306983"/>
+    <vertex lat="16.80440095" lon="-62.1913405"/>
+    <vertex lat="16.80956859" lon="-62.1757859"/>
+    <vertex lat="16.74032217" lon="-62.14844906"/>
+  </area>
+</country>

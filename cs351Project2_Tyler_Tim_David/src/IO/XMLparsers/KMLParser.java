@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class KMLParser extends RegionParserHandler
 {
+  /*
+}
   private List<Region> regions;
 
   private String regName;
@@ -129,10 +131,14 @@ public class KMLParser extends RegionParserHandler
     } 
     /* I had no idea this was legal.
      * Bad form, but works for proof of kml parsing *  */
-    catch (SAXException | ParserConfigurationException | IOException e)
+
+
+/*
+  catch (SAXException | ParserConfigurationException | IOException e)
     {
       e.printStackTrace();
     }
     return null;
   }
+*/
 }

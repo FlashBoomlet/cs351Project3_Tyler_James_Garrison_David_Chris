@@ -1,0 +1,18 @@
+<country>
+  <name>Bahrain</name>
+  <area>
+    <vertex lat="25.88312328" lon="50.60727827"/>
+    <vertex lat="25.80679719" lon="50.57492883"/>
+    <vertex lat="25.8335139" lon="50.54402632"/>
+    <vertex lat="25.96554719" lon="50.46589155"/>
+    <vertex lat="26.05846141" lon="50.48945601"/>
+    <vertex lat="26.19080476" lon="50.45245568"/>
+    <vertex lat="26.22894196" lon="50.46992232"/>
+    <vertex lat="26.24643443" lon="50.56407678"/>
+    <vertex lat="26.24072419" lon="50.58588423"/>
+    <vertex lat="26.19829784" lon="50.55777225"/>
+    <vertex lat="26.12445222" lon="50.60975874"/>
+    <vertex lat="26.00234081" lon="50.61751021"/>
+    <vertex lat="25.88312328" lon="50.60727827"/>
+  </area>
+</country>

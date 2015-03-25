@@ -1,0 +1,14 @@
+<country>
+  <name>Barbados</name>
+  <area>
+    <vertex lat="13.08196666" lon="-59.49331397"/>
+    <vertex lat="13.06220043" lon="-59.5218652"/>
+    <vertex lat="13.10209463" lon="-59.61134294"/>
+    <vertex lat="13.15030874" lon="-59.64278805"/>
+    <vertex lat="13.30311595" lon="-59.64668962"/>
+    <vertex lat="13.31768871" lon="-59.59160255"/>
+    <vertex lat="13.19681753" lon="-59.48788795"/>
+    <vertex lat="13.15278921" lon="-59.42763323"/>
+    <vertex lat="13.08196666" lon="-59.49331397"/>
+  </area>
+</country>

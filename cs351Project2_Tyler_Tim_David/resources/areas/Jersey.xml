@@ -1,0 +1,14 @@
+<country>
+  <name>Jersey</name>
+  <area>
+    <vertex lat="49.23125886" lon="-2.01863095"/>
+    <vertex lat="49.18079682" lon="-2.00989763"/>
+    <vertex lat="49.16981558" lon="-2.05374508"/>
+    <vertex lat="49.18738557" lon="-2.09102963"/>
+    <vertex lat="49.18738557" lon="-2.16567624"/>
+    <vertex lat="49.17637849" lon="-2.23582699"/>
+    <vertex lat="49.26637299" lon="-2.22047909"/>
+    <vertex lat="49.25539175" lon="-2.08224464"/>
+    <vertex lat="49.23125886" lon="-2.01863095"/>
+  </area>
+</country>

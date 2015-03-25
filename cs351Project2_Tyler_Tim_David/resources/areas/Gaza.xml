@@ -1,0 +1,15 @@
+<country>
+  <name>Gaza</name>
+  <area>
+    <vertex lat="31.20832795" lon="34.24527958"/>
+    <vertex lat="31.29227631" lon="34.21251672"/>
+    <vertex lat="31.32261038" lon="34.19815067"/>
+    <vertex lat="31.48376333" lon="34.38728641"/>
+    <vertex lat="31.58484243" lon="34.47735843"/>
+    <vertex lat="31.54164094" lon="34.5241256"/>
+    <vertex lat="31.52562124" lon="34.52557254"/>
+    <vertex lat="31.36276297" lon="34.35018273"/>
+    <vertex lat="31.29292227" lon="34.34832238"/>
+    <vertex lat="31.20832795" lon="34.24527958"/>
+  </area>
+</country>

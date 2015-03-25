@@ -1,0 +1,14 @@
+<country>
+  <name>Singapore</name>
+  <area>
+    <vertex lat="1.33144359" lon="103.96970585"/>
+    <vertex lat="1.26540111" lon="103.81994754"/>
+    <vertex lat="1.32555248" lon="103.65013879"/>
+    <vertex lat="1.42342764" lon="103.70532922"/>
+    <vertex lat="1.44709545" lon="103.81798384"/>
+    <vertex lat="1.41598623" lon="103.90903771"/>
+    <vertex lat="1.39221507" lon="103.9608175"/>
+    <vertex lat="1.36523998" lon="103.99637088"/>
+    <vertex lat="1.33144359" lon="103.96970585"/>
+  </area>
+</country>

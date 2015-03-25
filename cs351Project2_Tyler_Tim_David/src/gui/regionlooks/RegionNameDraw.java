@@ -60,7 +60,8 @@ public class RegionNameDraw
       e.printStackTrace();
     }
 
-    g2d.drawString(gRegion.getName(), dst.x, dst.y);
+    if( gRegion.getName() != null ) g2d.drawString(gRegion.getName(), dst.x, dst.y);
+    else g2d.drawString("NAME NOT FOUND IN gRegion", dst.x, dst.y);
 
     if( gRegion.flag() )
     {

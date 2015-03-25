@@ -1,0 +1,12 @@
+<country>
+  <name>Guernsey</name>
+  <area>
+    <vertex lat="49.49452444" lon="-2.51232174"/>
+    <vertex lat="49.4287145" lon="-2.5473842"/>
+    <vertex lat="49.45093537" lon="-2.63900652"/>
+    <vertex lat="49.46822114" lon="-2.64613786"/>
+    <vertex lat="49.50659089" lon="-2.54219072"/>
+    <vertex lat="49.50628083" lon="-2.52092587"/>
+    <vertex lat="49.49452444" lon="-2.51232174"/>
+  </area>
+</country>
