@@ -125,7 +125,6 @@ public class RegionParserHandler extends DefaultHandler
     {
       nameTag = false;
       regName = new String(ch, start, length);
-      tmpRegion.setName(new String(ch, start, length));
     }
   }
 
@@ -138,6 +137,7 @@ public class RegionParserHandler extends DefaultHandler
       // save and reset....
       tmpRegion.setPerimeter(new ArrayList<MapPoint>(tmpPerimeterSet));
       tmpRegion.setName(regName);
+      tmpRegion.setFlag("resources/flags/" + regName + ".png" );
       regionList.add(tmpRegion);
       tmpPerimeterSet.clear();
     }

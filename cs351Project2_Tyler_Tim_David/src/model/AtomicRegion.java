@@ -44,7 +44,8 @@ public class AtomicRegion implements Region
   @Override
   public String getFlag()
   {
-    return flagLocation;
+    if( !flagLocation.contains("\n") ) return flagLocation;
+    else return null;
   }
 
 
