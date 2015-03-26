@@ -42,10 +42,22 @@ public class RegionNameDraw
     g2d.setColor(ColorsAndFonts.REGION_NAME_FONT_C);
 
     /* find ~center of region in map-space */
-    int x = (int) gRegion.getPoly().getBounds().getCenterX();
-    int y = (int) gRegion.getPoly().getBounds().getCenterY();
+    int x = 0;
+    int y = 0;
+    int total = 0;
+
+    for( Polygon p: gRegion.getPoly())
+    {
+      total ++;
+      x += (int) p.getBounds().getCenterX();
+      y += (int) p.getBounds().getCenterY();
+    }
+    //Find the average x and y coordinates
+    x /= total;
+    y /= total;
     
-    
+
+
     Point src = new Point(x,y);
     Point dst = new Point();
     
@@ -65,7 +77,7 @@ public class RegionNameDraw
 
     if( gRegion.flag() )
     {
-      g2d.drawImage(gRegion.getFlag(), dst.x+10,dst.y+10,30,30,null);
+      g2d.drawImage(gRegion.getFlag(), dst.x+5,dst.y+5,30,20,null);
     }
     /* reset the transform for any RegionViews depending on it for proper rendering */
     g2d.setTransform(at);

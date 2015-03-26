@@ -18,9 +18,9 @@ public interface Region
 
   void setFlag(String flagLocation);
 
-  List<MapPoint> getPerimeter();
+  List<MiniArea> getPerimeter();
 
-  void setPerimeter(List<MapPoint> perimeter);
+  void setPerimeter(List<MiniArea> perimeter);
 
   public RegionAttributes getAttributes();
 

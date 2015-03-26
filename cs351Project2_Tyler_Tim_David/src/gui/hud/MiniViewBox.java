@@ -147,13 +147,16 @@ public class MiniViewBox extends JPanel
 
         for (GUIRegion gr : regions)
         {
-          Rectangle2D bounds = gr.getPoly().getBounds2D();
+          for( Polygon p: gr.getPoly() )
+          {
+            Rectangle2D bounds = p.getBounds2D();
 
-          minX = Math.min(minX, bounds.getX());
-          minY = Math.min(minY, bounds.getY());
+            minX = Math.min(minX, bounds.getX());
+            minY = Math.min(minY, bounds.getY());
 
-          maxX = Math.max(maxX, bounds.getMaxX());
-          maxY = Math.max(maxY, bounds.getMaxY());
+            maxX = Math.max(maxX, bounds.getMaxX());
+            maxY = Math.max(maxY, bounds.getMaxY());
+          }
         }
 
         /* width and height of bounding rect */
@@ -189,11 +192,14 @@ public class MiniViewBox extends JPanel
 
         for (GUIRegion gr : regions)
         {
-          g2d.fill(gr.getPoly());
-          if( getTitle() != "AVERAGE:" )
+          for( Polygon p: gr.getPoly() )
           {
-            g2d.fillRect(50,50,30,20);
-            //g2d.drawImage(gr.getFlag(), 0,0,30,20,null);
+            g2d.fill(p);
+            if( getTitle() != "AVERAGE:" )
+            {
+              g2d.fillRect(50,50,30,20);
+              //g2d.drawImage(gr.getFlag(), 0,0,30,20,null);
+            }
           }
         }
       }

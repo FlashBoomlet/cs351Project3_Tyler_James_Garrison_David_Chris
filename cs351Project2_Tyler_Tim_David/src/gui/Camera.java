@@ -22,7 +22,7 @@ import java.awt.geom.Rectangle2D;
 
 public class Camera
 {
-  private static final double ASPECT_RATIO = 2;
+  private static final double ASPECT_RATIO = 1.7;
   private static double BASE_W = 1_200;
   private static double BASE_H = BASE_W / ASPECT_RATIO;
 

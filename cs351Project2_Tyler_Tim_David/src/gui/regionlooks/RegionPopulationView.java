@@ -35,8 +35,11 @@ class RegionPopulationView implements RegionView
     }
 
     g.setColor(color);
-    g.fillPolygon(gRegion.getPoly());
-    g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
-    g.drawPolygon(gRegion.getPoly());
+    for( Polygon p: gRegion.getPoly() )
+    {
+      g.fillPolygon(p);
+      g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
+      g.drawPolygon(p);
+    }
   }
 }

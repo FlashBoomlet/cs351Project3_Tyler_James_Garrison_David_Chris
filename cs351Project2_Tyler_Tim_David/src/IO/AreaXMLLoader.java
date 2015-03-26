@@ -9,6 +9,7 @@ package IO;
 
 import IO.XMLparsers.RegionParserHandler;
 import gui.XMLEditor;
+import model.MiniArea;
 import model.Region;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -92,7 +93,10 @@ public class AreaXMLLoader
       {
         Collection<Region> tmpRegions = parseFile(currentFile);
 
-        for (Region r : tmpRegions) regionValidator.validate(r);
+        for (Region r : tmpRegions)
+        {
+            regionValidator.validate(r);
+        }
 
         regionList.addAll(tmpRegions);
 

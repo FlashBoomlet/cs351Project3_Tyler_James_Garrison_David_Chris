@@ -28,25 +28,27 @@ class defaultLook implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    Polygon poly = gRegion.getPoly();
-    Color outLine;
-    Color fill;
-
-    if (gRegion.isActive())
+    for(Polygon poly : gRegion.getPoly())
     {
-      outLine = ColorsAndFonts.ACTIVE_REGION_OUTLINE;
-      fill = ColorsAndFonts.ACTIVE_REGION;
-    }
-    else
-    {
-      outLine = ColorsAndFonts.PASSIVE_REGION_OUTLINE;
-      fill = ColorsAndFonts.PASSIVE_REGION;
-    }
+      Color outLine;
+      Color fill;
 
-    g.setColor(fill);
-    g.fillPolygon(poly);
+      if (gRegion.isActive())
+      {
+        outLine = ColorsAndFonts.ACTIVE_REGION_OUTLINE;
+        fill = ColorsAndFonts.ACTIVE_REGION;
+      }
+      else
+      {
+        outLine = ColorsAndFonts.PASSIVE_REGION_OUTLINE;
+        fill = ColorsAndFonts.PASSIVE_REGION;
+      }
 
-    g.setColor(outLine);
-    g.drawPolygon(poly);
+      g.setColor(fill);
+      g.fillPolygon(poly);
+
+      g.setColor(outLine);
+      g.drawPolygon(poly);
+    }
   }
 }

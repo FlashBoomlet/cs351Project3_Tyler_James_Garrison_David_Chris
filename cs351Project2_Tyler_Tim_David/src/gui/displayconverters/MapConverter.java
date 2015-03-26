@@ -1,6 +1,7 @@
 package gui.displayconverters;
 
 import model.MapPoint;
+import model.MiniArea;
 import model.Region;
 
 import java.awt.*;
@@ -21,7 +22,7 @@ public abstract class MapConverter
    * @param r region object to be transformed.
    * @return polygon representing the region in the appropriate map projection.
    */
-  public Polygon regionToPolygon(Region r)
+  public Polygon regionToPolygon(MiniArea r)
   {
     Polygon polygon = new Polygon();
     for (MapPoint mp : r.getPerimeter())

@@ -147,19 +147,23 @@ public class WorldPresenter extends Observable
 
     for (GUIRegion guir : regionsInView)
     {
-      if (guir.getPoly().contains(x, y))
+      for( Polygon p: guir.getPoly() )
       {
-        if (activeRegions.contains(guir))
+        if (p.contains(x, y))
         {
-          activeRegions.remove(guir);
+          if (activeRegions.contains(guir))
+          {
+            activeRegions.remove(guir);
+          }
+          else
+          {
+            activeRegions.clear();
+            activeRegions.add(guir);
+          }
+          return; //for early loop termination.
         }
-        else
-        {
-          activeRegions.clear();
-          activeRegions.add(guir);
-        }
-        return; //for early loop termination.
       }
+
     }
     activeRegions.clear(); // deselects all regions when mouse click on ocean.
   }
@@ -180,17 +184,20 @@ public class WorldPresenter extends Observable
 
     for (GUIRegion guir : regionsInView)
     {
-      if (guir.getPoly().contains(x, y))
+      for( Polygon p: guir.getPoly())
       {
-        if (activeRegions.contains(guir))
+        if (p.contains(x, y))
         {
-          activeRegions.remove(guir);
+          if (activeRegions.contains(guir))
+          {
+            activeRegions.remove(guir);
+          }
+          else
+          {
+            activeRegions.add(guir);
+          }
+          return; //for early loop termination.
         }
-        else
-        {
-          activeRegions.add(guir);
-        }
-        return; //for early loop termination.
       }
     }
   }
@@ -292,9 +299,18 @@ public class WorldPresenter extends Observable
                                                  Collection<GUIRegion> regions)
   {
     List<GUIRegion> regionsInR = new ArrayList<>();
+
     for (GUIRegion g : regions)
     {
-      if (g.getPoly().intersects(r)) regionsInR.add(g);
+      innerloop:
+      for( Polygon p: g.getPoly() )
+      {
+        if (p.intersects(r))
+        {
+          regionsInR.add(g);
+          break innerloop;
+        }
+      }
     }
 
     return regionsInR;
@@ -313,11 +329,13 @@ public class WorldPresenter extends Observable
     int sum = 0;
     for (GUIRegion g : modelRegions)
     {
-      Polygon p = g.getPoly();
-      int n = p.npoints;
-      for (int i = 0; i < n; i++)
+      for( Polygon p: g.getPoly() )
       {
-        if (r.contains(p.xpoints[i], p.ypoints[i])) sum++;
+        int n = p.npoints;
+        for (int i = 0; i < n; i++)
+        {
+          if (r.contains(p.xpoints[i], p.ypoints[i])) sum++;
+        }
       }
     }
     return sum;

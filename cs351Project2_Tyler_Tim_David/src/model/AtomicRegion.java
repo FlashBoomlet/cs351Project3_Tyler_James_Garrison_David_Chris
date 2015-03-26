@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class AtomicRegion implements Region
 {
-  private List<MapPoint> perimeter;
+  private List<MiniArea> perimeter;
   private String name;
   private RegionAttributes attributes;
   private String flagLocation;
@@ -57,14 +57,15 @@ public class AtomicRegion implements Region
 
 
   @Override
-  public List<MapPoint> getPerimeter()
+  public List<MiniArea> getPerimeter()
   {
+    if( getName() == "Morocco") System.out.println(perimeter.size() );
     return perimeter;
   }
 
 
   @Override
-  public void setPerimeter(List<MapPoint> perimeter)
+  public void setPerimeter(List<MiniArea> perimeter)
   {
     this.perimeter = perimeter;
   }

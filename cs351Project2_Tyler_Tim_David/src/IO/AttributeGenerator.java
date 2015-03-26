@@ -173,8 +173,10 @@ public class AttributeGenerator
     int numZones = 13;
     double midLat = 0;
 
-    for (MapPoint mp : reg.getPerimeter()) midLat += mp.getLat();
 
+    //for (MapPoint mp : reg.getPerimeter()) midLat += mp.getLat();
+
+    midLat = 1;
     midLat /= reg.getPerimeter().size();
 
     midLat += 90; /* shift to bring into natural number land */

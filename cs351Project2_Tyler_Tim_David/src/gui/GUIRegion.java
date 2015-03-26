@@ -3,6 +3,7 @@ package gui;
 import gui.displayconverters.MapConverter;
 import gui.hud.NavMap;
 import gui.regionlooks.RegionView;
+import model.MiniArea;
 import model.Region;
 
 import javax.imageio.ImageIO;
@@ -11,6 +12,7 @@ import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
 
 /**
  * Created by winston on 1/23/15.
@@ -21,10 +23,10 @@ public class GUIRegion
 {
   private Region region;
   private MapConverter converter; //set at class def.
-  private Area area;
+  private LinkedList<Area> area = new LinkedList<>();
   private boolean isActive;
   private RegionView look;
-  private Polygon poly;
+  private LinkedList<Polygon> polyList = new LinkedList<>();
   private BufferedImage image;
 
   public GUIRegion(Region region, MapConverter converter, RegionView look)
@@ -89,25 +91,31 @@ public class GUIRegion
     return image;
   }
 
-  public Polygon getPoly()
+  public LinkedList<Polygon> getPoly()
   {
-    if (poly == null)
+    polyList.clear();
+    for( MiniArea MA: region.getPerimeter())
     {
-      poly = converter.regionToPolygon(region);
+      polyList.add(converter.regionToPolygon(MA));
     }
-    return poly;
+    return polyList;
   }
 
   public double getSurfaceArea()
   {
-    return getPoly().getBounds().getWidth() * getPoly().getBounds().getHeight();
+    double localSA = 0;
+    for( Polygon p: getPoly() )
+    {
+      localSA += p.getBounds().getWidth() * p.getBounds().getHeight();
+    }
+    return localSA;
   }
 
-  public Area getArea()
+  public LinkedList<Area> getArea()
   {
-    if (area == null)
+    for( Polygon p: getPoly() )
     {
-      area = new Area(getPoly());
+      area.add(new Area(p));
     }
     return area;
   }

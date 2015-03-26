@@ -47,8 +47,11 @@ public class PlantingZoneView implements RegionView
       g.setColor(getPlantingColor(index));
     }
 
-    g.fillPolygon(gRegion.getPoly());
-    g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
-    g.drawPolygon(gRegion.getPoly());
+    for( Polygon p: gRegion.getPoly() )
+    {
+      g.fillPolygon(p);
+      g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
+      g.drawPolygon(p);
+    }
   }
 }

@@ -1,6 +1,7 @@
 package gui.displayconverters;
 
 import model.MapPoint;
+import model.MiniArea;
 import model.Region;
 
 import java.awt.*;
@@ -121,7 +122,7 @@ public class EquirectangularConverter extends MapConverter
    @return a Polygon representing the passed Region, appropriately scaled and converted
    */
   @Override
-  public Polygon regionToPolygon(Region r)
+  public Polygon regionToPolygon(MiniArea r)
   {
 
     Polygon poly = new Polygon();

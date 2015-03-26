@@ -6,15 +6,15 @@ package IO.XMLparsers;
  * CS 351 spring 2015
  */
 
-import model.AtomicRegion;
-import model.MapPoint;
-import model.Region;
+import model.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +27,8 @@ public class RegionParserHandler extends DefaultHandler
   private List<Region> regionList;
   private Locator locator;
   private Region tmpRegion;
+  private List<MiniArea> miniAreaList;
+  private MiniArea tempMiniArea;
   private List<MapPoint> tmpPerimeterSet;
   private boolean nameTag;
   private String regName;
@@ -66,6 +68,7 @@ public class RegionParserHandler extends DefaultHandler
   {
     regionList = new ArrayList<>();
     tmpPerimeterSet = new LinkedList<>();
+    miniAreaList = new LinkedList<>();
   }
 
   @Override
@@ -79,12 +82,13 @@ public class RegionParserHandler extends DefaultHandler
      * entering a new area tag.
      */
       case "area":
-        tmpRegion = new AtomicRegion();
+        tempMiniArea = new AtomicMiniArea();
         break;
     /*
      * sets flag to extract content of the same tag.
      */
       case "name":
+        tmpRegion = new AtomicRegion();
         nameTag = true;
         break;
 
@@ -135,11 +139,20 @@ public class RegionParserHandler extends DefaultHandler
     if (qName.equals("area"))
     {
       // save and reset....
-      tmpRegion.setPerimeter(new ArrayList<MapPoint>(tmpPerimeterSet));
-      tmpRegion.setName(regName);
-      tmpRegion.setFlag("resources/flags/" + regName + ".png" );
-      regionList.add(tmpRegion);
+
+      tempMiniArea.setPerimeter(new ArrayList<>(tmpPerimeterSet));
+      tempMiniArea.setName(regName);
+      miniAreaList.add(tempMiniArea);
       tmpPerimeterSet.clear();
+    }
+    if(qName.equals("country"))
+    {
+      //Add list of
+      tmpRegion.setPerimeter(new ArrayList<>(miniAreaList));
+      tmpRegion.setName(regName);
+      tmpRegion.setFlag("resources/flags/" + regName + ".png");
+      miniAreaList.clear();
+      regionList.add(tmpRegion);
     }
   }
 }

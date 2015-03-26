@@ -2,6 +2,7 @@ package IO;
 
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
+import model.MiniArea;
 import org.xml.sax.SAXException;
 import model.MapPoint;
 import model.Region;
@@ -20,15 +21,17 @@ public class RegionValidator
 
   public boolean validate(Region region) throws SAXException
   {
-    for (MapPoint mp : region.getPerimeter())
+    boolean isSingular = false;
+
+    for( MiniArea a: region.getPerimeter() )
     {
-      if (! isValidMapPoint(mp) ) throw new SAXException("Invalid Map Point.");
+      for (MapPoint mp : a.getPerimeter()) {
+        if (!isValidMapPoint(mp)) throw new SAXException("Invalid Map Point.");
+      }
+      // check to make sure all region polygons are simple.
+      isSingular = new Area( CONVERTER.regionToPolygon(a) ).isSingular();
+      if (! isSingular) throw new SAXException("Invalid Region shape");
     }
-
-    // check to make sure all region polygons are simple.
-    boolean isSingular = new Area(CONVERTER.regionToPolygon(region)).isSingular();
-
-    if (! isSingular) throw new SAXException("Invalid Region shape");
 
     return true;
   }
