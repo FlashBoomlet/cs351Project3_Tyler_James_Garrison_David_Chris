@@ -32,6 +32,8 @@ class RegionHappyView implements RegionView
       return;
     }
 
+    double happinessLevel = gRegion.getRegion().getAttributes().getAttribute(HAPPINESS);
+
     Color color;
     if (gRegion.isActive())
     {
@@ -39,8 +41,6 @@ class RegionHappyView implements RegionView
     }
     else
     {
-      double happinessLevel = gRegion.getRegion().getAttributes().getAttribute(HAPPINESS);
-
       if  (happinessLevel< 0.25)
       {
         color = new Color((float) (happinessLevel*3.3), (float) 0.0, (float) 0.0);
@@ -58,9 +58,11 @@ class RegionHappyView implements RegionView
       }
     }
 
-    g.setColor(color);
+
+
     for( Polygon p: gRegion.getPoly() )
     {
+      g.setColor(color);
       g.fillPolygon(p);
       g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
       g.drawPolygon(p);

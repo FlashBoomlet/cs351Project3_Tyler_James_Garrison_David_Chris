@@ -20,7 +20,7 @@ class RegionPopulationView implements RegionView
   public void draw(Graphics g, GUIRegion gRegion)
   {
     double pops = gRegion.getRegion().getAttributes().getAttribute(POPULATION);
-    Color color;
+    Color color = Color.YELLOW;
     if (gRegion.isActive())
     {
       color = new Color(0x00EE00);
@@ -34,9 +34,10 @@ class RegionPopulationView implements RegionView
         color = colors[colors.length-1];
     }
 
-    g.setColor(color);
+
     for( Polygon p: gRegion.getPoly() )
     {
+      g.setColor(color);
       g.fillPolygon(p);
       g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
       g.drawPolygon(p);

@@ -37,18 +37,19 @@ public class PlantingZoneView implements RegionView
       .getAttributes()
       .getAttribute(RegionAttributes.PLANTING_ATTRIBUTES.PLANTING_ZONE);
 
-
+    Color color;
     if (gRegion.isActive())
     {
-      g.setColor(ColorsAndFonts.ACTIVE_REGION);
+      color = ColorsAndFonts.ACTIVE_REGION;
     }
     else
     {
-      g.setColor(getPlantingColor(index));
+      color = getPlantingColor(index);
     }
 
     for( Polygon p: gRegion.getPoly() )
     {
+      g.setColor(color);
       g.fillPolygon(p);
       g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
       g.drawPolygon(p);

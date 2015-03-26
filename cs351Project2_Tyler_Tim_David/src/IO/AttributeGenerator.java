@@ -1,9 +1,6 @@
 package IO;
 
-import model.AtomicRegion;
-import model.MapPoint;
-import model.Region;
-import model.RegionAttributes;
+import model.*;
 
 import static model.RegionAttributes.*;
 import static model.RegionAttributes.PLANTING_ATTRIBUTES.*;
@@ -173,11 +170,16 @@ public class AttributeGenerator
     int numZones = 13;
     double midLat = 0;
 
-
-    //for (MapPoint mp : reg.getPerimeter()) midLat += mp.getLat();
-
-    midLat = 1;
-    midLat /= reg.getPerimeter().size();
+    int total = 0;
+    for( MiniArea r: reg.getPerimeter() )
+    {
+      for (MapPoint mp : r.getPerimeter())
+      {
+        total ++;
+        midLat += mp.getLat();
+      }
+    }
+    midLat /= total;
 
     midLat += 90; /* shift to bring into natural number land */
 

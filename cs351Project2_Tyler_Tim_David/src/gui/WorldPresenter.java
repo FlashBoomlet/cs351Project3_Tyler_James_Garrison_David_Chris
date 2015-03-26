@@ -302,13 +302,11 @@ public class WorldPresenter extends Observable
 
     for (GUIRegion g : regions)
     {
-      innerloop:
       for( Polygon p: g.getPoly() )
       {
         if (p.intersects(r))
         {
-          regionsInR.add(g);
-          break innerloop;
+          if( !regionsInR.contains(g) ) regionsInR.add(g);
         }
       }
     }

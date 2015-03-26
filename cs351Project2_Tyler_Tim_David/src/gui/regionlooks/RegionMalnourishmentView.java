@@ -34,9 +34,10 @@ class RegionMalnourishmentView implements RegionView
         color = colors[colors.length-1];
     }
 
-    g.setColor(color);
+
     for( Polygon p: gRegion.getPoly() )
     {
+      g.setColor(color);
       g.fillPolygon(p);
       g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
       g.drawPolygon(p);

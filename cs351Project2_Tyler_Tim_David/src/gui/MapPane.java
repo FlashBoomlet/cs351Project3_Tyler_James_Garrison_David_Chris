@@ -3,6 +3,7 @@ package gui;
 import gui.hud.NavMap;
 import gui.regionlooks.RegionNameDraw;
 import gui.regionlooks.RegionViewFactory;
+import model.MiniArea;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;

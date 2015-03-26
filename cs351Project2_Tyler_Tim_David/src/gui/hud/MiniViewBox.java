@@ -112,6 +112,11 @@ public class MiniViewBox extends JPanel
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHints(rh);
+        if( getTitle() != "AVERAGE:" )
+        {
+          GUIRegion gr = regions.get(0);
+          g2d.drawImage(gr.getFlag(), 0,0,30,20,null);
+        }
 
         /* set alpha blending var for a nice fade in animation */
         if (alpha < 1)
@@ -195,11 +200,6 @@ public class MiniViewBox extends JPanel
           for( Polygon p: gr.getPoly() )
           {
             g2d.fill(p);
-            if( getTitle() != "AVERAGE:" )
-            {
-              g2d.fillRect(50,50,30,20);
-              //g2d.drawImage(gr.getFlag(), 0,0,30,20,null);
-            }
           }
         }
       }
