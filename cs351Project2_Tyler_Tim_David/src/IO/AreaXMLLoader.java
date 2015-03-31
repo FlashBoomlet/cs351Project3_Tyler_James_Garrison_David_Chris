@@ -9,7 +9,6 @@ package IO;
 
 import IO.XMLparsers.RegionParserHandler;
 import gui.XMLEditor;
-import model.MiniArea;
 import model.Region;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.io.File;
 
 import static IO.IOHelpers.convertToFileURL;
 import static IO.IOHelpers.getFilesInDir;
@@ -33,7 +33,7 @@ import static IO.IOHelpers.getFilesInDir;
 public class AreaXMLLoader
 {
   private RegionParserHandler handler;
-  private final static String AREA_DIR_PATH = "resources/areas";
+  private final static String AREA_DIR_PATH = "cs351Project2_Tyler_Tim_David/src/resources/areas";
   private XMLEditor editor;
   private XMLReader xmlReader;
 
@@ -85,8 +85,7 @@ public class AreaXMLLoader
     List<Region> regionList = new ArrayList<>();
     List<String> filesToRead = getFilesInDir(AREA_DIR_PATH);
     RegionValidator regionValidator = new RegionValidator();
-
-    while (!filesToRead.isEmpty())
+    while (filesToRead != null && !filesToRead.isEmpty())
     {
       String currentFile = filesToRead.remove(0);
       try
@@ -99,7 +98,6 @@ public class AreaXMLLoader
         }
 
         regionList.addAll(tmpRegions);
-
       }
       catch (SAXException e) //routine for loading the editor.
       {

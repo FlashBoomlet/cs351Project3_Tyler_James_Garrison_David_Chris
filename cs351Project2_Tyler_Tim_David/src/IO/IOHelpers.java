@@ -38,7 +38,6 @@ public class IOHelpers
     File folder = new File(dirName);
 
     if (!folder.isDirectory()) return null;
-
     List<String> files = new LinkedList<>();
 
     for (File f : folder.listFiles())
