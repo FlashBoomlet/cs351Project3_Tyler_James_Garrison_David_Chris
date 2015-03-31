@@ -133,6 +133,46 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.AGE);
     }
   };
+  private Action cornOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.CORN);
+    }
+  };
+  private Action wheatOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.WHEAT);
+    }
+  };
+  private Action riceOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.RICE);
+    }
+  };
+  private Action soyOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOY);
+    }
+  };
+  private Action otherOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.OTHER);
+    }
+  };
   // test key binding
   public static Action stepWorld = new AbstractAction()
   {
@@ -191,6 +231,21 @@ public class MapPane extends JPanel
 
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("8"), "ageview");
     getActionMap().put("ageview", ageOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("9"), "cornview");
+    getActionMap().put("cornview", cornOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('q'), "wheatview");
+    getActionMap().put("wheatview", wheatOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('w'), "riceview");
+    getActionMap().put("riceview", riceOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('e'), "soyview");
+    getActionMap().put("soyview", soyOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('r'), "otherview");
+    getActionMap().put("otherview", otherOverlay);
 
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.

@@ -28,7 +28,12 @@ public class OverlaySelect extends JPanel
       "Nourishment",
       "Soil Type",
       "Population",
-      "Median Age"
+      "Median Age",
+      "% Corn",
+      "% Wheat",
+      "% Rice",
+      "% Soy",
+      "% Other"
     };
 
   /**
@@ -87,6 +92,21 @@ public class OverlaySelect extends JPanel
           case 7:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.AGE);
             break;
+          case 8:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.CORN);
+            break;
+          case 9:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.WHEAT);
+            break;
+          case 10:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.RICE);
+            break;
+          case 11:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOY);
+            break;
+          case 12:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.OTHER);
+            break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
         }
@@ -111,6 +131,11 @@ public class OverlaySelect extends JPanel
     else if( overlay == "SOIL_TYPE" ) overlaySelector.setSelectedIndex(5);
     else if( overlay == "POPULATION" ) overlaySelector.setSelectedIndex(6);
     else if( overlay == "AGE" ) overlaySelector.setSelectedIndex(7);
+    else if( overlay == "CORN" ) overlaySelector.setSelectedIndex(8);
+    else if( overlay == "WHEAT" ) overlaySelector.setSelectedIndex(9);
+    else if( overlay == "RICE" ) overlaySelector.setSelectedIndex(10);
+    else if( overlay == "SOY" ) overlaySelector.setSelectedIndex(11);
+    else if( overlay == "OTHER" ) overlaySelector.setSelectedIndex(12);
     else overlaySelector.setSelectedIndex(0);
   }
 }

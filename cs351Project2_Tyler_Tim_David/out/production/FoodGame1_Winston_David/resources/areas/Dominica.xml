@@ -1,0 +1,15 @@
+<country>
+  <name>Dominica</name>
+  <area>
+    <vertex lat="15.24904369" lon="-61.2817061"/>
+    <vertex lat="15.22728791" lon="-61.37536964"/>
+    <vertex lat="15.39983552" lon="-61.41572893"/>
+    <vertex lat="15.52515087" lon="-61.48115129"/>
+    <vertex lat="15.6034665" lon="-61.46993751"/>
+    <vertex lat="15.63310293" lon="-61.45812944"/>
+    <vertex lat="15.58504385" lon="-61.32002418"/>
+    <vertex lat="15.52670116" lon="-61.27726193"/>
+    <vertex lat="15.37317048" lon="-61.25106198"/>
+    <vertex lat="15.24904369" lon="-61.2817061"/>
+  </area>
+</country>

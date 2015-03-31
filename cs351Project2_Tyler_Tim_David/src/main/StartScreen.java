@@ -70,15 +70,29 @@ public class StartScreen extends JPanel
       {
         public void actionPerformed(ActionEvent e)
         {
-          Game.startGame();
-          Game.settingsDisplay(false);
+          startMethod();
         }
       }
     );
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("Enter"), "startaction");
+    getActionMap().put("startaction", startAction);
+
     add(start);
     textHolder.add(version);
     textHolder.add(text);
     add(textHolder);
 
   }
+  private void startMethod(){
+    Game.startGame();
+    Game.settingsDisplay(false);
+  }
+  private Action startAction = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      startMethod();
+    }
+  };
 }

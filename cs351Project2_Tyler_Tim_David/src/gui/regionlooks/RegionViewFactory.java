@@ -21,7 +21,6 @@ import gui.Camera;
  * TODO:
  * crops overlay
  * temperature overlay
- * age
  * birth rate
  * % organic
  */
@@ -36,6 +35,11 @@ public class RegionViewFactory
   private final static RegionView SOIL_TYPE_VIEW = new RegionSoilTypeView();
   private final static RegionView POPULATION_VIEW = new RegionPopulationView();
   private final static RegionView AGE_VIEW = new RegionAgeView();
+  private final static RegionView CORN_VIEW = new RegionCornView();
+  private final static RegionView WHEAT_VIEW = new RegionWheatView();
+  private final static RegionView RICE_VIEW = new RegionRiceView();
+  private final static RegionView SOY_VIEW = new RegionSoyView();
+  private final static RegionView OTHER_VIEW = new RegionOtherView();
   private Overlay currentOverlay;
 
   /**
@@ -87,6 +91,21 @@ public class RegionViewFactory
       case AGE:
         return AGE_VIEW;
 
+      case CORN:
+        return CORN_VIEW;
+
+      case WHEAT:
+        return WHEAT_VIEW;
+
+      case RICE:
+        return RICE_VIEW;
+
+      case SOY:
+        return SOY_VIEW;
+
+      case OTHER:
+        return OTHER_VIEW;
+
       default:
         return DEFAULT_LOOK;
     }
@@ -101,6 +120,11 @@ public class RegionViewFactory
     NOURISHMENT,
     SOIL_TYPE,
     AGE,
+    CORN,
+    WHEAT,
+    RICE,
+    SOY,
+    OTHER,
     POPULATION
   }
 }

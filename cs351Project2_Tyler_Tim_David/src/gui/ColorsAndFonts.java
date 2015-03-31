@@ -118,6 +118,62 @@ public interface ColorsAndFonts
       new Color(0x520052)
   };
 
+  Color[] CORN = {
+      new Color(0xFFFFCC),
+      new Color(0xFFFFA1),
+      new Color(0xFFFF80),
+      new Color(0xFFFF4D),
+      new Color(0xFFFF33),
+      new Color(0xFFD633),
+      new Color(0xFFFF19),
+      new Color(0xFFFF00)
+  };
+
+  Color[] WHEAT = {
+      new Color(0xffe6be),
+      new Color(0xfdd494),
+      new Color(0xfdc672),
+      new Color(0xffbc54),
+      new Color(0xfeaf35),
+      new Color(0xffa720),
+      new Color(0xffa00e),
+      new Color(0xff9a00)
+  };
+
+  Color[] RICE = {
+      new Color(0xFFEBD6),
+      new Color(0xFFDBB8),
+      new Color(0xFFCCAA),
+      new Color(0xFFBBAA),
+      new Color(0xFFADAD),
+      new Color(0xFFA3A3),
+      new Color(0xFF9999),
+      new Color(0xFF7777)
+  };
+
+  Color[] SOY = {
+      new Color(0xCCF5CC),
+      new Color(0x80E680),
+      new Color(0x4DDB4D),
+      new Color(0x33D633),
+      new Color(0x19D119),
+      new Color(0x00CC00),
+      new Color(0x00AA00),
+      new Color(0x008800)
+  };
+
+  Color[] OTHER = {
+      new Color(0xE0EBEB),
+      new Color(0xB2CCCC),
+      new Color(0x94B8B8),
+      new Color(0x85ADAD),
+      new Color(0x75A3A3),
+      new Color(0x669999),
+      new Color(0x339999),
+      new Color(0x118888)
+  };
+
+
   Color BAR_GRAPH_NEG = Color.cyan;
 
   class colorConverter
