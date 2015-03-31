@@ -37,6 +37,7 @@ public class ScalePanel extends JPanel
     setBackground(Color.BLUE);
     setLocation(x,y);
     setPreferredSize(new Dimension(width,height));
+    //setLayout(new FlowLayout(SwingConstants.CENTER,0,0));
 
     title = new JLabel("Scale: ");
     title.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);

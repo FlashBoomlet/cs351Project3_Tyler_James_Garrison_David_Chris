@@ -101,13 +101,10 @@ public class GUIRegion
     return polyList;
   }
 
-  public double getSurfaceArea()
+  public double getSurfaceArea(Polygon p)
   {
     double localSA = 0;
-    for( Polygon p: getPoly() )
-    {
-      localSA += p.getBounds().getWidth() * p.getBounds().getHeight();
-    }
+    localSA += p.getBounds().getWidth() * p.getBounds().getHeight();
     return localSA;
   }
 

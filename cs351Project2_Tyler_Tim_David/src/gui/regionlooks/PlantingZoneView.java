@@ -40,7 +40,7 @@ public class PlantingZoneView implements RegionView
     Color color;
     if (gRegion.isActive())
     {
-      color = ColorsAndFonts.ACTIVE_REGION;
+      color = Color.GREEN;
     }
     else
     {

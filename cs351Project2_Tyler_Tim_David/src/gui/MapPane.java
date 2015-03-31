@@ -250,9 +250,12 @@ public class MapPane extends JPanel
       double screenArea = cam.getViewBounds().getWidth() * cam.getViewBounds().getWidth();
       for (GUIRegion region : regionsToDraw)
       {
-        if (screenArea / region.getSurfaceArea() < MAP_VISIBILITY_SCALE)
+        for( Polygon p: region.getPoly() )
         {
-          RegionNameDraw.draw(g2, region);
+          if (screenArea / region.getSurfaceArea(p) < MAP_VISIBILITY_SCALE)
+          {
+            RegionNameDraw.draw(g2, region, p);
+          }
         }
       }
     }
@@ -260,7 +263,12 @@ public class MapPane extends JPanel
     {
       if (cam.getDistance() != Camera.CAM_DISTANCE.LONG)
       {
-        for (GUIRegion region : regionsToDraw) RegionNameDraw.draw(g2, region);
+        for (GUIRegion region : regionsToDraw) {
+          for( Polygon p: region.getPoly())
+          {
+            RegionNameDraw.draw(g2, region, p);
+          }
+        }
       }
     }
 

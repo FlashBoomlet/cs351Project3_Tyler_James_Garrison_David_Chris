@@ -51,8 +51,8 @@ public class WorldFeedPanel extends JPanel implements Observer
    */
   datePanel = new DatePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
   overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.25)),componentHeight);
-  scalePanel = new ScalePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
-  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.20))+(frameWidth*(.25))),componentHeight);
+  scalePanel = new ScalePanel(0,0,(int) (frameWidth*(.20)),componentHeight);
+  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.20))+(frameWidth*(.20))),componentHeight);
 
   datePanel.setDate(presenter.getWorldDate());
 
@@ -79,8 +79,10 @@ public class WorldFeedPanel extends JPanel implements Observer
  {
   setLayout(layout);
 
-  add(scalePanel);
   add(overlaySelect);
+
+  add(scalePanel);
+
   add(datePanel);
   add(gameplayControl);
 

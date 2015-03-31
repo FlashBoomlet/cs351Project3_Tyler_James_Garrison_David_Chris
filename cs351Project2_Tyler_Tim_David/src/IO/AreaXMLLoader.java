@@ -33,7 +33,7 @@ import static IO.IOHelpers.getFilesInDir;
 public class AreaXMLLoader
 {
   private RegionParserHandler handler;
-  private final static String AREA_DIR_PATH = "cs351Project2_Tyler_Tim_David/src/resources/areas";
+  private final static String AREA_DIR_PATH = "resources/areas";
   private XMLEditor editor;
   private XMLReader xmlReader;
 
@@ -85,7 +85,7 @@ public class AreaXMLLoader
     List<Region> regionList = new ArrayList<>();
     List<String> filesToRead = getFilesInDir(AREA_DIR_PATH);
     RegionValidator regionValidator = new RegionValidator();
-    while (filesToRead != null && !filesToRead.isEmpty())
+    while ( !filesToRead.isEmpty() )
     {
       String currentFile = filesToRead.remove(0);
       try

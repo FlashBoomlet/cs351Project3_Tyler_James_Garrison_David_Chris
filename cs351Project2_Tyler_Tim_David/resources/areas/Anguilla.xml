@@ -1,0 +1,11 @@
+<country>
+  <name>Anguilla</name>
+  <area>
+    <vertex lat="18.22178213" lon="-63.00121355"/>
+    <vertex lat="18.17139761" lon="-63.16001522"/>
+    <vertex lat="18.20028474" lon="-63.15334897"/>
+    <vertex lat="18.26973786" lon="-63.02601824"/>
+    <vertex lat="18.26477692" lon="-62.97956112"/>
+    <vertex lat="18.22178213" lon="-63.00121355"/>
+  </area>
+</country>

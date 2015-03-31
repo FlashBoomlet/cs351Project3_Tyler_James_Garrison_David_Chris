@@ -24,7 +24,7 @@ public class RegionNameDraw
    @param g   graphics context to draw to
    @param gRegion   GUIRegion whose name is to be drawn
    */
-  public static void draw(Graphics g, GUIRegion gRegion)
+  public static void draw(Graphics g, GUIRegion gRegion, Polygon p)
   {
     Graphics2D g2d = (Graphics2D) g;
 
@@ -46,6 +46,9 @@ public class RegionNameDraw
     int y = 0;
     int total = 0;
 
+    //Loop through and find polygon with the biggest area and Center on that flag?
+    //Another option is average the value based on if there is an area
+    /*
     for( Polygon p: gRegion.getPoly())
     {
       total ++;
@@ -55,8 +58,10 @@ public class RegionNameDraw
     //Find the average x and y coordinates
     x /= total;
     y /= total;
-    
+    */
 
+    x += (int) p.getBounds().getCenterX();
+    y += (int) p.getBounds().getCenterY();
 
     Point src = new Point(x,y);
     Point dst = new Point();

@@ -58,14 +58,14 @@ public class GameplayControl extends JPanel implements ActionListener
     speed = new JLabel();
     speed.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     speed.setFont(ColorsAndFonts.TOP_FONT);
-    speedControlLabel = new JLabel("Speed Controls:");
+    speedControlLabel = new JLabel("Speed:");
     speedControlLabel.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     speedControlLabel.setFont(ColorsAndFonts.TOP_FONT);
 
     add(next);
     add(speedControlLabel);
-    add(slower);
     add(speed);
+    add(slower);
     add(faster);
     next.setFocusable(false);
     slower.setFocusable(false);
