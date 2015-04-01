@@ -6,6 +6,7 @@ import model.World;
  */
 public class WorldCell
 {
+  private boolean original = false;
   private double lon = 0;
   private double lat = 0;
   private int x = 0;
@@ -21,6 +22,11 @@ public class WorldCell
   {
     lat = latIn;
     lon = lonIn;
+  }
+
+  public boolean isOriginal ()
+  {
+    return original;
   }
 
   public double getLat ()
@@ -62,6 +68,7 @@ public class WorldCell
 
   public void setAllPrecip (double[] months)
   {
+    original = true;
     double temp = 0;
     if (months.length == 12)
     {
@@ -71,7 +78,7 @@ public class WorldCell
         {
           temp = temp + months[i];
         }
-        annualPrecip = temp / 12;
+        annualPrecip = temp;
       }
       else
       {
@@ -86,6 +93,11 @@ public class WorldCell
     {
       System.out.println("Need 12 months to set Precip");
     }
+  }
+
+  public void setPrecip (double precip)
+  {
+    annualPrecip = precip;
   }
 
   public double getPrecip ()

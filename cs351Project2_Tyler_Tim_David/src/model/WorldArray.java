@@ -122,13 +122,13 @@ public class WorldArray
   }
 
   /**
-  public boolean pointInCell (double lonPoint, double latPoint)
-  {
-    if (latPoint >= lat && latPoint < (lat + EDGE_Y_LAT) && lonPoint >= lon && lonPoint < (lon + EDGE_X_LON))
-    {
-      return true;
-    }
-    return false;
-  }
+   public boolean pointInCell (double lonPoint, double latPoint)
+   {
+   if (latPoint >= lat && latPoint < (lat + EDGE_Y_LAT) && lonPoint >= lon && lonPoint < (lon + EDGE_X_LON))
+   {
+   return true;
+   }
+   return false;
+   }
    */
 }
