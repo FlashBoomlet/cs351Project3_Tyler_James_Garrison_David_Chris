@@ -1,12 +1,14 @@
 package model;
 
+import com.sun.scenario.effect.Crop;
 import model.World;
 /**
  * Created by Tim on 3/14/15.
  */
 public class WorldCell
 {
-  private boolean original = false;
+  private boolean originalPrecip = false;
+  public boolean assigned = false;
   private double lon = 0;
   private double lat = 0;
   private int x = 0;
@@ -17,6 +19,11 @@ public class WorldCell
   private double annualPrecip = -1;
   private double monthlyDayAvg;
   private double monthlyNightAvg;
+  private CropType currentCrop;
+  private CropType previousCrop;
+  private CropState currentCropState;
+  private CropState previousCropState;
+  private double currentCropPenalty;
 
   public WorldCell (double lonIn, double latIn)
   {
@@ -26,7 +33,7 @@ public class WorldCell
 
   public boolean isOriginal ()
   {
-    return original;
+    return originalPrecip;
   }
 
   public double getLat ()
@@ -68,7 +75,7 @@ public class WorldCell
 
   public void setAllPrecip (double[] months)
   {
-    original = true;
+    originalPrecip = true;
     double temp = 0;
     if (months.length == 12)
     {
@@ -103,5 +110,33 @@ public class WorldCell
   public double getPrecip ()
   {
     return annualPrecip;
+  }
+
+  public enum CropType
+  {
+    WHEAT,
+    CORN,
+    SOY,
+    RICE,
+    OTHER,
+    NONE
+  }
+
+  public enum CropState
+  {
+    IDEAL,
+    ACCEPT,
+    POOR,
+    NONE
+  }
+
+  public void addNoise ()
+  {
+
+  }
+
+  public void update ()
+  {
+
   }
 }
