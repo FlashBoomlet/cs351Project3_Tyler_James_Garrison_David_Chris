@@ -173,6 +173,31 @@ public interface ColorsAndFonts
       new Color(0x118888)
   };
 
+  Color[] ORGANIC = {
+      new Color(0xB2E0C2),
+      new Color(0x80CC99),
+      new Color(0x4DB870),
+      new Color(0x33AD5C),
+      new Color(0x19A347),
+      new Color(0x009933),
+      new Color(0x008833),
+      new Color(0x006644)
+  };
+
+  Color[] TEMPERATURE = {
+      new Color(0x053061),
+      new Color(0x2166ac),
+      new Color(0x4393c3),
+      new Color(0x92c5de),
+      new Color(0xAAEEBB),
+      new Color(0x77ff77),
+      new Color(0xBBEEAA),
+      new Color(0xf4a582),
+      new Color(0xd6604d),
+      new Color(0xb2182b),
+      new Color(0x67001f),
+      new Color(0x67001f),
+  };
 
   Color BAR_GRAPH_NEG = Color.cyan;
 

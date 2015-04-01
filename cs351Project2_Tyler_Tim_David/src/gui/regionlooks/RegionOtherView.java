@@ -10,15 +10,14 @@ import java.awt.*;
  * Created by David M. on 3/31/2015
  * CS 351 spring 2015
  * <p/>
- * Represents the % corn of the regions.
+ * Represents the % other of the regions.
  */
 class RegionOtherView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.OTHER;
-  private static double LIMIT = colors.length / 1.0;
 
   /**
-   * Method takes % corn from region and displays it.
+   * Method takes % other from region and displays it.
    *
    * @param g
    * @param gRegion
@@ -33,7 +32,7 @@ class RegionOtherView implements RegionView
       return;
     }
 
-    double corn = gRegion.getRegion().getAttributes().getCropP("Corn");
+    double other = gRegion.getRegion().getAttributes().getCropP("Other");
     Color color;
     if (gRegion.isActive())
     {
@@ -41,7 +40,7 @@ class RegionOtherView implements RegionView
     }
     else
     {
-      int select = (int) (corn * limit);
+      int select = (int) (other * limit);
       if(select < colors.length)
         color = colors[select];
       else

@@ -173,6 +173,22 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.OTHER);
     }
   };
+  private Action organicOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.ORGANIC);
+    }
+  };
+  private Action temperatureOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.TEMPERATURE);
+    }
+  };
   // test key binding
   public static Action stepWorld = new AbstractAction()
   {
@@ -247,6 +263,11 @@ public class MapPane extends JPanel
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('r'), "otherview");
     getActionMap().put("otherview", otherOverlay);
 
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('y'), "organicview");
+    getActionMap().put("organicview", organicOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('t'), "temperatureview");
+    getActionMap().put("temperatureview", temperatureOverlay);
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.
        When modified by a "shift", holding will fire events repeatedly, and allow

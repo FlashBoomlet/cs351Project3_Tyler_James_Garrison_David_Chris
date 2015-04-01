@@ -10,14 +10,14 @@ import java.awt.*;
  * Created by David M. on 3/31/2015
  * CS 351 spring 2015
  * <p/>
- * Represents the % soy of the regions.
+ * Represents the % organic of the regions.
  */
-class RegionSoyView implements RegionView
+class RegionOrganicView implements RegionView
 {
-  private static Color[] colors = ColorsAndFonts.SOY;
+  private static Color[] colors = ColorsAndFonts.ORGANIC;
 
   /**
-   * Method takes % soy from region and displays it.
+   * Method takes % organic from region and displays it.
    *
    * @param g
    * @param gRegion
@@ -25,14 +25,14 @@ class RegionSoyView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double limit = colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
+    double limit = colors.length /0.4;
 
     if (gRegion == null || gRegion.getRegion().getAttributes() == null) {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
 
-    double soy = gRegion.getRegion().getAttributes().getCropP("Soy");
+    double organic = gRegion.getRegion().getAttributes().getCropP("Organic Land");
     Color color;
     if (gRegion.isActive())
     {
@@ -40,7 +40,7 @@ class RegionSoyView implements RegionView
     }
     else
     {
-      int select = (int) (soy * limit);
+      int select = (int) (organic * limit);
       if(select < colors.length)
         color = colors[select];
       else

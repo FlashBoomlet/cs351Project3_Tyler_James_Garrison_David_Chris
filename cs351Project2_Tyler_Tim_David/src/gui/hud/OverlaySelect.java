@@ -33,7 +33,9 @@ public class OverlaySelect extends JPanel
       "% Wheat",
       "% Rice",
       "% Soy",
-      "% Other"
+      "% Other",
+      "% Organic",
+      "Annual Temperature"
     };
 
   /**
@@ -107,6 +109,12 @@ public class OverlaySelect extends JPanel
           case 12:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.OTHER);
             break;
+          case 13:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.ORGANIC);
+            break;
+          case 14:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.TEMPERATURE);
+            break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
         }
@@ -136,6 +144,8 @@ public class OverlaySelect extends JPanel
     else if( overlay == "RICE" ) overlaySelector.setSelectedIndex(10);
     else if( overlay == "SOY" ) overlaySelector.setSelectedIndex(11);
     else if( overlay == "OTHER" ) overlaySelector.setSelectedIndex(12);
+    else if( overlay == "ORGANIC" ) overlaySelector.setSelectedIndex(13);
+    else if( overlay == "TEMPERATURE" ) overlaySelector.setSelectedIndex(14);
     else overlaySelector.setSelectedIndex(0);
   }
 }

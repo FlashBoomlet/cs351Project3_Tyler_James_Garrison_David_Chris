@@ -15,10 +15,9 @@ import java.awt.*;
 class RegionRiceView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.RICE;
-  private static double LIMIT = colors.length / 1.0;
 
   /**
-   * Method takes % corn from region and displays it.
+   * Method takes % rice from region and displays it.
    *
    * @param g
    * @param gRegion
@@ -33,7 +32,7 @@ class RegionRiceView implements RegionView
       return;
     }
 
-    double corn = gRegion.getRegion().getAttributes().getCropP("Corn");
+    double rice = gRegion.getRegion().getAttributes().getCropP("Rice");
     Color color;
     if (gRegion.isActive())
     {
@@ -41,7 +40,7 @@ class RegionRiceView implements RegionView
     }
     else
     {
-      int select = (int) (corn * limit);
+      int select = (int) (rice * limit);
       if(select < colors.length)
         color = colors[select];
       else

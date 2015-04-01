@@ -19,10 +19,7 @@ import gui.Camera;
  *
  *
  * TODO:
- * crops overlay
- * temperature overlay
  * birth rate
- * % organic
  */
 public class RegionViewFactory
 {
@@ -40,6 +37,8 @@ public class RegionViewFactory
   private final static RegionView RICE_VIEW = new RegionRiceView();
   private final static RegionView SOY_VIEW = new RegionSoyView();
   private final static RegionView OTHER_VIEW = new RegionOtherView();
+  private final static RegionView ORGANIC_VIEW = new RegionOrganicView();
+  private final static RegionView TEMPERATURE_VIEW = new RegionTemperatureView();
   private Overlay currentOverlay;
 
   /**
@@ -106,6 +105,12 @@ public class RegionViewFactory
       case OTHER:
         return OTHER_VIEW;
 
+      case ORGANIC:
+        return ORGANIC_VIEW;
+
+      case TEMPERATURE:
+        return TEMPERATURE_VIEW;
+
       default:
         return DEFAULT_LOOK;
     }
@@ -125,6 +130,8 @@ public class RegionViewFactory
     RICE,
     SOY,
     OTHER,
+    ORGANIC,
+    TEMPERATURE,
     POPULATION
   }
 }

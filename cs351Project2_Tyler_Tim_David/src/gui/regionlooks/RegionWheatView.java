@@ -10,15 +10,14 @@ import java.awt.*;
  * Created by David M. on 3/31/2015
  * CS 351 spring 2015
  * <p/>
- * Represents the % corn of the regions.
+ * Represents the % wheat of the regions.
  */
 class RegionWheatView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.WHEAT;
-  private static double LIMIT = colors.length / 1.0;
 
   /**
-   * Method takes % corn from region and displays it.
+   * Method takes % wheat from region and displays it.
    *
    * @param g
    * @param gRegion
@@ -33,7 +32,7 @@ class RegionWheatView implements RegionView
       return;
     }
 
-    double corn = gRegion.getRegion().getAttributes().getCropP("Corn");
+    double wheat = gRegion.getRegion().getAttributes().getCropP("Wheat");
     Color color;
     if (gRegion.isActive())
     {
@@ -41,7 +40,7 @@ class RegionWheatView implements RegionView
     }
     else
     {
-      int select = (int) (corn * limit);
+      int select = (int) (wheat * limit);
       if(select < colors.length)
         color = colors[select];
       else
