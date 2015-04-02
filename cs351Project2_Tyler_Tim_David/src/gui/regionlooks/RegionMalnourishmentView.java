@@ -20,7 +20,6 @@ class RegionMalnourishmentView implements RegionView
   public void draw(Graphics g, GUIRegion gRegion)
   {
     double nourish = gRegion.getRegion().getAttributes().getAttribute(UNDERNOURISHMENT_RATE);
-    System.out.println(nourish+" : "+LIMIT);
     Color color;
     if (gRegion.isActive())
     {
