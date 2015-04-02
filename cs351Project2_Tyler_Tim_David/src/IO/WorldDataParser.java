@@ -32,7 +32,7 @@ public class WorldDataParser
     {
       Scanner rainScan = new Scanner(new FileReader(fileURL));
       String [] strings;
-      double [] months = new double [12];
+      float [] months = new float [12];
       String current = null;
       int cellX = 0;
       int cellY = 0;
@@ -47,7 +47,7 @@ public class WorldDataParser
         currentLat = Double.parseDouble(strings[1]);
         for (int i = 0; i < 12; i++)
         {
-          months[i] = Double.parseDouble(strings[i + 2]);
+          months[i] = Float.parseFloat(strings[i + 2]);
         }
         worldArray.get(currentLon, currentLat, false).setAllPrecip(months);
       }
@@ -65,9 +65,9 @@ public class WorldDataParser
     int numFound = 0;
     int step = 2;
     int counter = 1;
-    double temp = 0;
-    double tempX = 0;
-    double tempY = 0;
+    float temp = 0;
+    float tempX = 0;
+    float tempY = 0;
     for (int i = 0; i < X_CELLS; i++)
     {
       for (int j = 0; j < Y_CELLS; j++)

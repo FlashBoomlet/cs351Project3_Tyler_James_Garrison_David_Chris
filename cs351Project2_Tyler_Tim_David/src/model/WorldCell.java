@@ -8,22 +8,22 @@ import model.World;
 public class WorldCell
 {
   private boolean originalPrecip = false;
-  public boolean assigned = false;
+  public boolean hasCountry = false;
   private double lon = 0;
   private double lat = 0;
   private int x = 0;
   private int y = 0;
-  private double annualHigh = 0;
-  private double annualLow = 0;
-  private double elevation = 0;
-  private double annualPrecip = -1;
-  private double monthlyDayAvg;
-  private double monthlyNightAvg;
+  private float annualHigh = 0;
+  private float annualLow = 0;
+  //private double elevation = 0;
+  private float annualPrecip = -1;
+  private float monthlyDayAvg;
+  private float monthlyNightAvg;
   private CropType currentCrop;
-  private CropType previousCrop;
+  //private CropType previousCrop;
   private CropState currentCropState;
-  private CropState previousCropState;
-  private double currentCropPenalty;
+  //private CropState previousCropState;
+  private float currentCropPenalty;
 
   public WorldCell (double lonIn, double latIn)
   {
@@ -36,6 +36,11 @@ public class WorldCell
     return originalPrecip;
   }
 
+  public boolean hasCountry ()
+  {
+    return hasCountry;
+  }
+
   public double getLat ()
   {
     return lat;
@@ -46,21 +51,37 @@ public class WorldCell
     return lon;
   }
 
+  /*
   public double getElevation ()
   {
     return elevation;
+  }*/
+  public float getPrecip ()
+  {
+    return annualPrecip;
   }
 
-  public double getAnnualHigh ()
+  public float getAnnualHigh ()
   {
     return annualHigh;
   }
 
-  public double getAnnualLow ()
+  public float getAnnualLow ()
   {
     return annualLow;
   }
 
+  public float getMonthlyDayAvg ()
+  {
+    return monthlyDayAvg;
+  }
+
+  public float getMonthlyNightAvg ()
+  {
+    return monthlyNightAvg;
+  }
+
+  /*
   public void setElevation (double elev)
   {
     if (elev >= 0 && elev <= 8850)
@@ -71,12 +92,12 @@ public class WorldCell
     {
       System.out.println("Invalid elevation.");
     }
-  }
+  }*/
 
-  public void setAllPrecip (double[] months)
+  public void setAllPrecip (float[] months)
   {
     originalPrecip = true;
-    double temp = 0;
+    float temp = 0;
     if (months.length == 12)
     {
       if (annualPrecip == -1)
@@ -102,14 +123,29 @@ public class WorldCell
     }
   }
 
-  public void setPrecip (double precip)
+  public void setPrecip (float precip)
   {
     annualPrecip = precip;
   }
 
-  public double getPrecip ()
+  public void setAnnualHigh (float high)
   {
-    return annualPrecip;
+    annualHigh = high;
+  }
+
+  public void setAnnualLow (float low)
+  {
+    annualLow = low;
+  }
+
+  public void setMonthlyDayAvg (float day)
+  {
+    monthlyDayAvg = day;
+  }
+
+  public void setMonthlyNightAvg (float night)
+  {
+    monthlyNightAvg = night;
   }
 
   public enum CropType
@@ -130,13 +166,21 @@ public class WorldCell
     NONE
   }
 
-  public void addNoise ()
+  public void update (CropType newCrop, CropState newState)
   {
-
-  }
-
-  public void update ()
-  {
-
+    if (currentCrop == CropType.NONE)
+    {
+      currentCropPenalty = (float) 0.1;
+    }
+    else if (currentCrop != newCrop)
+    {
+      currentCropPenalty = (float) 0.5;
+    }
+    else
+    {
+      currentCropPenalty = 1;
+    }
+    currentCrop = newCrop;
+    currentCropState = newState;
   }
 }

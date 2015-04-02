@@ -1,20 +1,24 @@
 package model;
+import java.util.Random;
+import java.util.HashSet;
 
 /**
- * Created by Gandalf on 3/15/15.
+ * Created by Tim on 3/15/15.
  */
 public class WorldArray
 {
   private int X_CELLS;
   private int Y_CELLS;
   private WorldCell [][] worldCells;
+  float randPercent;
 
-  public WorldArray (int lonLength, int latHeight)
+  public WorldArray (int lonLength, int latHeight, float randPercent)
   {
     worldCells = new WorldCell [lonLength][latHeight];
     X_CELLS = lonLength;
     Y_CELLS = latHeight;
     initCells();
+    this.randPercent = randPercent;
   }
 
   private void initCells ()
@@ -119,6 +123,69 @@ public class WorldArray
       }
       return get (modifiedX, modifiedY);
     }
+  }
+
+  /**
+   * Right now, this visits ALL cells, not just land.
+   */
+  public void addNoise ()
+  {
+    int cellsToVisit = (int) (X_CELLS * Y_CELLS * .1);
+    int counter = 0;
+    Random rand = new Random();
+    HashSet <WorldCell> visited = new HashSet();
+    int tempX = 0;
+    int tempY = 0;
+    float r1 = rand.nextFloat();
+    float r2 = rand.nextFloat();
+    float deltaOne = 0;
+    float deltaTwo = 0;
+    float deltaThree = 0;
+    while (counter < cellsToVisit)
+    {
+      tempX = rand.nextInt(X_CELLS);
+      tempY = rand.nextInt(Y_CELLS);
+      if (!visited.contains(worldCells[tempX][tempY]))
+      {
+        deltaOne = (float) ((worldCells[tempX][tempY].getAnnualHigh() - worldCells[tempX][tempY].getAnnualLow()) * .1 * randPercent * (r1 - r2));
+        worldCells[tempX][tempY].setAnnualHigh(worldCells[tempX][tempY].getAnnualHigh() + deltaOne);
+        worldCells[tempX][tempY].setAnnualLow(worldCells[tempX][tempY].getAnnualLow() + deltaOne);
+        deltaTwo = (float) ((worldCells[tempX][tempY].getMonthlyDayAvg() - worldCells[tempX][tempY].getMonthlyNightAvg()) * .1 * randPercent * (r1 - r2));
+        worldCells[tempX][tempY].setMonthlyDayAvg(worldCells[tempX][tempY].getMonthlyDayAvg() + deltaTwo);
+        worldCells[tempX][tempY].setMonthlyNightAvg(worldCells[tempX][tempY].getMonthlyNightAvg() + deltaTwo);
+        deltaThree = (float) (worldCells[tempX][tempY].getPrecip() * .1 * randPercent * (r1 - r2));
+        worldCells[tempX][tempY].setPrecip(worldCells[tempX][tempY].getPrecip() + deltaThree);
+        for (int i = -1; i < 2; i++)
+        {
+          //if land
+          noiseHelp(tempX + i, tempY + 1, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+        }
+        for (int j = -1; j < 2; j++)
+        {
+          //if land
+          noiseHelp(tempX + j, tempY - 1, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+        }
+        //if land
+        noiseHelp(tempX + 1, tempY, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+        //if land
+        noiseHelp(tempX - 1, tempY, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+        visited.add(worldCells[tempX][tempY]);
+      }
+      else
+      {
+        continue;
+      }
+      counter++;
+    }
+  }
+
+  private void noiseHelp (int x, int y, float deltaOne, float deltaTwo, float deltaThree, float r3)
+  {
+    worldCells[x][y].setAnnualHigh(worldCells[x][y].getAnnualHigh() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
+    worldCells[x][y].setAnnualLow(worldCells[x][y].getAnnualLow() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
+    worldCells[x][y].setMonthlyDayAvg(worldCells[x][y].getMonthlyDayAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
+    worldCells[x][y].setMonthlyNightAvg(worldCells[x][y].getMonthlyNightAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
+    worldCells[x][y].setPrecip(worldCells[x][y].getPrecip() + (float) (deltaThree/Math.log(Math.E + 100 * r3)));
   }
 
   /**
