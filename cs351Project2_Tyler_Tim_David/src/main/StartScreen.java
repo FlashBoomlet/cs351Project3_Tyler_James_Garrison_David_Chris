@@ -37,13 +37,14 @@ public class StartScreen extends JPanel
     setSize(frameWidth, frameHeight);
 
     setBackground(new Color(0x1A1A1A));
+    setLayout(new FlowLayout());
 
     start = new JButton("START");
     start.setHorizontalAlignment(SwingConstants.RIGHT);
-    start.setFocusable(false);
 
     textHolder = new JPanel();
     textHolder.setLayout(new BoxLayout(textHolder, BoxLayout.PAGE_AXIS));
+
 
     text = new JTextArea();
     text.setBackground(new Color(0x333333));
@@ -52,10 +53,23 @@ public class StartScreen extends JPanel
     text.setForeground(Color.white);
     text.setText(" * \"World Food Production and Land Management\" version 1.2 developed by: \n" +
         "   Tyler Lynch, Timothy Chavez, and David Matins \n" +
-        "   with a version 1.1 foundation by: Winston Wriley and David Ringo \n\n" +
-        "TODO: why the game was made \n\n" +
+        "   with a version 1.1 foundation by: Winston Wriley and David Ringo \n" +
+        "   Why:\n" +
+        "      You are a policy Maker for the country. Your mission, should you choose to accept it, is to\n" +
+        "      further advance the world while maintaining or improving upon the populations over all well being\n" +
+        "      \n" +
+        "      The overall well being of a country is defined by their happiness.\n" +
+        "      \n" +
+        "      What portion of the government should you represent?\n" +
+        "         \tFor this simulation you are the\n" +
+        "      \n" +
+        "      Difficulty levels based on external influences on your policies\n" +
+        "      At the end of the game you will see how well you have done throughout the game\n" +
+        "      \n" +
+        "      As always, \"All models are wrong, but some are useful\" \n\n" +
         "TODO: what the game models \n\n" +
         "TODO: how to play the game");
+
     text.setEditable(false);
 
     version = new JTextArea();
@@ -75,13 +89,20 @@ public class StartScreen extends JPanel
       }
     );
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("Enter"), "startaction");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "startaction");
     getActionMap().put("startaction", startAction);
 
-    add(start);
+
     textHolder.add(version);
     textHolder.add(text);
+    textHolder.setPreferredSize(new Dimension((int) (getWidth() * (.70)), (int) (getHeight() * (.75))));
     add(textHolder);
+
+    JPanel buttonCon = new JPanel();
+    buttonCon.setPreferredSize(new Dimension((int) (getWidth() * (.70)), (int) (getHeight() * (.25))));
+    buttonCon.setOpaque(false);
+    buttonCon.add(start);
+    add(buttonCon);
 
   }
   private void startMethod(){

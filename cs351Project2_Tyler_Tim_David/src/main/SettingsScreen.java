@@ -96,11 +96,11 @@ public class SettingsScreen extends JPanel
 
       panelSimulator = new algorithmInfluencePanel();
 
-      JPanel otherPanel = new JPanel();
-      otherPanel.setOpaque(false);
+      JPanel DefinitionsPanel = new JPanel();
+      DefinitionsPanel.setOpaque(false);
 
-      addTab("Choose world influences", null, panelSimulator, "Influence Simulator");
-      addTab("Other, does nothing at all right now but in the future.", null, otherPanel, "Does nothing");
+      addTab("World influences", null, panelSimulator, "Influence Simulator");
+      addTab("Definitions", null, DefinitionsPanel, "Does nothing");
     }
   }
 
