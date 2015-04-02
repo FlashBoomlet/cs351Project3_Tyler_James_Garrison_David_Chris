@@ -1,6 +1,5 @@
 package model;
 
-
 import java.util.List;
 
 
@@ -16,6 +15,7 @@ public class AtomicRegion implements Region
   private String name;
   private RegionAttributes attributes;
   private String flagLocation;
+  private WorldCell[] landCells;
 
   @Override
   public RegionAttributes getAttributes()
@@ -76,5 +76,10 @@ public class AtomicRegion implements Region
     return "AtomicRegion{" +
         "name='" + name + '\'' +
         '}';
+  }
+
+  public void setLandCells (WorldArray worldArray)
+  {
+
   }
 }

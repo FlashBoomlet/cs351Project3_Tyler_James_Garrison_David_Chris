@@ -46,6 +46,16 @@ public class WorldArray
     return Y_CELLS;
   }
 
+  public int [] getNumber (double lon, double lat)
+  {
+    int [] out = new int [2];
+    double tempX = (((lon/180) * X_CELLS/2) + X_CELLS/2);
+    double tempY = ((Y_CELLS/2 * Math.sin(Math.PI * lat/180)/(Math.PI/2)) + Y_CELLS/2);
+    out [0] = (int) Math.round(tempX);
+    out [1] = (int) Math.round(tempY);
+    return out;
+  }
+
   /**
    *
    * @param lon

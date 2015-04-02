@@ -46,7 +46,7 @@ public class World
   {
     this.world = world;
     this.currentDate = cal;
-    worldArray = new WorldArray(X_CELLS, Y_CELLS);
+    worldArray = new WorldArray(X_CELLS, Y_CELLS, (float) 0.5);
   }
 
   public WorldArray getWorldArray()
