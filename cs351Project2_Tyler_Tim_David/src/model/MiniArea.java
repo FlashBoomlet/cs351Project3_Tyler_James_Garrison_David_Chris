@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.HashSet;
 
 /**
  * Created by winston on 1/23/15.
@@ -17,4 +18,6 @@ public interface MiniArea
   List<MapPoint> getPerimeter();
 
   void setPerimeter(List<MapPoint> perimeter);
+
+  void setLandCells(WorldArray worldArray, HashSet<WorldCell> cells);
 }

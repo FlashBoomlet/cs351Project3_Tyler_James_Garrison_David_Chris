@@ -1,6 +1,8 @@
 package model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.awt.geom.Path2D;
 
 
 /**
@@ -15,7 +17,7 @@ public class AtomicRegion implements Region
   private String name;
   private RegionAttributes attributes;
   private String flagLocation;
-  private WorldCell[] landCells;
+  private HashSet<WorldCell> landCells;
   private CountryData data;
 
   @Override
@@ -80,7 +82,10 @@ public class AtomicRegion implements Region
 
   public void setLandCells (WorldArray worldArray)
   {
-
+    for (MiniArea area: perimeter)
+    {
+      area.setLandCells(worldArray, landCells);
+    }
   }
 
   public void setCountryData(CountryData data)
