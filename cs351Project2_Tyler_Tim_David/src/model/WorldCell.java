@@ -18,9 +18,9 @@ public class WorldCell
   private float annualPrecip = -1;
   private float monthlyDayAvg;
   private float monthlyNightAvg;
-  private CropType currentCrop;
+  private String currentCrop = "None";
   //private CropType previousCrop;
-  private CropState currentCropState;
+  private float currentCropState;
   //private CropState previousCropState;
   private float currentCropPenalty;
 
@@ -78,6 +78,16 @@ public class WorldCell
   public float getMonthlyNightAvg ()
   {
     return monthlyNightAvg;
+  }
+
+  public String getCrop ()
+  {
+    return currentCrop;
+  }
+
+  public float getCropState ()
+  {
+    return currentCropState;
   }
 
   /*
@@ -147,6 +157,7 @@ public class WorldCell
     monthlyNightAvg = night;
   }
 
+  /*
   public enum CropType
   {
     WHEAT,
@@ -155,23 +166,15 @@ public class WorldCell
     RICE,
     OTHER,
     NONE
-  }
+  }*/
 
-  public enum CropState
+  public void update (String newCrop, Float newState)
   {
-    IDEAL,
-    ACCEPT,
-    POOR,
-    NONE
-  }
-
-  public void update (CropType newCrop, CropState newState)
-  {
-    if (currentCrop == CropType.NONE)
+    if (currentCrop.equals("None"))
     {
       currentCropPenalty = (float) 0.1;
     }
-    else if (currentCrop != newCrop)
+    else if (currentCrop.equals(newCrop))
     {
       currentCropPenalty = (float) 0.5;
     }
@@ -181,5 +184,11 @@ public class WorldCell
     }
     currentCrop = newCrop;
     currentCropState = newState;
+  }
+
+  public void updateFirstYear (String crop, Float state)
+  {
+    currentCrop = crop;
+    currentCropState = state;
   }
 }
