@@ -19,6 +19,9 @@ import java.util.LinkedList;
  * Created by winston on 1/23/15.
  * Phase_01
  * CS 351 spring 2015
+ *
+ * Restructured by:
+ * @author Tyler Lynch <lyncht@unm.edu>
  */
 public class GUIRegion
 {
@@ -29,7 +32,7 @@ public class GUIRegion
   private RegionView look;
   private LinkedList<Polygon> polyList = new LinkedList<>();
   private BufferedImage image;
-  private CountryData data;
+  private CountryData data = null;
 
   public GUIRegion(Region region, MapConverter converter, RegionView look)
   {
@@ -134,7 +137,7 @@ public class GUIRegion
     this.data = data;
   }
 
-  public CountryData getCountryData(CountryData data)
+  public CountryData getCountryData()
   {
     return data;
   }

@@ -7,6 +7,9 @@ import java.util.List;
  * Phase_01
  * CS 351 spring 2015
  *
+ *
+ * Restructured by:
+ * @author Tyler Lynch <lyncht@unm.edu>
  */
 public interface Region
 {
@@ -28,5 +31,5 @@ public interface Region
 
   public void setCountryData(CountryData data);
 
-  public CountryData getCountryData(CountryData data);
+  public CountryData getCountryData();
 }

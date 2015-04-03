@@ -96,7 +96,6 @@ public class CountryCSVParser {
       currentRegion = findCurrentRegion(country);
       if( currentRegion != null )
       {
-        System.out.println( "Found region/country: " + country );
         CountryData data = new CountryData();
         data.setPopulation( Double.parseDouble(atributes[1]) );
         data.setAverageAge( Double.parseDouble(atributes[2]) );
@@ -135,12 +134,19 @@ public class CountryCSVParser {
         data.setOrganic( Double.parseDouble(atributes[29]) );
         data.setConventional( Double.parseDouble(atributes[30]) );
         data.setGmo( Double.parseDouble(atributes[31]) );
+
+        data.calculateZeroOrder();
         currentRegion.setCountryData(data);
       }
     }
 
   }
 
+  /**
+   *
+   * @param name
+   * @return a region that matches
+   */
   private Region findCurrentRegion(String name)
   {
     for( Region r: regions)
