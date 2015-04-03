@@ -1,5 +1,6 @@
 package IO;
 
+import model.CountryData;
 import model.Region;
 
 import java.io.BufferedReader;
@@ -87,44 +88,67 @@ public class CountryCSVParser {
    */
   private void assignAttributes(String[] atributes)
   {
+    Region currentRegion = null;
     // To prevent array index out of bounds error, ensure all data is filled out
     if( atributes.length >= 31 )
     {
       String country = atributes[0];
+      currentRegion = findCurrentRegion(country);
+      if( currentRegion != null )
+      {
+        System.out.println( "Found region/country: " + country );
+        CountryData data = new CountryData();
+        data.setPopulation( Double.parseDouble(atributes[1]) );
+        data.setAverageAge( Double.parseDouble(atributes[2]) );
+        data.setBirthRate( Double.parseDouble(atributes[3]) );
+        data.setMortality( Double.parseDouble(atributes[4]) );
+        data.setMigration( Double.parseDouble(atributes[5]) );
+        data.setUndernourish( Double.parseDouble(atributes[6]) );
 
-      double population = Double.parseDouble(atributes[1]);
-      double averageAge = Double.parseDouble(atributes[2]);
-      double birthRate = Double.parseDouble(atributes[3]);
-      double mortality = Double.parseDouble(atributes[4]);
-      double migration = Double.parseDouble(atributes[5]);
-      double undernourish = Double.parseDouble(atributes[6]);
+        data.setCornProduction( Double.parseDouble(atributes[7]) );
+        data.setCornExports( Double.parseDouble(atributes[8]) );
+        data.setCornImports( Double.parseDouble(atributes[9]) );
+        data.setCornLand( Double.parseDouble(atributes[10]) );
 
-      double cornProduction = Double.parseDouble(atributes[7]);
-      double cornExports = Double.parseDouble(atributes[8]);
-      double cornImports = Double.parseDouble(atributes[9]);
-      double cornLand = Double.parseDouble(atributes[10]);
-      double wheatProduction= Double.parseDouble(atributes[11]);
-      double wheatExports = Double.parseDouble(atributes[12]);
-      double wheatImports = Double.parseDouble(atributes[13]);
-      double wheatLand = Double.parseDouble(atributes[14]);
-      double riceProduction = Double.parseDouble(atributes[15]);
-      double riceExports = Double.parseDouble(atributes[16]);
-      double riceImports = Double.parseDouble(atributes[17]);
-      double riceLand = Double.parseDouble(atributes[18]);
-      double soyProduction = Double.parseDouble(atributes[19]);
-      double soyExports = Double.parseDouble(atributes[20]);
-      double soyImports = Double.parseDouble(atributes[21]);
-      double soyLand = Double.parseDouble(atributes[22]);
-      double otherProduction = Double.parseDouble(atributes[23]);
-      double otherExports = Double.parseDouble(atributes[24]);
-      double otherImports = Double.parseDouble(atributes[25]);
-      double otherLand = Double.parseDouble(atributes[26]);
-      double landArea = Double.parseDouble(atributes[27]);
-      double arableOpen = Double.parseDouble(atributes[28]);
-      double organic = Double.parseDouble(atributes[29]);
-      double conventional = Double.parseDouble(atributes[30]);
-      double gmo = Double.parseDouble(atributes[31]);
+        data.setWheatProduction( Double.parseDouble(atributes[11]) );
+        data.setWheatExports( Double.parseDouble(atributes[12]) );
+        data.setWheatImports( Double.parseDouble(atributes[13]) );
+        data.setWheatLand( Double.parseDouble(atributes[14]) );
+
+        data.setRiceProduction( Double.parseDouble(atributes[15]) );
+        data.setRiceExports( Double.parseDouble(atributes[16]) );
+        data.setRiceImports( Double.parseDouble(atributes[17]) );
+        data.setRiceLand( Double.parseDouble(atributes[18]) );
+
+        data.setSoyProduction( Double.parseDouble(atributes[19]) );
+        data.setSoyExports( Double.parseDouble(atributes[20]) );
+        data.setSoyImports( Double.parseDouble(atributes[21]) );
+        data.setSoyLand( Double.parseDouble(atributes[22]) );
+
+        data.setOtherProduction( Double.parseDouble(atributes[23]) );
+        data.setOtherExports( Double.parseDouble(atributes[24]) );
+        data.setOtherImports( Double.parseDouble(atributes[25]) );
+        data.setOtherLand( Double.parseDouble(atributes[26]) );
+
+        data.setLandArea( Double.parseDouble(atributes[27]) );
+        data.setArableOpen( Double.parseDouble(atributes[28]) );
+        data.setOrganic( Double.parseDouble(atributes[29]) );
+        data.setConventional( Double.parseDouble(atributes[30]) );
+        data.setGmo( Double.parseDouble(atributes[31]) );
+        currentRegion.setCountryData(data);
+      }
     }
 
+  }
+
+  private Region findCurrentRegion(String name)
+  {
+    for( Region r: regions)
+    {
+      if( r.getName().equals(name) ) {
+        return r;
+      }
+    }
+    return null;
   }
 }

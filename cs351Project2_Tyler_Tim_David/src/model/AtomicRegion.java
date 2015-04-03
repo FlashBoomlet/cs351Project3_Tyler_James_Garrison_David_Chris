@@ -16,6 +16,7 @@ public class AtomicRegion implements Region
   private RegionAttributes attributes;
   private String flagLocation;
   private WorldCell[] landCells;
+  private CountryData data;
 
   @Override
   public RegionAttributes getAttributes()
@@ -80,5 +81,15 @@ public class AtomicRegion implements Region
   public void setLandCells (WorldArray worldArray)
   {
 
+  }
+
+  public void setCountryData(CountryData data)
+  {
+    this.data = data;
+  }
+
+  public CountryData getCountryData(CountryData data)
+  {
+    return data;
   }
 }

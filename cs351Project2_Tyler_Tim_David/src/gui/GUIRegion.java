@@ -3,6 +3,7 @@ package gui;
 import gui.displayconverters.MapConverter;
 import gui.hud.NavMap;
 import gui.regionlooks.RegionView;
+import model.CountryData;
 import model.MiniArea;
 import model.Region;
 
@@ -28,6 +29,7 @@ public class GUIRegion
   private RegionView look;
   private LinkedList<Polygon> polyList = new LinkedList<>();
   private BufferedImage image;
+  private CountryData data;
 
   public GUIRegion(Region region, MapConverter converter, RegionView look)
   {
@@ -125,5 +127,15 @@ public class GUIRegion
   public Region getRegion()
   {
     return region;
+  }
+
+  public void setCountryData(CountryData data)
+  {
+    this.data = data;
+  }
+
+  public CountryData getCountryData(CountryData data)
+  {
+    return data;
   }
 }
