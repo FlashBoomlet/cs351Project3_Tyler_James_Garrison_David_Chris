@@ -46,15 +46,17 @@ public class CountryData
 
 
   /*
+   *************************************************************
    *
    * GETTERS
    *
+   *************************************************************
    */
 
 
   /**
    * get the population
-   * @return population
+   * @return population population
    */
   public double getPopulation()
   {
@@ -62,7 +64,7 @@ public class CountryData
   }
   /**
    * get the averageAge
-   * @return averageAge
+   * @return averageAge averageAge
    */
   public double getAverageAge()
   {
@@ -70,7 +72,7 @@ public class CountryData
   }
   /**
    * get the birthRate
-   * @return birthRate
+   * @return birthRate birthRate
    */
   public double getBirthRate()
   {
@@ -78,7 +80,7 @@ public class CountryData
   }
   /**
    * get the mortality
-   * @return mortality
+   * @return mortality mortality
    */
   public double getMortality()
   {
@@ -86,7 +88,7 @@ public class CountryData
   }
   /**
    * get the migration
-   * @return migration
+   * @return migration migration
    */
   public double getMigration()
   {
@@ -94,7 +96,7 @@ public class CountryData
   }
   /**
    * get the undernourish
-   * @return undernourish
+   * @return undernourish undernourish
    */
   public double getUndernourish()
   {
@@ -102,7 +104,7 @@ public class CountryData
   }
   /**
    * get the cornProduction
-   * @return cornProduction
+   * @return cornProduction cornProduction
    */
   public double getCornProduction()
   {
@@ -110,7 +112,7 @@ public class CountryData
   }
   /**
    * get the cornExports
-   * @return cornExports
+   * @return cornExports cornExports
    */
   public double getCornExports()
   {
@@ -118,7 +120,7 @@ public class CountryData
   }
   /**
    * get the cornImports
-   * @return cornImports
+   * @return cornImports cornImports
    */
   public double getCornImports()
   {
@@ -126,7 +128,7 @@ public class CountryData
   }
   /**
    * get the cornLand
-   * @return cornLand
+   * @return cornLand cornLand
    */
   public double getCornLand()
   {
@@ -134,7 +136,7 @@ public class CountryData
   }
   /**
    * get the wheatProduction
-   * @return wheatProduction
+   * @return wheatProduction wheatProduction
    */
   public double getWheatProduction()
   {
@@ -142,7 +144,7 @@ public class CountryData
   }
   /**
    * get the wheatExports
-   * @return wheatExports
+   * @return wheatExports wheatExports
    */
   public double getWheatExports()
   {
@@ -150,7 +152,7 @@ public class CountryData
   }
   /**
    * get the wheatImports
-   * @return wheatImports
+   * @return wheatImports wheatImports
    */
   public double getWheatImports()
   {
@@ -158,7 +160,7 @@ public class CountryData
   }
   /**
    * get the wheatLand
-   * @return wheatLand
+   * @return wheatLand wheatLand
    */
   public double getWheatLand()
   {
@@ -166,7 +168,7 @@ public class CountryData
   }
   /**
    * get the riceProduction
-   * @return riceProduction
+   * @return riceProduction riceProduction
    */
   public double getRiceProduction()
   {
@@ -174,7 +176,7 @@ public class CountryData
   }
   /**
    * get the riceExports
-   * @return riceExports
+   * @return riceExports riceExports
    */
   public double getRiceExports()
   {
@@ -182,7 +184,7 @@ public class CountryData
   }
   /**
    * get the riceImports
-   * @return riceImports
+   * @return riceImports riceImports
    */
   public double getRiceImports()
   {
@@ -190,7 +192,7 @@ public class CountryData
   }
   /**
    * get the riceLand
-   * @return riceLand
+   * @return riceLand riceLand
    */
   public double getRiceLand()
   {
@@ -198,7 +200,7 @@ public class CountryData
   }
   /**
    * get the soyProduction
-   * @return soyProduction
+   * @return soyProduction soyProduction
    */
   public double getSoyProduction()
   {
@@ -206,7 +208,7 @@ public class CountryData
   }
   /**
    * get the soyExports
-   * @return soyExports
+   * @return soyExports soyExports
    */
   public double getSoyExports()
   {
@@ -214,7 +216,7 @@ public class CountryData
   }
   /**
    * get the soyImports
-   * @return soyImports
+   * @return soyImports soyImports
    */
   public double getSoyImports()
   {
@@ -222,7 +224,7 @@ public class CountryData
   }
   /**
    * get the soyLand
-   * @return soyLand
+   * @return soyLand soyLand
    */
   public double getSoyLand()
   {
@@ -230,7 +232,7 @@ public class CountryData
   }
   /**
    * get the otherProduction
-   * @return otherProduction
+   * @return otherProduction otherProduction
    */
   public double getOtherProduction()
   {
@@ -238,7 +240,7 @@ public class CountryData
   }
   /**
    * get the otherExports
-   * @return otherExports
+   * @return otherExports otherExports
    */
   public double getOtherExports()
   {
@@ -246,7 +248,7 @@ public class CountryData
   }
   /**
    * get the otherImports
-   * @return otherImports
+   * @return otherImports otherImports
    */
   public double getOtherImports()
   {
@@ -254,7 +256,7 @@ public class CountryData
   }
   /**
    * get the otherLand
-   * @return otherLand
+   * @return otherLand otherLand
    */
   public double getOtherLand()
   {
@@ -262,7 +264,7 @@ public class CountryData
   }
   /**
    * get the landArea
-   * @return landArea
+   * @return landArea landArea
    */
   public double getLandArea()
   {
@@ -270,7 +272,7 @@ public class CountryData
   }
   /**
    * get the arableOpen
-   * @return arableOpen
+   * @return arableOpen arableOpen
    */
   public double getArableOpen()
   {
@@ -278,7 +280,7 @@ public class CountryData
   }
   /**
    * get the organic
-   * @return organic
+   * @return organic organic
    */
   public double getOrganic()
   {
@@ -286,7 +288,7 @@ public class CountryData
   }
   /**
    * get the conventional
-   * @return conventional
+   * @return conventional conventional
    */
   public double getConventional()
   {
@@ -294,7 +296,7 @@ public class CountryData
   }
   /**
    * get the gmo
-   * @return gmo
+   * @return gmo gmo
    */
   public double getGmo()
   {
@@ -303,15 +305,17 @@ public class CountryData
 
 
   /*
+   *************************************************************
    *
    * ALL OF THE SETTERS
    *
+   *************************************************************
    */
 
 
   /**
    * set the population
-   * @param population
+   * @param population population
    */
   public void setPopulation(double population)
   {
@@ -319,7 +323,7 @@ public class CountryData
   }
   /**
    * set the averageAge
-   * @param averageAge
+   * @param averageAge averageAge
    */
   public void setAverageAge(double averageAge)
   {
@@ -327,7 +331,7 @@ public class CountryData
   }
   /**
    * set the birthRate
-   * @param birthRate
+   * @param birthRate birthRate
    */
   public void setBirthRate(double birthRate)
   {
@@ -335,7 +339,7 @@ public class CountryData
   }
   /**
    * set the mortality
-   * @param mortality
+   * @param mortality mortality
    */
   public void setMortality(double mortality)
   {
@@ -343,7 +347,7 @@ public class CountryData
   }
   /**
    * set the migration
-   * @param migration
+   * @param migration migration
    */
   public void setMigration(double migration)
   {
@@ -351,7 +355,7 @@ public class CountryData
   }
   /**
    * set the undernourish
-   * @param undernourish
+   * @param undernourish undernourish
    */
   public void setUndernourish(double undernourish)
   {
@@ -359,7 +363,7 @@ public class CountryData
   }
   /**
    * set the cornProduction
-   * @param cornProduction
+   * @param cornProduction cornProduction
    */
   public void setCornProduction(double cornProduction)
   {
@@ -367,7 +371,7 @@ public class CountryData
   }
   /**
    * set the cornExports
-   * @param cornExports
+   * @param cornExports cornExports
    */
   public void setCornExports(double cornExports)
   {
@@ -375,7 +379,7 @@ public class CountryData
   }
   /**
    * set the cornImports
-   * @param cornImports
+   * @param cornImports cornImports
    */
   public void setCornImports(double cornImports)
   {
@@ -383,7 +387,7 @@ public class CountryData
   }
   /**
    * set the cornLand
-   * @param cornLand
+   * @param cornLand cornLand
    */
   public void setCornLand(double cornLand)
   {
@@ -391,7 +395,7 @@ public class CountryData
   }
   /**
    * set the wheatProduction
-   * @param wheatProduction
+   * @param wheatProduction wheatProduction
    */
   public void setWheatProduction(double wheatProduction)
   {
@@ -399,7 +403,7 @@ public class CountryData
   }
   /**
    * set the wheatExports
-   * @param wheatExports
+   * @param wheatExports wheatExports
    */
   public void setWheatExports(double wheatExports)
   {
@@ -407,7 +411,7 @@ public class CountryData
   }
   /**
    * set the wheatImports
-   * @param wheatImports
+   * @param wheatImports wheatImports
    */
   public void setWheatImports(double wheatImports)
   {
@@ -415,7 +419,7 @@ public class CountryData
   }
   /**
    * set the wheatLand
-   * @param wheatLand
+   * @param wheatLand wheatLand
    */
   public void setWheatLand(double wheatLand)
   {
@@ -423,7 +427,7 @@ public class CountryData
   }
   /**
    * set the riceProduction
-   * @param riceProduction
+   * @param riceProduction riceProduction
    */
   public void setRiceProduction(double riceProduction)
   {
@@ -431,7 +435,7 @@ public class CountryData
   }
   /**
    * set the riceExports
-   * @param riceExports
+   * @param riceExports riceExports
    */
   public void setRiceExports(double riceExports)
   {
@@ -439,7 +443,7 @@ public class CountryData
   }
   /**
    * set the riceImports
-   * @param riceImports
+   * @param riceImports riceImports
    */
   public void setRiceImports(double riceImports)
   {
@@ -447,7 +451,7 @@ public class CountryData
   }
   /**
    * set the riceLand
-   * @param riceLand
+   * @param riceLand riceLand
    */
   public void setRiceLand(double riceLand)
   {
@@ -455,7 +459,7 @@ public class CountryData
   }
   /**
    * set the soyProduction
-   * @param soyProduction
+   * @param soyProduction soyProduction
    */
   public void setSoyProduction(double soyProduction)
   {
@@ -463,7 +467,7 @@ public class CountryData
   }
   /**
    * set the soyExports
-   * @param soyExports
+   * @param soyExports soyExports
    */
   public void setSoyExports(double soyExports)
   {
@@ -471,7 +475,7 @@ public class CountryData
   }
   /**
    * set the soyImports
-   * @param soyImports
+   * @param soyImports soyImports
    */
   public void setSoyImports(double soyImports)
   {
@@ -479,7 +483,7 @@ public class CountryData
   }
   /**
    * set the soyLand
-   * @param soyLand
+   * @param soyLand soyLand
    */
   public void setSoyLand(double soyLand)
   {
@@ -487,7 +491,7 @@ public class CountryData
   }
   /**
    * set the otherProduction
-   * @param otherProduction
+   * @param otherProduction otherProduction
    */
   public void setOtherProduction(double otherProduction)
   {
@@ -495,7 +499,7 @@ public class CountryData
   }
   /**
    * set the otherExports
-   * @param otherExports
+   * @param otherExports otherExports
    */
   public void setOtherExports(double otherExports)
   {
@@ -503,7 +507,7 @@ public class CountryData
   }
   /**
    * set the otherImports
-   * @param otherImports
+   * @param otherImports otherImports
    */
   public void setOtherImports(double otherImports)
   {
@@ -511,7 +515,7 @@ public class CountryData
   }
   /**
    * set the otherLand
-   * @param otherLand
+   * @param otherLand otherLand
    */
   public void setOtherLand(double otherLand)
   {
@@ -519,7 +523,7 @@ public class CountryData
   }
   /**
    * set the landArea
-   * @param landArea
+   * @param landArea landArea
    */
   public void setLandArea(double landArea)
   {
@@ -527,7 +531,7 @@ public class CountryData
   }
   /**
    * set the arableOpen
-   * @param arableOpen
+   * @param arableOpen arableOpen
    */
   public void setArableOpen(double arableOpen)
   {
@@ -535,7 +539,7 @@ public class CountryData
   }
   /**
    * set the organic
-   * @param organic
+   * @param organic organic
    */
   public void setOrganic(double organic)
   {
@@ -543,7 +547,7 @@ public class CountryData
   }
   /**
    * set the conventional
-   * @param conventional
+   * @param conventional conventional
    */
   public void setConventional(double conventional)
   {
@@ -551,10 +555,29 @@ public class CountryData
   }
   /**
    * set the gmo
-   * @param gmo
+   * @param gmo gmo
    */
   public void setGmo(double gmo)
   {
     this.gmo = gmo;
+  }
+
+
+
+  /*
+   *************************************************************
+   *
+   * calculateZeroOrder
+   *
+   *************************************************************
+   */
+
+
+  /**
+   * Calculates the Zero-Order Approximations
+   */
+  public void calculateZeroOrder()
+  {
+
   }
 }

@@ -8,6 +8,8 @@ import java.util.List;
  * attributes. The class acts as a kind of container for the parsed XML data.
  *
  * @author winston riley
+ * Restructured by:
+ * @author Tyler Lynch <lyncht@unm.edu>
  */
 public class AtomicRegion implements Region
 {
@@ -16,7 +18,7 @@ public class AtomicRegion implements Region
   private RegionAttributes attributes;
   private String flagLocation;
   private WorldCell[] landCells;
-  private CountryData data;
+  private CountryData data = null;
 
   @Override
   public RegionAttributes getAttributes()
@@ -88,7 +90,7 @@ public class AtomicRegion implements Region
     this.data = data;
   }
 
-  public CountryData getCountryData(CountryData data)
+  public CountryData getCountryData()
   {
     return data;
   }
