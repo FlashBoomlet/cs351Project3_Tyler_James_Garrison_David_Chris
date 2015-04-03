@@ -1,6 +1,7 @@
 package main;
 
 import IO.AreaXMLLoader;
+import IO.CountryCSVParser;
 import IO.WorldDataParser;
 import gui.*;
 import gui.displayconverters.EquirectangularConverter;
@@ -168,6 +169,7 @@ public class Game
 
     buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
+    new CountryCSVParser(allRegions);
     initFrame();
     setupControlls();
   }

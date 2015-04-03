@@ -59,7 +59,6 @@ public class AtomicRegion implements Region
   @Override
   public List<MiniArea> getPerimeter()
   {
-    if( getName() == "Morocco") System.out.println(perimeter.size() );
     return perimeter;
   }
 
