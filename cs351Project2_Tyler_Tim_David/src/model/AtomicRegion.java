@@ -213,7 +213,8 @@ public class AtomicRegion implements Region
   }
 
   /**
-   *
+   * Algorithm would be best if crop priority was
+   * based on crop pickiness.
    */
   public void setFirstCrops ()
   {

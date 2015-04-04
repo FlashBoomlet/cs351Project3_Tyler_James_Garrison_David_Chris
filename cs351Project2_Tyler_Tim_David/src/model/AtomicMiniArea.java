@@ -2,6 +2,7 @@ package model;
 
 
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.HashSet;
 
@@ -52,8 +53,8 @@ public class AtomicMiniArea implements MiniArea
   }
 
   /**
-   * A VERY inefficient way of finding all the cells within
-   * in a mini area to be stored by the main area.
+   * More efficient cell retrieval, uses bounding box of area to get
+   * relevant cells.
    * @param worldArray
    */
   public void setLandCells (WorldArray worldArray, HashSet <WorldCell> cells)
@@ -67,15 +68,23 @@ public class AtomicMiniArea implements MiniArea
       tempPerimeter.lineTo(current.getLon(), current.getLat());
     }
     tempPerimeter.closePath();
+    Rectangle2D bound = tempPerimeter.getBounds2D();
+    int [] start = worldArray.getNumber(bound.getX(), bound.getY());
+    int xStart = start[0];
+    int yStart = start[1];
+    int [] end = worldArray.getNumber(bound.getX() + bound.getWidth(), bound.getY() + bound.getHeight());
+    int xEnd = end[0];
+    int yEnd = end[1];
     WorldCell currentCell;
-    for (int i = 0; i < worldArray.getXSize(); i++)
+    for (int i = xStart; i < xEnd; i++)
     {
-      for (int j = 0; j < worldArray.getYSize(); j++)
+      for (int j = yStart; j < yEnd; j++)
       {
         currentCell = worldArray.get(i, j);
-        if (tempPerimeter.contains(currentCell.getLon(), currentCell.getLat())) ;
+        if (!currentCell.hasCountry && tempPerimeter.contains(currentCell.getLon(), currentCell.getLat())) ;
         {
           cells.add(currentCell);
+          currentCell.setToArea();
         }
       }
     }
