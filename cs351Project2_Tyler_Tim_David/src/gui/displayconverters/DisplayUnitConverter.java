@@ -1,9 +1,5 @@
 package gui.displayconverters;
 
-import model.RegionAttributes;
-
-import static model.RegionAttributes.PLANTING_ATTRIBUTES;
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.*;
 
 /**
  * Created by winston on 2/6/15.
@@ -14,15 +10,27 @@ import static model.RegionAttributes.PLANTING_ATTRIBUTES.*;
  * <p/>
  * for more info see: http://en.wikipedia.org/wiki/United_States_customary_units
  */
-public abstract class DisplayUnitConverter
+public class DisplayUnitConverter
 {
+
   /**
    * Returns the currency symbol. used in display contexts to show the
    * appropriate currency annotation.
    *
    * @return string representing the currency of the converter.
    */
-  public abstract String getCurrencySymbol();
+  public String getCurrencySymbol(boolean metricUnits)
+  {
+    return "$";
+  }
+
+  /**
+   * Returns the land used symbol. used in display contexts to show the
+   * appropriate currency annotation.
+   *
+   * @return string representing the land used of the converter.
+   */
+  public String getLandUsedSymbol(boolean metricUnits){ return "km^2"; }
 
   /**
    * Converts the given measurement in inches into the Converters equivalent.
@@ -30,7 +38,10 @@ public abstract class DisplayUnitConverter
    * @param inches value in inches
    * @return the converters equivalent inch, returned as a double.
    */
-  public abstract double convertInches(double inches);
+  public double convertInches(double inches)
+  {
+    return inches;
+  }
 
   /**
    * Returns the appropriate symbol corresponding the the converters 'version'
@@ -38,7 +49,10 @@ public abstract class DisplayUnitConverter
    *
    * @return string representing the converters unite for inches (eg. mm or in)
    */
-  public abstract String getInchSymbol();
+  public String getInchSymbol(boolean metricUnits)
+  {
+    return "In.";
+  }
 
   /**
    * Converts the given measurement in feet into the Converters equivalent.
@@ -46,7 +60,10 @@ public abstract class DisplayUnitConverter
    * @param feet value measured in feet
    * @return the converters equivalent of feet, returned as a double.
    */
-  public abstract double convertFeet(double feet);
+  public double convertFeet(double feet)
+  {
+    return feet;
+  }
 
   /**
    * Returns the appropriate symbol corresponding the the converters 'version'
@@ -54,7 +71,10 @@ public abstract class DisplayUnitConverter
    *
    * @return string representing the converters unite for feet (eg. m or ft)
    */
-  public abstract String getFeetSymbol();
+  public String getFeetSymbol(boolean metricUnits)
+  {
+    return "ft.";
+  }
 
   /**
    * Converts the given measurement in Fahrenheit into the Converters equivalent.
@@ -62,7 +82,10 @@ public abstract class DisplayUnitConverter
    * @param temp value measured in Fahrenheit
    * @return the converters equivalent of Fahrenheit, returned as a double.
    */
-  public abstract double convertFahrenheit(double temp);
+  public double convertFahrenheit(double temp)
+  {
+    return temp;
+  }
 
   /**
    * Returns the appropriate symbol corresponding the the converters 'version'
@@ -71,70 +94,19 @@ public abstract class DisplayUnitConverter
    * @return string representing the converters unite for Fahrenheit
    * (eg. C° or F°)
    */
-  public abstract String getTmpSymbol();
+  public String getTmpSymbol(boolean metricUnits)
+  {
+    return "F°";
+  }
 
   /**
    * Returns the appropriate symbol for '%'
    *
    * @return string representing '%'
    */
-  public abstract String getPercentSymbol();
-
-
-  /**
-   * Given a set of attributes this method generates a new set according the
-   * the conversion rules defined in the implementing class.
-   * <p/>
-   * Note, this class creates a new object, it does not mutate the model data!
-   * <p/>
-   * Note, this is where extensions to the conversion should be added.
-   * ie, if currency conversion was to be added it would be done in this method.
-   *
-   * @param originalSet model unite RegionAttributes object
-   * @return converted new RegionAttributes object.
-   */
-  public RegionAttributes convertAttributes(RegionAttributes originalSet)
+  public String getPercentSymbol(boolean metricUnits)
   {
-    RegionAttributes copy = new RegionAttributes();
-
-    // copies all the crop information.
-    for (String cropName : originalSet.getAllCrops())
-    {
-      copy.setCrop(cropName, originalSet.getCropGrowth(cropName));
-    }
-
-    // makes a copy of all remaining data.
-    for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
-    {
-      copy.setAttribute(att, originalSet.getAttribute(att));
-    }
-
-    // updates only the needed fields with the conversion rules.
-    copy.setAttribute(
-      ANNUAL_RAINFALL,
-      convertInches(originalSet.getAttribute(ANNUAL_RAINFALL))
-    );
-
-    copy.setAttribute(
-      MONTHLY_RAINFALL,
-      convertInches(originalSet.getAttribute(MONTHLY_RAINFALL))
-    );
-
-    copy.setAttribute(
-      AVE_MONTH_TEMP_HI,
-      convertFahrenheit(originalSet.getAttribute(AVE_MONTH_TEMP_HI))
-    );
-
-    copy.setAttribute(
-      AVE_MONTH_TEMP_LO,
-      convertFahrenheit(originalSet.getAttribute(AVE_MONTH_TEMP_LO))
-    );
-
-    copy.setAttribute(
-      ELEVATION,
-      convertFeet(originalSet.getAttribute(ELEVATION))
-    );
-
-    return copy;
+    return "%";
   }
+
 }

@@ -7,7 +7,7 @@ package model;
 public class CountryData
 {
   private double population;
-  private double averageAge;
+  private double medianAge;
   private double birthRate;
   private double mortality;
   private double migration;
@@ -68,12 +68,12 @@ public class CountryData
     return population;
   }
   /**
-   * get the averageAge
-   * @return averageAge averageAge
+   * get the medianAge
+   * @return medianAge medianAge
    */
-  public double getAverageAge()
+  public double getMedianAge()
   {
-    return averageAge;
+    return medianAge;
   }
   /**
    * get the birthRate
@@ -108,28 +108,12 @@ public class CountryData
     return undernourish;
   }
   /**
-   * get the cornProduction
-   * @return cornProduction cornProduction
+   * get the cornTotal
+   * @return cornTotal cornProduction
    */
-  public double getCornProduction()
+  public double getCornTotal()
   {
-    return cornProduction;
-  }
-  /**
-   * get the cornExports
-   * @return cornExports cornExports
-   */
-  public double getCornExports()
-  {
-    return cornExports;
-  }
-  /**
-   * get the cornImports
-   * @return cornImports cornImports
-   */
-  public double getCornImports()
-  {
-    return cornImports;
+    return (cornProduction + cornImports - cornExports);
   }
   /**
    * get the cornLand
@@ -140,28 +124,12 @@ public class CountryData
     return cornLand;
   }
   /**
-   * get the wheatProduction
-   * @return wheatProduction wheatProduction
+   * get the WheatTotal
+   * @return WheatTotal WheatTotal
    */
-  public double getWheatProduction()
+  public double getWheatTotal()
   {
-    return wheatProduction;
-  }
-  /**
-   * get the wheatExports
-   * @return wheatExports wheatExports
-   */
-  public double getWheatExports()
-  {
-    return wheatExports;
-  }
-  /**
-   * get the wheatImports
-   * @return wheatImports wheatImports
-   */
-  public double getWheatImports()
-  {
-    return wheatImports;
+    return (wheatProduction + wheatImports - wheatExports);
   }
   /**
    * get the wheatLand
@@ -172,28 +140,12 @@ public class CountryData
     return wheatLand;
   }
   /**
-   * get the riceProduction
-   * @return riceProduction riceProduction
+   * get the riceTotal
+   * @return riceTotal riceProduction
    */
-  public double getRiceProduction()
+  public double getRiceTotal()
   {
-    return riceProduction;
-  }
-  /**
-   * get the riceExports
-   * @return riceExports riceExports
-   */
-  public double getRiceExports()
-  {
-    return riceExports;
-  }
-  /**
-   * get the riceImports
-   * @return riceImports riceImports
-   */
-  public double getRiceImports()
-  {
-    return riceImports;
+    return (riceProduction + riceImports - riceExports);
   }
   /**
    * get the riceLand
@@ -204,28 +156,12 @@ public class CountryData
     return riceLand;
   }
   /**
-   * get the soyProduction
-   * @return soyProduction soyProduction
+   * get the soyTotal
+   * @return soyTotal soyProduction
    */
-  public double getSoyProduction()
+  public double getSoyTotal()
   {
-    return soyProduction;
-  }
-  /**
-   * get the soyExports
-   * @return soyExports soyExports
-   */
-  public double getSoyExports()
-  {
-    return soyExports;
-  }
-  /**
-   * get the soyImports
-   * @return soyImports soyImports
-   */
-  public double getSoyImports()
-  {
-    return soyImports;
+    return (soyProduction + soyImports - soyExports);
   }
   /**
    * get the soyLand
@@ -236,28 +172,20 @@ public class CountryData
     return soyLand;
   }
   /**
-   * get the otherProduction
-   * @return otherProduction otherProduction
+   * get the otherTotal
+   * @return otherTotal otherProduction
    */
-  public double getOtherProduction()
+  public double getOtherTotal()
   {
-    return otherProduction;
+    return (otherProduction + otherImports - otherExports);
   }
   /**
-   * get the otherExports
-   * @return otherExports otherExports
+   * get the CropTotal
+   * @return CropTotal CropTotal
    */
-  public double getOtherExports()
+  public double getCropTotal()
   {
-    return otherExports;
-  }
-  /**
-   * get the otherImports
-   * @return otherImports otherImports
-   */
-  public double getOtherImports()
-  {
-    return otherImports;
+    return (getOtherTotal() + getSoyTotal() + getRiceTotal() + getWheatTotal() + getCornTotal() );
   }
   /**
    * get the otherLand
@@ -285,7 +213,7 @@ public class CountryData
   }
   /**
    * get the organic
-   * @return organic organic
+   * @return percent of organic
    */
   public double getOrganic()
   {
@@ -293,7 +221,7 @@ public class CountryData
   }
   /**
    * get the conventional
-   * @return conventional conventional
+   * @return percent of conventional
    */
   public double getConventional()
   {
@@ -301,7 +229,7 @@ public class CountryData
   }
   /**
    * get the gmo
-   * @return gmo gmo
+   * @return percent of gmo
    */
   public double getGmo()
   {
@@ -327,12 +255,12 @@ public class CountryData
     this.population = population;
   }
   /**
-   * set the averageAge
-   * @param averageAge averageAge
+   * set the medianAge
+   * @param medianAge medianAge
    */
-  public void setAverageAge(double averageAge)
+  public void setMedianAge(double medianAge)
   {
-    this.averageAge = averageAge;
+    this.medianAge = medianAge;
   }
   /**
    * set the birthRate
@@ -628,5 +556,46 @@ public class CountryData
   public double getBaseYield()
   {
     return baseYield;
+  }
+
+
+   /*
+   *************************************************************
+   *
+   * iterateYear
+   *
+   *************************************************************
+   */
+
+
+  /**
+   * Calculates the the next years data based on data brought in, or rates calculated from it
+   */
+  public void iterateYear()
+  {
+    calculateCountryConsumption();
+    calculatePerCapitaConsumption();
+    calculateBaseYield();
+  }
+
+  /**
+   *
+   * @param name of the crop you would like
+   * @return the amount of the crop you wish to get
+   */
+  public double getCropP(String name)
+  {
+    return 0;
+  }
+
+  /**
+   *
+   * @param name of the Crop you would like to adjust
+   * @param adjustBy the new value of the crop you would like
+   * @return if the cropAdjustment was successful
+   */
+  public boolean cropAdjustmentByName(String name, Double adjustBy)
+  {
+    return false;
   }
 }

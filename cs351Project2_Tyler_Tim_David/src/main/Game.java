@@ -149,6 +149,7 @@ public class Game
     worldPresenter = new WorldPresenter(converter, world);
     worldPresenter.setBackgroundRegions(background);
     worldPresenter.setModelRegions(modelRegions);
+    new CountryCSVParser( worldPresenter.getAllRegions() );
 
     feedPanelHeight = (int) (frameHeight/25);
     Camera cam = new Camera(converter);
@@ -169,7 +170,6 @@ public class Game
 
     buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
-    new CountryCSVParser(allRegions);
     initFrame();
     setupControlls();
   }

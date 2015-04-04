@@ -417,14 +417,21 @@ public class AtomicRegion implements Region
     officialCountry = true;
   }
 
+
   private class CropNum
   {
     protected int num = 0;
     protected String crop;
-    public CropNum (int num, String crop)
+
+    public CropNum(int num, String crop)
     {
       this.num = num;
       this.crop = crop;
     }
+  }
+
+  public boolean getOfficialCountry()
+  {
+    return officialCountry;
   }
 }
