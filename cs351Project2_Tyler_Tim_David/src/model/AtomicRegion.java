@@ -24,6 +24,7 @@ public class AtomicRegion implements Region
   private HashSet<WorldCell> landCells;
   private HashSet<WorldCell> relevantCells;
   private CountryData data = null;
+  private boolean officialCountry = false;
 
   @Override
   public RegionAttributes getAttributes()
@@ -161,5 +162,10 @@ public class AtomicRegion implements Region
   public CountryData getCountryData()
   {
     return data;
+  }
+
+  public void setOfficialCountry()
+  {
+    officialCountry = true;
   }
 }

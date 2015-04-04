@@ -132,13 +132,4 @@ public class GUIRegion
     return region;
   }
 
-  public void setCountryData(CountryData data)
-  {
-    this.data = data;
-  }
-
-  public CountryData getCountryData()
-  {
-    return data;
-  }
 }

@@ -136,6 +136,7 @@ public class CountryCSVParser {
         data.setGmo( Double.parseDouble(atributes[31]) );
 
         data.calculateZeroOrder();
+        currentRegion.setOfficialCountry();
         currentRegion.setCountryData(data);
       }
     }

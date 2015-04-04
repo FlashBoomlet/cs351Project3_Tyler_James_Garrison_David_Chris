@@ -107,7 +107,7 @@ public class AttributeGenerator
 
   public void setRegionAttributes(Region reg, Random rand)
   {
-    RegionAttributes attributes = new RegionAttributes();
+    RegionAttributes attributes = new RegionAttributes(reg);
 
     for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
     {

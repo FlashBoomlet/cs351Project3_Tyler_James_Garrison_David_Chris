@@ -520,8 +520,7 @@ public class InfoPanel extends JPanel implements Observer
           case ELEVATION:
           case SOIL_TYPE:
 
-            attribMap.put(att,
-              attribMap.get(att) + attribs.getAttribute(att) / numRegions);
+            attribMap.put(att, attribMap.get(att) + attribs.getAttribute(att) / numRegions);
             break;
 
           case HAPPINESS:
@@ -577,7 +576,7 @@ public class InfoPanel extends JPanel implements Observer
     }
 
     /* build the new attribute set */
-    RegionAttributes rAtts = new RegionAttributes();
+    RegionAttributes rAtts = new RegionAttributes(null);
     for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
     {
       /* make sure to use the median value from zoneMap, NOT the value in

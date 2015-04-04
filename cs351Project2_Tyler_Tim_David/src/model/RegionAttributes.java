@@ -17,6 +17,18 @@ import java.util.Map;
  */
 public class RegionAttributes
 {
+  private Region region = null;
+  /**
+   * Constructor for Region Attributes so that it may talk to the region that
+   * it belongs too and then access all CountryData and present it properly to
+   * the user
+   *
+   * @param reg that that region attributes belong too
+   */
+  public RegionAttributes(Region reg)
+  {
+    this.region = reg;
+  }
 
   /**
    * static map to represent all the limits of all the different attributes.

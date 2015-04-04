@@ -39,6 +39,11 @@ public class CountryData
   private double conventional;
   private double gmo;
 
+  //Zero Order Approximation
+  private double countryConsumption;
+  private double perCapitaConsumption;
+  private double baseYield;
+
   /**
    * Empty constructor
    */
@@ -578,6 +583,50 @@ public class CountryData
    */
   public void calculateZeroOrder()
   {
+    calculateCountryConsumption();
+    calculatePerCapitaConsumption();
+    calculateBaseYield();
+  }
 
+  private void calculateCountryConsumption()
+  {
+    // 2014 = produced + import -export
+  }
+
+  private void calculatePerCapitaConsumption()
+  {
+    // Based on the Country consumption
+  }
+
+  private void calculateBaseYield()
+  {
+    // yeah....
+  }
+
+  /**
+   * Get the Countries Consumption rate
+   * @return countryConsumption rate
+   */
+  public double getCountryConsumption()
+  {
+    return countryConsumption;
+  }
+
+  /**
+   * Get the Per Capita Consumption rate
+   * @return Per Capita Consumption rate
+   */
+  public double getPerCapitaConsumption()
+  {
+    return perCapitaConsumption;
+  }
+
+  /**
+   * Get the Base Yield rate
+   * @return baseYield rate
+   */
+  public double getBaseYield()
+  {
+    return baseYield;
   }
 }
