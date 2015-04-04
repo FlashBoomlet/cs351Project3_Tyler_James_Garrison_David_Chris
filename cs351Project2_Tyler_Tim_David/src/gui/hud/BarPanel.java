@@ -39,19 +39,6 @@ public class BarPanel extends JPanel
   private static boolean showAdjust = false;
   private int animationStep = 0; /* used to start and stop animation */
 
-
-  /**
-   * Constructor for class.
-   *
-   * @param barColor  the barColor of the bar to be draw
-   * @param ratio     a double between 0 and 1, 1 being 'full'.
-   * @param labelText String that will be displayGUIRegion labeling the bar
-   */
-  public BarPanel(Color barColor, double ratio, String labelText)
-  {
-    this(barColor, ratio, labelText, null);
-  }
-
   /**
    * Constructor for class.
    *
@@ -61,12 +48,9 @@ public class BarPanel extends JPanel
    * @param overLayText String that will be displayed on top of the bar.
    *                    (to show the ratio passed in for example
    */
-  public BarPanel(Color barColor, double ratio, String labelText, String overLayText)
+  public BarPanel(Color barColor, double ratio, String labelText, String overLayText, boolean adjustable)
   {
-    if( AttributeGenerator.isAdjustableCrop(labelText) )
-    {
-      showAdjust = true;
-    }
+    showAdjust = adjustable;
 
     //init
     this.originalBarColor = barColor;

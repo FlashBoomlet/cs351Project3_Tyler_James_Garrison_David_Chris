@@ -36,6 +36,8 @@ public class InfoPanel extends JPanel implements Observer
   private final static Dimension size = new Dimension(220, 1);
   private MiniViewBox miniViewBox;
   private StatPane stats;
+  private StatPane cropStats;
+  private StatPane landStats;
 
   private DisplayUnitConverter converter = new DisplayUnitConverter();
   private static boolean metricUnits = true;
@@ -59,6 +61,8 @@ public class InfoPanel extends JPanel implements Observer
     // init
     miniViewBox = new MiniViewBox(" ",frameWidth, frameHeight);
     stats = new StatPane("REGION(S) DATA:",frameWidth,frameHeight);
+    cropStats = new StatPane("CROP(S) DATA:",frameWidth,frameHeight);
+    landStats = new StatPane("LAND DATA:",frameWidth,frameHeight);
 
     //config
     this.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
@@ -75,9 +79,21 @@ public class InfoPanel extends JPanel implements Observer
     miniViewBox.setPreferredSize(new Dimension(frameWidth, (frameHeight / 4)));
     this.add(miniViewBox);
 
-    int whatsLeft = (frameHeight / 3);
-    stats.setPreferredSize(new Dimension(frameWidth, frameHeight - whatsLeft));
+    int generalHeight = frameHeight - ( (frameHeight*13) / 16);
+    int cropHeight = frameHeight -( (frameHeight*13) / 16);
+    int landHeight = frameHeight - ( ((frameHeight*5) / 16) + generalHeight + cropHeight);
+    //to ensure that the entire bargraph is shown
+    int statsWidth = (int) (frameWidth*.98);
+    //General
+    stats.setPreferredSize(new Dimension( statsWidth, generalHeight));
     this.add(stats);
+    //Land
+    landStats.setPreferredSize(new Dimension( statsWidth, cropHeight));
+    this.add(landStats);
+    //Crops
+    cropStats.setPreferredSize(new Dimension( statsWidth, landHeight));
+    this.add(cropStats);
+
 
 
 
@@ -169,15 +185,26 @@ public class InfoPanel extends JPanel implements Observer
    */
   public void showAttributes()
   {
+    //Stats Panel
     stats.clearBarPlots();
     displayStats(stats);
     stats.revalidate();
+
+    //Crops Data
+    cropStats.clearBarPlots();
+    displayCrops(cropStats);
+    cropStats.revalidate();
+
+    //Land Data
+    landStats.clearBarPlots();
+    displayLand(landStats);
+    landStats.revalidate();
   }
 
 
   /**
-   * Controls the presentation logic for displaying the soil attributes
-   * in the info panel for the specified region.
+   * Controls the presentation logic for displaying the general data
+   * in the info panel for the specified region(s).
    *
    * @param statPane GUI element to 'write' to.
    */
@@ -190,18 +217,6 @@ public class InfoPanel extends JPanel implements Observer
     double migration = 0;
     double undernourish = 0;
 
-    double cornTotal = 0;
-    double wheatTotal = 0;
-    double riceTotal = 0;
-    double soyTotal = 0;
-    double otherTotal = 0;
-
-    double organic = 0;
-    double conventional = 0;
-    double gmo = 0;
-
-    double totalCrops = 0;
-
     if( singeCountry )
     {
       CountryData cd = countryDataList.get(0);
@@ -211,18 +226,6 @@ public class InfoPanel extends JPanel implements Observer
       mortality = cd.getMortality(metricUnits);
       migration = cd.getMigration(metricUnits);
       undernourish = cd.getUndernourish(metricUnits);
-
-      cornTotal = cd.getCornTotal(metricUnits);
-      wheatTotal = cd.getWheatTotal(metricUnits);
-      riceTotal = cd.getRiceTotal(metricUnits);
-      soyTotal = cd.getSoyTotal(metricUnits);
-      otherTotal = cd.getOtherTotal(metricUnits);
-
-      organic = cd.getOrganic(metricUnits);
-      conventional = cd.getConventional(metricUnits);
-      gmo = cd.getGmo(metricUnits);
-
-      totalCrops = cd.getCropTotal(metricUnits);
     }
     else
     {
@@ -235,18 +238,6 @@ public class InfoPanel extends JPanel implements Observer
         mortality += cd.getMortality(metricUnits);
         migration += cd.getMigration(metricUnits);
         undernourish += cd.getUndernourish(metricUnits);
-
-        cornTotal += cd.getCornTotal(metricUnits);
-        wheatTotal += cd.getWheatTotal(metricUnits);
-        riceTotal += cd.getRiceTotal(metricUnits);
-        soyTotal += cd.getSoyTotal(metricUnits);
-        otherTotal += cd.getOtherTotal(metricUnits);
-
-        organic += cd.getOrganic(metricUnits);
-        conventional += cd.getConventional(metricUnits);
-        gmo += cd.getGmo(metricUnits);
-
-        totalCrops += cd.getCropTotal(metricUnits);
       }
       // Average data -counld be more acurate by finding the median
       medianAge /= countryDataList.size();
@@ -255,50 +246,127 @@ public class InfoPanel extends JPanel implements Observer
       mortality /= countryDataList.size();
       migration /= countryDataList.size();
       undernourish /= countryDataList.size();
-      organic /= countryDataList.size();
-      conventional /= countryDataList.size();
-      gmo /= countryDataList.size();
     }
 
     /*
      * General Country Data
      */
-    BarPanel bp1 = getBarPanel( population, "Population" , 1);
+    BarPanel bp1 = getBarPanel( population, "Population" , 1, false );
     statPane.addBar(bp1);
-    BarPanel bp2 = getBarPanel( medianAge, "Median Age" , 122);
+    BarPanel bp2 = getBarPanel( medianAge, "Median Age" , 122, false );
     statPane.addBar(bp2);
-    BarPanel bp3 = getBarPanel( birthRate, "Birth Rate" , 500);
+    BarPanel bp3 = getBarPanel( birthRate, "Birth Rate" , 100, false );
     statPane.addBar(bp3);
-    BarPanel bp4 = getBarPanel( mortality, "Mortality Rate" , 500);
+    BarPanel bp4 = getBarPanel( mortality, "Mortality Rate" , 100, false );
     statPane.addBar(bp4);
-    BarPanel bp5 = getBarPanel( migration, "Migration Rate" , 500);
+    BarPanel bp5 = getBarPanel( migration, "Migration Rate" , 100, false );
     statPane.addBar(bp5);
-    BarPanel bp6 = getBarPanel( undernourish, "Unnourished" , 500);
+    BarPanel bp6 = getBarPanel( undernourish, "Unnourished" , 100, false );
     statPane.addBar(bp6);
+  }
 
-    /*
-     * Land Information
-     */
-    BarPanel bp7 = getBarPanel( organic, "Organic" , 1);
-    statPane.addBar(bp7);
-    BarPanel bp8 = getBarPanel( conventional, "Conventional" , 1);
-    statPane.addBar(bp8);
-    BarPanel bp9 = getBarPanel( gmo, "GMO" , 1);
-    statPane.addBar(bp9);
+  /**
+   * Controls the presentation logic for displaying the crop data
+   * in the info panel for the specified region(s).
+   *
+   * @param statPane GUI element to 'write' to.
+   */
+  private void displayCrops(StatPane statPane)
+  {
 
+    double cornTotal = 0;
+    double wheatTotal = 0;
+    double riceTotal = 0;
+    double soyTotal = 0;
+    double otherTotal = 0;
+
+    double totalCrops = 0;
+
+    if( singeCountry )
+    {
+      CountryData cd = countryDataList.get(0);
+
+      cornTotal = cd.getCornTotal(metricUnits);
+      wheatTotal = cd.getWheatTotal(metricUnits);
+      riceTotal = cd.getRiceTotal(metricUnits);
+      soyTotal = cd.getSoyTotal(metricUnits);
+      otherTotal = cd.getOtherTotal(metricUnits);
+
+      totalCrops = cd.getCropTotal(metricUnits);
+    }
+    else
+    {
+      // Sum up data
+      for( CountryData cd : countryDataList )
+      {
+        cornTotal += cd.getCornTotal(metricUnits);
+        wheatTotal += cd.getWheatTotal(metricUnits);
+        riceTotal += cd.getRiceTotal(metricUnits);
+        soyTotal += cd.getSoyTotal(metricUnits);
+        otherTotal += cd.getOtherTotal(metricUnits);
+
+        totalCrops += cd.getCropTotal(metricUnits);
+      }
+    }
     /*
      * Crop Information
      */
-    BarPanel bp14 = getBarPanel( cornTotal, "Corn", totalCrops );
+    BarPanel bp14 = getBarPanel( cornTotal, "Corn", totalCrops, true );
     statPane.addBar(bp14);
-    BarPanel bp13 = getBarPanel( wheatTotal, "Wheat", totalCrops );
+    BarPanel bp13 = getBarPanel( wheatTotal, "Wheat", totalCrops, true );
     statPane.addBar(bp13);
-    BarPanel bp12 = getBarPanel( soyTotal, "Rice", totalCrops );
+    BarPanel bp12 = getBarPanel( soyTotal, "Rice", totalCrops, true );
     statPane.addBar(bp12);
-    BarPanel bp11 = getBarPanel( riceTotal, "Soy", totalCrops );
+    BarPanel bp11 = getBarPanel( riceTotal, "Soy", totalCrops, true );
     statPane.addBar(bp11);
-    BarPanel bp10 = getBarPanel( otherTotal, "Other", totalCrops );
+    BarPanel bp10 = getBarPanel( otherTotal, "Other", totalCrops, true );
     statPane.addBar(bp10);
+  }
+
+  /**
+   * Controls the presentation logic for displaying the data on the Land
+   * in the info panel for the specified region(s).
+   *
+   * @param statPane GUI element to 'write' to.
+   */
+  private void displayLand(StatPane statPane)
+  {
+    double organic = 0;
+    double conventional = 0;
+    double gmo = 0;
+
+
+    if( singeCountry )
+    {
+      CountryData cd = countryDataList.get(0);
+
+      organic = cd.getOrganic(metricUnits);
+      conventional = cd.getConventional(metricUnits);
+      gmo = cd.getGmo(metricUnits);
+    }
+    else
+    {
+      // Sum up data
+      for( CountryData cd : countryDataList )
+      {
+        organic += cd.getOrganic(metricUnits);
+        conventional += cd.getConventional(metricUnits);
+        gmo += cd.getGmo(metricUnits);
+      }
+      // Average data
+      organic /= countryDataList.size();
+      conventional /= countryDataList.size();
+      gmo /= countryDataList.size();
+    }
+    /*
+     * Land Information
+     */
+    BarPanel bp7 = getBarPanel( organic, "Organic" , 1, true);
+    statPane.addBar(bp7);
+    BarPanel bp8 = getBarPanel( conventional, "Conventional" , 1, true);
+    statPane.addBar(bp8);
+    BarPanel bp9 = getBarPanel( gmo, "GMO" , 1, true);
+    statPane.addBar(bp9);
   }
 
   /**
@@ -307,7 +375,7 @@ public class InfoPanel extends JPanel implements Observer
    *<p>
    * ie. $ 2.23 for money, 34.23 F° for temperature etc...
    */
-  private BarPanel getBarPanel(double value, String name, double totalPercent)
+  private BarPanel getBarPanel(double value, String name, double totalPercent, boolean adjustable)
   {
     // somewhat sensible defaults.
     //RegionAttributes converted = getConverter().convertAttributes(attributesSet);
@@ -380,7 +448,7 @@ public class InfoPanel extends JPanel implements Observer
         ratio = 0;
         // no nothing, fall back on the above default values.
     }
-    return new BarPanel(barColor, ratio, PrimaryLabel, secondaryLabel);
+    return new BarPanel(barColor, ratio, PrimaryLabel, secondaryLabel, adjustable);
   }
 
   /**
