@@ -15,12 +15,16 @@ import static model.RegionAttributes.PLANTING_ATTRIBUTES.POPULATION;
 class RegionAgeView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.AGE;
-  private static double LIMIT = colors.length / RegionAttributes.LIMITS.get(MEDIAN_AGE);
+  // 122 is the oldest man to ever live to date 4/4/2015
+  private static double LIMIT = colors.length / 122.0;
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double ages = 100 * gRegion.getRegion().getAttributes().getAttribute(MEDIAN_AGE);
+    double ages = 122;
+    if( gRegion.getOfficialCountry() ) {
+      ages = gRegion.getCountryData().getMedianAge(true);
+    }
     Color color;
     if (gRegion.isActive())
     {
@@ -28,14 +32,17 @@ class RegionAgeView implements RegionView
     }
     else
     {
-      int select = (int) (ages * LIMIT);
+      int select = (int) ((ages) * LIMIT);
       if(select < colors.length)
         color = colors[select];
       else
         color = colors[colors.length-1];
     }
 
-
+    // If the region is not a recognized region, treat it as a dead region
+    if( !gRegion.getOfficialCountry() ) {
+      color = ColorsAndFonts.DEAD_REGION;
+    }
     for( Polygon p: gRegion.getPoly() )
     {
       g.setColor(color);
