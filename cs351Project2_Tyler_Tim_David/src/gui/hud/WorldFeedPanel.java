@@ -28,6 +28,7 @@ public class WorldFeedPanel extends JPanel implements Observer
  private static DatePanel datePanel;
  private static OverlaySelect overlaySelect;
  private static ScalePanel scalePanel;
+  private static WorldStatPanel worldStatPanel;
  private static GameplayControl gameplayControl;
 
  private LayoutManager layout = new FlowLayout(FlowLayout.LEFT,0,0);
@@ -49,10 +50,11 @@ public class WorldFeedPanel extends JPanel implements Observer
   /*
    * Component Initialization
    */
-  datePanel = new DatePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
-  overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.25)),componentHeight);
-  scalePanel = new ScalePanel(0,0,(int) (frameWidth*(.20)),componentHeight);
-  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.20))+(frameWidth*(.20))),componentHeight);
+  datePanel = new DatePanel(0,0,(int) (frameWidth*(.13)),componentHeight);
+  overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.22)),componentHeight);
+   worldStatPanel = new WorldStatPanel(0,0,(int) (frameWidth*(.25)),componentHeight);
+  scalePanel = new ScalePanel(0,0,(int) (frameWidth*(.10)),componentHeight);
+  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.10))+(frameWidth*(.20))),componentHeight);
 
   datePanel.setDate(presenter.getWorldDate());
 
@@ -68,7 +70,8 @@ public class WorldFeedPanel extends JPanel implements Observer
   datePanel.setVisible(trigger);
   overlaySelect.setVisible(trigger);
   scalePanel.setVisible(trigger);
-  gameplayControl.setVisible(trigger);
+  worldStatPanel.setVisible(trigger);
+   gameplayControl.setVisible(trigger);
   this.setVisible(trigger);
  }
 
@@ -82,7 +85,7 @@ public class WorldFeedPanel extends JPanel implements Observer
   add(overlaySelect);
 
   add(scalePanel);
-
+   add(worldStatPanel);
   add(datePanel);
   add(gameplayControl);
 
