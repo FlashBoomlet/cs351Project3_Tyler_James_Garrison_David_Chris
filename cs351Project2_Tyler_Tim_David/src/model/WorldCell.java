@@ -157,6 +157,11 @@ public class WorldCell
     monthlyNightAvg = night;
   }
 
+  public void setToArea ()
+  {
+    hasCountry = true;
+  }
+
   /*
   public enum CropType
   {
