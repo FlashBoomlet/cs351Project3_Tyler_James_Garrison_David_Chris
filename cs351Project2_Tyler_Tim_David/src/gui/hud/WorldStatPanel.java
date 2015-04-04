@@ -13,10 +13,7 @@ import java.awt.*;
  */
 public class WorldStatPanel extends JPanel
 {
-  JLabel popTitle;
-  JLabel pop;
-  JLabel happy;
-  JLabel happyTitle;
+  BarPanel bar;
 
   /**
    * WorldStatPanel initializes all of the components for the world population and happiness
@@ -38,23 +35,8 @@ public class WorldStatPanel extends JPanel
     setPreferredSize(new Dimension(width,height));
     //setLayout(new FlowLayout(SwingConstants.CENTER,0,0));
 
-    popTitle = new JLabel("World Population: ");
-    popTitle.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
-    popTitle.setFont(ColorsAndFonts.TOP_FONT);
-    pop = new JLabel("2?");
-    pop.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
-    pop.setFont(ColorsAndFonts.TOP_FONT);
+    bar = new BarPanel(ColorsAndFonts.NAV_MAP_OUTLINE, 0.5, "Population Happiness", "50% : 7,200,000,000", x, y, width, height);
 
-    happyTitle = new JLabel("Happiness: ");
-    happyTitle.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
-    happyTitle.setFont(ColorsAndFonts.TOP_FONT);
-    happy = new JLabel("good?");
-    happy.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
-    happy.setFont(ColorsAndFonts.TOP_FONT);
-
-    add(popTitle);
-    add(pop);
-    add(happyTitle);
-    add(happy);
+    add(bar);
   }
 }
