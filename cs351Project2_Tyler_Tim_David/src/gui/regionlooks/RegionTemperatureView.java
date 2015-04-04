@@ -4,8 +4,10 @@ package gui.regionlooks;
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import model.RegionAttributes;
+import model.WorldCell;
 
 import java.awt.*;
+import java.util.HashSet;
 
 import static model.RegionAttributes.PLANTING_ATTRIBUTES.AVE_MONTH_TEMP_HI;
 import static model.RegionAttributes.PLANTING_ATTRIBUTES.AVE_MONTH_TEMP_LO;
@@ -35,7 +37,10 @@ class RegionTemperatureView implements RegionView
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
-
+    HashSet<WorldCell> relevantCells = gRegion.getRegion().getRelevantCells();
+    for(WorldCell cell: relevantCells){
+      System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
+    }
     double temp = gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_HI);
     double low = gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_LO); // is 0.0 right now...
     Color color;

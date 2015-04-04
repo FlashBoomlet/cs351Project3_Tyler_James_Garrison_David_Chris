@@ -30,6 +30,10 @@ public class RegionAttributes
     this.region = reg;
   }
 
+  public Region getRegion(){
+    return region;
+  }
+
   /**
    * static map to represent all the limits of all the different attributes.
    */

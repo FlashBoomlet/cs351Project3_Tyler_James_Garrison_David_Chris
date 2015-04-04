@@ -56,7 +56,10 @@ public class AtomicRegion implements Region
     if( !flagLocation.contains("\n") ) return flagLocation;
     else return null;
   }
-
+  @Override
+  public HashSet<WorldCell> getRelevantCells(){
+    return relevantCells;
+  }
 
   @Override
   public void setName(String name)

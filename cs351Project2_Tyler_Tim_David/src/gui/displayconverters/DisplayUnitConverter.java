@@ -95,7 +95,7 @@ public abstract class DisplayUnitConverter
    */
   public RegionAttributes convertAttributes(RegionAttributes originalSet)
   {
-    RegionAttributes copy = new RegionAttributes();
+    RegionAttributes copy = new RegionAttributes(originalSet.getRegion());
 
     // copies all the crop information.
     for (String cropName : originalSet.getAllCrops())

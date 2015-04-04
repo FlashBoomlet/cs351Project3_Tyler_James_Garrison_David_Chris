@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public interface Region
   void setName(String name);
 
   String getFlag();
+
+  public HashSet<WorldCell> getRelevantCells();
 
   void setFlag(String flagLocation);
 
