@@ -83,8 +83,11 @@ public class AtomicMiniArea implements MiniArea
         currentCell = worldArray.get(i, j);
         if (!currentCell.hasCountry && tempPerimeter.contains(currentCell.getLon(), currentCell.getLat())) ;
         {
-          cells.add(currentCell);
-          currentCell.setToArea();
+          if( currentCell != null && cells != null )
+          {
+            cells.add(currentCell);
+            currentCell.setToArea();
+          }
         }
       }
     }

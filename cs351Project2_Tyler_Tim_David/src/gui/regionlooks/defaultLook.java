@@ -41,8 +41,12 @@ class defaultLook implements RegionView
       else
       {
         outLine = ColorsAndFonts.PASSIVE_REGION_OUTLINE;
-        if( gRegion.getOfficialCountry() ) fill = ColorsAndFonts.PASSIVE_REGION;
-        else fill = ColorsAndFonts.DEAD_REGION;
+        fill = ColorsAndFonts.PASSIVE_REGION;
+      }
+
+      // If the region is not a recognized region, treat it as a dead region
+      if( !gRegion.getOfficialCountry() ) {
+        fill = ColorsAndFonts.DEAD_REGION;
       }
 
       g.setColor(fill);
