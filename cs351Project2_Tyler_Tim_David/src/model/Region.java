@@ -37,4 +37,6 @@ public interface Region
   public CountryData getCountryData();
 
   public void setOfficialCountry();
+
+  public boolean getOfficialCountry();
 }

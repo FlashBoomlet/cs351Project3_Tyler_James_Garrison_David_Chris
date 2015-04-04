@@ -100,7 +100,7 @@ public class BarPanel extends JPanel
     label.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     label.setHorizontalAlignment(SwingConstants.LEFT);
     label.setVerticalAlignment(SwingConstants.TOP);
-    addMouseListener(getMouseListener());
+    if( !showAdjust ) addMouseListener(getMouseListener());
 
     if( showAdjust )
     {

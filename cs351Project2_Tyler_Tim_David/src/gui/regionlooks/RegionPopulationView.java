@@ -14,12 +14,15 @@ import static model.RegionAttributes.PLANTING_ATTRIBUTES.POPULATION;
 class RegionPopulationView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.POPULATION;
-  private static double LIMIT = colors.length / RegionAttributes.LIMITS.get(POPULATION);
+  private static double LIMIT = colors.length / 100_000_000.0;
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double pops = gRegion.getRegion().getAttributes().getAttribute(POPULATION);
+    double pops = 100_000_000.0;
+    if( gRegion.getOfficialCountry() ) {
+      pops = gRegion.getCountryData().getPopulation(true);
+    }
     Color color = Color.YELLOW;
     if (gRegion.isActive())
     {
@@ -34,6 +37,10 @@ class RegionPopulationView implements RegionView
         color = colors[colors.length-1];
     }
 
+    // If the region is not a recognized region, treat it as a dead region
+    if( !gRegion.getOfficialCountry() ) {
+      color = ColorsAndFonts.DEAD_REGION;
+    }
 
     for( Polygon p: gRegion.getPoly() )
     {

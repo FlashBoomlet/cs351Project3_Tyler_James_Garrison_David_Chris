@@ -32,6 +32,7 @@ public class GUIRegion
   private RegionView look;
   private LinkedList<Polygon> polyList = new LinkedList<>();
   private BufferedImage image;
+  private boolean officialCountry = false;
   private CountryData data = null;
 
   public GUIRegion(Region region, MapConverter converter, RegionView look)
@@ -39,6 +40,7 @@ public class GUIRegion
     this.region = region;
     this.converter = converter;
     this.look = look;
+
     if( region.getFlag() != null )
     {
       //For error catching data
@@ -132,4 +134,24 @@ public class GUIRegion
     return region;
   }
 
+
+  public void setCountryData(CountryData data)
+  {
+    this.data = data;
+  }
+
+  public CountryData getCountryData()
+  {
+    return data;
+  }
+
+  public void setOfficialCountry()
+  {
+    officialCountry = true;
+  }
+
+  public boolean getOfficialCountry()
+  {
+    return officialCountry;
+  }
 }

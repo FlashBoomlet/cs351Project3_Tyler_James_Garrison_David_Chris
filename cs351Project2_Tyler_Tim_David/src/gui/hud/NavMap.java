@@ -38,7 +38,7 @@ public class NavMap extends JPanel
   private static double baseY = 0;
   private static double baseW = 0;
   private static double baseH = 0;
-  private static Color NAV_COLOR = Color.CYAN;
+  private static Color NAV_COLOR = ColorsAndFonts.NAV_MAP_OUTLINE;
   private static int frameWidth = 0;
   private static int frameHeight = 0;
   private WorldPresenter presenter;
