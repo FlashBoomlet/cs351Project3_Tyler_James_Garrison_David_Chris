@@ -1,32 +1,32 @@
+
 package gui.hud;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.WorldPresenter;
-import gui.displayconverters.AmericanUniteConverter;
 import gui.displayconverters.DisplayUnitConverter;
-import gui.displayconverters.MetricDisplayConverter;
-import gui.regionlooks.PlantingZoneView;
-import model.RegionAttributes;
+import model.CountryData;
+import model.Region;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
 
 import static gui.ColorsAndFonts.BAR_GRAPH_NEG;
 import static gui.ColorsAndFonts.GUI_BACKGROUND;
-import static gui.ColorsAndFonts.OCEANS;
-import static model.RegionAttributes.PLANTING_ATTRIBUTES;
 
 /**
  * Created by winston on 2/3/15.
  *
- * Class responsible for creating and maintaining all the elements that
- * constitute the info panel. Used for viewing attributes about what is selected
- * in the map, and given feel back on what is selected.
+ * Scrapped by Tyler on 4.2.15
+ * Re-created by
+ * @author Tyler Lynch <lyncht@unm.edu>
+ * @since 4.3.15
+ *
  */
 public class InfoPanel extends JPanel implements Observer
 {
@@ -35,13 +35,19 @@ public class InfoPanel extends JPanel implements Observer
      are able to display their info correctly */
   private final static Dimension size = new Dimension(220, 1);
   private MiniViewBox miniViewBox;
-  private StatPane attributeStats;
-  private StatPane cropStatPane;
-  private DisplayUnitConverter converter;
+  private StatPane stats;
+
+  private DisplayUnitConverter converter = new DisplayUnitConverter();
+  private boolean metricUnits = true;
   private WorldPresenter presenter;
+
+  private boolean singeCountry = true;
+  private Region region = null;
+  private static List<CountryData> countryDataList = new LinkedList<>();
+  private static List<GUIRegion> officialRegions = new LinkedList<>();
+
   private int fullHeight;
   private int fullWidth;
-  private static RegionAttributes regionAttributes;
 
   /**
    Instantiate the InfoPanel
@@ -52,8 +58,7 @@ public class InfoPanel extends JPanel implements Observer
   {
     // init
     miniViewBox = new MiniViewBox(" ",frameWidth, frameHeight);
-    attributeStats = new StatPane("REGION(S) DATA:",frameWidth,frameHeight);
-    cropStatPane = new StatPane("REGION(S) CROP DATA:",frameWidth,frameHeight);
+    stats = new StatPane("REGION(S) DATA:",frameWidth,frameHeight);
 
     //config
     this.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
@@ -70,12 +75,10 @@ public class InfoPanel extends JPanel implements Observer
     miniViewBox.setPreferredSize(new Dimension(frameWidth, (frameHeight / 4)));
     this.add(miniViewBox);
 
-    attributeStats.setPreferredSize(new Dimension(frameWidth, (frameHeight / 4)));
-    this.add(attributeStats);
+    int whatsLeft = (frameHeight / 3);
+    stats.setPreferredSize(new Dimension(frameWidth, frameHeight - whatsLeft));
+    this.add(stats);
 
-    int whatsLeft = (frameHeight / 4)*2;
-    cropStatPane.setPreferredSize(new Dimension(frameWidth, frameHeight - whatsLeft));
-    this.add(cropStatPane);
 
 
     // key binding to switch between different Unite Display objects.
@@ -86,7 +89,7 @@ public class InfoPanel extends JPanel implements Observer
       @Override
       public void actionPerformed(ActionEvent e)
       {
-        setConverter(new MetricDisplayConverter());
+        metricUnits = true;
         update(null, null);
       }
     });
@@ -99,7 +102,7 @@ public class InfoPanel extends JPanel implements Observer
       @Override
       public void actionPerformed(ActionEvent e)
       {
-        setConverter(new AmericanUniteConverter());
+        metricUnits = false;
         update(null, null);
       }
     });
@@ -137,8 +140,6 @@ public class InfoPanel extends JPanel implements Observer
    */
   public DisplayUnitConverter getConverter()
   {
-    // defaults to AmericanUniteConverter
-    if (converter == null) converter = new AmericanUniteConverter();
     return converter;
   }
 
@@ -160,73 +161,139 @@ public class InfoPanel extends JPanel implements Observer
     miniViewBox.setTitle(title);
   }
 
+
+
+
+
+
+
+
   /**
    * Display the Specified Attribute object in the info panel. This method
    * delegates and handles clearing the previously displayed information.
-   *
-   * @param regionAttributes to render in the display.
    */
-  public void showAttributes(RegionAttributes regionAttributes)
+  public void showAttributes()
   {
-    this.regionAttributes = regionAttributes;
+    stats.clearBarPlots();
+    displayStats(stats);
+    stats.revalidate();
 
-    attributeStats.clearBarPlots();
-    displayAttributes(regionAttributes, attributeStats);
-    attributeStats.revalidate();
-
-    cropStatPane.clearBarPlots();
-    displayCropState(regionAttributes, cropStatPane);
-    cropStatPane.revalidate();
   }
 
-  /**
-   * Controls the presentation logic of building up the crop percentages section
-   * of the GUI info pane.
-   *
-   * @param atts     data that will be extracted and displayed.
-   * @param statPane GUI element to 'write' to.
-   */
-  private void displayCropState(RegionAttributes atts, StatPane statPane)
-  {
-    for (String cropName : atts.getAllCrops())
-    {
-      BarPanel bp = new BarPanel(
-        BAR_GRAPH_NEG,
-        atts.getCropP(cropName),
-        cropName,
-        String.format("%.2f", atts.getCropP(cropName) * 100) + "% "
-      );
-      statPane.addBar(bp);
-    }
-  }
 
   /**
    * Controls the presentation logic for displaying the soil attributes
    * in the info panel for the specified region.
    *
-   * @param atts     Attribute set to be displayed.
    * @param statPane GUI element to 'write' to.
    */
-  private void displayAttributes(RegionAttributes atts, StatPane statPane)
+  private void displayStats(StatPane statPane)
   {
-    if (atts == null)
-    {
-      System.err.println("atts for region are null.");
-      return;
-    }
+    double population = 0;
+    double medianAge = 0;
+    double birthRate = 0;
+    double mortality = 0;
+    double migration = 0;
+    double undernourish = 0;
 
-    for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
+    double cornTotal = 0;
+    double wheatTotal = 0;
+    double riceTotal = 0;
+    double soyTotal = 0;
+    double otherTotal = 0;
+
+    double organic = 0;
+    double conventional = 0;
+    double gmo = 0;
+
+    double totalCrops = 0;
+
+    if( singeCountry )
     {
-      BarPanel bp = getBarPanel(atts, att);
-      switch (att)
+      CountryData cd = countryDataList.get(0);
+      population = cd.getPopulation();
+      medianAge = cd.getMedianAge();
+      birthRate = cd.getBirthRate();
+      mortality = cd.getMortality();
+      migration = cd.getMigration();
+      undernourish = cd.getUndernourish();
+
+      cornTotal = cd.getCornTotal();
+      wheatTotal = cd.getWheatTotal();
+      riceTotal = cd.getRiceTotal();
+      soyTotal = cd.getSoyTotal();
+      otherTotal = cd.getOtherTotal();
+
+      organic = cd.getOrganic();
+      conventional = cd.getConventional();
+      gmo = cd.getGmo();
+
+      totalCrops = cd.getCropTotal();
+    }
+    else
+    {
+      for( CountryData cd : countryDataList )
       {
-        case SOIL_TYPE:case ELEVATION:case AVE_MONTH_TEMP_LO:case AVE_MONTH_TEMP_HI:case MONTHLY_RAINFALL:
-        case ANNUAL_RAINFALL:case COST_OF_CROPS:case PROFIT_FROM_CROPS:
-          break;
-        default:
-          statPane.addBar(bp);
+        population += cd.getPopulation();
+        medianAge += cd.getMedianAge();
+        birthRate += cd.getBirthRate();
+        mortality += cd.getMortality();
+        migration += cd.getMigration();
+        undernourish += cd.getUndernourish();
+
+        cornTotal += cd.getCornTotal();
+        wheatTotal += cd.getWheatTotal();
+        riceTotal += cd.getRiceTotal();
+        soyTotal += cd.getSoyTotal();
+        otherTotal += cd.getOtherTotal();
+
+        organic += cd.getOrganic();
+        conventional += cd.getConventional();
+        gmo += cd.getGmo();
+
+        totalCrops += cd.getCropTotal();
       }
     }
+
+    /*
+     * General Country Data
+     */
+    BarPanel bp1 = getBarPanel( population, "Population" , 1);
+    statPane.addBar(bp1);
+    BarPanel bp2 = getBarPanel( medianAge, "Median Age" , 122);
+    statPane.addBar(bp2);
+    BarPanel bp3 = getBarPanel( birthRate, "Birth Rate" , 1);
+    statPane.addBar(bp3);
+    BarPanel bp4 = getBarPanel( mortality, "Mortality Rate" , 1);
+    statPane.addBar(bp4);
+    BarPanel bp5 = getBarPanel( migration, "Migration Rate" , 1);
+    statPane.addBar(bp5);
+    BarPanel bp6 = getBarPanel( undernourish, "Unnourished" , 1);
+    statPane.addBar(bp6);
+
+    /*
+     * Land Information
+     */
+    BarPanel bp7 = getBarPanel( organic, "Organic" , 1);
+    statPane.addBar(bp7);
+    BarPanel bp8 = getBarPanel( conventional, "Conventional" , 1);
+    statPane.addBar(bp8);
+    BarPanel bp9 = getBarPanel( gmo, "GMO" , 1);
+    statPane.addBar(bp9);
+
+    /*
+     * Crop Information
+     */
+    BarPanel bp14 = getBarPanel( cornTotal, "Corn", totalCrops );
+    statPane.addBar(bp14);
+    BarPanel bp13 = getBarPanel( wheatTotal, "Wheat", totalCrops );
+    statPane.addBar(bp13);
+    BarPanel bp12 = getBarPanel( soyTotal, "Rice", totalCrops );
+    statPane.addBar(bp12);
+    BarPanel bp11 = getBarPanel( riceTotal, "Soy", totalCrops );
+    statPane.addBar(bp11);
+    BarPanel bp10 = getBarPanel( otherTotal, "Other", totalCrops );
+    statPane.addBar(bp10);
   }
 
   /**
@@ -235,76 +302,72 @@ public class InfoPanel extends JPanel implements Observer
    *<p>
    * ie. $ 2.23 for money, 34.23 F° for temperature etc...
    */
-  private BarPanel getBarPanel(final RegionAttributes attributesSet, PLANTING_ATTRIBUTES att)
+  private BarPanel getBarPanel(double value, String name, double totalPercent)
   {
     // somewhat sensible defaults.
-    RegionAttributes converted = getConverter().convertAttributes(attributesSet);
+    //RegionAttributes converted = getConverter().convertAttributes(attributesSet);
     int FULL_BAR = 1; // TO CREATE A LABEL, overloading the concept of bar.
-    String PrimaryLabel = att.toString();
+    String PrimaryLabel = name;
     Color barColor = BAR_GRAPH_NEG;
-    double ratio = attributesSet.getAttribute(att) / RegionAttributes.LIMITS.get(att);
-    String secondaryLabel = String.format("%.2f", converted.getAttribute(att));
+    double ratio = Math.abs(value / totalPercent);
+    // To override the java to string method, I don't want that, I want the number
+    NumberFormat formatter = new DecimalFormat("#");
 
-    switch (att)
+    String secondaryLabel = formatter.format(value);
+
+
+    switch(name)
     {
-      case PLANTING_ZONE:
-        barColor = PlantingZoneView.getPlantingColor(converted.getAttribute(att));
-        ratio = FULL_BAR;
-        secondaryLabel = "ZONE: " + (int) (double) converted.getAttribute(att);
+      case "Population":
+        ratio = 0;
         break;
-      case PROFIT_FROM_CROPS:
-        barColor = Color.green;
-        secondaryLabel = getConverter().getCurrencySymbol() + " " + secondaryLabel;
-        break;
-      case COST_OF_CROPS:
-        barColor = Color.red;
-        secondaryLabel = getConverter().getCurrencySymbol() + " " + secondaryLabel;
-        break;
-      case HAPPINESS:
-        ratio = converted.getAttribute(att);
-        barColor = getHappyColor(ratio);
-        secondaryLabel = getHappyLabel(ratio);
-        break;
-      case ANNUAL_RAINFALL:
-        secondaryLabel = secondaryLabel + " " + getConverter().getInchSymbol();
-        break;
-      case MONTHLY_RAINFALL:
-        secondaryLabel = secondaryLabel + " " + getConverter().getInchSymbol();
-        break;
-      case POPULATION:
-        secondaryLabel = "" + (int) (double) converted.getAttribute(att);
-        break;
-      case AVE_MONTH_TEMP_HI:
-        secondaryLabel = secondaryLabel + " " + getConverter().getTmpSymbol();
-        barColor = Color.red;
-        break;
-      case AVE_MONTH_TEMP_LO:
-        ratio = Math.abs(ratio);
-        secondaryLabel = secondaryLabel + " " + getConverter().getTmpSymbol();
-        barColor = BAR_GRAPH_NEG;
-        break;
-      case ELEVATION:
-        secondaryLabel = secondaryLabel + " " + getConverter().getFeetSymbol();
-        break;
-      case SOIL_TYPE:
-        secondaryLabel += " ph";
-        break;
-      case MEDIAN_AGE:
-        ratio =  attributesSet.getAttribute(att)*100 / RegionAttributes.LIMITS.get(att);
+      case "Median Age":
         barColor = Color.YELLOW;
-        secondaryLabel = String.format("%.2f", converted.getAttribute(att) * 100);
         break;
-      case BIRTH_RATE:
-      case MORTALITY_RATE:
-      case MIGRATION_RATE:
-      case UNDERNOURISHMENT_RATE:
-        ratio = Math.abs(ratio);
+      case "Birth Rate":
+      case "Mortality Rate":
+      case "Migration Rate":
         barColor = Color.GREEN;
-        secondaryLabel = String.format("%.2f", converted.getAttribute(att) * 100) + " " + getConverter().getPercentSymbol();
+        secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits) + "/year";
+        break;
+      case "Unnourished":
+        barColor = Color.RED;
+        secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
+        break;
+      case "Corn":
+        barColor = new Color(0xEBEB33);
+        secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+        break;
+      case "Wheat":
+        barColor = new Color(0xFF9900);
+        secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+        break;
+      case "Rice":
+        barColor = new Color(0xE6E6E6);
+        secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+        break;
+      case "Soy":
+        barColor = new Color(0xC2A385);
+        secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+        break;
+      case "Other":
+        barColor = new Color(0xFF66FF);
+        secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+        break;
+      case "Organic":
+        barColor = new Color(0x66FF33);
+        secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
+        break;
+      case "Conventional":
+        barColor = new Color(0x996633);
+        secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
+        break;
+      case "GMO":
+        barColor = new Color(0xFF5050);
+        secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
         break;
       default:
         // no nothing, fall back on the above default values.
-
     }
     return new BarPanel(barColor, ratio, PrimaryLabel, secondaryLabel);
   }
@@ -342,26 +405,12 @@ public class InfoPanel extends JPanel implements Observer
   public static double adjustCrop(double amount, String crop)
   {
     boolean error = false;
+    // This will only be called if the countryDataList is greater than 1
+    CountryData countryData = countryDataList.get(0);
 
-    if( amount > 0 && regionAttributes.getCropP(crop) <= Math.abs(1 - amount) )
-    {
-      // Must be less than 0.95 for example if amount == 0.05
-      if( !regionAttributes.validateCropAdjustment( 1 + amount ) )
-      {
-        error = true;
-      }
+    if( countryData.cropAdjustmentByName(crop, (1 + amount)) ) {
     }
-    else if( amount < 0 && regionAttributes.getCropP(crop) >= Math.abs(amount) )
-    {
-      //Because amount is negative, + -1 = --1
-      if( !regionAttributes.validateCropAdjustment( 1 + amount ) )
-      {
-        error = true;
-      }
-    }
-    else error = true;
-
-    if( error )
+    else
     {
       String errMsg;
       if( amount > 0 ) errMsg = "You can't add more land to this area. You have reached 100% use. Take away use.";
@@ -372,12 +421,7 @@ public class InfoPanel extends JPanel implements Observer
       JOptionPane.showMessageDialog(main.Game.frame,msg,"Invalid crop adjustment",
         JOptionPane.ERROR_MESSAGE);
     }
-    else
-    {
-      //Because if amount is negative, +-1 == --1
-      regionAttributes.setCropByPercent(crop, (1 + amount));
-    }
-    return regionAttributes.getCropP(crop);
+    return countryData.getCropP(crop);
   }
 
   /* display color as a function of happiness */
@@ -393,36 +437,39 @@ public class InfoPanel extends JPanel implements Observer
   {
     miniViewBox.setTitle(" ");
     miniViewBox.setDrawableRegions(null);
-    cropStatPane.clearBarPlots();
-    attributeStats.clearBarPlots();
+    stats.clearBarPlots();
   }
 
   /**
    * Renders the Stats for the list of regions given. This is also used
    * when only drawing a single region (i.e. length of collection = 1).
    *
-   * @param regions List of regions to display state for.
+   * @param officialRegions List of regions to display state for.
    */
-  public void displayAllGUIRegions(List<GUIRegion> regions)
+  public void displayAllGUIRegions(List<GUIRegion> officialRegions)
   {
     // single region display logic
-    if (regions.size() == 1)
+    if (officialRegions.size() == 1)
     {
-      setTitle(regions.get(0).getName());
-      showAttributes(regions.get(0).getRegion().getAttributes());
+      singeCountry = true;
+      setTitle(officialRegions.get(0).getName());
+      showAttributes();
       miniViewBox.setAlph(0.0f);
     }
-    else  // multi region display logic.
+    else if (officialRegions.size() > 1) // multi region display logic.
     {
+      singeCountry = false;
       clearDisplay();
       setTitle("AVERAGE:");
       miniViewBox.setAlph(1f);
       if (!presenter.isActivelyDragging()) // delays summation until drag is over.
       {
-        showAttributes(sumAttributes(regions));
+        showAttributes();
       }
     }
-    miniViewBox.setDrawableRegions(regions);
+
+
+    miniViewBox.setDrawableRegions(officialRegions);
   }
 
   /**
@@ -438,7 +485,23 @@ public class InfoPanel extends JPanel implements Observer
   public void update(Observable o, Object arg)
   {
     List<GUIRegion> activeRegions = getPresenter().getActiveRegions();
-    if (activeRegions == null)
+
+    //Clear all of the country data that will be displayed first
+    countryDataList.clear();
+    officialRegions.clear();
+
+    if (activeRegions != null)
+    {
+      for (GUIRegion gr : activeRegions) {
+        if ( gr.getOfficialCountry() )
+        {
+          if( gr.getCountryData() != null ) countryDataList.add(gr.getCountryData());
+          officialRegions.add(gr);
+        }
+      }
+    }
+
+    if (officialRegions.size() == 0 || activeRegions == null )
     {
       // HIDE PANEL
       this.setVisible(false);
@@ -448,151 +511,7 @@ public class InfoPanel extends JPanel implements Observer
     {
       // SHOW PANEL
       this.setVisible(true);
-      displayAllGUIRegions(activeRegions);
+      displayAllGUIRegions(officialRegions);
     }
-  }
-
-
-  /*
-    returns a RegionAttributes instance representing a collection of regions
-    
-    The following attributes are averaged:
-    Annual rainfall,
-    Monthly rainfall,
-    Soil type (acidity),
-    Average monthly high,
-    Average monthly low,
-    Elevation,
-    Happiness
-    
-    The following attributes are summed:
-    Population
-    Cost of crops
-    Profit from crops
-    All crop growth
-    
-    The Planting Zone is the median zone of all the regions in the List
-   */
-  private RegionAttributes sumAttributes(List<GUIRegion> regions)
-  {
-    /* Planting zone is represented as a median across multiple regions */
-    Map<Integer, Integer> zoneMap = new HashMap<>();
-
-    /* init map */
-    for (int i = 1; i <= 13; i++)
-    {
-      zoneMap.put(i, 0);
-    }
-    
-    /* everything else is either a sum or average */
-    Map<PLANTING_ATTRIBUTES, Double> attribMap = new HashMap<>();
-    
-    /* init map */
-    for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
-    {
-      attribMap.put(att, .0);
-    }
-    
-    /* crops are summed separately in a map */
-    LinkedHashMap<String, Double> cropMap = new LinkedHashMap<>();
-
-    int numRegions = regions.size();
-
-    for (GUIRegion gr : regions)
-    {
-      RegionAttributes attribs = gr.getRegion().getAttributes();
-      for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
-      {
-        switch (att)
-        {
-          /* averaged attributes */
-          case ANNUAL_RAINFALL:
-          case MEDIAN_AGE:
-          case BIRTH_RATE:
-          case MORTALITY_RATE:
-          case MIGRATION_RATE:
-          case UNDERNOURISHMENT_RATE:
-
-          case AVE_MONTH_TEMP_LO:
-          case AVE_MONTH_TEMP_HI:
-
-          case MONTHLY_RAINFALL:
-          case ELEVATION:
-          case SOIL_TYPE:
-
-            attribMap.put(att, attribMap.get(att) + attribs.getAttribute(att) / numRegions);
-            break;
-
-          case HAPPINESS:
-
-          
-          /* summed attributes */
-
-          case PROFIT_FROM_CROPS:
-          case COST_OF_CROPS:
-
-          case POPULATION:
-            attribMap.put(att,
-              attribMap.get(att) + attribs.getAttribute(att));
-            break;
-          
-          /* median'd attributes */
-          case PLANTING_ZONE:
-            Integer zone = attribs.getAttribute(att).intValue();
-            zoneMap.put(zone, zoneMap.get(zone) + 1);
-            break;
-          default:
-            /* never reached */
-            System.err.println("Problems in Attribute Summation");
-            break;
-        }
-      }
-
-      /* sum the crops */
-      for (String crop : attribs.getAllCrops())
-      {
-        if (!cropMap.containsKey(crop))
-        {
-          cropMap.put(crop, attribs.getCropGrowth(crop));
-        }
-        else
-        {
-          cropMap.put(crop, cropMap.get(crop) + attribs.getCropGrowth(crop));
-        }
-      }
-    }
-
-    /* find the most common planting zone */
-    Integer maxKey = 1, maxVal = 0;
-
-    for (Integer i : zoneMap.keySet())
-    {
-      Integer current = zoneMap.get(i);
-      if (current > maxVal)
-      {
-        maxVal = current;
-        maxKey = i;
-      }
-    }
-
-    /* build the new attribute set */
-    RegionAttributes rAtts = new RegionAttributes(null);
-    for (PLANTING_ATTRIBUTES att : PLANTING_ATTRIBUTES.values())
-    {
-      /* make sure to use the median value from zoneMap, NOT the value in
-         attribMap (still 0, probably) */
-      if (att == PLANTING_ATTRIBUTES.PLANTING_ZONE)
-      {
-        rAtts.setAttribute(att, maxKey);
-      }
-      else
-      {
-        rAtts.setAttribute(att, attribMap.get(att));
-      }
-    }
-
-    for (String crop : cropMap.keySet()) rAtts.setCrop(crop, cropMap.get(crop));
-
-    return rAtts;
   }
 }

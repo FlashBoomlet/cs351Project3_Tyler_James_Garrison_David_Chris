@@ -168,4 +168,9 @@ public class AtomicRegion implements Region
   {
     officialCountry = true;
   }
+
+  public boolean getOfficialCountry()
+  {
+    return officialCountry;
+  }
 }

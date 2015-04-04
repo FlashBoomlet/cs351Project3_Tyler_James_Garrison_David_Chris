@@ -1,11 +1,13 @@
 package IO;
 
+import gui.GUIRegion;
 import model.CountryData;
 import model.Region;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ public class CountryCSVParser {
   private BufferedReader br = null;
   private String line = "";
   private int counter = 0;
-  private List<Region> regions;
+  private Collection<GUIRegion> regions;
 
   /**
    * CountryCSVParser is the constructor to parse data for all countries being utalized in this game
@@ -32,7 +34,7 @@ public class CountryCSVParser {
    *
    * @param regions in the world
    */
-  public CountryCSVParser(List<Region> regions )
+  public CountryCSVParser(Collection<GUIRegion> regions )
   {
     this.regions = regions;
     parseCSV();
@@ -88,7 +90,7 @@ public class CountryCSVParser {
    */
   private void assignAttributes(String[] atributes)
   {
-    Region currentRegion = null;
+    GUIRegion currentRegion = null;
     // To prevent array index out of bounds error, ensure all data is filled out
     if( atributes.length >= 31 )
     {
@@ -98,7 +100,7 @@ public class CountryCSVParser {
       {
         CountryData data = new CountryData();
         data.setPopulation( Double.parseDouble(atributes[1]) );
-        data.setAverageAge( Double.parseDouble(atributes[2]) );
+        data.setMedianAge( Double.parseDouble(atributes[2]) );
         data.setBirthRate( Double.parseDouble(atributes[3]) );
         data.setMortality( Double.parseDouble(atributes[4]) );
         data.setMigration( Double.parseDouble(atributes[5]) );
@@ -148,12 +150,12 @@ public class CountryCSVParser {
    * @param name
    * @return a region that matches
    */
-  private Region findCurrentRegion(String name)
+  private GUIRegion findCurrentRegion(String name)
   {
-    for( Region r: regions)
+    for( GUIRegion gr: regions)
     {
-      if( r.getName().equals(name) ) {
-        return r;
+      if( gr.getName().equals(name) ) {
+        return gr;
       }
     }
     return null;
