@@ -21,12 +21,14 @@ public class BarPanel extends JPanel
   /* look and feel constants */
   private static final Font GUI_FONT = ColorsAndFonts.GUI_FONT;
   private static final Font OVERLAY_FONT = new Font("SansSerif", Font.PLAIN, 10);
+  private static final Font POP_AND_HAPPY_FONT = new Font("SansSerif", Font.PLAIN, 11);
   private static final Color BAR_TEXT_C = Color.black;
   private static final Color TEXT_ROLLOVER_C = ColorsAndFonts.ACTIVE_REGION;
   private static final Color BAR_ROLLOVER_C = Color.gray;
 
   private final Color originalBarColor;
   private Color overLayTextColor;
+  private Color chosenTextColor = BAR_TEXT_C;
   private Color barColor;
   private final JLabel label;
   private final double ratio;
@@ -55,7 +57,7 @@ public class BarPanel extends JPanel
     //init
     this.originalBarColor = barColor;
     this.barColor = barColor;
-    this.overLayTextColor = BAR_TEXT_C;
+    this.overLayTextColor = chosenTextColor;
     this.ratio = ratio;
     this.overLayText = overLayText;
 
@@ -102,6 +104,56 @@ public class BarPanel extends JPanel
   }
 
   /**
+   * Constructor for class for use in World population and happiness
+   *
+   * @param barColor    the barColor of the bar to be draw
+   * @param ratio       a double between 0 and 1, 1 being 'full'.
+   * @param labelText   String that will be displayGUIRegion labeling the bar
+   * @param overLayText String that will be displayed on top of the bar.
+   *                    (to show the ratio passed in for example
+   */
+  public BarPanel(Color barColor, double ratio, String labelText, String overLayText, int x, int y, int width, int height) //for use in World population and happiness
+  {
+    //init
+    this.originalBarColor = barColor;
+    this.barColor = barColor;
+    chosenTextColor = Color.white;
+    this.overLayTextColor = chosenTextColor;
+    this.ratio = ratio;
+    this.overLayText = overLayText;
+
+    // 6000 is just to make things too big! fighting with swing.
+    // 16 is height of each individual bar.
+    Dimension size = new Dimension(width, height);
+    setMaximumSize(size);
+    setLayout(new GridLayout(1,1));
+
+    setLocation(x,y);
+
+    label = new JLabel(labelText);
+    barGraph = new PopAndHappyPane();
+
+    dataPanel = new JPanel();
+    dataPanel.setOpaque(false);
+    dataPanel.setLayout(new GridLayout(1,2));
+    dataPanel.add(label);
+    dataPanel.add(barGraph);
+
+    //config
+    setBackground(ColorsAndFonts.OCEANS);
+
+    //setPreferredSize(new Dimension(width, height));
+
+    label.setFont(ColorsAndFonts.TOP_FONT);
+    label.setForeground(chosenTextColor);
+    label.setHorizontalAlignment(SwingConstants.LEFT);
+    label.setVerticalAlignment(SwingConstants.TOP);
+    addMouseListener(getMouseListener());
+
+    add(dataPanel);
+  }
+
+  /**
    * set the label for the bar graph.
    * @param text
    */
@@ -128,7 +180,7 @@ public class BarPanel extends JPanel
       @Override
       public void mouseExited(MouseEvent e)
       {
-        overLayTextColor = BAR_TEXT_C;
+        overLayTextColor = chosenTextColor;
         barColor = originalBarColor;
         label.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
       }
@@ -139,12 +191,12 @@ public class BarPanel extends JPanel
    * Generates an inner class to handle the custom drawing of the
    * bar.
    */
-  private class BarPane extends JPanel
+  private class PopAndHappyPane extends BarPane
   {
     int length = 0;
-    BarPane()
+    PopAndHappyPane()
     {
-      length = (int) (ratio * 100);
+      length = (int) (ratio * 130);
     }
 
     @Override
@@ -152,6 +204,52 @@ public class BarPanel extends JPanel
     {
       if (animationStep < length) animationStep += 2;
       Graphics2D g2d = (Graphics2D)g;
+      g2d.setColor(Color.darkGray);
+      g2d.drawRect(9,0,131,16);
+
+      g2d.setColor(barColor);
+      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f));
+
+      // position info, animation, and seize of bar, should correlate to font
+      // size.
+      g2d.fillRect(10, 1, animationStep, 15);
+
+      // if over lay text has been specified => draw it.
+      if (overLayText != null)
+      {
+        g2d.setRenderingHint(
+            RenderingHints.KEY_TEXT_ANTIALIASING,
+            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        g2d.setColor(overLayTextColor);
+        g2d.setFont(POP_AND_HAPPY_FONT);
+        g2d.drawString(overLayText, 12, 12);
+      }
+    }
+  }
+
+
+  /**
+   * Generates an inner class to handle the custom drawing of the
+   * bar.
+   */
+  private class BarPane extends JPanel
+  {
+    int length = 0;
+    BarPane()
+    {
+      length = (int) (ratio * 85);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+      if (animationStep < length) animationStep += 2;
+      Graphics2D g2d = (Graphics2D)g;
+      g2d.setColor(Color.darkGray);
+      g2d.drawRect(9,1,86,13);
+
       g2d.setColor(barColor);
       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f));
 
