@@ -14,9 +14,10 @@ public interface ColorsAndFonts
 
   Color REGION_NAME_FONT_C = new Color(0xFF0000);
 
-  Color OCEANS = new Color(58, 56, 56);
+  Color OCEANS = new Color(33, 31, 58);  //new Color(58, 56, 56);
 
-  Color ACTIVE_REGION = Color.CYAN;
+  Color ACTIVE_REGION = new Color(0xCCFF4E);
+  Color NAV_MAP_OUTLINE = REGION_NAME_FONT_C;
 
   /* changed from 0xE37956, now is same as PASSIVE_REGION_OUTLINE */
   Color ACTIVE_REGION_OUTLINE = new Color(58, 56, 56);
@@ -26,6 +27,7 @@ public interface ColorsAndFonts
 
 
   Color PASSIVE_REGION = new Color(0xD1D1D1);
+  Color DEAD_REGION = new Color(0x8CD1A4);
   Color PASSIVE_REGION_OUTLINE = new Color(58, 56, 56);
 
   Color XML_ERROR = new Color(255, 129, 78, 212);

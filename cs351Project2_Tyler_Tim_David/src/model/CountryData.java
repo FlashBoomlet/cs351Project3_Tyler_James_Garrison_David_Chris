@@ -61,177 +61,206 @@ public class CountryData
 
   /**
    * get the population
+   * @param metricUnits   boolean for data type
    * @return population population
    */
-  public double getPopulation()
+  public double getPopulation(boolean metricUnits)
   {
     return population;
   }
   /**
    * get the medianAge
+   * @param metricUnits   boolean for data type
    * @return medianAge medianAge
    */
-  public double getMedianAge()
+  public double getMedianAge(boolean metricUnits)
   {
     return medianAge;
   }
   /**
    * get the birthRate
+   * @param metricUnits   boolean for data type
    * @return birthRate birthRate
    */
-  public double getBirthRate()
+  public double getBirthRate(boolean metricUnits)
   {
     return birthRate;
   }
   /**
    * get the mortality
+   * @param metricUnits   boolean for data type
    * @return mortality mortality
    */
-  public double getMortality()
+  public double getMortality(boolean metricUnits)
   {
     return mortality;
   }
   /**
    * get the migration
+   * @param metricUnits   boolean for data type
    * @return migration migration
    */
-  public double getMigration()
+  public double getMigration(boolean metricUnits)
   {
     return migration;
   }
   /**
    * get the undernourish
+   * @param metricUnits   boolean for data type
    * @return undernourish undernourish
    */
-  public double getUndernourish()
+  public double getUndernourish(boolean metricUnits)
   {
     return undernourish;
   }
   /**
    * get the cornTotal
+   * @param metricUnits   boolean for data type
    * @return cornTotal cornProduction
    */
-  public double getCornTotal()
+  public double getCornTotal(boolean metricUnits)
   {
     return (cornProduction + cornImports - cornExports);
   }
   /**
    * get the cornLand
+   * @param metricUnits   boolean for data type
    * @return cornLand cornLand
    */
-  public double getCornLand()
+  public double getCornLand(boolean metricUnits)
   {
     return cornLand;
   }
   /**
    * get the WheatTotal
+   * @param metricUnits   boolean for data type
    * @return WheatTotal WheatTotal
    */
-  public double getWheatTotal()
+  public double getWheatTotal(boolean metricUnits)
   {
     return (wheatProduction + wheatImports - wheatExports);
   }
   /**
    * get the wheatLand
+   * @param metricUnits   boolean for data type
    * @return wheatLand wheatLand
    */
-  public double getWheatLand()
+  public double getWheatLand(boolean metricUnits)
   {
     return wheatLand;
   }
   /**
    * get the riceTotal
+   * @param metricUnits   boolean for data type
    * @return riceTotal riceProduction
    */
-  public double getRiceTotal()
+  public double getRiceTotal(boolean metricUnits)
   {
     return (riceProduction + riceImports - riceExports);
   }
   /**
    * get the riceLand
+   * @param metricUnits   boolean for data type
    * @return riceLand riceLand
    */
-  public double getRiceLand()
+  public double getRiceLand(boolean metricUnits)
   {
     return riceLand;
   }
   /**
    * get the soyTotal
+   * @param metricUnits   boolean for data type
    * @return soyTotal soyProduction
    */
-  public double getSoyTotal()
+  public double getSoyTotal(boolean metricUnits)
   {
     return (soyProduction + soyImports - soyExports);
   }
   /**
    * get the soyLand
+   * @param metricUnits   boolean for data type
    * @return soyLand soyLand
    */
-  public double getSoyLand()
+  public double getSoyLand(boolean metricUnits)
   {
     return soyLand;
   }
   /**
    * get the otherTotal
+   * @param metricUnits   boolean for data type
    * @return otherTotal otherProduction
    */
-  public double getOtherTotal()
+  public double getOtherTotal(boolean metricUnits)
   {
     return (otherProduction + otherImports - otherExports);
   }
   /**
    * get the CropTotal
+   * @param metricUnits   boolean for data type
    * @return CropTotal CropTotal
    */
-  public double getCropTotal()
+  public double getCropTotal(boolean metricUnits)
   {
-    return (getOtherTotal() + getSoyTotal() + getRiceTotal() + getWheatTotal() + getCornTotal() );
+    double rtnVal = (
+      getOtherTotal(metricUnits) +
+      getSoyTotal(metricUnits) +
+      getRiceTotal(metricUnits) +
+      getWheatTotal(metricUnits) +
+      getCornTotal(metricUnits)
+    );
+    return rtnVal;
   }
   /**
    * get the otherLand
+   * @param metricUnits   boolean for data type
    * @return otherLand otherLand
    */
-  public double getOtherLand()
+  public double getOtherLand(boolean metricUnits)
   {
     return otherLand;
   }
   /**
    * get the landArea
+   * @param metricUnits   boolean for data type
    * @return landArea landArea
    */
-  public double getLandArea()
+  public double getLandArea(boolean metricUnits)
   {
     return landArea;
   }
   /**
    * get the arableOpen
+   * @param metricUnits   boolean for data type
    * @return arableOpen arableOpen
    */
-  public double getArableOpen()
+  public double getArableOpen(boolean metricUnits)
   {
     return arableOpen;
   }
   /**
    * get the organic
+   * @param metricUnits   boolean for data type
    * @return percent of organic
    */
-  public double getOrganic()
+  public double getOrganic(boolean metricUnits)
   {
     return organic;
   }
   /**
    * get the conventional
+   * @param metricUnits   boolean for data type
    * @return percent of conventional
    */
-  public double getConventional()
+  public double getConventional(boolean metricUnits)
   {
     return conventional;
   }
   /**
    * get the gmo
+   * @param metricUnits   boolean for data type
    * @return percent of gmo
    */
-  public double getGmo()
+  public double getGmo(boolean metricUnits)
   {
     return gmo;
   }
@@ -533,27 +562,30 @@ public class CountryData
 
   /**
    * Get the Countries Consumption rate
+   * @param metricUnits   boolean for data type
    * @return countryConsumption rate
    */
-  public double getCountryConsumption()
+  public double getCountryConsumption(boolean metricUnits)
   {
     return countryConsumption;
   }
 
   /**
    * Get the Per Capita Consumption rate
+   * @param metricUnits   boolean for data type
    * @return Per Capita Consumption rate
    */
-  public double getPerCapitaConsumption()
+  public double getPerCapitaConsumption(boolean metricUnits)
   {
     return perCapitaConsumption;
   }
 
   /**
    * Get the Base Yield rate
+   * @param metricUnits   boolean for data type
    * @return baseYield rate
    */
-  public double getBaseYield()
+  public double getBaseYield(boolean metricUnits)
   {
     return baseYield;
   }
@@ -581,9 +613,10 @@ public class CountryData
   /**
    *
    * @param name of the crop you would like
+   * @param metricUnits   boolean for data type
    * @return the amount of the crop you wish to get
    */
-  public double getCropP(String name)
+  public double getCropP(String name, boolean metricUnits)
   {
     return 0;
   }

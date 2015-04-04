@@ -14,12 +14,16 @@ import static model.RegionAttributes.PLANTING_ATTRIBUTES.UNDERNOURISHMENT_RATE;
 class RegionMalnourishmentView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.NOURISHMENT;
-  private static double LIMIT = colors.length / RegionAttributes.LIMITS.get(UNDERNOURISHMENT_RATE);
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double nourish = gRegion.getRegion().getAttributes().getAttribute(UNDERNOURISHMENT_RATE);
+    double nourish = 100;
+    if( gRegion.getOfficialCountry() )
+    {
+      nourish = gRegion.getCountryData().getUndernourish(true);
+    }
+
     Color color;
     if (gRegion.isActive())
     {
@@ -27,11 +31,27 @@ class RegionMalnourishmentView implements RegionView
     }
     else
     {
-      int select = (int) (nourish * LIMIT);
+      int select = 1000;
+      if( nourish < 3 ) select = 0;
+      else if( nourish < 5 ) select = 1;
+      else if( nourish < 10 ) select = 2;
+      else if( nourish < 15 ) select = 3;
+      else if( nourish < 25 ) select = 4;
+      else if( nourish < 40 ) select = 5;
+      else if( nourish < 50 ) select = 6;
+      else if( nourish < 100 ) select = 7;
+      else if( nourish >= 200 ) select = 8;
+
+
       if(select < colors.length)
         color = colors[select];
       else
         color = colors[colors.length-1];
+
+      // If the region is not a recognized region, treat it as a dead region
+      if( !gRegion.getOfficialCountry() ) {
+        color = ColorsAndFonts.DEAD_REGION;
+      }
     }
 
 

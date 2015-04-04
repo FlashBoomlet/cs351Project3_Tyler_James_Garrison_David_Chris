@@ -101,7 +101,7 @@ public class AtomicRegion implements Region
     HashSet <WorldCell> leftovers2 = new HashSet<>();
     HashSet <WorldCell> leftovers3 = new HashSet<>();
     LinkedList<CropNum> cropPriority = new LinkedList<>();
-    double arableTotal = data.getArableOpen() + data.getCornLand() + data.getRiceLand() + data.getOtherLand() + data.getWheatLand() + data.getSoyLand();
+    double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
     int cellsNeeded = (int) arableTotal/100;
     setPriority(arableTotal, cellsNeeded, cropPriority);
     //Ideal placement
@@ -224,7 +224,7 @@ public class AtomicRegion implements Region
     HashSet <WorldCell> leftovers2 = new HashSet<>();
     HashSet <WorldCell> leftovers3 = new HashSet<>();
     LinkedList<CropNum> cropPriority = new LinkedList<>();
-    double arableTotal = data.getArableOpen() + data.getCornLand() + data.getRiceLand() + data.getOtherLand() + data.getWheatLand() + data.getSoyLand();
+    double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
     int cellsNeeded = (int) arableTotal/100;
     setPriority(arableTotal, cellsNeeded, cropPriority);
     //Ideal placement
@@ -349,15 +349,15 @@ public class AtomicRegion implements Region
 
   private void setPriority (double arableTotal, int cellsNeeded, LinkedList<CropNum> cropPriority)
   {
-    int temp = (int) ((data.getCornLand()/arableTotal)* cellsNeeded);
+    int temp = (int) ((data.getCornLand(true)/arableTotal)* cellsNeeded);
     cropPriority.add(new CropNum(temp, "Corn"));
-    temp = (int) ((data.getWheatLand()/arableTotal)* cellsNeeded);
+    temp = (int) ((data.getWheatLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Wheat", cropPriority);
-    temp = (int) ((data.getRiceLand()/arableTotal)* cellsNeeded);
+    temp = (int) ((data.getRiceLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Rice", cropPriority);
-    temp = (int) ((data.getSoyLand()/arableTotal)* cellsNeeded);
+    temp = (int) ((data.getSoyLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Soy", cropPriority);
-    temp = (int) ((data.getOtherLand()/arableTotal)* cellsNeeded);
+    temp = (int) ((data.getOtherLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Other", cropPriority);
   }
 

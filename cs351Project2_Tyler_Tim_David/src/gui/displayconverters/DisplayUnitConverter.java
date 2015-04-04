@@ -21,7 +21,8 @@ public class DisplayUnitConverter
    */
   public String getCurrencySymbol(boolean metricUnits)
   {
-    return "$";
+    if( metricUnits ) return "$";
+    else return "$";
   }
 
   /**
@@ -30,17 +31,10 @@ public class DisplayUnitConverter
    *
    * @return string representing the land used of the converter.
    */
-  public String getLandUsedSymbol(boolean metricUnits){ return "km^2"; }
-
-  /**
-   * Converts the given measurement in inches into the Converters equivalent.
-   *
-   * @param inches value in inches
-   * @return the converters equivalent inch, returned as a double.
-   */
-  public double convertInches(double inches)
+  public String getLandUsedSymbol(boolean metricUnits)
   {
-    return inches;
+    if( metricUnits ) return "km^2";
+    else return "km^2";
   }
 
   /**
@@ -51,18 +45,8 @@ public class DisplayUnitConverter
    */
   public String getInchSymbol(boolean metricUnits)
   {
-    return "In.";
-  }
-
-  /**
-   * Converts the given measurement in feet into the Converters equivalent.
-   *
-   * @param feet value measured in feet
-   * @return the converters equivalent of feet, returned as a double.
-   */
-  public double convertFeet(double feet)
-  {
-    return feet;
+    if( metricUnits ) return "mm.";
+    else return "in.";
   }
 
   /**
@@ -73,18 +57,8 @@ public class DisplayUnitConverter
    */
   public String getFeetSymbol(boolean metricUnits)
   {
-    return "ft.";
-  }
-
-  /**
-   * Converts the given measurement in Fahrenheit into the Converters equivalent.
-   *
-   * @param temp value measured in Fahrenheit
-   * @return the converters equivalent of Fahrenheit, returned as a double.
-   */
-  public double convertFahrenheit(double temp)
-  {
-    return temp;
+    if( metricUnits ) return "m.";
+    else return "ft.";
   }
 
   /**
@@ -96,7 +70,8 @@ public class DisplayUnitConverter
    */
   public String getTmpSymbol(boolean metricUnits)
   {
-    return "F°";
+    if( metricUnits ) return "C°";
+    else return "F°";
   }
 
   /**
@@ -107,6 +82,26 @@ public class DisplayUnitConverter
   public String getPercentSymbol(boolean metricUnits)
   {
     return "%";
+  }
+
+  /**
+   * Returns the unit of measure for rate of populations
+   *
+   * @return string ":1000 persons"
+   */
+  public String getRateSymbol(boolean metricUnits)
+  {
+    return ":1000 persons";
+  }
+
+  /**
+   * Returns the unit of measuring age
+   *
+   * @return string " years of age"
+   */
+  public String getYearsSymbol(boolean metricUnits)
+  {
+    return " years of age";
   }
 
 }

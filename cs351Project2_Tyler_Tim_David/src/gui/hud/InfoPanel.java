@@ -38,7 +38,7 @@ public class InfoPanel extends JPanel implements Observer
   private StatPane stats;
 
   private DisplayUnitConverter converter = new DisplayUnitConverter();
-  private boolean metricUnits = true;
+  private static boolean metricUnits = true;
   private WorldPresenter presenter;
 
   private boolean singeCountry = true;
@@ -163,11 +163,6 @@ public class InfoPanel extends JPanel implements Observer
 
 
 
-
-
-
-
-
   /**
    * Display the Specified Attribute object in the info panel. This method
    * delegates and handles clearing the previously displayed information.
@@ -177,7 +172,6 @@ public class InfoPanel extends JPanel implements Observer
     stats.clearBarPlots();
     displayStats(stats);
     stats.revalidate();
-
   }
 
 
@@ -211,48 +205,59 @@ public class InfoPanel extends JPanel implements Observer
     if( singeCountry )
     {
       CountryData cd = countryDataList.get(0);
-      population = cd.getPopulation();
-      medianAge = cd.getMedianAge();
-      birthRate = cd.getBirthRate();
-      mortality = cd.getMortality();
-      migration = cd.getMigration();
-      undernourish = cd.getUndernourish();
+      population = cd.getPopulation(metricUnits);
+      medianAge = cd.getMedianAge(metricUnits);
+      birthRate = cd.getBirthRate(metricUnits);
+      mortality = cd.getMortality(metricUnits);
+      migration = cd.getMigration(metricUnits);
+      undernourish = cd.getUndernourish(metricUnits);
 
-      cornTotal = cd.getCornTotal();
-      wheatTotal = cd.getWheatTotal();
-      riceTotal = cd.getRiceTotal();
-      soyTotal = cd.getSoyTotal();
-      otherTotal = cd.getOtherTotal();
+      cornTotal = cd.getCornTotal(metricUnits);
+      wheatTotal = cd.getWheatTotal(metricUnits);
+      riceTotal = cd.getRiceTotal(metricUnits);
+      soyTotal = cd.getSoyTotal(metricUnits);
+      otherTotal = cd.getOtherTotal(metricUnits);
 
-      organic = cd.getOrganic();
-      conventional = cd.getConventional();
-      gmo = cd.getGmo();
+      organic = cd.getOrganic(metricUnits);
+      conventional = cd.getConventional(metricUnits);
+      gmo = cd.getGmo(metricUnits);
 
-      totalCrops = cd.getCropTotal();
+      totalCrops = cd.getCropTotal(metricUnits);
     }
     else
     {
+      // Sum up data
       for( CountryData cd : countryDataList )
       {
-        population += cd.getPopulation();
-        medianAge += cd.getMedianAge();
-        birthRate += cd.getBirthRate();
-        mortality += cd.getMortality();
-        migration += cd.getMigration();
-        undernourish += cd.getUndernourish();
+        population += cd.getPopulation(metricUnits);
+        medianAge += cd.getMedianAge(metricUnits);
+        birthRate += cd.getBirthRate(metricUnits);
+        mortality += cd.getMortality(metricUnits);
+        migration += cd.getMigration(metricUnits);
+        undernourish += cd.getUndernourish(metricUnits);
 
-        cornTotal += cd.getCornTotal();
-        wheatTotal += cd.getWheatTotal();
-        riceTotal += cd.getRiceTotal();
-        soyTotal += cd.getSoyTotal();
-        otherTotal += cd.getOtherTotal();
+        cornTotal += cd.getCornTotal(metricUnits);
+        wheatTotal += cd.getWheatTotal(metricUnits);
+        riceTotal += cd.getRiceTotal(metricUnits);
+        soyTotal += cd.getSoyTotal(metricUnits);
+        otherTotal += cd.getOtherTotal(metricUnits);
 
-        organic += cd.getOrganic();
-        conventional += cd.getConventional();
-        gmo += cd.getGmo();
+        organic += cd.getOrganic(metricUnits);
+        conventional += cd.getConventional(metricUnits);
+        gmo += cd.getGmo(metricUnits);
 
-        totalCrops += cd.getCropTotal();
+        totalCrops += cd.getCropTotal(metricUnits);
       }
+      // Average data -counld be more acurate by finding the median
+      medianAge /= countryDataList.size();
+      // Average data
+      birthRate /= countryDataList.size();
+      mortality /= countryDataList.size();
+      migration /= countryDataList.size();
+      undernourish /= countryDataList.size();
+      organic /= countryDataList.size();
+      conventional /= countryDataList.size();
+      gmo /= countryDataList.size();
     }
 
     /*
@@ -262,13 +267,13 @@ public class InfoPanel extends JPanel implements Observer
     statPane.addBar(bp1);
     BarPanel bp2 = getBarPanel( medianAge, "Median Age" , 122);
     statPane.addBar(bp2);
-    BarPanel bp3 = getBarPanel( birthRate, "Birth Rate" , 1);
+    BarPanel bp3 = getBarPanel( birthRate, "Birth Rate" , 500);
     statPane.addBar(bp3);
-    BarPanel bp4 = getBarPanel( mortality, "Mortality Rate" , 1);
+    BarPanel bp4 = getBarPanel( mortality, "Mortality Rate" , 500);
     statPane.addBar(bp4);
-    BarPanel bp5 = getBarPanel( migration, "Migration Rate" , 1);
+    BarPanel bp5 = getBarPanel( migration, "Migration Rate" , 500);
     statPane.addBar(bp5);
-    BarPanel bp6 = getBarPanel( undernourish, "Unnourished" , 1);
+    BarPanel bp6 = getBarPanel( undernourish, "Unnourished" , 500);
     statPane.addBar(bp6);
 
     /*
@@ -310,11 +315,12 @@ public class InfoPanel extends JPanel implements Observer
     String PrimaryLabel = name;
     Color barColor = BAR_GRAPH_NEG;
     double ratio = Math.abs(value / totalPercent);
-    // To override the java to string method, I don't want that, I want the number
-    NumberFormat formatter = new DecimalFormat("#");
+
+    // I don't want the java to string method, I want the number how I want it
+    NumberFormat formatter = new DecimalFormat("#,###");
+    NumberFormat percentFormatter = new DecimalFormat("#,##0.0#");
 
     String secondaryLabel = formatter.format(value);
-
 
     switch(name)
     {
@@ -323,16 +329,17 @@ public class InfoPanel extends JPanel implements Observer
         break;
       case "Median Age":
         barColor = Color.YELLOW;
+        secondaryLabel += getConverter().getYearsSymbol(metricUnits);
         break;
       case "Birth Rate":
       case "Mortality Rate":
       case "Migration Rate":
         barColor = Color.GREEN;
-        secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits) + "/year";
+        secondaryLabel += getConverter().getRateSymbol(metricUnits);
         break;
       case "Unnourished":
         barColor = Color.RED;
-        secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
+        secondaryLabel += getConverter().getRateSymbol(metricUnits);
         break;
       case "Corn":
         barColor = new Color(0xEBEB33);
@@ -356,17 +363,21 @@ public class InfoPanel extends JPanel implements Observer
         break;
       case "Organic":
         barColor = new Color(0x66FF33);
+        secondaryLabel = percentFormatter.format(value*100);
         secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
         break;
       case "Conventional":
         barColor = new Color(0x996633);
+        secondaryLabel = percentFormatter.format(value*100);
         secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
         break;
       case "GMO":
         barColor = new Color(0xFF5050);
+        secondaryLabel = percentFormatter.format(value*100);
         secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
         break;
       default:
+        ratio = 0;
         // no nothing, fall back on the above default values.
     }
     return new BarPanel(barColor, ratio, PrimaryLabel, secondaryLabel);
@@ -421,7 +432,7 @@ public class InfoPanel extends JPanel implements Observer
       JOptionPane.showMessageDialog(main.Game.frame,msg,"Invalid crop adjustment",
         JOptionPane.ERROR_MESSAGE);
     }
-    return countryData.getCropP(crop);
+    return countryData.getCropP(crop,metricUnits);
   }
 
   /* display color as a function of happiness */
