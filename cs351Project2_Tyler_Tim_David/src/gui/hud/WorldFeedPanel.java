@@ -50,11 +50,10 @@ public class WorldFeedPanel extends JPanel implements Observer
   /*
    * Component Initialization
    */
-  datePanel = new DatePanel(0,0,(int) (frameWidth*(.13)),componentHeight);
+  datePanel = new DatePanel(0,0,(int) (frameWidth*(.23)),componentHeight);
   overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.22)),componentHeight);
-  // worldStatPanel = new WorldStatPanel(0,0,(int) (frameWidth*(.25)),componentHeight);
-   worldStatPanel = new BarPanel(ColorsAndFonts.NAV_MAP_OUTLINE, 0.5, "Population Happiness", "50% : 7,200,000,000", 0, 0, (int)(frameWidth*(.25)), height);
-  scalePanel = new ScalePanel(0,0,(int) (frameWidth*(.10)),componentHeight);
+   worldStatPanel = new BarPanel(ColorsAndFonts.NAV_MAP_OUTLINE, 0.5, "Population Happiness", "50% : 7,200,000,000", 0, 0, (int)(frameWidth*(.20)), height);
+  //scalePanel = new ScalePanel(0,0,(int) (frameWidth*(.10)),componentHeight);
   gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.10))+(frameWidth*(.20))),componentHeight);
 
   datePanel.setDate(presenter.getWorldDate());
@@ -70,7 +69,7 @@ public class WorldFeedPanel extends JPanel implements Observer
  {
   datePanel.setVisible(trigger);
   overlaySelect.setVisible(trigger);
-  scalePanel.setVisible(trigger);
+ // scalePanel.setVisible(trigger);
   worldStatPanel.setVisible(trigger);
    gameplayControl.setVisible(trigger);
   this.setVisible(trigger);
@@ -85,7 +84,7 @@ public class WorldFeedPanel extends JPanel implements Observer
 
   add(overlaySelect);
 
-  add(scalePanel);
+ // add(scalePanel);
    add(worldStatPanel);
   add(datePanel);
   add(gameplayControl);
@@ -103,7 +102,7 @@ public class WorldFeedPanel extends JPanel implements Observer
  public void update(Observable o, Object arg)
  {
   datePanel.setDate(((WorldPresenter)o).getWorldDate());
-  
+
   /* update ticker text */
  }
 

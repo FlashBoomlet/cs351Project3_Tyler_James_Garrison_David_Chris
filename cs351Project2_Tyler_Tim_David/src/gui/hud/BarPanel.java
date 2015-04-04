@@ -162,6 +162,11 @@ public class BarPanel extends JPanel
     label.setText(text);
   }
 
+  public void setOverLayText(String text)
+  {
+    overLayText = text;
+  }
+
   /**
    * creates a mouse listener to facilitate roll-over effects.
    */
