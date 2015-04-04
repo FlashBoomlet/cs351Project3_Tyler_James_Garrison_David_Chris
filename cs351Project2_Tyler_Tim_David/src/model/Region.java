@@ -32,6 +32,8 @@ public interface Region
 
   public void setAttributes(RegionAttributes attributes);
 
+  public void setLandCells(WorldArray worldArray);
+
   public void setCountryData(CountryData data);
 
   public CountryData getCountryData();

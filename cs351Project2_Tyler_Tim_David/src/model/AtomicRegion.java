@@ -98,6 +98,16 @@ public class AtomicRegion implements Region
     }
   }
 
+  public HashSet<WorldCell> getAllCells ()
+  {
+    return landCells;
+  }
+
+  public HashSet<WorldCell> getArableCells ()
+  {
+    return relevantCells;
+  }
+
   public void setCrops ()
   {
     HashSet <WorldCell> leftovers = new HashSet<>();
