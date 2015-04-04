@@ -42,7 +42,7 @@ public class BarPanel extends JPanel
   private int animationStep = 0; /* used to start and stop animation */
 
   /**
-   * Constructor for class.
+   * Constructor for infoPanel BarPanels
    *
    * @param barColor    the barColor of the bar to be draw
    * @param ratio       a double between 0 and 1, 1 being 'full'.
@@ -65,19 +65,9 @@ public class BarPanel extends JPanel
     // 16 is height of each individual bar.
     Dimension size = new Dimension(6000, 50);
     setMaximumSize(size);
-    if( showAdjust ) setLayout(new GridLayout(2,1) );
-    else setLayout(new GridLayout(1,1));
 
     label = new JLabel(labelText);
     barGraph = new BarPane();
-
-    dataPanel = new JPanel();
-    dataPanel.setOpaque(false);
-    dataPanel.setLayout(new GridLayout(1,2));
-    dataPanel.add(label);
-    dataPanel.add(barGraph);
-
-    adjustBox = new AdjustBox();
 
     //config
     setBackground(ColorsAndFonts.GUI_BACKGROUND);
@@ -85,22 +75,37 @@ public class BarPanel extends JPanel
     label.setFont(GUI_FONT);
     label.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     label.setHorizontalAlignment(SwingConstants.LEFT);
-    label.setVerticalAlignment(SwingConstants.TOP);
-    if( !showAdjust ) addMouseListener(getMouseListener());
+    label.setVerticalAlignment(SwingConstants.BOTTOM);
 
     if( showAdjust )
     {
-      add(dataPanel, BorderLayout.NORTH);
-      add(adjustBox, BorderLayout.SOUTH);
+      setLayout(new GridLayout(2,1) );
+
+      adjustBox = new AdjustBox();
+      JPanel top = new JPanel();
+      top.setOpaque(false);
+      top.setLayout(new GridLayout(1, 2));
+      label.setFont( new Font("SansSerif", Font.PLAIN, 12) );
+      top.add(label);
+      top.add(adjustBox);
+      add(top);
+
+      JPanel lower = new JPanel();
+      lower.setOpaque(false);
+      lower.setLayout(new GridLayout(1, 2));
+      lower.add(barGraph);
+      //FORMATTER
+      lower.add(new JLabel(""));
+      add(lower);
+
     }
     else
-    {/*
+    {
+      setLayout(new GridLayout(1,2) );
+      addMouseListener(getMouseListener());
       add(label);
       add(barGraph);
-      */
-      add(dataPanel);
     }
-    showAdjust = false;
   }
 
   /**
@@ -247,8 +252,13 @@ public class BarPanel extends JPanel
     {
       if (animationStep < length) animationStep += 2;
       Graphics2D g2d = (Graphics2D)g;
-      g2d.setColor(Color.darkGray);
-      g2d.drawRect(9,1,86,13);
+
+      //Based on GUI_BACKGROUND COLOR IN COLORSANDFONTS BUT LIGHTER
+      g2d.setColor(new Color(0x6C6A6A) );
+      g2d.fillRect(9, 1, 86, 13);
+      //Based on GUI_BACKGROUND COLOR IN COLORSANDFONTS BUT DARKER
+      g2d.setColor(new Color(0x5B5959) );
+      g2d.drawRect(9, 1, 86, 13);
 
       g2d.setColor(barColor);
       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f));
@@ -296,41 +306,30 @@ public class BarPanel extends JPanel
     AdjustBox()
     {
       super();
-
       setOpaque(false);
-      setLayout(new GridLayout(1,4));
+      setLayout(new GridLayout(1,2));
 
-      title = new JLabel("Adjust:");
-      title.setHorizontalAlignment(SwingConstants.RIGHT);
-      title.setFont(new Font("Serif", Font.PLAIN, 12));
-      title.setForeground(buttonColor);
-
-      down = new JLabel("<");
+      down = new JLabel("|-| ");
+      down.setFont(GUI_FONT);
+      down.setVerticalAlignment(SwingConstants.TOP);
       down.setHorizontalAlignment(SwingConstants.RIGHT);
-      down.setFont(new Font("Serif", Font.BOLD, 14));
       down.setName("-");
       down.setBackground(ColorsAndFonts.GUI_BACKGROUND);
       down.setForeground(buttonColor);
       down.setOpaque(true);
       down.addMouseListener(getMouseListener());
 
-      JLabel variable = new JLabel();
-      variable.setText(Integer.toString(adjustValue) + " %");
-      variable.setHorizontalAlignment(SwingConstants.CENTER);
-      variable.setForeground(labelColor);
-
-      up = new JLabel(">");
+      up = new JLabel(" |+|");
+      up.setFont(GUI_FONT);
+      up.setVerticalAlignment(SwingConstants.TOP);
       up.setHorizontalAlignment(SwingConstants.LEFT);
-      up.setFont(new Font("Serif", Font.BOLD, 14));
       up.setName("+");
       up.setBackground(ColorsAndFonts.GUI_BACKGROUND);
       up.setForeground(buttonColor);
       up.setOpaque(true);
       up.addMouseListener(getMouseListener());
 
-      add(title);
       add(down);
-      add(variable);
       add(up);
     }
     /**
@@ -354,13 +353,11 @@ public class BarPanel extends JPanel
           {
             up.setForeground(buttonRollover);
             up.setOpaque(true);
-            up.setText(">>");
           }
           else if( name == "-" )
           {
             down.setForeground(buttonRollover);
             down.setOpaque(true);
-            down.setText("<<");
           }
         }
 
@@ -373,13 +370,11 @@ public class BarPanel extends JPanel
           {
             up.setForeground(buttonColor);
             up.setOpaque(true);
-            up.setText(">");
           }
           else if( name == "-" )
           {
             down.setForeground(buttonColor);
             down.setOpaque(true);
-            down.setText("<");
           }
         }
 
@@ -390,17 +385,17 @@ public class BarPanel extends JPanel
           String name = tempBtn.getName();
           double changeBy = 0.05;
 
-          if( name == "+" )
-          {
-            overLayText = String.format("%.2f", InfoPanel.adjustCrop(changeBy, label.getText()) * 100) + "% ";
+          if( name == "+" ) {
+            InfoPanel.adjustCrop(changeBy, label.getText() );
           }
           else if( name == "-" )
           {
-            overLayText = String.format("%.2f", InfoPanel.adjustCrop((-changeBy), label.getText()) * 100) + "% ";
+            InfoPanel.adjustCrop( (-changeBy), label.getText() );
           }
           barGraph.repaint();
         }
       };
     }
+
   }
 }
