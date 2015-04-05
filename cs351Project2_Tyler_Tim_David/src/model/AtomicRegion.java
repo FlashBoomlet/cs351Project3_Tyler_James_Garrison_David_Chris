@@ -20,24 +20,12 @@ public class AtomicRegion implements Region
 {
   private List<MiniArea> perimeter;
   private String name;
-  private RegionAttributes attributes;
   private String flagLocation;
   private HashSet<WorldCell> landCells = new HashSet<>();
   private HashSet<WorldCell> relevantCells = new HashSet<>();
   private CountryData data = null;
   private boolean officialCountry = false;
 
-  @Override
-  public RegionAttributes getAttributes()
-  {
-    return attributes;
-  }
-
-  @Override
-  public void setAttributes(RegionAttributes attributes)
-  {
-    this.attributes = attributes;
-  }
 
   @Override
   public String getName()

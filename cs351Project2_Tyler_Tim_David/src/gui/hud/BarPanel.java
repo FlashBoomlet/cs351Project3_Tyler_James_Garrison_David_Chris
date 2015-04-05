@@ -1,6 +1,5 @@
 package gui.hud;
 
-import IO.AttributeGenerator;
 import gui.ColorsAndFonts;
 
 import javax.swing.*;
@@ -36,7 +35,7 @@ public class BarPanel extends JPanel
   private AdjustBox adjustBox;
   private JPanel dataPanel;
   private int adjustValue = 5;
-  private BarPane barGraph;
+  BarPane barGraph;
 
   private static boolean showAdjust = false;
   private int animationStep = 0; /* used to start and stop animation */
@@ -182,9 +181,9 @@ public class BarPanel extends JPanel
     overLayText = text;
   }
 
-  public void updateRatio(Double ratio)
+  public void updateRatio(Double ratio, BarPanel bar)
   {
-    this.ratio = this.ratio + ratio;
+    this.ratio = ratio;
   }
 
   /**

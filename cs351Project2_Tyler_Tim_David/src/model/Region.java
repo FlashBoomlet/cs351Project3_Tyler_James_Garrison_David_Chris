@@ -30,10 +30,6 @@ public interface Region
 
   void setPerimeter(List<MiniArea> perimeter);
 
-  public RegionAttributes getAttributes();
-
-  public void setAttributes(RegionAttributes attributes);
-
   public void setLandCells(WorldArray worldArray);
 
   public void setCountryData(CountryData data);

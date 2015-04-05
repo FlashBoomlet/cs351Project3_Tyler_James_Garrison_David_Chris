@@ -2,7 +2,6 @@ package gui.regionlooks;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.RegionAttributes;
 
 import java.awt.*;
 
@@ -33,9 +32,7 @@ public class PlantingZoneView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double index = gRegion.getRegion()
-      .getAttributes()
-      .getAttribute(RegionAttributes.PLANTING_ATTRIBUTES.PLANTING_ZONE);
+    double index = 0; //gRegion.getRegion().getAttributes().getAttribute(RegionAttributes.PLANTING_ATTRIBUTES.PLANTING_ZONE);
 
     Color color;
     if (gRegion.isActive())

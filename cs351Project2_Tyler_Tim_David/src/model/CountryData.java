@@ -611,9 +611,9 @@ public class CountryData
    */
   public void iterateYear()
   {
-    calculateCountryConsumption();
-    calculatePerCapitaConsumption();
-    calculateBaseYield();
+    //calculateCountryConsumption();
+    //calculatePerCapitaConsumption();
+    //calculateBaseYield();
   }
 
   /**

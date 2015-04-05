@@ -2,8 +2,6 @@ package gui.regionlooks;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.RegionAttributes;
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.*;
 
 import java.awt.*;
 
@@ -15,13 +13,13 @@ import java.awt.*;
 class RegionRainView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.RAIN_FALL;
-  private static double LIMIT = colors.length / RegionAttributes.LIMITS.get(ANNUAL_RAINFALL);
+  private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(ANNUAL_RAINFALL);
 
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double rains = gRegion.getRegion().getAttributes().getAttribute(ANNUAL_RAINFALL);
+    double rains = 0; //gRegion.getRegion().getAttributes().getAttribute(ANNUAL_RAINFALL);
     Color color;
     if (gRegion.isActive())
     {

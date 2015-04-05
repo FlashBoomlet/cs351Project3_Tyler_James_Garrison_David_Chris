@@ -6,8 +6,6 @@ import gui.GUIRegion;
 
 import java.awt.*;
 
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.HAPPINESS;
-
 /**
  * Created by winston on 1/27/15.
  * Phase_01
@@ -26,13 +24,13 @@ class RegionHappyView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    if (gRegion == null || gRegion.getRegion().getAttributes() == null)
+    if (gRegion == null ) //|| gRegion.getRegion().getAttributes() == null)
     {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
 
-    double happinessLevel = gRegion.getRegion().getAttributes().getAttribute(HAPPINESS);
+    double happinessLevel = 0 ;//gRegion.getRegion().getAttributes().getAttribute(HAPPINESS);
 
     Color color;
     if (gRegion.isActive())

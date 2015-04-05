@@ -3,6 +3,7 @@ package IO;
 import gui.GUIRegion;
 import model.CountryData;
 import model.Region;
+import model.World;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

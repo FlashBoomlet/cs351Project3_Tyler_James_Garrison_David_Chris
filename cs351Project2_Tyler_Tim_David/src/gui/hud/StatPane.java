@@ -1,7 +1,7 @@
 package gui.hud;
 
 
-import IO.AttributeGenerator;
+
 import gui.ColorsAndFonts;
 
 import javax.swing.*;
@@ -55,7 +55,11 @@ public class StatPane extends JPanel
     LayoutManager layout;
     if( name == "REGION(S) CROP DATA:" )
     {
-      layout = new GridLayout(AttributeGenerator.getCropsLength()+1,1);
+      //This is the issue here:
+      //layout = new GridLayout(AttributeGenerator.getCropsLength()+1,1);
+
+      //This next line probably shouldn't be here:
+      layout = new BoxLayout(barGraphsPanel, BoxLayout.Y_AXIS);
     }
     else
     {

@@ -25,14 +25,14 @@ class RegionWheatView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double limit = colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
+    double limit = 0; // colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
 
-    if (gRegion == null || gRegion.getRegion().getAttributes() == null) {
+    if (gRegion == null ){ // || gRegion.getRegion().getAttributes() == null) {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
 
-    double wheat = gRegion.getRegion().getAttributes().getCropP("Wheat");
+    double wheat = 0; //gRegion.getRegion().getAttributes().getCropP("Wheat");
     Color color;
     if (gRegion.isActive())
     {

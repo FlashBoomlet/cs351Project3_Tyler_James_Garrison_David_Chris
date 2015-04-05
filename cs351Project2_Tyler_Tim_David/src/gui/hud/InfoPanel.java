@@ -80,9 +80,7 @@ public class InfoPanel extends JPanel implements Observer
     this.setMinimumSize(size);
     this.setLocation(0, y);
     this.setPreferredSize(new Dimension(frameWidth, frameHeight));
-    // For a semi transparent background
-    this.setOpaque(false);
-    //this.setBackground(GUI_BACKGROUND);
+    this.setBackground(GUI_BACKGROUND);
     this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
 
     //to ensure that the entire bargraph is shown
@@ -634,7 +632,7 @@ public class InfoPanel extends JPanel implements Observer
     InfoPanelUserControls()
     {
       super();
-      setOpaque(false);
+      this.setBackground(GUI_BACKGROUND);
       setLayout(new BorderLayout());
 
       hide = new JButton("Hide/Clear");
