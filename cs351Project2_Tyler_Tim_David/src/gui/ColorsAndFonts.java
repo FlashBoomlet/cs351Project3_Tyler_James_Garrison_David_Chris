@@ -186,6 +186,7 @@ public interface ColorsAndFonts
       new Color(0x006644)
   };
 
+
   Color[] TEMPERATURE = {
       new Color(0x053061),
       new Color(0x2166ac),
@@ -199,6 +200,71 @@ public interface ColorsAndFonts
       new Color(0xb2182b),
       new Color(0x67001f),
       new Color(0x67001f),
+  };
+
+  Color[] BIRTHS = {
+      new Color(0xE0FFE0),
+      new Color(0xC2FFC2),
+      new Color(0xB8FFB8),
+      new Color(0xADFFAD),
+      new Color(0xA3FFA3),
+      new Color(0x99FF99),
+      new Color(0x77FF88),
+      new Color(0x66FF66)
+  };
+
+  Color[] MIGRATION = {
+      new Color(0x67001f),
+      new Color(0xb2182b),
+      new Color(0xd6604d),
+      new Color(0xf4a582),
+      new Color(0xf7f7f7),
+      new Color(0x92c5de),
+      new Color(0x4393c3),
+      new Color(0x2166ac),
+      new Color(0x053061)
+  };
+
+  Color[] MORTALITY = {
+      new Color(0xFFFFFF),
+      new Color(0xFFCCCC),
+      new Color(0xFFB2B2),
+      new Color(0xFF8080),
+      new Color(0xFF6666),
+      new Color(0xFF4D4D),
+      new Color(0xFF3333),
+      new Color(0xFF1919),
+      new Color(0xFF0000)
+  };
+
+  Color[] something = {
+      new Color(0xEBCCCC),
+      new Color(0xCC8080),
+      new Color(0xB84D4D),
+      new Color(0xAD3333),
+      new Color(0xA31919),
+      new Color(0x990000),
+      new Color(0x8A0000)
+  };
+
+  Color[] CONVENTIONAL = {
+      new Color(0xFFE0CC),
+      new Color(0xFFB280),
+      new Color(0xFF944D),
+      new Color(0xFF8533),
+      new Color(0xFF7519),
+      new Color(0xFF6600),
+      new Color(0xFF4400)
+  };
+
+  Color[] GMO = {
+      new Color(0xFFE0C2),
+      new Color(0xFFC285),
+      new Color(0xFFAD5C),
+      new Color(0xFFA347),
+      new Color(0xFF9933),
+      new Color(0xFF8A2E),
+      new Color(0xFF6622)
   };
 
   Color BAR_GRAPH_NEG = Color.cyan;

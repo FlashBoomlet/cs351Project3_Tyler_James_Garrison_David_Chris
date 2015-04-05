@@ -181,12 +181,52 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.ORGANIC);
     }
   };
+  private Action birthRateOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.BIRTHS);
+    }
+  };
   private Action temperatureOverlay = new AbstractAction()
   {
     @Override
     public void actionPerformed(ActionEvent e)
     {
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.TEMPERATURE);
+    }
+  };
+  private Action migrationOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.MIGRATION);
+    }
+  };
+  private Action mortalityOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.MORTALITY);
+    }
+  };
+  private Action conventionalOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.CONVENTIONAL);
+    }
+  };
+  private Action gmoOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.GMO);
     }
   };
   // test key binding
@@ -268,6 +308,22 @@ public class MapPane extends JPanel
 
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('t'), "temperatureview");
     getActionMap().put("temperatureview", temperatureOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('u'), "birthview");
+    getActionMap().put("birthview", birthRateOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('i'), "migrationview");
+    getActionMap().put("migrationview", migrationOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('o'), "mortalityview");
+    getActionMap().put("mortalityview", mortalityOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('p'), "conventionalview");
+    getActionMap().put("conventionalview", conventionalOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('a'), "gmoview");
+    getActionMap().put("gmoview", gmoOverlay);
+
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.
        When modified by a "shift", holding will fire events repeatedly, and allow

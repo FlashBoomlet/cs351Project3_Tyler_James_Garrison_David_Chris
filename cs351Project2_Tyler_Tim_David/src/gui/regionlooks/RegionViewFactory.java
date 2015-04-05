@@ -20,6 +20,10 @@ import gui.Camera;
  *
  * TODO:
  * birth rate
+ * migration?
+ * mortality
+ * conventional crops
+ * gmo crops
  */
 public class RegionViewFactory
 {
@@ -39,6 +43,11 @@ public class RegionViewFactory
   private final static RegionView OTHER_VIEW = new RegionOtherView();
   private final static RegionView ORGANIC_VIEW = new RegionOrganicView();
   private final static RegionView TEMPERATURE_VIEW = new RegionTemperatureView();
+  private final static RegionView BIRTH_RATE_VIEW = new RegionBirthRateView();
+  private final static RegionView MIGRATION_RATE_VIEW = new RegionMigrationRateView();
+  private final static RegionView MORTALITY_RATE_VIEW = new RegionMortalityRateView();
+  private final static RegionView CONVENTIONAL_VIEW = new RegionConventionalView();
+  private final static RegionView GMO_VIEW = new RegionGMOView();
   private Overlay currentOverlay;
 
   /**
@@ -111,6 +120,21 @@ public class RegionViewFactory
       case TEMPERATURE:
         return TEMPERATURE_VIEW;
 
+      case BIRTHS:
+        return BIRTH_RATE_VIEW;
+
+      case MIGRATION:
+        return MIGRATION_RATE_VIEW;
+
+      case MORTALITY:
+        return MORTALITY_RATE_VIEW;
+
+      case CONVENTIONAL:
+        return CONVENTIONAL_VIEW;
+
+      case GMO:
+        return GMO_VIEW;
+
       default:
         return DEFAULT_LOOK;
     }
@@ -132,6 +156,11 @@ public class RegionViewFactory
     OTHER,
     ORGANIC,
     TEMPERATURE,
+    BIRTHS,
+    MIGRATION,
+    MORTALITY,
+    CONVENTIONAL,
+    GMO,
     POPULATION
   }
 }

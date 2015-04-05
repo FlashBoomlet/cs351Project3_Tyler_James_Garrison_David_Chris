@@ -20,7 +20,9 @@ public interface Region
 
   String getFlag();
 
-  public HashSet<WorldCell> getRelevantCells();
+  public HashSet<WorldCell> getAllCells ();
+
+  public HashSet<WorldCell> getArableCells ();
 
   void setFlag(String flagLocation);
 

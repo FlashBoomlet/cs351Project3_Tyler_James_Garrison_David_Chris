@@ -37,7 +37,7 @@ class RegionTemperatureView implements RegionView
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
-    HashSet<WorldCell> relevantCells = gRegion.getRegion().getRelevantCells();
+    HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
     for(WorldCell cell: relevantCells){
       System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
     }
@@ -51,6 +51,7 @@ class RegionTemperatureView implements RegionView
     else
     {
       int select = (int) (temp * LIMIT);
+      if(select<0) select = 0;
       if(select < colors.length)
         color = colors[select];
       else
