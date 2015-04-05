@@ -37,7 +37,7 @@ public class Game
   public static final String PRECIP_DATA = "resources/data/precip.txt";
   //public static final String SITES = "resources/data/site_summary.txt";
   public static final String AVG = "resources/data/tavg.txt";
-  public static final String MAX = "resources/data/tmax.txt";
+  public static final String MAX = "resources/data/TMAX.txt";
   public static final String MIN = "resources/data/tmin.txt";
   int frameWidth = 1200;
   int frameHeight = 700;

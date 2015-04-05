@@ -39,4 +39,8 @@ public interface Region
   public void setOfficialCountry();
 
   public boolean getOfficialCountry();
+
+  public void setFirstCrops();
+
+  public void setCrops();
 }
