@@ -25,7 +25,7 @@ public class GameplayControl extends JPanel implements ActionListener
   private JButton faster;
   private JButton slower;
   private static JLabel speed;
-  private final double TIMER_ADJUST = 100;
+  private final double TIMER_ADJUST = 200;
 
   /**
    * GameplayControl initializes all of the components and adds them
@@ -58,13 +58,13 @@ public class GameplayControl extends JPanel implements ActionListener
     speed = new JLabel();
     speed.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     speed.setFont(ColorsAndFonts.TOP_FONT);
-    speedControlLabel = new JLabel("Speed:");
+    speedControlLabel = new JLabel("Game Speed:");
     speedControlLabel.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     speedControlLabel.setFont(ColorsAndFonts.TOP_FONT);
 
     add(next);
     add(speedControlLabel);
-    add(speed);
+    // add(speed);
     add(slower);
     add(faster);
     next.setFocusable(false);
@@ -119,7 +119,7 @@ public class GameplayControl extends JPanel implements ActionListener
 
         updateDisplaySpeed();
       }
-      else speed.setText("MAX" + " (sec./Day)");
+      // else speed.setText("MAX" + " (sec./Day)");
     }
   }
 
@@ -133,6 +133,6 @@ public class GameplayControl extends JPanel implements ActionListener
   public static void updateDisplaySpeed()
   {
     double oneSecond = 1000;
-    speed.setText( Double.toString(((main.Game.worldTime.getDelay())/oneSecond)) + " (sec./Day)" );
+    //speed.setText( Double.toString(((main.Game.worldTime.getDelay())/oneSecond)) + " (sec./Day)" );
   }
 }

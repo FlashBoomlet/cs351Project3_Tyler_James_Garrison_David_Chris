@@ -1,6 +1,5 @@
 package gui.hud;
 
-import IO.AttributeGenerator;
 import gui.ColorsAndFonts;
 
 import javax.swing.*;
@@ -36,7 +35,7 @@ public class BarPanel extends JPanel
   private AdjustBox adjustBox;
   private JPanel dataPanel;
   private int adjustValue = 5;
-  private BarPane barGraph;
+  BarPane barGraph;
 
   private static boolean showAdjust = false;
   private int animationStep = 0; /* used to start and stop animation */
@@ -110,7 +109,7 @@ public class BarPanel extends JPanel
   }
 
   /**
-   * Constructor for class for use in World population and happiness
+   * Constructor for class for use in World population, happiness, and clock
    *
    * @param barColor    the barColor of the bar to be draw
    * @param ratio       a double between 0 and 1, 1 being 'full'.
@@ -132,7 +131,6 @@ public class BarPanel extends JPanel
     // 16 is height of each individual bar.
     Dimension size = new Dimension(width, height);
     setMaximumSize(size);
-    setLayout(new GridLayout(1,1));
 
     setLocation(x,y);
 
@@ -141,8 +139,18 @@ public class BarPanel extends JPanel
 
     dataPanel = new JPanel();
     dataPanel.setOpaque(false);
-    dataPanel.setLayout(new GridLayout(1,2));
-    dataPanel.add(label);
+    if( labelText != "" )
+    {
+      setLayout(new GridLayout(1,1));
+      dataPanel.setLayout(new GridLayout(1,2));
+      dataPanel.add(label);
+    }
+    else
+    {
+      setLayout(new BorderLayout());
+      dataPanel.setLayout(new GridLayout(1,1));
+    }
+
     dataPanel.add(barGraph);
 
     //config
@@ -156,7 +164,7 @@ public class BarPanel extends JPanel
     label.setVerticalAlignment(SwingConstants.TOP);
     addMouseListener(getMouseListener());
 
-    add(dataPanel);
+    add(dataPanel,BorderLayout.CENTER);
   }
 
   /**
@@ -173,9 +181,9 @@ public class BarPanel extends JPanel
     overLayText = text;
   }
 
-  public void updateRatio(Double ratio)
+  public void updateRatio(Double ratio, BarPanel bar)
   {
-    this.ratio = this.ratio + ratio;
+    this.ratio = ratio;
   }
 
   /**

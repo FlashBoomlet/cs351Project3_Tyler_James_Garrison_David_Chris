@@ -235,7 +235,7 @@ public class MapPane extends JPanel
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      presenter.setWorldForward(30);
+      presenter.setWorldForward(365);
     }
   };
 

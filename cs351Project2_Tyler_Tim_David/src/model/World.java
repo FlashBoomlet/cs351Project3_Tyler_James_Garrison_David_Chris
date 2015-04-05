@@ -1,9 +1,13 @@
 package model;
 
-import IO.AttributeGenerator;
+
+import gui.GUIRegion;
+import gui.WorldPresenter;
+import gui.hud.DatePanel;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -21,6 +25,7 @@ public class World
 {
   private Random random = new Random(44);
   private Collection<Region> world;
+  private WorldPresenter worldPresenter;
   private Calendar currentDate;
   private static double EARTH_SURFACE_AREA = 510072000; //km squared
   private static double EQUATORIAL_CIRC = 40075; //Circumference of the earth around the equator
@@ -42,7 +47,7 @@ public class World
    * One can also build a world starting at a particular date.
    * @param world
    */
-  public World(Collection<Region> world, Calendar cal)
+  public World(Collection<Region> world, Calendar cal )
   {
     this.world = world;
     this.currentDate = cal;
@@ -76,7 +81,14 @@ public class World
     this.currentDate = currentDate;
   }
 
-
+  /**
+   * Sets the regions so that the country data can be updated every year
+   * @param worldPresenter
+   */
+  public void setPresenter(WorldPresenter worldPresenter)
+  {
+    this.worldPresenter = worldPresenter;
+  }
 
   /**
    * Advances the world forward by the given number of days. Every new month
@@ -86,12 +98,28 @@ public class World
    */
   public boolean setByDays(int numOfDays)
   {
-    int previousMonth = currentDate.get(Calendar.MONTH);
+    int previousYear = currentDate.get(Calendar.YEAR);
     currentDate.add(Calendar.DATE, numOfDays);
 
-    boolean isNewMonth = previousMonth != currentDate.get(Calendar.MONTH);
-    if (isNewMonth) AttributeGenerator.stepAttributes(random, world);
+    DatePanel.updateRatio(currentDate.get(Calendar.DAY_OF_YEAR)/365.0);
 
-    return isNewMonth;
+    if( currentDate.get(Calendar.YEAR) == 2050 )
+    {
+      //Call to finish game
+      System.out.println( "Congratulations, you have now destroyed the world!");
+      main.Game.gameFinished();
+      return false;
+    }
+
+    boolean isPreviousYear = previousYear != currentDate.get(Calendar.YEAR);
+    if (isPreviousYear)
+    {
+      for( GUIRegion gr: worldPresenter.getAllRegions() )
+      {
+        gr.iterateYear();
+      }
+    }
+
+    return isPreviousYear;
   }
 }

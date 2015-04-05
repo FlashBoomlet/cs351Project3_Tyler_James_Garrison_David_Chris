@@ -1,12 +1,19 @@
 package model;
 
 import model.World;
+import java.util.ArrayList;
 /**
  * Created by Tim on 3/14/15.
  */
 public class WorldCell
 {
   private boolean originalPrecip = false;
+  private boolean originalTAVG = false;
+  private ArrayList<Float> avg = new ArrayList<>();
+  private ArrayList<Float> max = new ArrayList<>();
+  private ArrayList<Float> min = new ArrayList<>();
+  private boolean originalTMAX = false;
+  private boolean originalTMIN = false;
   public boolean hasCountry = false;
   private double lon = 0;
   private double lat = 0;
@@ -18,6 +25,7 @@ public class WorldCell
   private float annualPrecip = -1;
   private float monthlyDayAvg;
   private float monthlyNightAvg;
+  private float tempAvg = 0;
   private String currentCrop = "None";
   //private CropType previousCrop;
   private float currentCropState;
@@ -33,6 +41,21 @@ public class WorldCell
   public boolean isOriginal ()
   {
     return originalPrecip;
+  }
+
+  public boolean isOriginalTAVG ()
+  {
+    return originalTAVG;
+  }
+
+  public boolean isOriginalTMAX ()
+  {
+    return originalTMAX;
+  }
+
+  public boolean isOriginalTMIN ()
+  {
+    return originalTMIN;
   }
 
   public boolean hasCountry ()
@@ -78,6 +101,11 @@ public class WorldCell
   public float getMonthlyNightAvg ()
   {
     return monthlyNightAvg;
+  }
+
+  public float getTempAvg ()
+  {
+    return tempAvg;
   }
 
   public String getCrop ()
@@ -162,6 +190,70 @@ public class WorldCell
     hasCountry = true;
   }
 
+  public void setTempAvg (float avg)
+  {
+    tempAvg = avg;
+  }
+
+  public void setOriginalTAVG (float avg)
+  {
+    originalTAVG = true;
+    if (this.avg.size() == 0)
+    {
+      tempAvg = avg;
+      this.avg.add(avg);
+    }
+    else
+    {
+      this.avg.add(avg);
+      float temp = 0;
+      for (Float current: this.avg)
+      {
+        temp = temp + current;
+      }
+      tempAvg = temp / this.avg.size();
+    }
+  }
+
+  public void setOriginalTMAX (float high)
+  {
+    originalTMAX = true;
+    if (max.size() == 0)
+    {
+      annualHigh = high;
+      max.add(high);
+    }
+    else
+    {
+      max.add(high);
+      float temp = 0;
+      for (Float current: max)
+      {
+        temp = temp + current;
+      }
+      annualHigh = temp / max.size();
+    }
+  }
+
+  public void setOriginalTMIN (float low)
+  {
+    originalTMIN = true;
+    if (min.size() == 0)
+    {
+      annualLow = low;
+      min.add(low);
+    }
+    else
+    {
+      min.add(low);
+      float temp = 0;
+      for (Float current: min)
+      {
+        temp = temp + current;
+      }
+      annualLow = temp / min.size();
+    }
+  }
   /*
   public enum CropType
   {

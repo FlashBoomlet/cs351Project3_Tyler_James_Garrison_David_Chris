@@ -9,7 +9,6 @@ import gui.displayconverters.MapConverter;
 import gui.hud.*;
 import model.Region;
 import model.World;
-import IO.AttributeGenerator;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -36,6 +35,10 @@ public class Game
   public static final String MODEL_DATA_PATH = "resources/ne_10m_admin_1_states_provinces.kml";
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
   public static final String PRECIP_DATA = "resources/data/precip2010.txt";
+  public static final String SITES = "resources/data/site_summary.txt";
+  public static final String AVG = "resources/data/TAVG.txt";
+  public static final String MAX = "resources/data/TMAX.txt";
+  public static final String MIN = "resources/data/TMIN.txt";
   int frameWidth = 1200;
   int frameHeight = 700;
   final float NAV_HEIGHT_SCALE = (float) .25;
@@ -55,6 +58,7 @@ public class Game
   private static StartScreen startPanel;
   private static SettingsScreen settingsScreen;
   private static JPanel defaultScreen;
+  private static MapScale mapScale;
 
   /*
    * Frame components
@@ -79,7 +83,7 @@ public class Game
       //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 
       //GTK theme
-     // UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+      // UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
     }
     catch (UnsupportedLookAndFeelException e) {
       // handle exception
@@ -133,23 +137,20 @@ public class Game
     defaultScreen.setBounds(0,0,frameWidth,frameHeight);
     defaultScreen.setBackground(ColorsAndFonts.OCEANS);
 
-    Random random = new Random(234);
-    AttributeGenerator randoAtts = new AttributeGenerator();
 
-    Collection<Region> background = initBackgroundRegions(random, randoAtts);
-    Collection<Region> modelRegions = initModelRegions(random, randoAtts);
-
-    List<Region> allRegions = new ArrayList<>(modelRegions);
-    allRegions.addAll(background);
+    List<Region> allRegions = new ArrayList<>(xmlRegions);
+    allRegions.addAll(xmlRegions);
     World world = new World(allRegions);
 
     MapConverter converter = new EquirectangularConverter();
     WorldDataParser globalData = new WorldDataParser(world);
+    //globalData.parsePrecip(PRECIP_DATA);
 
     worldPresenter = new WorldPresenter(converter, world);
-    worldPresenter.setBackgroundRegions(background);
-    worldPresenter.setModelRegions(modelRegions);
+    worldPresenter.setBackgroundRegions(xmlRegions);
+    worldPresenter.setModelRegions(xmlRegions);
     new CountryCSVParser( worldPresenter.getAllRegions() );
+    world.setPresenter(worldPresenter );
 
     feedPanelHeight = (int) (frameHeight/25);
     Camera cam = new Camera(converter);
@@ -169,6 +170,8 @@ public class Game
     navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
     buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
+
+    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20);
 
     initFrame();
     setupControlls();
@@ -250,35 +253,6 @@ public class Game
     InputMap inputMap = mapPane.getInputMap();
     ActionMap actionMap = mapPane.getActionMap();
 
-//    inputMap.put(KeyStroke.getKeyStroke("8"), "defaultTime");
-//    actionMap.put("defaultTime", new AbstractAction()
-//    {
-//      @Override
-//      public void actionPerformed(ActionEvent e)
-//      {
-//        worldTime.setDelay(DEFAULT_TIME_SPEED);
-//      }
-//    });
-//
-//    inputMap.put(KeyStroke.getKeyStroke("9"), "faster");
-//    actionMap.put("faster", new AbstractAction()
-//    {
-//      @Override
-//      public void actionPerformed(ActionEvent e)
-//      {
-//        worldTime.setDelay(DEFAULT_TIME_SPEED / 3);
-//      }
-//    });
-//
-//    inputMap.put(KeyStroke.getKeyStroke("0"), "superfast");
-//    actionMap.put("superfast", new AbstractAction()
-//    {
-//      @Override
-//      public void actionPerformed(ActionEvent e)
-//      {
-//        worldTime.setDelay(DEFAULT_TIME_SPEED / 6);
-//      }
-//    });
 
     inputMap.put(KeyStroke.getKeyStroke("SPACE"), "pause");
     actionMap.put("pause", new AbstractAction()
@@ -307,39 +281,6 @@ public class Game
     frame.addKeyListener(mapPane);
     frame.pack();
     frame.setVisible(true);
-  }
-
-  /**
-   * Loads all the model regions and sets their attributes according to the
-   * given attribute generator.
-   */
-  private Collection<Region> initModelRegions(Random random,
-                                              AttributeGenerator randoAtts)
-  {
-    Collection<Region> modelMap = new LinkedList<>();
-    // adds XML regions for area folder...
-    modelMap.addAll(xmlRegions);
-
-    for (Region r : modelMap)
-    {
-      randoAtts.setRegionAttributes(r, random);
-    }
-    return modelMap;
-  }
-
-  /**
-   * Loads and inits attributes for all background regions.
-   */
-  private Collection<Region> initBackgroundRegions(Random random,
-                                                   AttributeGenerator randoAtts)
-  {
-    Collection<Region> BGRegions = new LinkedList<>();
-    BGRegions.addAll(xmlRegions);
-    for (Region r : BGRegions)
-    {
-      randoAtts.setRegionAttributes(r, random);
-    }
-    return BGRegions;
   }
 
   /**
@@ -392,6 +333,9 @@ public class Game
       // Button panel in the lower right hand corner
       layeredPane.add(buttonPanel, new Integer(4) );
 
+      // Map Scale in the lower right hand corner above the Nav Map
+      layeredPane.add(mapScale, new Integer(5) );
+
       pauseGame();
     }
   }
@@ -412,6 +356,20 @@ public class Game
     buttonPanel.setVisible(true);
     startPanel.setVisible(false);
     settingsScreen.setVisible(false);
+    mapScale.setVisible(true);
+  }
+
+  /**
+   * Called by World to signify that the simulation is done
+   *
+   * WARNING! This does end the game. No going back once it is called
+   *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   */
+  public static void gameFinished()
+  {
+    pauseGame();
+    reset();
   }
 
   /**
@@ -431,6 +389,7 @@ public class Game
     buttonPanel.setVisible(false);
     startPanel.setVisible(true);
     settingsScreen.setVisible(false);
+    mapScale.setVisible(false);
   }
 
   /**
