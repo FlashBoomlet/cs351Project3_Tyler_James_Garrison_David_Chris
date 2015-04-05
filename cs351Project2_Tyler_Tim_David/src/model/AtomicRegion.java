@@ -108,7 +108,7 @@ public class AtomicRegion implements Region
     return relevantCells;
   }
 
-  public void setCrops ()
+  public void setCrops()
   {
     HashSet <WorldCell> leftovers = new HashSet<>();
     HashSet <WorldCell> leftovers2 = new HashSet<>();
@@ -226,7 +226,7 @@ public class AtomicRegion implements Region
    * Algorithm would be best if crop priority was
    * based on crop pickiness.
    */
-  public void setFirstCrops ()
+  public void setFirstCrops()
   {
     /*
     for (String s: attributes.getAllCrops())

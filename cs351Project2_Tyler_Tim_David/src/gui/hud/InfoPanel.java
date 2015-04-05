@@ -5,12 +5,14 @@ import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.displayconverters.DisplayUnitConverter;
+import main.Game;
 import model.CountryData;
 import model.Region;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -34,22 +36,24 @@ public class InfoPanel extends JPanel implements Observer
      instantiation.  Height is important, however, to ensure the child components
      are able to display their info correctly */
   private final static Dimension size = new Dimension(220, 1);
+  /*
+   * Components
+   */
   private MiniViewBox miniViewBox;
   private StatPane stats;
   private StatPane cropStats;
   private StatPane landStats;
-
-  private DisplayUnitConverter converter = new DisplayUnitConverter();
-  private static boolean metricUnits = true;
+  private InfoPanelUserControls infoPanelUserControls;
   private WorldPresenter presenter;
-
-  private boolean singeCountry = true;
+  private DisplayUnitConverter converter = new DisplayUnitConverter();
   private Region region = null;
+  /*
+   * Variables
+   */
+  private static boolean metricUnits = true;
+  private boolean singeCountry = true;
   private static List<CountryData> countryDataList = new LinkedList<>();
   private static List<GUIRegion> officialRegions = new LinkedList<>();
-
-  private int fullHeight;
-  private int fullWidth;
 
   /**
    Instantiate the InfoPanel
@@ -63,6 +67,7 @@ public class InfoPanel extends JPanel implements Observer
     stats = new StatPane("REGION(S) DATA:",frameWidth,frameHeight);
     cropStats = new StatPane("CROP(S) DATA:",frameWidth,frameHeight);
     landStats = new StatPane("LAND DATA:",frameWidth,frameHeight);
+    infoPanelUserControls = new InfoPanelUserControls();
 
     //config
     this.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
@@ -70,29 +75,32 @@ public class InfoPanel extends JPanel implements Observer
     this.setMinimumSize(size);
     this.setLocation(0, y);
     this.setPreferredSize(new Dimension(frameWidth, frameHeight));
-    fullHeight = frameHeight;
-    fullWidth = frameWidth;
-    this.setBackground(GUI_BACKGROUND);
+    // For a semi transparent background
+    this.setOpaque(false);
+    //this.setBackground(GUI_BACKGROUND);
     this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
 
     //wire
     miniViewBox.setPreferredSize(new Dimension(frameWidth, (frameHeight / 4)));
     this.add(miniViewBox);
 
-    int generalHeight = frameHeight - ( (frameHeight*13) / 16);
-    int cropHeight = frameHeight -( (frameHeight*13) / 16);
-    int landHeight = frameHeight - ( ((frameHeight*5) / 16) + generalHeight + cropHeight);
+    int generalHeight = ( (frameHeight*3) / 16);
+    int landHeight = ( (frameHeight*3) / 16);
+    int cropHeight = frameHeight - ( ((frameHeight*5) / 16) + generalHeight + landHeight);
     //to ensure that the entire bargraph is shown
-    int statsWidth = (int) (frameWidth*.98);
+    int statsWidth = (int) (frameWidth*.99);
     //General
     stats.setPreferredSize(new Dimension( statsWidth, generalHeight));
     this.add(stats);
     //Land
-    landStats.setPreferredSize(new Dimension( statsWidth, cropHeight));
+    landStats.setPreferredSize(new Dimension( statsWidth, landHeight));
     this.add(landStats);
     //Crops
-    cropStats.setPreferredSize(new Dimension( statsWidth, landHeight));
+    cropStats.setPreferredSize(new Dimension( statsWidth, cropHeight));
     this.add(cropStats);
+    //User Controls
+    infoPanelUserControls.setPreferredSize(new Dimension( statsWidth, ((frameHeight*1)/40) ));
+    this.add(infoPanelUserControls);
 
 
 
@@ -488,6 +496,9 @@ public class InfoPanel extends JPanel implements Observer
     {
       cd.adjustmentByName(crop, increase);
     }
+    //Make a Call to update WorldArray
+
+    //Update Panel Stats
     main.Game.infoPanel.update(null, null);
   }
 
@@ -581,4 +592,67 @@ public class InfoPanel extends JPanel implements Observer
       displayAllGUIRegions(officialRegions);
     }
   }
+
+  /**
+   * Called to update the units
+   * @param units true for metric or false for english
+   */
+  public static void setMetricUnits(boolean units)
+  {
+    metricUnits = metricUnits;
+    main.Game.infoPanel.update(null, null);
+
+  }
+
+  class InfoPanelUserControls extends JPanel implements ActionListener
+  {
+    JButton hide;
+    JButton units;
+
+    InfoPanelUserControls()
+    {
+      super();
+      setOpaque(false);
+      setLayout(new BorderLayout());
+
+      hide = new JButton("Hide/Clear");
+      hide.addActionListener(this);
+
+      units = new JButton("English");
+      units.addActionListener(this);
+
+      add(units,BorderLayout.WEST);
+      add(hide,BorderLayout.EAST);
+    }
+    /**
+     * Overrides action performed.
+     * Detects which button is clicked and either pauses the game or shows the settings
+     *
+     * @author Tyler Lynch <lyncht@unm.edu>
+     *
+     * @param e
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      JButton tempBtn = (JButton) e.getSource();
+      String text = tempBtn.getText();
+
+      if( text == "Hide/Clear" )
+      {
+        getPresenter().clearActiveList();
+      }
+      else if( text == "Metric" )
+      {
+        setMetricUnits(true);
+        units.setText("English");
+      }
+      else if( text == "English" )
+      {
+        setMetricUnits(false);
+        units.setText("Metric");
+      }
+      main.Game.infoPanel.update(null, null);
+    }
+  }
+
 }
