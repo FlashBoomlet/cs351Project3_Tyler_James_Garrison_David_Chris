@@ -93,11 +93,21 @@ public class AtomicRegion implements Region
 
   public void setCrops()
   {
+    if (data == null)
+    {
+      return;
+    }
     HashSet <WorldCell> leftovers = new HashSet<>();
     HashSet <WorldCell> leftovers2 = new HashSet<>();
     HashSet <WorldCell> leftovers3 = new HashSet<>();
     LinkedList<CropNum> cropPriority = new LinkedList<>();
-    double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
+    //double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
+    double arableTotal = data.getArableOpen(true);
+    arableTotal = arableTotal + data.getCornLand(true);
+    arableTotal = arableTotal + data.getRiceLand(true);
+    arableTotal = arableTotal + data.getOtherLand(true);
+    arableTotal = arableTotal + data.getWheatLand(true);
+    arableTotal = arableTotal + data.getSoyLand(true);
     int cellsNeeded = (int) arableTotal/100;
     setPriority(arableTotal, cellsNeeded, cropPriority);
     //Ideal placement
@@ -211,6 +221,10 @@ public class AtomicRegion implements Region
    */
   public void setFirstCrops()
   {
+    if (data == null)
+    {
+      return;
+    }
     /*
     for (String s: attributes.getAllCrops())
     {
@@ -221,7 +235,14 @@ public class AtomicRegion implements Region
     HashSet <WorldCell> leftovers2 = new HashSet<>();
     HashSet <WorldCell> leftovers3 = new HashSet<>();
     LinkedList<CropNum> cropPriority = new LinkedList<>();
-    double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
+    double arableTotal = 0;
+    //double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
+    arableTotal = data.getArableOpen(true);
+    arableTotal = arableTotal + data.getCornLand(true);
+    arableTotal = arableTotal + data.getRiceLand(true);
+    arableTotal = arableTotal + data.getOtherLand(true);
+    arableTotal = arableTotal + data.getWheatLand(true);
+    arableTotal = arableTotal + data.getSoyLand(true);
     int cellsNeeded = (int) arableTotal/100;
     setPriority(arableTotal, cellsNeeded, cropPriority);
     //Ideal placement
@@ -401,6 +422,7 @@ public class AtomicRegion implements Region
 
   public void setCountryData(CountryData data)
   {
+    System.out.println(name);
     this.data = data;
   }
 

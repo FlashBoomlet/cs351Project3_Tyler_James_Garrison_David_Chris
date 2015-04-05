@@ -92,6 +92,7 @@ public class CountryCSVParser {
   private void assignAttributes(String[] atributes)
   {
     GUIRegion currentRegion = null;
+    CountryData data = null;
     // To prevent array index out of bounds error, ensure all data is filled out
     if( atributes.length >= 31 )
     {
@@ -99,7 +100,7 @@ public class CountryCSVParser {
       currentRegion = findCurrentRegion(country);
       if( currentRegion != null )
       {
-        CountryData data = new CountryData();
+        data = new CountryData();
         data.setPopulation( Double.parseDouble(atributes[1]) );
         data.setMedianAge( Double.parseDouble(atributes[2]) );
         data.setBirthRate( Double.parseDouble(atributes[3]) );

@@ -137,6 +137,7 @@ public class GUIRegion
 
   public void setCountryData(CountryData data)
   {
+    region.setCountryData(data);
     this.data = data;
   }
 
