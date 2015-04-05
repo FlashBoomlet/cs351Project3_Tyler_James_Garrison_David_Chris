@@ -48,7 +48,7 @@ public class Game
    * Frame panels
    */
   private static MapPane mapPane;
-  private static InfoPanel infoPanel;
+  public static InfoPanel infoPanel;
   private static NavMap navMap;
   private static WorldFeedPanel worldFeedPanel;
   private static ButtonPanel buttonPanel;

@@ -315,9 +315,9 @@ public class InfoPanel extends JPanel implements Observer
     statPane.addBar(bp14);
     BarPanel bp13 = getBarPanel( wheatTotal, "Wheat", totalCrops, true );
     statPane.addBar(bp13);
-    BarPanel bp12 = getBarPanel( soyTotal, "Rice", totalCrops, true );
+    BarPanel bp12 = getBarPanel( riceTotal, "Rice", totalCrops, true );
     statPane.addBar(bp12);
-    BarPanel bp11 = getBarPanel( riceTotal, "Soy", totalCrops, true );
+    BarPanel bp11 = getBarPanel( soyTotal, "Soy", totalCrops, true );
     statPane.addBar(bp11);
     BarPanel bp10 = getBarPanel( otherTotal, "Other", totalCrops, true );
     statPane.addBar(bp10);
@@ -477,30 +477,18 @@ public class InfoPanel extends JPanel implements Observer
   /**
    * @author Tyler Lynch <lyncht@unm.edu>
    *
-   * @param amount you wish to adjust the crop by
    * @param crop that you wish to adjust
    * @return updated crop amount
    */
-  public static double adjustCrop(double amount, String crop)
+  public static void adjustCrop(boolean increase, String crop)
   {
     boolean error = false;
     // This will only be called if the countryDataList is greater than 1
-    CountryData countryData = countryDataList.get(0);
-
-    if( countryData.cropAdjustmentByName(crop, (1 + amount)) ) {
-    }
-    else
+    for( CountryData cd: countryDataList)
     {
-      String errMsg;
-      if( amount > 0 ) errMsg = "You can't add more land to this area. You have reached 100% use. Take away use.";
-      else errMsg = "You can't subtract more land to this area. You have reached 0% use. Add more use.";
-
-      String msg = "Invalid adjustment for " + crop + "\n" + errMsg;
-
-      JOptionPane.showMessageDialog(main.Game.frame,msg,"Invalid crop adjustment",
-        JOptionPane.ERROR_MESSAGE);
+      cd.adjustmentByName(crop, increase);
     }
-    return countryData.getCropP(crop,metricUnits);
+    main.Game.infoPanel.update(null, null);
   }
 
   /* display color as a function of happiness */
