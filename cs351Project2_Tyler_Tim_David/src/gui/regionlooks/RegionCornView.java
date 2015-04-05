@@ -15,41 +15,28 @@ import java.awt.*;
 class RegionCornView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.CORN;
-  private static double LIMIT = colors.length / 1.0;
+  private static double LIMIT = colors.length;
 
-  /**
-   * Method takes % corn from region and displays it.
-   *
-   * @param g
-   * @param gRegion
-   */
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double corn = 0;
-    double limit = 0;
-    /*
-    double limit = colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
-
-    if (gRegion == null || gRegion.getRegion().getAttributes() == null) {
-      System.err.println("(!) GUI REGION or attribute set is null!");
-      return;
+    double land = 0.0;
+    if( gRegion.getOfficialCountry() ) {
+      land = gRegion.getCountryData().getCornLand(true);
     }
-
-    corn = gRegion.getRegion().getAttributes().getCropP("Corn");
-    */
-    Color color;
-    if (gRegion.isActive())
+    Color color = Color.cyan;
+    if (!gRegion.isActive())
     {
-      color = Color.CYAN;
-    }
-    else
-    {
-      int select = (int) (corn * limit);
+      int select = (int) (land * LIMIT);
       if(select < colors.length)
         color = colors[select];
       else
         color = colors[colors.length-1];
+    }
+
+    // If the region is not a recognized region, treat it as a dead region
+    if( !gRegion.getOfficialCountry() ) {
+      color = ColorsAndFonts.DEAD_REGION;
     }
 
     for( Polygon p: gRegion.getPoly() )

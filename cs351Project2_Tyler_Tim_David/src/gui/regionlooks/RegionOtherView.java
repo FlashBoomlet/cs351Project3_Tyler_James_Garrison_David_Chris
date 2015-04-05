@@ -15,36 +15,28 @@ import java.awt.*;
 class RegionOtherView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.OTHER;
+  private static double LIMIT = colors.length;
 
-  /**
-   * Method takes % other from region and displays it.
-   *
-   * @param g
-   * @param gRegion
-   */
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double limit = 0; //colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
-
-    if (gRegion == null ){ //|| gRegion.getRegion().getAttributes() == null) {
-      System.err.println("(!) GUI REGION or attribute set is null!");
-      return;
+    double land = 0.0;
+    if( gRegion.getOfficialCountry() ) {
+      land = gRegion.getCountryData().getOtherLand(true);
     }
-
-    double other = 0; //gRegion.getRegion().getAttributes().getCropP("Other");
-    Color color;
-    if (gRegion.isActive())
+    Color color = Color.cyan;
+    if (!gRegion.isActive())
     {
-      color = Color.CYAN;
-    }
-    else
-    {
-      int select = (int) (other * limit);
+      int select = (int) (land * LIMIT);
       if(select < colors.length)
         color = colors[select];
       else
         color = colors[colors.length-1];
+    }
+
+    // If the region is not a recognized region, treat it as a dead region
+    if( !gRegion.getOfficialCountry() ) {
+      color = ColorsAndFonts.DEAD_REGION;
     }
 
     for( Polygon p: gRegion.getPoly() )
