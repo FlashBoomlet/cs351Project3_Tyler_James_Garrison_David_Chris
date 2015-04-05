@@ -59,6 +59,11 @@ public class Game
   private static SettingsScreen settingsScreen;
   private static JPanel defaultScreen;
   private static MapScale mapScale;
+  public static void repaintMapScale()
+  {
+    mapScale.updateScale();
+    mapScale.repaint();
+  }
 
   /*
    * Frame components
@@ -174,7 +179,7 @@ public class Game
 
     buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
-    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20);
+    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,worldPresenter);
 
     initFrame();
     setupControlls();

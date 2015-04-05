@@ -122,4 +122,12 @@ public class World
 
     return isPreviousYear;
   }
+
+  public void setAllFirstCrops()
+  {
+    for (Region area: world)
+    {
+      area.setFirstCrops();;
+    }
+  }
 }

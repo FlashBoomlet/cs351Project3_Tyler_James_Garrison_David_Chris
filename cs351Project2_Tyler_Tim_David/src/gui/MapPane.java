@@ -634,6 +634,7 @@ public class MapPane extends JPanel
     /*todo: generalize conversion from wheel rotation to zoom */
 
     cam.zoomAbsolute(e.getPreciseWheelRotation() * SCROLL_FACTOR, mapClick.getX(), mapClick.getY());
+    main.Game.repaintMapScale();
   }
 
 
