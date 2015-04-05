@@ -7,29 +7,15 @@ import java.util.ArrayList;
  */
 public class WorldCell
 {
-  private boolean originalPrecip = false;
-  private boolean originalTAVG = false;
-  private ArrayList<Float> avg = new ArrayList<>();
-  private ArrayList<Float> max = new ArrayList<>();
-  private ArrayList<Float> min = new ArrayList<>();
-  private boolean originalTMAX = false;
-  private boolean originalTMIN = false;
   public boolean hasCountry = false;
   private double lon = 0;
   private double lat = 0;
-  private int x = 0;
-  private int y = 0;
-  private float annualHigh = 0;
-  private float annualLow = 0;
-  //private double elevation = 0;
+  private float annualHigh = -1;
+  private float annualLow = -1;
   private float annualPrecip = -1;
-  private float monthlyDayAvg;
-  private float monthlyNightAvg;
-  private float tempAvg = 0;
+  private float tempAvg = -1;
   private String currentCrop = "None";
-  //private CropType previousCrop;
   private float currentCropState;
-  //private CropState previousCropState;
   private float currentCropPenalty;
 
   public WorldCell (double lonIn, double latIn)
@@ -37,7 +23,7 @@ public class WorldCell
     lat = latIn;
     lon = lonIn;
   }
-
+/*
   public boolean isOriginal ()
   {
     return originalPrecip;
@@ -56,7 +42,7 @@ public class WorldCell
   public boolean isOriginalTMIN ()
   {
     return originalTMIN;
-  }
+  }*/
 
   public boolean hasCountry ()
   {
@@ -93,16 +79,6 @@ public class WorldCell
     return annualLow;
   }
 
-  public float getMonthlyDayAvg ()
-  {
-    return monthlyDayAvg;
-  }
-
-  public float getMonthlyNightAvg ()
-  {
-    return monthlyNightAvg;
-  }
-
   public float getTempAvg ()
   {
     return tempAvg;
@@ -118,6 +94,11 @@ public class WorldCell
     return currentCropState;
   }
 
+  public float getCurrentCropPenalty ()
+  {
+    return currentCropPenalty;
+  }
+
   /*
   public void setElevation (double elev)
   {
@@ -129,7 +110,7 @@ public class WorldCell
     {
       System.out.println("Invalid elevation.");
     }
-  }*/
+  }
 
   public void setAllPrecip (float[] months)
   {
@@ -158,7 +139,7 @@ public class WorldCell
     {
       System.out.println("Need 12 months to set Precip");
     }
-  }
+  }*/
 
   public void setPrecip (float precip)
   {
@@ -175,16 +156,6 @@ public class WorldCell
     annualLow = low;
   }
 
-  public void setMonthlyDayAvg (float day)
-  {
-    monthlyDayAvg = day;
-  }
-
-  public void setMonthlyNightAvg (float night)
-  {
-    monthlyNightAvg = night;
-  }
-
   public void setToArea ()
   {
     hasCountry = true;
@@ -195,66 +166,25 @@ public class WorldCell
     tempAvg = avg;
   }
 
+/*
   public void setOriginalTAVG (float avg)
   {
     originalTAVG = true;
-    if (this.avg.size() == 0)
-    {
-      tempAvg = avg;
-      this.avg.add(avg);
-    }
-    else
-    {
-      this.avg.add(avg);
-      float temp = 0;
-      for (Float current: this.avg)
-      {
-        temp = temp + current;
-      }
-      tempAvg = temp / this.avg.size();
-    }
+    tempAvg = avg;
   }
 
   public void setOriginalTMAX (float high)
   {
     originalTMAX = true;
-    if (max.size() == 0)
-    {
-      annualHigh = high;
-      max.add(high);
-    }
-    else
-    {
-      max.add(high);
-      float temp = 0;
-      for (Float current: max)
-      {
-        temp = temp + current;
-      }
-      annualHigh = temp / max.size();
-    }
+    annualHigh = high;
   }
 
   public void setOriginalTMIN (float low)
   {
     originalTMIN = true;
-    if (min.size() == 0)
-    {
-      annualLow = low;
-      min.add(low);
-    }
-    else
-    {
-      min.add(low);
-      float temp = 0;
-      for (Float current: min)
-      {
-        temp = temp + current;
-      }
-      annualLow = temp / min.size();
-    }
+    annualLow = low;
   }
-  /*
+
   public enum CropType
   {
     WHEAT,

@@ -49,6 +49,7 @@ public class World
     worldArray = new WorldArray(X_CELLS, Y_CELLS, (float) 0.5);
     for (Region area: world)
     {
+      System.out.println(area.getName());
       area.setLandCells(worldArray);
     }
   }

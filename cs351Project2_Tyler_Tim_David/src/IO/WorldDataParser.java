@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 /**
  * Created by Tim on 3/14/15.
  */
@@ -20,7 +21,7 @@ public class WorldDataParser
   private WorldArray worldArray = null;
   private int X_CELLS;
   private int Y_CELLS;
-  private HashMap<Integer, Coord> sites = new HashMap<>();
+  //private HashMap<Integer, Coord> sites = new HashMap<>();
   //private int LONGITUDE_CELL_NUM = 40075/10 + 1; //40075 km = Circumference of the earth around the equator
   //private int LATITUDE_CELL_NUM = 40008/10 + 1;  //40008 km = Circumference from pole to pole
 
@@ -32,6 +33,131 @@ public class WorldDataParser
     Y_CELLS = worldArray.getYSize();
   }
 
+  public void parseMaxTemp (String fileURL)
+  {
+    try
+    {
+      Scanner scan = new Scanner(new FileReader(fileURL));
+      int counterX = 0;
+      int counterY = 0;
+      while (scan.hasNext())
+      {
+        worldArray.get(counterX, counterY).setAnnualHigh(Float.parseFloat(scan.nextLine()));
+        if (counterX == X_CELLS)
+        {
+          break;
+        }
+        else if (counterY == Y_CELLS)
+        {
+          counterY = 0;
+          counterX++;
+        }
+        else
+        {
+          counterY++;
+        }
+      }
+    }
+    catch (FileNotFoundException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void parseMinTemp (String fileURL)
+  {
+    try
+    {
+      Scanner scan = new Scanner(new FileReader(fileURL));
+      int counterX = 0;
+      int counterY = 0;
+      while (scan.hasNext())
+      {
+        worldArray.get(counterX, counterY).setAnnualLow(Float.parseFloat(scan.nextLine()));
+        if (counterX == X_CELLS)
+        {
+          break;
+        }
+        else if (counterY == Y_CELLS)
+        {
+          counterY = 0;
+          counterX++;
+        }
+        else
+        {
+          counterY++;
+        }
+      }
+    }
+    catch (FileNotFoundException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void parsePrecip (String fileURL)
+  {
+    try
+    {
+      Scanner scan = new Scanner(new FileReader(fileURL));
+      int counterX = 0;
+      int counterY = 0;
+      while (scan.hasNext())
+      {
+        worldArray.get(counterX, counterY).setPrecip(Float.parseFloat(scan.nextLine()));
+        if (counterX == X_CELLS)
+        {
+          break;
+        }
+        else if (counterY == Y_CELLS)
+        {
+          counterY = 0;
+          counterX++;
+        }
+        else
+        {
+          counterY++;
+        }
+      }
+    }
+    catch (FileNotFoundException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void parseAvgTemp (String fileURL)
+  {
+    try
+    {
+      Scanner scan = new Scanner(new FileReader(fileURL));
+      int counterX = 0;
+      int counterY = 0;
+      while (scan.hasNext())
+      {
+        worldArray.get(counterX, counterY).setTempAvg(Float.parseFloat(scan.nextLine()));
+        if (counterX == X_CELLS)
+        {
+          break;
+        }
+        else if (counterY == Y_CELLS)
+        {
+          counterY = 0;
+          counterX++;
+        }
+        else
+        {
+          counterY++;
+        }
+      }
+    }
+    catch (FileNotFoundException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  /*
   public void parseSites (String fileURL)
   {
     try
@@ -60,8 +186,9 @@ public class WorldDataParser
               {
                 end++;
               }
-              station = Integer.parseInt(current.substring(counter, end - 1));
+              station = Integer.parseInt(current.substring(counter, end));
               numCount++;
+              counter = end;
             }
             else if (numCount == 1)
             {
@@ -70,7 +197,9 @@ public class WorldDataParser
               {
                 end++;
               }
-              currentLat = Double.parseDouble(current.substring(counter, end - 1));
+              currentLat = Double.parseDouble(current.substring(counter, end));
+              numCount++;
+              counter = end;
             }
             else if (numCount == 2)
             {
@@ -79,7 +208,7 @@ public class WorldDataParser
               {
                 end++;
               }
-              currentLon = Double.parseDouble(current.substring(counter, end - 1));
+              currentLon = Double.parseDouble(current.substring(counter, end));
               break;
             }
             else if (numCount == 3)
@@ -110,6 +239,7 @@ public class WorldDataParser
       int cellY = 0;
       double currentLon = 0;
       double currentLat = 0;
+      System.out.println("about to parse");
       while (rainScan.hasNext())
       {
         current = rainScan.nextLine();
@@ -288,16 +418,6 @@ public class WorldDataParser
     return temp;
   }
 
-  public void parseMaxTemp (String fileURL)
-  {
-
-  }
-
-  public void parseMinTemp (String fileURL)
-  {
-
-  }
-
   public void parseAvgTemp (String fileURL)
   {
     try
@@ -307,13 +427,17 @@ public class WorldDataParser
       int end = 0;
       int counter = 0;
       int numCount = 0;
-      int station = 0;
+      int station = -1;
       int year = 0;
       float avgTemp = 0;
       double currentLon = 0;
       double currentLat = 0;
+      ArrayList<Float> averages = new ArrayList<>();
+      int previousStation = -1;
+      float AvgOfAvg = 0;
       while (avgScan.hasNext())
       {
+        previousStation = station;
         counter = 0;
         numCount = 0;
         current = avgScan.nextLine();
@@ -321,7 +445,7 @@ public class WorldDataParser
         //strings = current.split("\\s+");
         while (numCount < 4)
         {
-          if (current.charAt(counter) != '\t' && current.charAt(counter) != ' ')
+          if (!Character.isWhitespace(current.charAt(counter)))
           {
             if (numCount == 0)
             {
@@ -330,8 +454,9 @@ public class WorldDataParser
               {
                 end++;
               }
-              station = Integer.parseInt(current.substring(counter, end - 1));
+              station = Integer.parseInt(current.substring(counter, end));
               numCount++;
+              counter = end;
             }
             else if (numCount == 1)
             {
@@ -340,8 +465,9 @@ public class WorldDataParser
             }
             else if (numCount == 2)
             {
-              year = Integer.parseInt(current.substring(counter, counter + 3));
+              year = Integer.parseInt(current.substring(counter, counter + 4));
               numCount++;
+              counter = counter + 7;
             }
             else if (numCount == 3)
             {
@@ -350,21 +476,42 @@ public class WorldDataParser
               {
                 end++;
               }
-              avgTemp = Float.parseFloat(current.substring(counter, end - 1));
+              avgTemp = Float.parseFloat(current.substring(counter, end));
               break;
             }
           }
           counter++;
         }
-        if (year == 2013)
+        if (year == 2013 && sites.get(station) != null && sites.get(station).lat > -180)
         {
           currentLon = sites.get((Integer) station).lon;
           currentLat = sites.get((Integer) station).lat;
-          worldArray.get(currentLon, currentLat, false).setOriginalTAVG(avgTemp);
+          if (station == previousStation)
+          {
+            averages.add(avgTemp);
+            for (Float currentAvg: averages)
+            {
+              AvgOfAvg = AvgOfAvg + currentAvg;
+            }
+            AvgOfAvg = AvgOfAvg / averages.size();
+            //System.out.println("lon: " + currentLon + " lat: " + currentLat + " avg: " + AvgOfAvg);
+            worldArray.get(currentLon, currentLat, false).setOriginalTMAX(AvgOfAvg);
+          }
+          else
+          {
+            averages.clear();
+            averages.add(avgTemp);
+            //System.out.println("lon: " + currentLon + " lat: " + currentLat + " avg: " + avgTemp);
+            worldArray.get(currentLon, currentLat, false).setOriginalTMAX(avgTemp);
+          }
+        }
+        else
+        {
+          station = previousStation;
         }
       }
       finalizeAVG();
-      print("tavg.txt");
+      print("tmax.txt");
     }
     catch (FileNotFoundException e)
     {
@@ -384,17 +531,17 @@ public class WorldDataParser
     {
       for (int j = 0; j < Y_CELLS; j++)
       {
-        if (worldArray.get(i,j).isOriginalTAVG())
+        if (worldArray.get(i,j).isOriginalTMAX())
         {
           numFound = 0;
           while (step < X_CELLS)
           {
-            if (worldArray.get(i+step, j).isOriginalTAVG())
+            if (worldArray.get(i+step, j).isOriginalTMAX())
             {
-              temp = worldArray.get(i+step,j).getTempAvg() - worldArray.get(i, j).getTempAvg();
+              temp = worldArray.get(i+step,j).getAnnualHigh() - worldArray.get(i, j).getAnnualHigh();
               while (counter < step)
               {
-                worldArray.get(i+counter, j).setTempAvg((temp / step) * counter + worldArray.get(i, j).getTempAvg());
+                worldArray.get(i+counter, j).setAnnualHigh((temp / step) * counter + worldArray.get(i, j).getAnnualHigh());
                 counter++;
               }
               numFound++;
@@ -406,12 +553,12 @@ public class WorldDataParser
           counter = 1;
           while (step < X_CELLS)
           {
-            if (worldArray.get(i-step, j).isOriginalTAVG())
+            if (worldArray.get(i-step, j).isOriginalTMAX())
             {
-              temp = worldArray.get(i-step,j).getTempAvg() - worldArray.get(i, j).getTempAvg();
+              temp = worldArray.get(i-step,j).getAnnualHigh() - worldArray.get(i, j).getAnnualHigh();
               while (counter < step)
               {
-                worldArray.get(i-counter, j).setTempAvg((temp / step) * counter + worldArray.get(i, j).getTempAvg());
+                worldArray.get(i-counter, j).setAnnualHigh((temp / step) * counter + worldArray.get(i, j).getAnnualHigh());
                 counter++;
               }
               numFound++;
@@ -423,12 +570,12 @@ public class WorldDataParser
           counter = 1;
           while (step < Y_CELLS)
           {
-            if (worldArray.get(i, j+step).isOriginalTAVG())
+            if (worldArray.get(i, j+step).isOriginalTMAX())
             {
-              temp = worldArray.get(i,j+step).getTempAvg() - worldArray.get(i, j).getTempAvg();
+              temp = worldArray.get(i,j+step).getAnnualHigh() - worldArray.get(i, j).getAnnualHigh();
               while (counter < step)
               {
-                worldArray.get(i, j+counter).setTempAvg((temp / step) * counter + worldArray.get(i, j).getTempAvg());
+                worldArray.get(i, j+counter).setAnnualHigh((temp / step) * counter + worldArray.get(i, j).getAnnualHigh());
                 counter++;
               }
               numFound++;
@@ -440,12 +587,12 @@ public class WorldDataParser
           counter = 1;
           while (step < Y_CELLS)
           {
-            if (worldArray.get(i, j-step).isOriginalTAVG())
+            if (worldArray.get(i, j-step).isOriginalTMAX())
             {
-              temp = worldArray.get(i, j-step).getTempAvg() - worldArray.get(i, j).getTempAvg();
+              temp = worldArray.get(i, j-step).getAnnualHigh() - worldArray.get(i, j).getAnnualHigh();
               while (counter < step)
               {
-                worldArray.get(i, j-counter).setTempAvg((temp / step) * counter + worldArray.get(i, j).getTempAvg());
+                worldArray.get(i, j-counter).setAnnualHigh((temp / step) * counter + worldArray.get(i, j).getAnnualHigh());
                 counter++;
               }
               numFound++;
@@ -456,7 +603,7 @@ public class WorldDataParser
           if (numFound != 4)
           {
             //oops++;
-            //System.out.println("Initial precip data not a grid in worldArrays: " + numFound);
+            //System.out.println(worldArray.get(i,j).getAnnualLow());
           }
         }
       }
@@ -465,51 +612,51 @@ public class WorldDataParser
     {
       for (int j = 0; j < Y_CELLS; j++)
       {
-        if (worldArray.get(i, j).getTempAvg() == -1)
+        if (worldArray.get(i, j).getAnnualHigh() == -1)
         {
           step = 1;
           counter = 1;
           while (step < X_CELLS)
           {
-            if (worldArray.get(i + step, j).getTempAvg() != -1)
+            if (worldArray.get(i + step, j).getAnnualHigh() != -1)
             {
-              tempX = worldArray.get(i + step, j).getTempAvg();
+              tempX = worldArray.get(i + step, j).getAnnualHigh();
               break;
             }
             step++;
           }
           while (counter < X_CELLS)
           {
-            if (worldArray.get(i - counter, j).getTempAvg() != -1)
+            if (worldArray.get(i - counter, j).getAnnualHigh() != -1)
             {
-              tempX = tempX - worldArray.get(i - counter, j).getTempAvg();
+              tempX = tempX - worldArray.get(i - counter, j).getAnnualHigh();
               break;
             }
             counter++;
           }
-          tempX = (tempX / (step + counter) * counter) + worldArray.get(i - counter, j).getTempAvg();
+          tempX = (tempX / (step + counter) * counter) + worldArray.get(i - counter, j).getAnnualHigh();
           step = 1;
           counter = 1;
           while (step < Y_CELLS)
           {
-            if (worldArray.get(i, j + step).getTempAvg() != -1)
+            if (worldArray.get(i, j + step).getAnnualHigh() != -1)
             {
-              tempY = worldArray.get(i, j + step).getTempAvg();
+              tempY = worldArray.get(i, j + step).getAnnualHigh();
               break;
             }
             step++;
           }
           while (counter < Y_CELLS)
           {
-            if (worldArray.get(i, j - counter).getTempAvg() != -1)
+            if (worldArray.get(i, j - counter).getAnnualHigh() != -1)
             {
-              tempY = tempY - worldArray.get(i, j - counter).getTempAvg();
+              tempY = tempY - worldArray.get(i, j - counter).getAnnualHigh();
               break;
             }
             counter++;
           }
-          tempY = (tempY / (step + counter) * counter) + worldArray.get(i, j - counter).getTempAvg();
-          worldArray.get(i, j).setTempAvg((tempX + tempY) / 2);
+          tempY = (tempY / (step + counter) * counter) + worldArray.get(i, j - counter).getAnnualHigh();
+          worldArray.get(i, j).setAnnualHigh((tempX + tempY) / 2);
         }
       }
     }
@@ -526,7 +673,7 @@ public class WorldDataParser
       {
         for (int j = 0; j < Y_CELLS; j++)
         {
-          bw.write(Float.toString(worldArray.get(i, j).getPrecip()));
+          bw.write(Float.toString(worldArray.get(i, j).getAnnualHigh()));
           bw.newLine();
         }
       }
@@ -548,6 +695,6 @@ public class WorldDataParser
       this.lon = lon;
       this.lat = lat;
     }
-  }
+  }*/
 }
 

@@ -35,11 +35,11 @@ public class Game
    */
   public static final String MODEL_DATA_PATH = "resources/ne_10m_admin_1_states_provinces.kml";
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
-  public static final String PRECIP_DATA = "resources/data/precip2010.txt";
-  public static final String SITES = "resources/data/site_summary.txt";
-  public static final String AVG = "resources/data/TAVG.txt";
-  public static final String MAX = "resources/data/TMAX.txt";
-  public static final String MIN = "resources/data/TMIN.txt";
+  public static final String PRECIP_DATA = "resources/data/precip.txt";
+  //public static final String SITES = "resources/data/site_summary.txt";
+  public static final String AVG = "resources/data/tavg.txt";
+  public static final String MAX = "resources/data/tmax.txt";
+  public static final String MIN = "resources/data/tmin.txt";
   int frameWidth = 1200;
   int frameHeight = 700;
   final float NAV_HEIGHT_SCALE = (float) .25;
@@ -146,11 +146,15 @@ public class Game
 
     List<Region> allRegions = new ArrayList<>(modelRegions);
     allRegions.addAll(background);
-    World world = new World(allRegions);
 
+    World world = new World(allRegions);
     MapConverter converter = new EquirectangularConverter();
     WorldDataParser globalData = new WorldDataParser(world);
     //globalData.parsePrecip(PRECIP_DATA);
+    globalData.parseMaxTemp(MAX);
+    globalData.parseMinTemp(MIN);
+    globalData.parseAvgTemp(AVG);
+    globalData.parsePrecip(PRECIP_DATA);
 
     worldPresenter = new WorldPresenter(converter, world);
     worldPresenter.setBackgroundRegions(background);
