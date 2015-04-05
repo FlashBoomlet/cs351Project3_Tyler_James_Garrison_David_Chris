@@ -65,7 +65,7 @@ public class MapPane extends JPanel
   private boolean dynamicNameDrawing;
 
   /* Actions associated with the KeyBinding mapping framework */
-  //"OVERLAY-DOC" make sure to update and read RegionViewFactory.java
+  //"OVERLAY-DOC" make sure to update and read RegionViewFactory.java as well as OverlaySelect
   //Create an action for each overlay you would like
   //and update key bindings below SEARCH "KEY-BINDING-DOC"
 
@@ -85,12 +85,12 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.NOURISHMENT);
     }
   };
-  private Action rainOverlay = new AbstractAction()
+  private Action precipitationOverlay = new AbstractAction()
   {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      presenter.setCurrentOverlay(RegionViewFactory.Overlay.YEARLY_RAIN_FALL);
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.PRECIPITATION);
     }
   };
   private Action defaultOverlay = new AbstractAction()
@@ -189,12 +189,28 @@ public class MapPane extends JPanel
       presenter.setCurrentOverlay(RegionViewFactory.Overlay.BIRTHS);
     }
   };
-  private Action temperatureOverlay = new AbstractAction()
+  private Action avgTemperatureOverlay = new AbstractAction()
   {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      presenter.setCurrentOverlay(RegionViewFactory.Overlay.TEMPERATURE);
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.AVG_TEMPERATURE);
+    }
+  };
+  private Action highTemperatureOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.HIGH_TEMPERATURE);
+    }
+  };
+  private Action lowTemperatureOverlay = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      presenter.setCurrentOverlay(RegionViewFactory.Overlay.LOW_TEMPERATURE);
     }
   };
   private Action migrationOverlay = new AbstractAction()
@@ -264,72 +280,72 @@ public class MapPane extends JPanel
     setDoubleBuffered(true);
 
     // set up keybindings. "KEY-BINDING-DOC"
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("6"), "nourishmentview");
-    getActionMap().put("nourishmentview", nourishmentOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("5"), "rainview");
-    getActionMap().put("rainview", rainOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "default");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('1'), "default");
     getActionMap().put("default", defaultOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"), "happy");
-    getActionMap().put("happy", happyOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"), "planting");
-    getActionMap().put("planting", plantingZoneOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"), "soiltypeview");
-    getActionMap().put("soiltypeview", soilTypeOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("7"), "populationview");
-    getActionMap().put("populationview", populationOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("8"), "ageview");
-    getActionMap().put("ageview", ageOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("9"), "cornview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('2'), "cornview");
     getActionMap().put("cornview", cornOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('q'), "wheatview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('3'), "wheatview");
     getActionMap().put("wheatview", wheatOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('w'), "riceview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('4'), "riceview");
     getActionMap().put("riceview", riceOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('e'), "soyview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('5'), "soyview");
     getActionMap().put("soyview", soyOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('r'), "otherview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('6'), "otherview");
     getActionMap().put("otherview", otherOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('y'), "organicview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('7'), "organicview");
     getActionMap().put("organicview", organicOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('t'), "temperatureview");
-    getActionMap().put("temperatureview", temperatureOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('u'), "birthview");
-    getActionMap().put("birthview", birthRateOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('i'), "migrationview");
-    getActionMap().put("migrationview", migrationOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('o'), "mortalityview");
-    getActionMap().put("mortalityview", mortalityOverlay);
-
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('p'), "conventionalview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('8'), "conventionalview");
     getActionMap().put("conventionalview", conventionalOverlay);
 
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('a'), "gmoview");
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('9'), "gmoview");
     getActionMap().put("gmoview", gmoOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('q'), "avgtemperatureview");
+    getActionMap().put("avgtemperatureview", avgTemperatureOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('w'), "hightemperatureview");
+    getActionMap().put("hightemperatureview", highTemperatureOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('e'), "lowtemperatureview");
+    getActionMap().put("lowtemperatureview", lowTemperatureOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('r'), "precipitationview");
+    getActionMap().put("precipitationview", precipitationOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('t'), "happy");
+    getActionMap().put("happy", happyOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('y'), "nourishmentview");
+    getActionMap().put("nourishmentview", nourishmentOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('u'), "populationview");
+    getActionMap().put("populationview", populationOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('i'), "ageview");
+    getActionMap().put("ageview", ageOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('o'), "birthview");
+    getActionMap().put("birthview", birthRateOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('p'), "migrationview");
+    getActionMap().put("migrationview", migrationOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('a'), "mortalityview");
+    getActionMap().put("mortalityview", mortalityOverlay);
 
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.
        When modified by a "shift", holding will fire events repeatedly, and allow
        for world stepping (and demise) at an accelerated rate */
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("shift pressed s"), "step");
-    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('s'), "step");
+    //getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('s'), "step");
     getActionMap().put("step", stepWorld);
 
   }

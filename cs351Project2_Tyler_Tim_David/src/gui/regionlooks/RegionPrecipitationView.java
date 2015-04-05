@@ -10,7 +10,7 @@ import java.awt.*;
  *
  * Edited by David M on 3/19/2015
  */
-class RegionRainView implements RegionView
+class RegionPrecipitationView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.RAIN_FALL;
   private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(ANNUAL_RAINFALL);

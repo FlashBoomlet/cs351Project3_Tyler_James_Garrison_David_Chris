@@ -13,19 +13,13 @@ import java.util.HashSet;
  * Created by David M. on 3/31/2015
  * CS 351 spring 2015
  * <p/>
- * Represents the temperatures of the regions.
+ * Represents the high temperatures of the region tiles.
  */
-class RegionTemperatureView implements RegionView
+class RegionHighTemperatureView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.TEMPERATURE;
   private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(AVE_MONTH_TEMP_HI);
 
-  /**
-   * Method takes temperatures from region and displays it.
-   *
-   * @param g
-   * @param gRegion
-   */
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
@@ -35,17 +29,15 @@ class RegionTemperatureView implements RegionView
       return;
     }
     HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
+    if(relevantCells.isEmpty()){
+      System.out.println("empty daug");
+    }
     for(WorldCell cell: relevantCells){
       System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
     }
     double temp = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_HI);
-    double low = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_LO); // is 0.0 right now...
-    Color color;
-    if (gRegion.isActive())
-    {
-      color = Color.CYAN;
-    }
-    else
+    Color color = Color.CYAN;
+    if (!gRegion.isActive())
     {
       int select = (int) (temp * LIMIT);
       if(select<0) select = 0;

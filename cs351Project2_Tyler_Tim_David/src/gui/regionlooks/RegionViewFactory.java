@@ -19,11 +19,8 @@ import gui.Camera;
  *
  *
  * TODO:
- * birth rate
- * migration?
- * mortality
- * conventional crops
- * gmo crops
+ * remove soil type
+ * remove planting zone
  */
 public class RegionViewFactory
 {
@@ -31,7 +28,6 @@ public class RegionViewFactory
   private final static RegionView DEFAULT_LOOK = new defaultLook();
   private final static RegionView PLANTING_VIEW = new PlantingZoneView();
   private final static RegionView HAPPINESS_VIEW = new RegionHappyView();
-  private final static RegionView RAIN_VIEW = new RegionRainView();
   private final static RegionView NOURISHMENT_VIEW = new RegionMalnourishmentView();
   private final static RegionView SOIL_TYPE_VIEW = new RegionSoilTypeView();
   private final static RegionView POPULATION_VIEW = new RegionPopulationView();
@@ -42,7 +38,10 @@ public class RegionViewFactory
   private final static RegionView SOY_VIEW = new RegionSoyView();
   private final static RegionView OTHER_VIEW = new RegionOtherView();
   private final static RegionView ORGANIC_VIEW = new RegionOrganicView();
-  private final static RegionView TEMPERATURE_VIEW = new RegionTemperatureView();
+  private final static RegionView AVG_TEMPERATURE_VIEW = new RegionAverageTemperatureView();
+  private final static RegionView HIGH_TEMPERATURE_VIEW = new RegionHighTemperatureView();
+  private final static RegionView LOW_TEMPERATURE_VIEW = new RegionLowTemperatureView();
+  private final static RegionView PRECIPITATION_VIEW = new RegionPrecipitationView();
   private final static RegionView BIRTH_RATE_VIEW = new RegionBirthRateView();
   private final static RegionView MIGRATION_RATE_VIEW = new RegionMigrationRateView();
   private final static RegionView MORTALITY_RATE_VIEW = new RegionMortalityRateView();
@@ -84,8 +83,8 @@ public class RegionViewFactory
       case HAPPINESS:
         return HAPPINESS_VIEW;
 
-      case YEARLY_RAIN_FALL:
-        return RAIN_VIEW;
+      case PRECIPITATION:
+        return PRECIPITATION_VIEW;
 
       case NOURISHMENT:
         return NOURISHMENT_VIEW;
@@ -117,8 +116,14 @@ public class RegionViewFactory
       case ORGANIC:
         return ORGANIC_VIEW;
 
-      case TEMPERATURE:
-        return TEMPERATURE_VIEW;
+      case AVG_TEMPERATURE:
+        return AVG_TEMPERATURE_VIEW;
+
+      case HIGH_TEMPERATURE:
+        return HIGH_TEMPERATURE_VIEW;
+
+      case LOW_TEMPERATURE:
+        return LOW_TEMPERATURE_VIEW;
 
       case BIRTHS:
         return BIRTH_RATE_VIEW;
@@ -145,7 +150,7 @@ public class RegionViewFactory
     NONE,
     PLANTING_ZONE,
     HAPPINESS,
-    YEARLY_RAIN_FALL,
+    PRECIPITATION,
     NOURISHMENT,
     SOIL_TYPE,
     AGE,
@@ -155,12 +160,14 @@ public class RegionViewFactory
     SOY,
     OTHER,
     ORGANIC,
-    TEMPERATURE,
     BIRTHS,
     MIGRATION,
     MORTALITY,
     CONVENTIONAL,
     GMO,
-    POPULATION
+    POPULATION,
+    AVG_TEMPERATURE,
+    HIGH_TEMPERATURE,
+    LOW_TEMPERATURE
   }
 }

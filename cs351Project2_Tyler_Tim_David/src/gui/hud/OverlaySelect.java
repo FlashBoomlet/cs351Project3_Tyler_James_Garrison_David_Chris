@@ -22,25 +22,25 @@ public class OverlaySelect extends JPanel
   private JLabel title;
   private static String[] filters= {
       "None",
-      "Happiness",
-      "Planting Zone",
-      "Annual Rain Fall",
-      "Nourishment",
-      "Soil Type",
-      "Population",
-      "Median Age",
       "% Corn",
       "% Wheat",
       "% Rice",
       "% Soy",
       "% Other",
       "% Organic",
-      "Annual Temperature",
+      "% Conventional",
+      "% GMO",
+      "Average Temperature",
+      "Annual High Temperature",
+      "Annual Low Temperature",
+      "Precipitation",
+      "Happiness",
+      "Nourishment",
+      "Population",
+      "Median Age",
       "Birth Rate",
       "Migration Rate",
-      "Mortality Rate",
-      "% Conventional",
-      "% GMO"
+      "Mortality Rate"
     };
 
   /**
@@ -79,61 +79,61 @@ public class OverlaySelect extends JPanel
         switch(key)
         {
           case 1:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.HAPPINESS);
-            break;
-          case 2:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.PLANTING_ZONE);
-            break;
-          case 3:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.YEARLY_RAIN_FALL);
-            break;
-          case 4:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NOURISHMENT);
-            break;
-          case 5:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOIL_TYPE);
-            break;
-          case 6:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.POPULATION);
-            break;
-          case 7:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.AGE);
-            break;
-          case 8:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.CORN);
             break;
-          case 9:
+          case 2:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.WHEAT);
             break;
-          case 10:
+          case 3:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.RICE);
             break;
-          case 11:
+          case 4:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.SOY);
             break;
-          case 12:
+          case 5:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.OTHER);
             break;
-          case 13:
+          case 6:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.ORGANIC);
             break;
-          case 14:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.TEMPERATURE);
-            break;
-          case 15:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.BIRTHS);
-            break;
-          case 16:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.MIGRATION);
-            break;
-          case 17:
-            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.MORTALITY);
-            break;
-          case 18:
+          case 7:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.CONVENTIONAL);
             break;
-          case 19:
+          case 8:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.GMO);
+            break;
+          case 9:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.AVG_TEMPERATURE);
+            break;
+          case 10:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.HIGH_TEMPERATURE);
+            break;
+          case 11:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.LOW_TEMPERATURE);
+            break;
+          case 12:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.PRECIPITATION);
+            break;
+          case 13:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.HAPPINESS);
+            break;
+          case 14:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NOURISHMENT);
+            break;
+          case 15:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.POPULATION);
+            break;
+          case 16:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.AGE);
+            break;
+          case 17:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.BIRTHS);
+            break;
+          case 18:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.MIGRATION);
+            break;
+          case 19:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.MORTALITY);
             break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
@@ -152,25 +152,25 @@ public class OverlaySelect extends JPanel
   public static void updateOverlaySelect(RegionViewFactory.Overlay currentOverlay)
   {
     String overlay = currentOverlay.toString();
-    if( overlay == "HAPPINESS") overlaySelector.setSelectedIndex(1);
-    else if( overlay == "PLANTING_ZONE") overlaySelector.setSelectedIndex(2);
-    else if( overlay == "YEARLY_RAIN_FALL") overlaySelector.setSelectedIndex(3);
-    else if( overlay == "NOURISHMENT" ) overlaySelector.setSelectedIndex(4);
-    else if( overlay == "SOIL_TYPE" ) overlaySelector.setSelectedIndex(5);
-    else if( overlay == "POPULATION" ) overlaySelector.setSelectedIndex(6);
-    else if( overlay == "AGE" ) overlaySelector.setSelectedIndex(7);
-    else if( overlay == "CORN" ) overlaySelector.setSelectedIndex(8);
-    else if( overlay == "WHEAT" ) overlaySelector.setSelectedIndex(9);
-    else if( overlay == "RICE" ) overlaySelector.setSelectedIndex(10);
-    else if( overlay == "SOY" ) overlaySelector.setSelectedIndex(11);
-    else if( overlay == "OTHER" ) overlaySelector.setSelectedIndex(12);
-    else if( overlay == "ORGANIC" ) overlaySelector.setSelectedIndex(13);
-    else if( overlay == "TEMPERATURE" ) overlaySelector.setSelectedIndex(14);
-    else if( overlay == "BIRTHS" ) overlaySelector.setSelectedIndex(15);
-    else if( overlay == "MIGRATION" ) overlaySelector.setSelectedIndex(16);
-    else if( overlay == "MORTALITY" ) overlaySelector.setSelectedIndex(17);
-    else if( overlay == "CONVENTIONAL" ) overlaySelector.setSelectedIndex(18);
-    else if( overlay == "GMO" ) overlaySelector.setSelectedIndex(19);
+    if( overlay == "CORN" ) overlaySelector.setSelectedIndex(1);
+    else if( overlay == "WHEAT" ) overlaySelector.setSelectedIndex(2);
+    else if( overlay == "RICE" ) overlaySelector.setSelectedIndex(3);
+    else if( overlay == "SOY" ) overlaySelector.setSelectedIndex(4);
+    else if( overlay == "OTHER" ) overlaySelector.setSelectedIndex(5);
+    else if( overlay == "ORGANIC" ) overlaySelector.setSelectedIndex(6);
+    else if( overlay == "CONVENTIONAL" ) overlaySelector.setSelectedIndex(7);
+    else if( overlay == "GMO" ) overlaySelector.setSelectedIndex(8);
+    else if( overlay == "AVG_TEMPERATURE" ) overlaySelector.setSelectedIndex(9);
+    else if( overlay == "HIGH_TEMPERATURE" ) overlaySelector.setSelectedIndex(10);
+    else if( overlay == "LOW_TEMPERATURE" ) overlaySelector.setSelectedIndex(11);
+    else if( overlay == "PRECIPITATION") overlaySelector.setSelectedIndex(12);
+    else if( overlay == "HAPPINESS") overlaySelector.setSelectedIndex(13);
+    else if( overlay == "NOURISHMENT" ) overlaySelector.setSelectedIndex(14);
+    else if( overlay == "POPULATION" ) overlaySelector.setSelectedIndex(15);
+    else if( overlay == "AGE" ) overlaySelector.setSelectedIndex(16);
+    else if( overlay == "BIRTHS" ) overlaySelector.setSelectedIndex(17);
+    else if( overlay == "MIGRATION" ) overlaySelector.setSelectedIndex(18);
+    else if( overlay == "MORTALITY" ) overlaySelector.setSelectedIndex(19);
     else overlaySelector.setSelectedIndex(0);
   }
 }

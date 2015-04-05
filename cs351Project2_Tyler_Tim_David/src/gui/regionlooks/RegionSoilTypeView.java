@@ -16,7 +16,6 @@ import java.awt.*;
 class RegionSoilTypeView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.SOIL;
-  private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(SOIL_TYPE);
 
   /**
    * Method takes soil types from region and displays it.
@@ -27,13 +26,9 @@ class RegionSoilTypeView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    if (gRegion == null ) //|| gRegion.getRegion().getAttributes() == null)
-    {
-      System.err.println("(!) GUI REGION or attribute set is null!");
-      return;
-    }
+    double soil = 0.0;
+    double limit = 0.0;
 
-    double nourish = 0; //gRegion.getRegion().getAttributes().getAttribute(SOIL_TYPE);
     Color color;
     if (gRegion.isActive())
     {
@@ -41,7 +36,7 @@ class RegionSoilTypeView implements RegionView
     }
     else
     {
-      int select = (int) (nourish * LIMIT);
+      int select = (int) (soil * limit);
       if(select < colors.length)
         color = colors[select];
       else
