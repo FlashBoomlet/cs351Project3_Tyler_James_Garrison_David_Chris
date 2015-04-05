@@ -35,7 +35,12 @@ public class OverlaySelect extends JPanel
       "% Soy",
       "% Other",
       "% Organic",
-      "Annual Temperature"
+      "Annual Temperature",
+      "Birth Rate",
+      "Migration Rate",
+      "Mortality Rate",
+      "% Conventional",
+      "% GMO"
     };
 
   /**
@@ -115,6 +120,21 @@ public class OverlaySelect extends JPanel
           case 14:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.TEMPERATURE);
             break;
+          case 15:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.BIRTHS);
+            break;
+          case 16:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.MIGRATION);
+            break;
+          case 17:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.MORTALITY);
+            break;
+          case 18:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.CONVENTIONAL);
+            break;
+          case 19:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.GMO);
+            break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
         }
@@ -146,6 +166,11 @@ public class OverlaySelect extends JPanel
     else if( overlay == "OTHER" ) overlaySelector.setSelectedIndex(12);
     else if( overlay == "ORGANIC" ) overlaySelector.setSelectedIndex(13);
     else if( overlay == "TEMPERATURE" ) overlaySelector.setSelectedIndex(14);
+    else if( overlay == "BIRTHS" ) overlaySelector.setSelectedIndex(15);
+    else if( overlay == "MIGRATION" ) overlaySelector.setSelectedIndex(16);
+    else if( overlay == "MORTALITY" ) overlaySelector.setSelectedIndex(17);
+    else if( overlay == "CONVENTIONAL" ) overlaySelector.setSelectedIndex(18);
+    else if( overlay == "GMO" ) overlaySelector.setSelectedIndex(19);
     else overlaySelector.setSelectedIndex(0);
   }
 }

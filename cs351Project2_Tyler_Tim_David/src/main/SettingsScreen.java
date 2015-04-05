@@ -1,6 +1,7 @@
 package main;
 
 import gui.ColorsAndFonts;
+import gui.hud.InfoPanel;
 import main.Game;
 
 import javax.swing.*;
@@ -29,10 +30,14 @@ public class SettingsScreen extends JPanel
   private TabbedPanel center;
   private SettingsButtonPanel buttons;
   private algorithmInfluencePanel panelSimulator;
+  private GeneralSettings generalSettings;
+
+  // J-Radio buttons
   private JRadioButton selectAll;
   private JRadioButton lowestAccuracy;
   private JRadioButton mediumAccuracy;
   private JRadioButton highestAccuracy;
+  private static JRadioButton units;
 
   /**
    * Initializes a JPanel for all of the settings and adds the various components to it
@@ -94,12 +99,18 @@ public class SettingsScreen extends JPanel
       setSize(new Dimension(getWidth(), getHeight()));
       setOpaque(false);
 
+      JPanel container = new JPanel();
+      container.setOpaque(false);
+
       panelSimulator = new algorithmInfluencePanel();
+      generalSettings = new GeneralSettings();
+      container.add(panelSimulator);
+      container.add(generalSettings);
 
       JPanel DefinitionsPanel = new JPanel();
       DefinitionsPanel.setOpaque(false);
 
-      addTab("World influences", null, panelSimulator, "Influence Simulator");
+      addTab("World influences", null, container, "Influence Simulator");
       addTab("Definitions", null, DefinitionsPanel, "Does nothing");
     }
   }
@@ -192,6 +203,7 @@ public class SettingsScreen extends JPanel
       add(mediumAccuracy);
       add(highestAccuracy);
       add(selectAll);
+      selectAll.setVisible(false);
     }
 
     @Override
@@ -235,6 +247,62 @@ public class SettingsScreen extends JPanel
         mediumAccuracy.setSelected(false);
         highestAccuracy.setSelected(true);
         selectAll.setSelected(false);
+      }
+    }
+  }
+
+  public static void updateUnits(boolean show)
+  {
+    units.setSelected(show);
+  }
+
+  public static boolean getUnits()
+  {
+    return units.isSelected();
+  }
+
+  private class GeneralSettings extends JPanel implements ActionListener
+  {
+
+    GeneralSettings()
+    {
+      super();
+      setOpaque(false);
+      setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+      units = new JRadioButton("Metric Units");
+      units.setName("UNIT");
+      units.setSelected(true);
+      units.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
+      units.addActionListener(this);
+
+      add(units);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      JRadioButton tempBtn = (JRadioButton) e.getSource();
+      String name = tempBtn.getName();
+
+      if( name == "UNIT" )
+      {
+        if( !tempBtn.isSelected() )
+        {
+          // Un-select
+          units.setSelected(false);
+          InfoPanel.setMetricUnits(false);
+        }
+        else
+        {
+          // Select
+          units.setSelected(true);
+          InfoPanel.setMetricUnits(true);
+        }
+
+      }
+      else
+      {
+        //Do nothing
       }
     }
   }

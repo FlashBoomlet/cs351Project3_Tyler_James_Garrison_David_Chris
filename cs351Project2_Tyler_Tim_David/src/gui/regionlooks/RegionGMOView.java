@@ -1,20 +1,16 @@
 package gui.regionlooks;
 
-
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 
 import java.awt.*;
 
 /**
- * Created by David M. on 3/31/2015
- * CS 351 spring 2015
- * <p/>
- * Represents the % organic of the regions.
+ * Created  by David M on 3/22/2015
  */
-class RegionOrganicView implements RegionView
+class RegionGMOView implements RegionView
 {
-  private static Color[] colors = ColorsAndFonts.ORGANIC;
+  private static Color[] colors = ColorsAndFonts.GMO;
   private static double LIMIT = colors.length;
 
   @Override
@@ -22,7 +18,7 @@ class RegionOrganicView implements RegionView
   {
     double land = 0.0;
     if( gRegion.getOfficialCountry() ) {
-      land = gRegion.getCountryData().getOrganic(true);
+      land = gRegion.getCountryData().getGmo(true);
     }
     Color color = Color.cyan;
     if (!gRegion.isActive())

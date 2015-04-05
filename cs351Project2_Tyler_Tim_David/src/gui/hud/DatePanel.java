@@ -38,7 +38,7 @@ public class DatePanel extends JPanel
    */
   public DatePanel(int x, int y, int width, int height)
   {
-    bar = new BarPanel(Color.cyan, 0.5, "Timeline/Progress :", "MMM d, YYYY", x, y, width, height);
+    bar = new BarPanel(Color.cyan, 0.5, "", "MMM d, YYYY", x, y, width, height);
     bar.setPreferredSize(new Dimension(width-10, height));
     formatter = new SimpleDateFormat(DATE_PATTERN);
 

@@ -58,11 +58,6 @@ public class AtomicRegion implements Region
     else return null;
   }
   @Override
-  public HashSet<WorldCell> getRelevantCells(){
-    return relevantCells;
-  }
-
-  @Override
   public void setName(String name)
   {
     this.name = name;
@@ -97,12 +92,12 @@ public class AtomicRegion implements Region
       area.setLandCells(worldArray, landCells);
     }
   }
-
+@Override
   public HashSet<WorldCell> getAllCells ()
   {
     return landCells;
   }
-
+@Override
   public HashSet<WorldCell> getArableCells ()
   {
     return relevantCells;

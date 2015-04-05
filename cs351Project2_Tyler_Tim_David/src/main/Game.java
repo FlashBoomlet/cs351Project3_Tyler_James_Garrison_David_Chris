@@ -59,6 +59,7 @@ public class Game
   private static StartScreen startPanel;
   private static SettingsScreen settingsScreen;
   private static JPanel defaultScreen;
+  private static MapScale mapScale;
 
   /*
    * Frame components
@@ -174,6 +175,8 @@ public class Game
     navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
     buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
+
+    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20);
 
     initFrame();
     setupControlls();
@@ -397,6 +400,9 @@ public class Game
       // Button panel in the lower right hand corner
       layeredPane.add(buttonPanel, new Integer(4) );
 
+      // Map Scale in the lower right hand corner above the Nav Map
+      layeredPane.add(mapScale, new Integer(5) );
+
       pauseGame();
     }
   }
@@ -417,6 +423,7 @@ public class Game
     buttonPanel.setVisible(true);
     startPanel.setVisible(false);
     settingsScreen.setVisible(false);
+    mapScale.setVisible(true);
   }
 
   /**
@@ -431,11 +438,12 @@ public class Game
   {
     mapPane.setVisible(false);
     worldFeedPanel.showAll(false);
-    infoPanel.setVisible(false);
+    infoPanel.hidePanel();
     navMap.setVisible(false);
     buttonPanel.setVisible(false);
     startPanel.setVisible(true);
     settingsScreen.setVisible(false);
+    mapScale.setVisible(false);
   }
 
   /**

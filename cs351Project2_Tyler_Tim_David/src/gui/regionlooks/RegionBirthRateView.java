@@ -1,33 +1,33 @@
 package gui.regionlooks;
 
-
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 
 import java.awt.*;
 
 /**
- * Created by David M. on 3/31/2015
- * CS 351 spring 2015
- * <p/>
- * Represents the % organic of the regions.
+ * Created  by David M on 3/22/2015
  */
-class RegionOrganicView implements RegionView
+class RegionBirthRateView implements RegionView
 {
-  private static Color[] colors = ColorsAndFonts.ORGANIC;
-  private static double LIMIT = colors.length;
+  private static Color[] colors = ColorsAndFonts.BIRTHS;
+  private static double LIMIT = colors.length / 50.0;
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double land = 0.0;
+    double rate = 0.0;
     if( gRegion.getOfficialCountry() ) {
-      land = gRegion.getCountryData().getOrganic(true);
+      rate = gRegion.getCountryData().getBirthRate(true);
     }
-    Color color = Color.cyan;
-    if (!gRegion.isActive())
+    Color color = Color.YELLOW;
+    if (gRegion.isActive())
     {
-      int select = (int) (land * LIMIT);
+      color = Color.cyan;
+    }
+    else
+    {
+      int select = (int) (rate * LIMIT);
       if(select < colors.length)
         color = colors[select];
       else
