@@ -426,7 +426,7 @@ public class Game
   {
     mapPane.setVisible(false);
     worldFeedPanel.showAll(false);
-    infoPanel.setVisible(false);
+    infoPanel.hidePanel();
     navMap.setVisible(false);
     buttonPanel.setVisible(false);
     startPanel.setVisible(true);

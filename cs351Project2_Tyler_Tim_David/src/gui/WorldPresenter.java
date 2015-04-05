@@ -203,6 +203,14 @@ public class WorldPresenter extends Observable
   }
 
   /**
+   * Clears the active region list and thus hides the side panel
+   */
+  public void clearActiveList()
+  {
+    activeRegions.clear();
+  }
+
+  /**
    * Given a Camera, this method returns all the GUI regions 'in view',
    * and adjusts the look to the appropriate level of detail.
    *
