@@ -50,9 +50,9 @@ public class WorldFeedPanel extends JPanel implements Observer
    * Component Initialization
    */
   datePanel = new DatePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
-  overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.25)),componentHeight);
+  overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.30)),componentHeight);
   worldStatPanel = new BarPanel(ColorsAndFonts.NAV_MAP_OUTLINE, 0.5, "Population Well-being", " 50%  :  7.2 Billion", 0, 0, (int)(frameWidth*(.30)), height);
-  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.30))),componentHeight);
+  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.25))),componentHeight);
 
   datePanel.setDate(presenter.getWorldDate());
 

@@ -180,7 +180,7 @@ public class Game
 
     buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
-    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,worldPresenter);
+    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,cam);
 
     initFrame();
     setupControlls();

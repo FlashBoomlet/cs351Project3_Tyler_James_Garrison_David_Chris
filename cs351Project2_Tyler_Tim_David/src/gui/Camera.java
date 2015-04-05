@@ -288,6 +288,11 @@ public class Camera
     scale = Math.pow(2, height);
   }
 
+  public double getScale()
+  {
+    return scale;
+  }
+
   /**
    @return the Rectangle that defines the visible area the Camera is scaling to,
    in map-space

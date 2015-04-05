@@ -4,13 +4,18 @@ import gui.Camera;
 import gui.ColorsAndFonts;
 import gui.WorldPresenter;
 import gui.displayconverters.DisplayUnitConverter;
+import gui.displayconverters.EquirectangularConverter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Set;
 
 /**
- * Created by Lyncht on 4/4/15.
+ * Creates and houses anything that is needed to make the
+ * map scale on the lower right hand corner function
+ *
+ * @author Tyler Lynch <lyncht@unm.edu>
+ * @since 4.4.2015
  */
 public class MapScale extends JPanel
 {
@@ -21,27 +26,49 @@ public class MapScale extends JPanel
   private double scale = 0;
   private String scale1 = "";
   private String scale2 = "" ;
-  private int s2 = 100;
-  private int s1 = s2/2;
+  private double s2;
+  private double s1;
   private static final Font FONT = new Font("SansSerif", Font.PLAIN, 10);
 
-  MapScale(int x, int y, int width, int height, WorldPresenter worldPresenter)
+  /**
+   * Constructor to create a JPanel to hold the MapScale and all components
+   * drawn inside.
+   *
+   * @param x location
+   * @param y location
+   * @param width of component
+   * @param height of component
+   * @param cam that controls the view
+   */
+  MapScale(int x, int y, int width, int height, Camera cam)
   {
     super();
-    this.worldPresenter = worldPresenter;
+    this.cam = cam;
+    s2 = (cam.getScale());
     setOpaque(false);
 
     setLocation(x, y);
     setSize(width, height);
   }
 
+  /**
+   * Updates the scale label's
+   * Called by Game.java once you change your zoom
+   */
   public void updateScale()
   {
     // get scale from world presenter
-    s1 = 100;
+    s2 = (cam.getScale());
+    //Convert to English Miles if appropriate
+    if( !SettingsScreen.getUnits() ) s2 *= 0.60934;
     s1 = s2/2;
+    repaint();
   }
 
+  /**
+   * Override paint components
+   * @param g graphics you with to have
+   */
   @Override
   public void paint(Graphics g)
   {
@@ -62,10 +89,11 @@ public class MapScale extends JPanel
     g2d.setColor(ColorsAndFonts.GUI_TEXT_COLOR);
     g2d.setFont(FONT);
 
-    scale1 = s1 + " " + converter.getScaleSymbol( SettingsScreen.getUnits() ) ;
-    scale2 = s2  + " " +  converter.getScaleSymbol( SettingsScreen.getUnits() ) ;
+    scale1 = String.format( "%.1f" + " " + converter.getScaleSymbol( SettingsScreen.getUnits() ) , s1);
+    scale2 = String.format( "%.1f" + " " + converter.getScaleSymbol( SettingsScreen.getUnits() ) , s2);
 
     g2d.drawString(scale2, scale2X, scale2Y);
     g2d.drawString(scale1, scale1X, scale1Y);
   }
+
 }

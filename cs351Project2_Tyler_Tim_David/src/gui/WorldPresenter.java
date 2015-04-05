@@ -25,7 +25,7 @@ public class WorldPresenter extends Observable
 {
   private boolean DEBUG = false;
   private CAM_DISTANCE lastDistance;
-  private MapConverter mpConverter;
+  public MapConverter mpConverter;
   private Collection<GUIRegion> modelRegions;
   private Collection<GUIRegion> backgroundRegions;
   private ActiveRegionList activeRegions;

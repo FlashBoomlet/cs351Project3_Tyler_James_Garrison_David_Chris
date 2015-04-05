@@ -422,7 +422,7 @@ public class AtomicRegion implements Region
 
   public void setCountryData(CountryData data)
   {
-    System.out.println(name);
+    //System.out.println(name);
     this.data = data;
   }
 
