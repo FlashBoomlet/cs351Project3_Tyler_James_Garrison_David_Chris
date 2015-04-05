@@ -3,6 +3,7 @@ package model;
 
 import gui.GUIRegion;
 import gui.WorldPresenter;
+import gui.hud.DatePanel;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -99,6 +100,8 @@ public class World
   {
     int previousYear = currentDate.get(Calendar.YEAR);
     currentDate.add(Calendar.DATE, numOfDays);
+
+    DatePanel.updateRatio(currentDate.get(Calendar.DAY_OF_YEAR)/365.0);
 
     if( currentDate.get(Calendar.YEAR) == 2050 )
     {

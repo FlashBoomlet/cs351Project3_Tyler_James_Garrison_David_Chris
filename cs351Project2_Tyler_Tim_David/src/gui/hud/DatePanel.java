@@ -30,7 +30,11 @@ public class DatePanel extends JPanel
   private BarPanel bar;
   private SimpleDateFormat formatter;
   private Date date;
-
+  private static double ratio = 0;
+  private int x;
+  private int y;
+  private int width;
+  private int height;
 
   /**
    Instantiates a DatePanel whose Dimension is dependent on FontMetrics and a
@@ -38,7 +42,12 @@ public class DatePanel extends JPanel
    */
   public DatePanel(int x, int y, int width, int height)
   {
-    bar = new BarPanel(Color.cyan, 0.5, "", "MMM d, YYYY", x, y, width, height);
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+
+    bar = new BarPanel(Color.cyan, ratio, "", "MMM d, YYYY", x, y, width, height);
     bar.setPreferredSize(new Dimension(width-10, height));
     formatter = new SimpleDateFormat(DATE_PATTERN);
 
@@ -51,6 +60,11 @@ public class DatePanel extends JPanel
 
   }
 
+  public static void updateRatio(double newRatio)
+  {
+    ratio = newRatio;
+  }
+
   /**
    Set the date to display
    @param d   Date to display in panel
@@ -58,9 +72,8 @@ public class DatePanel extends JPanel
   public void setDate(Date d)
   {
     date = d;
-    bar.updateRatio(0.05);
+    bar.updateRatio(ratio, bar);
     bar.setOverLayText(getDateString(d).toUpperCase());
-   // repaint();
   }
 
   /* wraps getDateString base with the member variable date as an arg*/
