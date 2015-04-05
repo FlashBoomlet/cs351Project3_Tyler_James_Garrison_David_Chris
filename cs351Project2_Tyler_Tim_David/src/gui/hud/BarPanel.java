@@ -87,15 +87,16 @@ public class BarPanel extends JPanel
       top.setLayout(new GridLayout(1, 2));
       label.setFont( new Font("SansSerif", Font.PLAIN, 12) );
       top.add(label);
-      top.add(adjustBox);
+      //FORMATTER
+      top.add(new JLabel(""));
+
       add(top);
 
       JPanel lower = new JPanel();
       lower.setOpaque(false);
       lower.setLayout(new GridLayout(1, 2));
       lower.add(barGraph);
-      //FORMATTER
-      lower.add(new JLabel(""));
+      lower.add(adjustBox);
       add(lower);
 
     }
@@ -396,11 +397,11 @@ public class BarPanel extends JPanel
           double changeBy = 0.05;
 
           if( name == "+" ) {
-            InfoPanel.adjustCrop(changeBy, label.getText() );
+            InfoPanel.adjustCrop(true, label.getText() );
           }
           else if( name == "-" )
           {
-            InfoPanel.adjustCrop( (-changeBy), label.getText() );
+            InfoPanel.adjustCrop(false, label.getText() );
           }
           barGraph.repaint();
         }

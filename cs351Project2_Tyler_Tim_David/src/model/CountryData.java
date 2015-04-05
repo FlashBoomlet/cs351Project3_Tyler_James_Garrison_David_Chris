@@ -6,33 +6,39 @@ package model;
  */
 public class CountryData
 {
+  // General
   private double population;
   private double medianAge;
   private double birthRate;
   private double mortality;
   private double migration;
   private double undernourish;
-
+  // Corn
   private double cornProduction;
   private double cornExports;
   private double cornImports;
   private double cornLand;
+  // Wheat
   private double wheatProduction;
   private double wheatExports;
   private double wheatImports;
   private double wheatLand;
+  // Rice
   private double riceProduction;
   private double riceExports;
   private double riceImports;
   private double riceLand;
+  // Soy
   private double soyProduction;
   private double soyExports;
   private double soyImports;
   private double soyLand;
+  // Other
   private double otherProduction;
   private double otherExports;
   private double otherImports;
   private double otherLand;
+  // Land information
   private double landArea;
   private double arableOpen;
   private double organic;
@@ -624,11 +630,86 @@ public class CountryData
   /**
    *
    * @param name of the Crop you would like to adjust
-   * @param adjustBy the new value of the crop you would like
    * @return if the cropAdjustment was successful
    */
-  public boolean cropAdjustmentByName(String name, Double adjustBy)
+  public boolean adjustmentByName(String name, boolean increase )
   {
-    return false;
+    boolean success = false;
+    switch( name )
+    {
+      case "Corn":
+        // has to be greater than 100 square km's
+        if( !increase && cornProduction >= 100 )
+        {
+          // Call to re-arrange data on grid
+          setCornProduction(cornProduction - 100);
+        }
+        else if( increase )
+        {
+          // Call to re-arrange data on grid
+          setCornProduction(cornProduction + 100);
+        }
+        success = true;
+        break;
+      case "Wheat":
+        // has to be greater than 100 square km's
+        if( !increase && wheatProduction >= 100 )
+        {
+          // Call to re-arrange data on grid
+          setWheatProduction(wheatProduction - 100);
+        }
+        else if( increase )
+        {
+          // Call to re-arrange data on grid
+          setWheatProduction(wheatProduction + 100);
+        }
+        success = true;
+        break;
+      case "Soy":
+        // has to be greater than 100 square km's
+        if( !increase && soyProduction >= 100 )
+        {
+          // Call to re-arrange data on grid
+          setSoyProduction(soyProduction - 100);
+        }
+        else if( increase )
+        {
+          // Call to re-arrange data on grid
+          setSoyProduction(soyProduction + 100);
+        }
+        success = true;
+        break;
+      case "Rice":
+        // has to be greater than 100 square km's
+        if( !increase && riceProduction >= 100 )
+        {
+          // Call to re-arrange data on grid
+          setRiceProduction(riceProduction - 100);
+        }
+        else if( increase )
+        {
+          // Call to re-arrange data on grid
+          setRiceProduction(riceProduction + 100);
+        }
+        success = true;
+        break;
+      case "Other":
+        // has to be greater than 100 square km's
+        if( !increase && otherProduction >= 100 )
+        {
+          // Call to re-arrange data on grid
+          setOtherProduction(otherProduction-100);
+        }
+        else if( increase )
+        {
+          // Call to re-arrange data on grid
+          setOtherProduction(otherProduction+100);
+        }
+        success = true;
+        break;
+      default:
+        // Do nothing
+    }
+    return success;
   }
 }
