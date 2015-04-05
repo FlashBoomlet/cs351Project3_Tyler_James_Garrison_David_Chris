@@ -4,7 +4,7 @@ package gui.regionlooks;
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import model.WorldCell;
-
+import gui.displayconverters.EquirectangularConverter;
 import java.awt.*;
 import java.util.HashSet;
 
@@ -17,36 +17,14 @@ import java.util.HashSet;
  */
 class RegionAverageTemperatureView implements RegionView
 {
+  private static EquirectangularConverter converter = new EquirectangularConverter();
   private static Color[] colors = ColorsAndFonts.TEMPERATURE;
-  private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(AVE_MONTH_TEMP_HI);
+  private static double LIMIT = colors.length / 100.0;
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    if (gRegion == null ) //|| gRegion.getRegion().getAttributes() == null)
-    {
-      System.err.println("(!) GUI REGION or attribute set is null!");
-      return;
-    }
-    HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
-    if(relevantCells.isEmpty()){
-      System.out.println("empty daug");
-    }
-    for(WorldCell cell: relevantCells){
-      System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
-    }
-    double temp = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_HI);
-    double low = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_LO); // is 0.0 right now...
-    Color color = Color.CYAN;
-    if (!gRegion.isActive())
-    {
-      int select = (int) (temp * LIMIT);
-      if(select<0) select = 0;
-      if(select < colors.length)
-        color = colors[select];
-      else
-        color = colors[colors.length-1];
-    }
+    Color color = Color.white;
 
     for( Polygon p: gRegion.getPoly() )
     {
@@ -55,5 +33,26 @@ class RegionAverageTemperatureView implements RegionView
       g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
       g.drawPolygon(p);
     }
+
+    HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
+    if (!gRegion.isActive())
+    {
+      for(WorldCell cell: relevantCells){
+        System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
+
+//        int select = (int) (cell.getTempAvg() * LIMIT);
+//        if(select<0) select = 0;
+//        if(select < colors.length)
+//          color = colors[select];
+//        else
+//          color = colors[colors.length-1];
+
+        color = Color.red;
+
+        g.setColor(color);
+        g.drawRect((int)converter.lonToX(cell.getLon()),(int)converter.latToY(cell.getLat()),4,4);
+      }
+    }
+
   }
 }

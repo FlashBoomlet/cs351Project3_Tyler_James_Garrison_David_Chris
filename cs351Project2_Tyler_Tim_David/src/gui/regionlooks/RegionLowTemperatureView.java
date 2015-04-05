@@ -18,41 +18,27 @@ import java.util.HashSet;
 class RegionLowTemperatureView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.TEMPERATURE;
-  private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(AVE_MONTH_TEMP_HI);
+  private static double LIMIT = colors.length / 100.0;
 
   @Override
-  public void draw(Graphics g, GUIRegion gRegion)
-  {
-    if (gRegion == null ) //|| gRegion.getRegion().getAttributes() == null)
-    {
-      System.err.println("(!) GUI REGION or attribute set is null!");
-      return;
-    }
-    HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
-    if(relevantCells.isEmpty()){
-      System.out.println("empty daug");
-    }
-    for(WorldCell cell: relevantCells){
-      System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
-    }
-    double temp = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_HI);
+  public void draw(Graphics g, GUIRegion gRegion) {
     Color color = Color.CYAN;
-    if (!gRegion.isActive())
-    {
-      int select = (int) (temp * LIMIT);
-      if(select<0) select = 0;
-      if(select < colors.length)
-        color = colors[select];
-      else
-        color = colors[colors.length-1];
-    }
 
-    for( Polygon p: gRegion.getPoly() )
-    {
-      g.setColor(color);
-      g.fillPolygon(p);
-      g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
-      g.drawPolygon(p);
+    HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
+    if (!gRegion.isActive()) {
+      for (WorldCell cell : relevantCells) {
+        //System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
+
+        int select = (int) (cell.getTempAvg() * LIMIT);
+        if (select < 0) select = 0;
+        if (select < colors.length)
+          color = colors[select];
+        else
+          color = colors[colors.length - 1];
+
+        g.setColor(color);
+        g.drawRect((int) cell.getLat(), (int) cell.getLon(), 2, 2);
+      }
     }
   }
 }
