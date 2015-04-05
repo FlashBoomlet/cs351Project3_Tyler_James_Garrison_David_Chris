@@ -3,11 +3,8 @@ package gui.regionlooks;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.RegionAttributes;
 
 import java.awt.*;
-
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.SOIL_TYPE;
 
 /**
  * Created by David M. on 3/31/2015
@@ -29,6 +26,9 @@ class RegionCornView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
+    double corn = 0;
+    double limit = 0;
+    /*
     double limit = colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
 
     if (gRegion == null || gRegion.getRegion().getAttributes() == null) {
@@ -36,7 +36,8 @@ class RegionCornView implements RegionView
       return;
     }
 
-    double corn = gRegion.getRegion().getAttributes().getCropP("Corn");
+    corn = gRegion.getRegion().getAttributes().getCropP("Corn");
+    */
     Color color;
     if (gRegion.isActive())
     {

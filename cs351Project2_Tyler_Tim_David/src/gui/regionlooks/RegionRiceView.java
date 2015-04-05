@@ -25,14 +25,14 @@ class RegionRiceView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double limit = colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
+    double limit = 0; //colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
 
-    if (gRegion == null || gRegion.getRegion().getAttributes() == null) {
+    if (gRegion == null ){ //|| gRegion.getRegion().getAttributes() == null) {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
 
-    double rice = gRegion.getRegion().getAttributes().getCropP("Rice");
+    double rice = 0; //gRegion.getRegion().getAttributes().getCropP("Rice");
     Color color;
     if (gRegion.isActive())
     {

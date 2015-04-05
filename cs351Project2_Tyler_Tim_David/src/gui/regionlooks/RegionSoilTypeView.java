@@ -3,11 +3,9 @@ package gui.regionlooks;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.RegionAttributes;
 
 import java.awt.*;
 
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.SOIL_TYPE;
 
 /**
  * Created by David M. on 3/22/2015
@@ -18,7 +16,7 @@ import static model.RegionAttributes.PLANTING_ATTRIBUTES.SOIL_TYPE;
 class RegionSoilTypeView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.SOIL;
-  private static double LIMIT = colors.length / RegionAttributes.LIMITS.get(SOIL_TYPE);
+  private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(SOIL_TYPE);
 
   /**
    * Method takes soil types from region and displays it.
@@ -29,13 +27,13 @@ class RegionSoilTypeView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    if (gRegion == null || gRegion.getRegion().getAttributes() == null)
+    if (gRegion == null ) //|| gRegion.getRegion().getAttributes() == null)
     {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
 
-    double nourish = gRegion.getRegion().getAttributes().getAttribute(SOIL_TYPE);
+    double nourish = 0; //gRegion.getRegion().getAttributes().getAttribute(SOIL_TYPE);
     Color color;
     if (gRegion.isActive())
     {

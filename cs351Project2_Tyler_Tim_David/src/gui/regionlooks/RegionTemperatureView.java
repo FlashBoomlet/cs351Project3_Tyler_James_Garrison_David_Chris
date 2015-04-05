@@ -3,14 +3,11 @@ package gui.regionlooks;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.RegionAttributes;
 import model.WorldCell;
 
 import java.awt.*;
 import java.util.HashSet;
 
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.AVE_MONTH_TEMP_HI;
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.AVE_MONTH_TEMP_LO;
 
 /**
  * Created by David M. on 3/31/2015
@@ -21,7 +18,7 @@ import static model.RegionAttributes.PLANTING_ATTRIBUTES.AVE_MONTH_TEMP_LO;
 class RegionTemperatureView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.TEMPERATURE;
-  private static double LIMIT = colors.length / RegionAttributes.LIMITS.get(AVE_MONTH_TEMP_HI);
+  private static double LIMIT = 0; //colors.length / RegionAttributes.LIMITS.get(AVE_MONTH_TEMP_HI);
 
   /**
    * Method takes temperatures from region and displays it.
@@ -32,7 +29,7 @@ class RegionTemperatureView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    if (gRegion == null || gRegion.getRegion().getAttributes() == null)
+    if (gRegion == null ) //|| gRegion.getRegion().getAttributes() == null)
     {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
@@ -41,8 +38,8 @@ class RegionTemperatureView implements RegionView
     for(WorldCell cell: relevantCells){
       System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
     }
-    double temp = gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_HI);
-    double low = gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_LO); // is 0.0 right now...
+    double temp = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_HI);
+    double low = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_LO); // is 0.0 right now...
     Color color;
     if (gRegion.isActive())
     {

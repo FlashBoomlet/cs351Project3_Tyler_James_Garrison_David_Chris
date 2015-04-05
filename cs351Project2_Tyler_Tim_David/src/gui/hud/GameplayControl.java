@@ -25,7 +25,7 @@ public class GameplayControl extends JPanel implements ActionListener
   private JButton faster;
   private JButton slower;
   private static JLabel speed;
-  private final double TIMER_ADJUST = 100;
+  private final double TIMER_ADJUST = 200;
 
   /**
    * GameplayControl initializes all of the components and adds them
@@ -104,7 +104,7 @@ public class GameplayControl extends JPanel implements ActionListener
 
     if( name == "Next Year" )
     {
-      MapPane.presenter.setWorldForward(364);
+      MapPane.presenter.setWorldForward(365);
     }
     else if( name == "-" )
     {

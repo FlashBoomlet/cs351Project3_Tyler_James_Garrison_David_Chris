@@ -25,14 +25,14 @@ class RegionOtherView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double limit = colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
+    double limit = 0; //colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
 
-    if (gRegion == null || gRegion.getRegion().getAttributes() == null) {
+    if (gRegion == null ){ //|| gRegion.getRegion().getAttributes() == null) {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
 
-    double other = gRegion.getRegion().getAttributes().getCropP("Other");
+    double other = 0; //gRegion.getRegion().getAttributes().getCropP("Other");
     Color color;
     if (gRegion.isActive())
     {
