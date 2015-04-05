@@ -15,19 +15,20 @@ import java.awt.*;
 class RegionRiceView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.RICE;
-  private static double LIMIT = colors.length;
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
     double land = 0.0;
+    double limit = 0.0;
     if( gRegion.getOfficialCountry() ) {
       land = gRegion.getCountryData().getRiceLand(true);
+      limit = colors.length/(gRegion.getCountryData().getArableOpen(true));
     }
     Color color = Color.cyan;
     if (!gRegion.isActive())
     {
-      int select = (int) (land * LIMIT);
+      int select = (int) (land * limit);
       if(select < colors.length)
         color = colors[select];
       else

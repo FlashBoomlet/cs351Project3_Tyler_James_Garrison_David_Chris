@@ -15,19 +15,20 @@ import java.awt.*;
 class RegionSoyView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.SOY;
-  private static double LIMIT = colors.length;
 
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
     double land = 0.0;
+    double limit = 0.0;
     if( gRegion.getOfficialCountry() ) {
       land = gRegion.getCountryData().getSoyLand(true);
+      limit = colors.length/(gRegion.getCountryData().getArableOpen(true));
     }
     Color color = Color.cyan;
     if (!gRegion.isActive())
     {
-      int select = (int) (land * LIMIT);
+      int select = (int) (land * limit);
       if(select < colors.length)
         color = colors[select];
       else

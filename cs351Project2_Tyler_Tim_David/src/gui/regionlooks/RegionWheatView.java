@@ -16,35 +16,28 @@ class RegionWheatView implements RegionView
 {
   private static Color[] colors = ColorsAndFonts.WHEAT;
 
-  /**
-   * Method takes % wheat from region and displays it.
-   *
-   * @param g
-   * @param gRegion
-   */
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    double limit = 0; // colors.length / gRegion.getRegion().getAttributes().getCropP("Arable land");
-
-    if (gRegion == null ){ // || gRegion.getRegion().getAttributes() == null) {
-      System.err.println("(!) GUI REGION or attribute set is null!");
-      return;
+    double land = 0.0;
+    double limit = 0.0;
+    if( gRegion.getOfficialCountry() ) {
+      land = gRegion.getCountryData().getWheatLand(true);
+      limit = colors.length/(gRegion.getCountryData().getArableOpen(true));
     }
-
-    double wheat = 0; //gRegion.getRegion().getAttributes().getCropP("Wheat");
-    Color color;
-    if (gRegion.isActive())
+    Color color = Color.cyan;
+    if (!gRegion.isActive())
     {
-      color = Color.CYAN;
-    }
-    else
-    {
-      int select = (int) (wheat * limit);
+      int select = (int) (land * limit);
       if(select < colors.length)
         color = colors[select];
       else
         color = colors[colors.length-1];
+    }
+
+    // If the region is not a recognized region, treat it as a dead region
+    if( !gRegion.getOfficialCountry() ) {
+      color = ColorsAndFonts.DEAD_REGION;
     }
 
     for( Polygon p: gRegion.getPoly() )
