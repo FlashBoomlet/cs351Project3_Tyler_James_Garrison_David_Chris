@@ -127,7 +127,7 @@ public class World
   {
     for (Region area: world)
     {
-      area.setFirstCrops();;
+      area.setFirstCrops();
     }
   }
 }

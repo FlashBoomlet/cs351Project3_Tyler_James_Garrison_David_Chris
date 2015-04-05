@@ -153,6 +153,7 @@ public class Game
     worldPresenter.setBackgroundRegions(xmlRegions);
     worldPresenter.setModelRegions(xmlRegions);
     new CountryCSVParser( worldPresenter.getAllRegions() );
+    world.setAllFirstCrops();
     world.setPresenter(worldPresenter );
 
     feedPanelHeight = (int) (frameHeight/25);

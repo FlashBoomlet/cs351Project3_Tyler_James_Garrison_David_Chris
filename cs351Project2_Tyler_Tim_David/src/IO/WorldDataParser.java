@@ -133,9 +133,11 @@ public class WorldDataParser
       Scanner scan = new Scanner(new FileReader(fileURL));
       int counterX = 0;
       int counterY = 0;
+      float temp = 0;
       while (scan.hasNext())
       {
-        worldArray.get(counterX, counterY).setTempAvg(Float.parseFloat(scan.nextLine()));
+        temp = Float.parseFloat(scan.nextLine());
+        worldArray.get(counterX, counterY).setTempAvg(temp);
         if (counterX == X_CELLS)
         {
           break;
