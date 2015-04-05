@@ -22,8 +22,8 @@ public class AtomicRegion implements Region
   private String name;
   private RegionAttributes attributes;
   private String flagLocation;
-  private HashSet<WorldCell> landCells;
-  private HashSet<WorldCell> relevantCells;
+  private HashSet<WorldCell> landCells = new HashSet<>();
+  private HashSet<WorldCell> relevantCells = new HashSet<>();
   private CountryData data = null;
   private boolean officialCountry = false;
 
