@@ -31,7 +31,7 @@ public class BarPanel extends JPanel
   private Color chosenTextColor = BAR_TEXT_C;
   private Color barColor;
   private final JLabel label;
-  private final double ratio;
+  private double ratio;
   private String overLayText;
   private AdjustBox adjustBox;
   private JPanel dataPanel;
@@ -147,7 +147,7 @@ public class BarPanel extends JPanel
     //config
     setBackground(ColorsAndFonts.OCEANS);
 
-    //setPreferredSize(new Dimension(width, height));
+    //setPreferredSize(new Dimension(width-8, height));
 
     label.setFont(ColorsAndFonts.TOP_FONT);
     label.setForeground(chosenTextColor);
@@ -170,6 +170,11 @@ public class BarPanel extends JPanel
   public void setOverLayText(String text)
   {
     overLayText = text;
+  }
+
+  public void updateRatio(Double ratio)
+  {
+    this.ratio = this.ratio + ratio;
   }
 
   /**

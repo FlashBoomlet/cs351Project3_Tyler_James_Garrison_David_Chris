@@ -38,11 +38,12 @@ public class DatePanel extends JPanel
    */
   public DatePanel(int x, int y, int width, int height)
   {
-    bar = new BarPanel(Color.cyan, 0.5, "Time", "MMM d, YYYY", x, y, width, height);
-
+    bar = new BarPanel(Color.cyan, 0.5, "Timeline/Progress :", "MMM d, YYYY", x, y, width, height);
+    bar.setPreferredSize(new Dimension(width-10, height));
     formatter = new SimpleDateFormat(DATE_PATTERN);
 
     setOpaque(true);
+    setPreferredSize(new Dimension(width,height));
     setBackground(guiBackground);
     setBorder(BorderFactory.createMatteBorder(0, 3, 1, 3, ColorsAndFonts.GUI_TEXT_COLOR.darker()  ));
 
@@ -57,6 +58,7 @@ public class DatePanel extends JPanel
   public void setDate(Date d)
   {
     date = d;
+    bar.updateRatio(0.05);
     bar.setOverLayText(getDateString(d).toUpperCase());
    // repaint();
   }
