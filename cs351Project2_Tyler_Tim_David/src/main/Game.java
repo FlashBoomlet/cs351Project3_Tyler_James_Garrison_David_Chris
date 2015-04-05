@@ -36,6 +36,10 @@ public class Game
   public static final String MODEL_DATA_PATH = "resources/ne_10m_admin_1_states_provinces.kml";
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
   public static final String PRECIP_DATA = "resources/data/precip2010.txt";
+  public static final String SITES = "resources/data/site_summary.txt";
+  public static final String AVG = "resources/data/TAVG.txt";
+  public static final String MAX = "resources/data/TMAX.txt";
+  public static final String MIN = "resources/data/TMIN.txt";
   int frameWidth = 1200;
   int frameHeight = 700;
   final float NAV_HEIGHT_SCALE = (float) .25;
@@ -145,6 +149,7 @@ public class Game
 
     MapConverter converter = new EquirectangularConverter();
     WorldDataParser globalData = new WorldDataParser(world);
+    //globalData.parsePrecip(PRECIP_DATA);
 
     worldPresenter = new WorldPresenter(converter, world);
     worldPresenter.setBackgroundRegions(background);

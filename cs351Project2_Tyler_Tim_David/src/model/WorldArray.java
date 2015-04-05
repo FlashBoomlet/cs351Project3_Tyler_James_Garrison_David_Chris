@@ -136,7 +136,7 @@ public class WorldArray
   }
 
   /**
-   * Right now, this visits ALL cells, not just land.
+   *Somewhat inefficient, could try to visit ocean cells
    */
   public void addNoise ()
   {
@@ -155,7 +155,7 @@ public class WorldArray
     {
       tempX = rand.nextInt(X_CELLS);
       tempY = rand.nextInt(Y_CELLS);
-      if (!visited.contains(worldCells[tempX][tempY]))
+      if (!visited.contains(worldCells[tempX][tempY]) && worldCells[tempX][tempY].hasCountry())
       {
         deltaOne = (float) ((worldCells[tempX][tempY].getAnnualHigh() - worldCells[tempX][tempY].getAnnualLow()) * .1 * randPercent * (r1 - r2));
         worldCells[tempX][tempY].setAnnualHigh(worldCells[tempX][tempY].getAnnualHigh() + deltaOne);
