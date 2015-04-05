@@ -37,7 +37,7 @@ public class Game
   public static final String PRECIP_DATA = "resources/data/precip.txt";
   //public static final String SITES = "resources/data/site_summary.txt";
   public static final String AVG = "resources/data/tavg.txt";
-  public static final String MAX = "resources/data/TMAX.txt";
+  public static final String MAX = "resources/data/tmax.txt";
   public static final String MIN = "resources/data/tmin.txt";
   int frameWidth = 1200;
   int frameHeight = 700;
@@ -59,6 +59,11 @@ public class Game
   private static SettingsScreen settingsScreen;
   private static JPanel defaultScreen;
   private static MapScale mapScale;
+  public static void repaintMapScale()
+  {
+    mapScale.updateScale();
+    mapScale.repaint();
+  }
 
   /*
    * Frame components
@@ -174,7 +179,7 @@ public class Game
 
     buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
-    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20);
+    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,worldPresenter);
 
     initFrame();
     setupControlls();

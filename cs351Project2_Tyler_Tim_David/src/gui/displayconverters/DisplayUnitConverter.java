@@ -33,8 +33,8 @@ public class DisplayUnitConverter
    */
   public String getLandUsedSymbol(boolean metricUnits)
   {
-    if( metricUnits ) return "km^2";
-    else return "km^2";
+    if( metricUnits ) return "sqKm";
+    else return "sqM";
   }
 
   /**
@@ -105,4 +105,14 @@ public class DisplayUnitConverter
     return " years of age";
   }
 
+  /**
+   * Returns the unit for the scale
+   *
+   * @return string " years of age"
+   */
+  public String getScaleSymbol(boolean metricUnits)
+  {
+    if( metricUnits ) return "Km";
+    else return "Miles";
+  }
 }
