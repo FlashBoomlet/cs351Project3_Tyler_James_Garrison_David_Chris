@@ -6,6 +6,7 @@ import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.displayconverters.DisplayUnitConverter;
 import main.Game;
+import main.SettingsScreen;
 import model.CountryData;
 import model.Region;
 
@@ -47,6 +48,8 @@ public class InfoPanel extends JPanel implements Observer
   private WorldPresenter presenter;
   private DisplayUnitConverter converter = new DisplayUnitConverter();
   private Region region = null;
+  private static JButton hide;
+  private static JButton units;
   /*
    * Variables
    */
@@ -69,6 +72,8 @@ public class InfoPanel extends JPanel implements Observer
     landStats = new StatPane("LAND DATA:",frameWidth,frameHeight);
     infoPanelUserControls = new InfoPanelUserControls();
 
+    metricUnits = SettingsScreen.getUnits();
+
     //config
     this.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
     // GridBagConstraints c = new GridBagConstraints();
@@ -80,15 +85,16 @@ public class InfoPanel extends JPanel implements Observer
     //this.setBackground(GUI_BACKGROUND);
     this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
 
+    //to ensure that the entire bargraph is shown
+    int statsWidth = (int) (frameWidth*.99);
+
     //wire
-    miniViewBox.setPreferredSize(new Dimension(frameWidth, (frameHeight / 4)));
+    miniViewBox.setPreferredSize(new Dimension(statsWidth, (frameHeight / 4)));
     this.add(miniViewBox);
 
     int generalHeight = ( (frameHeight*3) / 16);
     int landHeight = ( (frameHeight*3) / 16);
     int cropHeight = frameHeight - ( ((frameHeight*5) / 16) + generalHeight + landHeight);
-    //to ensure that the entire bargraph is shown
-    int statsWidth = (int) (frameWidth*.99);
     //General
     stats.setPreferredSize(new Dimension( statsWidth, generalHeight));
     this.add(stats);
@@ -595,20 +601,36 @@ public class InfoPanel extends JPanel implements Observer
 
   /**
    * Called to update the units
-   * @param units true for metric or false for english
+   * @param unitsB true for metric or false for english
    */
-  public static void setMetricUnits(boolean units)
+  public static void setMetricUnits(boolean unitsB)
   {
-    metricUnits = metricUnits;
+    metricUnits = unitsB;
     main.Game.infoPanel.update(null, null);
+    if( unitsB )
+    {
+      units.setText("English");
+    }
+    else
+    {
+      units.setText("Metric");
+    }
 
+  }
+
+  /**
+   * hidePanel and clear active regions when settings are altered and or
+   * the game is paused
+   */
+  public void hidePanel()
+  {
+    getPresenter().clearActiveList();
+    main.Game.infoPanel.update(null, null);
+    this.setVisible(false);
   }
 
   class InfoPanelUserControls extends JPanel implements ActionListener
   {
-    JButton hide;
-    JButton units;
-
     InfoPanelUserControls()
     {
       super();
@@ -644,12 +666,12 @@ public class InfoPanel extends JPanel implements Observer
       else if( text == "Metric" )
       {
         setMetricUnits(true);
-        units.setText("English");
+        SettingsScreen.updateUnits(true);
       }
       else if( text == "English" )
       {
         setMetricUnits(false);
-        units.setText("Metric");
+        SettingsScreen.updateUnits(false);
       }
       main.Game.infoPanel.update(null, null);
     }
