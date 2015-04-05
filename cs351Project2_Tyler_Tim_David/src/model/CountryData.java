@@ -209,10 +209,10 @@ public class CountryData
   {
     double rtnVal = (
       getOtherTotal(metricUnits) +
-      getSoyTotal(metricUnits) +
-      getRiceTotal(metricUnits) +
-      getWheatTotal(metricUnits) +
-      getCornTotal(metricUnits)
+        getSoyTotal(metricUnits) +
+        getRiceTotal(metricUnits) +
+        getWheatTotal(metricUnits) +
+        getCornTotal(metricUnits)
     );
     return rtnVal;
   }
@@ -641,12 +641,10 @@ public class CountryData
         // has to be greater than 100 square km's
         if( !increase && cornProduction >= 100 )
         {
-          // Call to re-arrange data on grid
           setCornProduction(cornProduction - 100);
         }
         else if( increase )
         {
-          // Call to re-arrange data on grid
           setCornProduction(cornProduction + 100);
         }
         success = true;
@@ -655,12 +653,10 @@ public class CountryData
         // has to be greater than 100 square km's
         if( !increase && wheatProduction >= 100 )
         {
-          // Call to re-arrange data on grid
           setWheatProduction(wheatProduction - 100);
         }
         else if( increase )
         {
-          // Call to re-arrange data on grid
           setWheatProduction(wheatProduction + 100);
         }
         success = true;
@@ -669,12 +665,10 @@ public class CountryData
         // has to be greater than 100 square km's
         if( !increase && soyProduction >= 100 )
         {
-          // Call to re-arrange data on grid
           setSoyProduction(soyProduction - 100);
         }
         else if( increase )
         {
-          // Call to re-arrange data on grid
           setSoyProduction(soyProduction + 100);
         }
         success = true;
@@ -683,12 +677,10 @@ public class CountryData
         // has to be greater than 100 square km's
         if( !increase && riceProduction >= 100 )
         {
-          // Call to re-arrange data on grid
           setRiceProduction(riceProduction - 100);
         }
         else if( increase )
         {
-          // Call to re-arrange data on grid
           setRiceProduction(riceProduction + 100);
         }
         success = true;
@@ -697,19 +689,101 @@ public class CountryData
         // has to be greater than 100 square km's
         if( !increase && otherProduction >= 100 )
         {
-          // Call to re-arrange data on grid
           setOtherProduction(otherProduction-100);
         }
         else if( increase )
         {
-          // Call to re-arrange data on grid
           setOtherProduction(otherProduction+100);
+        }
+        success = true;
+        break;
+      case "Organic":
+        // has to be greater than 5%
+        if( !increase && organic >= 0.05 )
+        {
+          if( getLandUseTotal() < 0.95 ) findMaxAndIncrease();
+          setOrganic(organic - 0.05);
+        }
+        else if( increase )
+        {
+          if( getLandUseTotal() >= 0.95 ) findMaxAndDecrease();
+          setOrganic(organic + 0.05);
+        }
+        success = true;
+        break;
+      case "Conventional":
+        // has to be greater than 5%
+        if( !increase && conventional >= 0.05 )
+        {
+          if( getLandUseTotal() < 0.95 ) findMaxAndIncrease();
+          setConventional(conventional - 0.05);
+        }
+        else if( increase )
+        {
+          if( getLandUseTotal() >= 0.95 ) findMaxAndDecrease();
+          setConventional(conventional + 0.05);
+        }
+        success = true;
+        break;
+      case "GMO":
+        // has to be greater than 5%
+        if( !increase && gmo >= 0.05 )
+        {
+          if( getLandUseTotal() < 0.95 ) findMaxAndIncrease();
+          setGmo(gmo - 0.05);
+        }
+        else if( increase )
+        {
+          if( getLandUseTotal() >= 0.95 ) findMaxAndDecrease();
+          setGmo(gmo+0.05);
         }
         success = true;
         break;
       default:
         // Do nothing
     }
+    if( success ){
+      //Call to re-arrange data on grid for this region
+    }
     return success;
+  }
+
+  private void findMaxAndDecrease()
+  {
+    double max = conventional;
+    if( organic >= max && gmo <= max )
+    {
+      organic -= 0.05;
+    }
+    else if ( gmo >= max && organic <= max )
+    {
+      gmo -= 0.05;
+    }
+    else
+    {
+      conventional -= 0.05;
+    }
+  }
+
+  private void findMaxAndIncrease()
+  {
+    double max = conventional;
+    if( organic >= max && gmo <= max )
+    {
+      organic += 0.05;
+    }
+    else if ( gmo >= max && organic <= max )
+    {
+      gmo += 0.05;
+    }
+    else
+    {
+      conventional += 0.05;
+    }
+  }
+
+  private double getLandUseTotal()
+  {
+    return (conventional + organic + gmo);
   }
 }
