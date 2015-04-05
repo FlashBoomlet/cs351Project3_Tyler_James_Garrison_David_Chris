@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.LinkedList;
 import java.awt.geom.Path2D;
+import model.common.CropIdeals;
 
 
 /**
@@ -16,7 +17,7 @@ import java.awt.geom.Path2D;
  * Restructured by:
  * @author Tyler Lynch <lyncht@unm.edu>
  */
-public class AtomicRegion implements Region
+public class AtomicRegion implements Region, CropIdeals
 {
   private List<MiniArea> perimeter;
   private String name;
@@ -25,6 +26,12 @@ public class AtomicRegion implements Region
   private HashSet<WorldCell> relevantCells = new HashSet<>();
   private CountryData data = null;
   private boolean officialCountry = false;
+  private int OTHER_AVG_HIGH;
+  private int OTHER_AVG_LOW;
+  private int OTHER_MAX_HIGH;
+  private int OTHER_MAX_LOW;
+  private int OTHER_RAIN_HIGH;
+  private int OTHER_RAIN_LOW;
 
 
   @Override
@@ -225,6 +232,7 @@ public class AtomicRegion implements Region
     {
       return;
     }
+    setOtherIdeals();
     /*
     for (String s: attributes.getAllCrops())
     {
@@ -362,7 +370,167 @@ public class AtomicRegion implements Region
 
   private int checkIdeal (WorldCell cell, String crop)
   {
-    return 0;
+    float precip = cell.getPrecip();
+    float tAvg = cell.getTempAvg();
+    float tMax = cell.getAnnualHigh();
+    float tMin = cell.getAnnualLow();
+    int ideal = 0;
+    if (crop.equals("Wheat"))
+    {
+      if (precip > WHEAT_RAIN_LOW && precip < WHEAT_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      if (tAvg > WHEAT_AVG_LOW && tAvg < WHEAT_AVG_HIGH)
+      {
+        ideal++;
+      }
+      if (tMax < WHEAT_MAX_HIGH)
+      {
+        ideal++;
+      }
+      if (tMin > WHEAT_MAX_LOW)
+      {
+        ideal++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Soy"))
+    {
+      if (precip > SOY_RAIN_LOW && precip < SOY_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      if (tAvg > SOY_AVG_LOW && tAvg < SOY_AVG_HIGH)
+      {
+        ideal++;
+      }
+      if (tMax < SOY_MAX_HIGH)
+      {
+        ideal++;
+      }
+      if (tMin > SOY_MAX_LOW)
+      {
+        ideal++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Corn"))
+    {
+      if (precip > CORN_RAIN_LOW && precip < CORN_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      if (tAvg > CORN_AVG_LOW && tAvg < CORN_AVG_HIGH)
+      {
+        ideal++;
+      }
+      if (tMax < CORN_MAX_HIGH)
+      {
+        ideal++;
+      }
+      if (tMin > CORN_MAX_LOW)
+      {
+        ideal++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Rice"))
+    {
+      if (precip > RICE_RAIN_LOW && precip < RICE_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      if (tAvg > RICE_AVG_LOW && tAvg < RICE_AVG_HIGH)
+      {
+        ideal++;
+      }
+      if (tMax < RICE_MAX_HIGH)
+      {
+        ideal++;
+      }
+      if (tMin > RICE_MAX_LOW)
+      {
+        ideal++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Other"))
+    {
+      if (precip > OTHER_RAIN_LOW && precip < OTHER_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      if (tAvg > OTHER_AVG_LOW && tAvg < OTHER_AVG_HIGH)
+      {
+        ideal++;
+      }
+      if (tMax < OTHER_MAX_HIGH)
+      {
+        ideal++;
+      }
+      if (tMin > OTHER_MAX_LOW)
+      {
+        ideal++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    return -1;
   }
 
   private void setPriority (double arableTotal, int cellsNeeded, LinkedList<CropNum> cropPriority)
@@ -418,6 +586,37 @@ public class AtomicRegion implements Region
     {
       cropPriority.add(current);
     }
+  }
+
+  private void setOtherIdeals ()
+  {
+    float temp = 0;
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getTempAvg();
+    }
+    temp = temp / landCells.size();
+    OTHER_AVG_HIGH = (int) (temp + 5);
+    OTHER_AVG_LOW = (int) (temp - 5);
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getPrecip();
+    }
+    temp = temp / landCells.size();
+    OTHER_RAIN_HIGH = (int) (temp + 20);
+    OTHER_RAIN_LOW = (int) (temp - 20);
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getAnnualHigh();
+    }
+    temp = temp / landCells.size();
+    OTHER_MAX_HIGH = (int) temp;
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getAnnualLow();
+    }
+    temp = temp / landCells.size();
+    OTHER_MAX_LOW = (int) temp;
   }
 
   public void setCountryData(CountryData data)
