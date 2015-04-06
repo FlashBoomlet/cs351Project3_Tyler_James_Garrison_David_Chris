@@ -116,8 +116,9 @@ public class World
     {
       for( GUIRegion gr: worldPresenter.getAllRegions() )
       {
-        gr.iterateYear(worldArray);
+        gr.iterateYear();
       }
+      worldArray.updateClimate();
       main.Game.getWorldFeedPanel().update();
     }
 

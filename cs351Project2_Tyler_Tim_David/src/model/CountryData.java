@@ -617,13 +617,12 @@ public class CountryData
   /**
    * Calculates the the next years data based on data brought in, or rates calculated from it
    */
-  public void iterateYear(WorldArray worldArray, Region region)
+  public void iterateYear(Region region)
   {
     //calculateCountryConsumption();
     //calculatePerCapitaConsumption();
     //calculateBaseYield();
-    //worldArray.updateClimate();
-    //region.setCrops();
+    //region.setCrops(); Should be one of the first things as it places the crops based on what the user specifies in the GUI
   }
 
   /**
