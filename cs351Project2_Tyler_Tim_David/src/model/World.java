@@ -4,6 +4,7 @@ package model;
 import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.hud.DatePanel;
+import gui.hud.PopulationAndHappiness;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -117,6 +118,7 @@ public class World
       {
         gr.iterateYear(worldArray);
       }
+      PopulationAndHappiness.update();
     }
 
     return isPreviousYear;
