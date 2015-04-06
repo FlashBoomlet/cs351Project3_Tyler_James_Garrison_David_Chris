@@ -58,9 +58,13 @@ public class CountryData
   //Base Yield calculations
   private double idealLand = 1;
   private double acceptableLand = 0;
-  private double acceptableRate = 0;
+  private double acceptableRate = 0.6; //Pretty sure this and poorRate are un-needed, since they will always be .6 and .25.
   private double poorLand = 0;
-  private double poorRate = 0;
+  private double poorRate = 0.25;
+
+  //Country Center
+  private double centerLat;
+  private double centerLon;
 
   /**
    * Empty constructor
@@ -281,6 +285,22 @@ public class CountryData
   public double getGmo(boolean metricUnits)
   {
     return gmo;
+  }
+  /**
+   * get the centerLat
+   * @return centerLat
+   */
+  public double getShippingLat()
+  {
+    return centerLat;
+  }
+  /**
+   * get the centerLon
+   * @return centerLon
+   */
+  public double getShippingLon()
+  {
+    return centerLon;
   }
 
 
@@ -541,6 +561,23 @@ public class CountryData
   {
     this.gmo = gmo;
   }
+  /**
+   * set the centerLat
+   * @param centerLat centerLat
+   */
+  public void setShippingLat(double centerLat)
+  {
+    this.centerLat = centerLat;
+  }
+  /**
+   * set the centerLon
+   * @param centerLon centerLon
+   */
+  public void setShippingLon(double centerLon)
+  {
+    this.centerLon = centerLon;
+  }
+
 
 
 
@@ -700,61 +737,61 @@ public class CountryData
     {
       case "Corn":
         // has to be greater than 100 square km's
-        if( !increase && cornProduction >= 100 )
+        if( !increase && cornLand >= 100 )
         {
-          setCornProduction(cornProduction - 100);
+          setCornLand(cornLand - 100);
         }
         else if( increase )
         {
-          setCornProduction(cornProduction + 100);
+          setCornLand(cornLand + 100);
         }
         success = true;
         break;
       case "Wheat":
         // has to be greater than 100 square km's
-        if( !increase && wheatProduction >= 100 )
+        if( !increase && wheatLand >= 100 )
         {
-          setWheatProduction(wheatProduction - 100);
+          setWheatLand(wheatLand - 100);
         }
         else if( increase )
         {
-          setWheatProduction(wheatProduction + 100);
+          setWheatLand(wheatLand + 100);
         }
         success = true;
         break;
       case "Soy":
         // has to be greater than 100 square km's
-        if( !increase && soyProduction >= 100 )
+        if( !increase && soyLand >= 100 )
         {
-          setSoyProduction(soyProduction - 100);
+          setSoyLand(soyLand - 100);
         }
         else if( increase )
         {
-          setSoyProduction(soyProduction + 100);
+          setSoyLand(soyLand + 100);
         }
         success = true;
         break;
       case "Rice":
         // has to be greater than 100 square km's
-        if( !increase && riceProduction >= 100 )
+        if( !increase && riceLand >= 100 )
         {
-          setRiceProduction(riceProduction - 100);
+          setRiceLand(riceLand - 100);
         }
         else if( increase )
         {
-          setRiceProduction(riceProduction + 100);
+          setRiceLand(riceLand + 100);
         }
         success = true;
         break;
       case "Other":
         // has to be greater than 100 square km's
-        if( !increase && otherProduction >= 100 )
+        if( !increase && otherLand >= 100 )
         {
-          setOtherProduction(otherProduction-100);
+          setOtherLand(otherLand-100);
         }
         else if( increase )
         {
-          setOtherProduction(otherProduction+100);
+          setOtherLand(otherLand+100);
         }
         success = true;
         break;
