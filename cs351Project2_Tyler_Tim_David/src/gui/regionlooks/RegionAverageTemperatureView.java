@@ -26,34 +26,38 @@ class RegionAverageTemperatureView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    Color color = Color.white;
-
-    for( Polygon p: gRegion.getPoly() )
-    {
-      g.setColor(color);
-      g.fillPolygon(p);
-      g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
-      g.drawPolygon(p);
-    }
-
-    HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
-    if (!gRegion.isActive() && WorldPresenter.calcDistance(main.Game.getCamera()) == Camera.CAM_DISTANCE.CLOSE_UP )
-    {
-      for(WorldCell cell: relevantCells){
-
-        int select = (int) (cell.getTempAvg() * LIMIT);
-        if(select<0) select = 0;
-        if(select < colors.length)
-          color = colors[select];
-        else
-          color = colors[colors.length-1];
-
-        color = Color.red;
+    Rectangle cameraBounds = main.Game.getCamera().getViewBounds().getBounds();
+    for (Polygon p : gRegion.getPoly()) {
+      if(cameraBounds.intersects(p.getBounds())) {
+        Color color = Color.white;
+        if (gRegion.isActive()) color = Color.cyan;
 
         g.setColor(color);
-        g.fillOval((int) converter.lonToX(cell.getLon()), (int) converter.latToY(cell.getLat()),990,680);
+        g.fillPolygon(p);
+        g.setColor(ColorsAndFonts.PASSIVE_REGION_OUTLINE);
+        g.drawPolygon(p);
+
+        Camera.CAM_DISTANCE distance = WorldPresenter.calcDistance(main.Game.getCamera());
+        if (!gRegion.isActive() && distance == Camera.CAM_DISTANCE.CLOSE_UP || distance == Camera.CAM_DISTANCE.MEDIUM) {
+          HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
+          for (WorldCell cell : relevantCells) {
+            int cellX = (int) converter.lonToX(cell.getLon());
+            int cellY = (int) converter.latToY(cell.getLat());
+            if(cameraBounds.contains(cellX, cellY)){
+              int select = (int) ((cell.getTempAvg()+50.0) * LIMIT);
+              if (select < 0) select = 0;
+              if (select < colors.length)
+                color = colors[select];
+              else
+                color = colors[colors.length - 1];
+
+              g.setColor(color);
+              g.fillOval(cellX, cellY, 990, 680);
+            }
+          }
+        }
       }
     }
-
   }
+
 }
