@@ -114,9 +114,11 @@ public class World
     boolean isPreviousYear = previousYear != currentDate.get(Calendar.YEAR);
     if (isPreviousYear)
     {
-      for( GUIRegion gr: worldPresenter.getAllRegions() )
-      {
+      for( GUIRegion gr: worldPresenter.getAllRegions() ) {
         gr.iterateYear();
+      }
+      for( GUIRegion gr: worldPresenter.getAllRegions() ) {
+        gr.startIterate();
       }
       worldArray.updateClimate();
       main.Game.getWorldFeedPanel().update();
