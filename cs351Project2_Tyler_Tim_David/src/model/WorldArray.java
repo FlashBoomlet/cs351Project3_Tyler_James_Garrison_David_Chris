@@ -11,7 +11,8 @@ public class WorldArray
   private int X_CELLS;
   private int Y_CELLS;
   private WorldCell [][] worldCells;
-  float randPercent;
+  private float randPercent;
+  private float climateProjection = (float) 0.8;
 
   /**
    * Sets the array based on dimensions passed in.
@@ -26,6 +27,8 @@ public class WorldArray
     Y_CELLS = latHeight;
     initCells();
     this.randPercent = randPercent;
+    Random rand = new Random();
+    climateProjection = climateProjection + (float) ((2.6-0.8) * rand.nextFloat());
   }
 
   /**
@@ -163,9 +166,29 @@ public class WorldArray
   }
 
   /**
+   * Updates the climate according to the model
+   * and adds noise to 10 percent of the cells randomly.
+   */
+  public void updateClimate ()
+  {
+    WorldCell current = null;
+    for (int i = 0; i < X_CELLS; i++)
+    {
+      for (int j = 0; j < Y_CELLS; j++)
+      {
+        current = worldCells[i][j];
+        current.setTempAvg(current.getTempAvg() + climateProjection / ((float) 2050 - 2014));
+        current.setAnnualHigh(current.getAnnualHigh() + climateProjection / ((float) 2050 - 2014));
+        current.setAnnualLow(current.getAnnualLow() + climateProjection / ((float) 2050 - 2014));
+      }
+    }
+    addNoise();
+  }
+
+  /**
    * Adds noise to 10 percent of the cells randomly.
    */
-  public void addNoise ()
+  private void addNoise ()
   {
     int cellsToVisit = (int) (X_CELLS * Y_CELLS * .1);
     int counter = 0;
@@ -219,7 +242,7 @@ public class WorldArray
   {
     worldCells[x][y].setAnnualHigh(worldCells[x][y].getAnnualHigh() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
     worldCells[x][y].setAnnualLow(worldCells[x][y].getAnnualLow() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
-    worldCells[x][y].setTempAvg(worldCells[x][y].getTempAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
+    worldCells[x][y].setTempAvg(worldCells[x][y].getTempAvg() + (float) (deltaTwo / Math.log(Math.E + 100 * r3)));
     worldCells[x][y].setPrecip(worldCells[x][y].getPrecip() + (float) (deltaThree/Math.log(Math.E + 100 * r3)));
   }
 

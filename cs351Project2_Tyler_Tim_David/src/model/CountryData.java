@@ -622,7 +622,7 @@ public class CountryData
     //calculateCountryConsumption();
     //calculatePerCapitaConsumption();
     //calculateBaseYield();
-    //worldArray.addNoise();
+    //worldArray.updateClimate();
     //region.setCrops();
   }
 
