@@ -80,6 +80,10 @@ public class AtomicRegion implements Region, CropIdeals
         '}';
   }
 
+  /**
+   * Selects land cells for the area based on its mini areas.
+   * @param worldArray  All the World Cells.
+   */
   public void setLandCells (WorldArray worldArray)
   {
     for (MiniArea area: perimeter)
@@ -98,6 +102,9 @@ public class AtomicRegion implements Region, CropIdeals
     return relevantCells;
   }
 
+  /**
+   * Sets crops each year after the first in arable land cells.
+   */
   public void setCrops()
   {
     if (data == null)
@@ -214,6 +221,10 @@ public class AtomicRegion implements Region, CropIdeals
     clearCells(leftovers3);
   }
 
+  /**
+   * Sets the remaining cells to have no crops.
+   * @param leftovers Cells not used for crop placement.
+   */
   private void clearCells (HashSet<WorldCell> leftovers)
   {
     for (WorldCell cell: leftovers)
@@ -223,8 +234,7 @@ public class AtomicRegion implements Region, CropIdeals
   }
 
   /**
-   * Algorithm would be best if crop priority was
-   * based on crop pickiness.
+   * Sets crops in the first year.
    */
   public void setFirstCrops()
   {
@@ -353,6 +363,12 @@ public class AtomicRegion implements Region, CropIdeals
     finalizeCells(leftovers3, cellsNeeded);
   }
 
+  /**
+   * Grabs the number of arable cells still needed from
+   * the total after crop placement.
+   * @param leftovers   Cells not used yet for crops.
+   * @param cellsNeeded Number of arable land cells.
+   */
   private void finalizeCells (HashSet<WorldCell> leftovers, int cellsNeeded)
   {
     int length = cellsNeeded - relevantCells.size();
@@ -368,6 +384,15 @@ public class AtomicRegion implements Region, CropIdeals
     }
   }
 
+  /**
+   * Checks if a cell is ideal for a certain crop.
+   * 0 is ideal.
+   * 1 is acceptable.
+   * -1 is poor.
+   * @param cell  The cell.
+   * @param crop  The crop to check.
+   * @return      Ideal/Acceptable/Poor
+   */
   private int checkIdeal (WorldCell cell, String crop)
   {
     float precip = cell.getPrecip();
@@ -624,6 +649,12 @@ public class AtomicRegion implements Region, CropIdeals
     return -1;
   }
 
+  /**
+   * Sets up the crop linked list
+   * @param arableTotal   Total cells for arable land.
+   * @param cellsNeeded   Land needed to be filled with crops.
+   * @param cropPriority  The linked list of crops and the number of cells to plant each in.
+   */
   private void setPriority (double arableTotal, int cellsNeeded, LinkedList<CropNum> cropPriority)
   {
     int temp = (int) ((data.getCornLand(true)/arableTotal)* cellsNeeded);
@@ -638,6 +669,12 @@ public class AtomicRegion implements Region, CropIdeals
     addCrop(temp, "Other", cropPriority);
   }
 
+  /**
+   * Adds a crop to the linked list based on how many to be planted.
+   * @param number        How many to be planted.
+   * @param crop          The crop.
+   * @param cropPriority  The linked list of crops.
+   */
   private void addCrop (int number, String crop, LinkedList<CropNum> cropPriority)
   {
     boolean inserted = false;
@@ -659,6 +696,12 @@ public class AtomicRegion implements Region, CropIdeals
     }
   }
 
+  /**
+   * Sorts a crop back into the linked list,
+   * prioritizing least amount remaining.
+   * @param current       The current crop just checked/planted.
+   * @param cropPriority  The linked list of crops.
+   */
   private void resortCrop (CropNum current, LinkedList<CropNum> cropPriority)
   {
     boolean inserted = false;
@@ -679,6 +722,10 @@ public class AtomicRegion implements Region, CropIdeals
     }
   }
 
+  /**
+   * Sets the ideals for the Other crop
+   * based on this region's averages.
+   */
   private void setOtherIdeals ()
   {
     float temp = 0;
@@ -710,12 +757,19 @@ public class AtomicRegion implements Region, CropIdeals
     OTHER_MAX_LOW = (int) temp;
   }
 
+  /**
+   * Set the region's data.
+   * @param data  Country data.
+   */
   public void setCountryData(CountryData data)
   {
-    //System.out.println(name);
     this.data = data;
   }
 
+  /**
+   * Get the region's data.
+   * @return  Country data.
+   */
   public CountryData getCountryData()
   {
     return data;

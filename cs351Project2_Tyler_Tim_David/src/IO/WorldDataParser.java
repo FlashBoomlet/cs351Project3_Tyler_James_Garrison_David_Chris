@@ -33,6 +33,10 @@ public class WorldDataParser
     Y_CELLS = worldArray.getYSize();
   }
 
+  /**
+   * Read in max temperature data line by line.
+   * @param fileURL
+   */
   public void parseMaxTemp (String fileURL)
   {
     try
@@ -64,6 +68,10 @@ public class WorldDataParser
     }
   }
 
+  /**
+   * Read in min temperature data line by line.
+   * @param fileURL
+   */
   public void parseMinTemp (String fileURL)
   {
     try
@@ -95,6 +103,10 @@ public class WorldDataParser
     }
   }
 
+  /**
+   * Read in precipitation data line by line.
+   * @param fileURL
+   */
   public void parsePrecip (String fileURL)
   {
     try
@@ -126,6 +138,10 @@ public class WorldDataParser
     }
   }
 
+  /**
+   * Read in average temperature data line by line.
+   * @param fileURL
+   */
   public void parseAvgTemp (String fileURL)
   {
     try
