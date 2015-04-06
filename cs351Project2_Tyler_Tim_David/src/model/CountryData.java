@@ -605,11 +605,11 @@ public class CountryData
   /**
    * Calculates the Zero-Order Approximations
    */
-  public void calculateZeroOrder()
+  public void calculateZeroOrder(int [] landNums)
   {
     calculateCountryConsumption();
     calculatePerCapitaConsumption();
-    calculateBaseYield();
+    calculateBaseYield(landNums);
   }
 
   private void calculateCountryConsumption()
@@ -635,9 +635,14 @@ public class CountryData
   /**
    * Crop yield base case
    */
-  private void calculateBaseYield()
+  private void calculateBaseYield(int[] landNums)
   {
     //baseYield = getProdution()/(idealLand+(acceptableLand*acceptableRate)+(poorLand*poorRate));
+    baseYieldCorn = cornProduction/(landNums[0]+(landNums[1]*acceptableRate)+(landNums[2]*poorRate));
+    baseYieldWheat = wheatProduction/(landNums[3]+(landNums[4]*acceptableRate)+(landNums[5]*poorRate));
+    baseYieldSoy = soyProduction/(landNums[6]+(landNums[7]*acceptableRate)+(landNums[8]*poorRate));
+    baseYieldRice = riceProduction/(landNums[9]+(landNums[10]*acceptableRate)+(landNums[11]*poorRate));
+    baseYieldOther = otherProduction/(landNums[12]+(landNums[13]*acceptableRate)+(landNums[14]*poorRate));
   }
 
   private double getProdution()
