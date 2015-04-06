@@ -63,7 +63,6 @@ public class StartScreen extends JPanel
         "      The overall well being of a country is defined by their happiness.\n" +
         "      \n" +
         "      What portion of the government should you represent?\n" +
-        "         \tFor this simulation you are the\n" +
         "      \n" +
         "      Difficulty levels based on external influences on your policies\n" +
         "      At the end of the game you will see how well you have done throughout the game\n" +
