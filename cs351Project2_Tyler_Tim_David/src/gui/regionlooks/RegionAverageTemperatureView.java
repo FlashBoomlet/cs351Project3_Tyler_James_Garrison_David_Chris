@@ -5,7 +5,6 @@ import gui.Camera;
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.WorldPresenter;
-import model.World;
 import model.WorldCell;
 import gui.displayconverters.EquirectangularConverter;
 import java.awt.*;
@@ -41,7 +40,6 @@ class RegionAverageTemperatureView implements RegionView
     if (!gRegion.isActive() && WorldPresenter.calcDistance(main.Game.getCamera()) == Camera.CAM_DISTANCE.CLOSE_UP )
     {
       for(WorldCell cell: relevantCells){
-       // System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
 
         int select = (int) (cell.getTempAvg() * LIMIT);
         if(select<0) select = 0;
