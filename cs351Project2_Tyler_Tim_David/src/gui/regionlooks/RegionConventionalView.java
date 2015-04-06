@@ -6,7 +6,10 @@ import gui.GUIRegion;
 import java.awt.*;
 
 /**
- * Created  by David M on 3/22/2015
+ * Created by David M. on 3/31/2015
+ * CS 351 spring 2015
+ * <p/>
+ * Represents % conventional crop use of the region.
  */
 class RegionConventionalView implements RegionView
 {

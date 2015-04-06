@@ -2,14 +2,13 @@ package gui.regionlooks;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.RegionAttributes;
-
 import java.awt.*;
 
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.UNDERNOURISHMENT_RATE;
-
 /**
- * Created  by David M on 3/19/2015
+ * Created by David M. on 3/31/2015
+ * CS 351 spring 2015
+ * <p/>
+ * Represents the % malnourished of the region.
  */
 class RegionMalnourishmentView implements RegionView
 {
