@@ -37,6 +37,7 @@ public class GUIRegion
   private BufferedImage image;
   private boolean officialCountry = false;
   private CountryData data = null;
+  private int[] centerOfShipping = new int[2];
 
   /**
    * Loads the region's flag.
@@ -58,6 +59,15 @@ public class GUIRegion
     }
   }
 
+  /**
+   * Get the center of shipping location
+   * @return array where index 0 is the x location and index 1 is the y location
+   */
+  public int[] getCenterOfShipping()
+  {
+    return centerOfShipping;
+  }
+  
   /**
    * @return  Is region active.
    */
@@ -206,9 +216,8 @@ public class GUIRegion
 
   /**
    * Advances to the next year.
-   * @param worldArray  All of the World Cells to update.
    */
-  public void iterateYear(WorldArray worldArray)
+  public void iterateYear()
   {
     /*
      * It shouldn't need a null check but for some reason I am getting a null pointer
@@ -216,7 +225,7 @@ public class GUIRegion
      */
     if( data != null )
     {
-      data.iterateYear(worldArray, region);
+      data.iterateYear(region);
     }
   }
 

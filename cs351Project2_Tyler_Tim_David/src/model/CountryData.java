@@ -55,6 +55,13 @@ public class CountryData
   private double baseYield;
   private double randomization = 0;
 
+  //Base Yield calculations
+  private double idealLand = 1;
+  private double acceptableLand = 0;
+  private double acceptableRate = 0;
+  private double poorLand = 0;
+  private double poorRate = 0;
+
   /**
    * Empty constructor
    */
@@ -558,17 +565,25 @@ public class CountryData
 
   private void calculateCountryConsumption()
   {
-    // 2014 = produced + import -export
+    countryConsumption = getCropTotal(true);
   }
 
   private void calculatePerCapitaConsumption()
   {
     // Based on the Country consumption
+    perCapitaConsumption = countryConsumption/(population-((0.5)*undernourish));
   }
 
+  /**
+   * Crop yield base case
+   */
   private void calculateBaseYield()
   {
-    // yeah....
+    baseYield = getProdution()/(idealLand+(acceptableLand*acceptableRate)+(poorLand*poorRate));
+  }
+  private double getProdution()
+  {
+    return (cornProduction + wheatProduction + soyProduction + riceProduction + otherProduction);
   }
 
   public void randomizePercent()
@@ -616,10 +631,7 @@ public class CountryData
    */
 
 
-  /**
-   * Calculates the the next years data based on data brought in, or rates calculated from it
-   */
-  public void iterateYear(WorldArray worldArray, Region region)
+  private void calculateProduction(Region region)
   {
     HashSet<WorldCell> relevantCells = region.getArableCells();
     double corn = 0.0;
@@ -645,13 +657,24 @@ public class CountryData
           other += cell.getCurrentCropPenalty();
       }
     }
-    System.out.println(other);
+//    cornProduction = corn * baseYield;
+//    wheatProduction = wheat * baseYield;
+//    riceProduction = rice * baseYield;
+//    soyProduction = soy * baseYield;
+//    otherProduction = other * baseYield;
   }
-//    calculateCountryConsumption();
-//    calculatePerCapitaConsumption();
-//    calculateBaseYield();
-//    worldArray.updateClimate();
-//    region.setCrops();
+
+  /**
+   * Calculates the the next years data based on data brought in, or rates calculated from it
+   */
+  public void iterateYear(Region region)
+  {
+    calculateProduction(region);
+    //calculateCountryConsumption();
+    //calculatePerCapitaConsumption();
+    //calculateBaseYield();
+    // Should be one of the first things as it places the crops based on what the user specifies in the GUI
+    //region.setCrops();
   }
 
   /**
