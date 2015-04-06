@@ -2,6 +2,8 @@ package model;
 
 import main.SettingsScreen;
 
+import java.util.HashSet;
+
 /**
  * @author Tyler Lynch <lyncht@unm.edu>
  * @since 4.2.2015
@@ -619,11 +621,37 @@ public class CountryData
    */
   public void iterateYear(WorldArray worldArray, Region region)
   {
-    //calculateCountryConsumption();
-    //calculatePerCapitaConsumption();
-    //calculateBaseYield();
-    //worldArray.updateClimate();
-    //region.setCrops();
+    HashSet<WorldCell> relevantCells = region.getArableCells();
+    double corn = 0.0;
+    double wheat = 0.0;
+    double rice = 0.0;
+    double soy = 0.0;
+    double other = 0.0;
+    for (WorldCell cell : relevantCells) {
+      switch(cell.getCrop()) {
+        case "Corn":
+          corn += cell.getCurrentCropPenalty();
+          break;
+        case "Wheat":
+          wheat += cell.getCurrentCropPenalty();
+          break;
+        case "Rice":
+          rice += cell.getCurrentCropPenalty();
+          break;
+        case "Soy":
+          soy += cell.getCurrentCropPenalty();
+          break;
+        default:
+          other += cell.getCurrentCropPenalty();
+      }
+    }
+    System.out.println(other);
+  }
+//    calculateCountryConsumption();
+//    calculatePerCapitaConsumption();
+//    calculateBaseYield();
+//    worldArray.updateClimate();
+//    region.setCrops();
   }
 
   /**
