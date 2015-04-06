@@ -48,9 +48,21 @@ public class CountryData
   private double gmo;
 
   //Zero Order Approximation
-  private double countryConsumption;
-  private double perCapitaConsumption;
-  private double baseYield;
+  private double countryConsumptionWheat;
+  private double perCapitaConsumptionWheat;
+  private double baseYieldWheat;
+  private double countryConsumptionCorn;
+  private double perCapitaConsumptionCorn;
+  private double baseYieldCorn;
+  private double countryConsumptionSoy;
+  private double perCapitaConsumptionSoy;
+  private double baseYieldSoy;
+  private double countryConsumptionRice;
+  private double perCapitaConsumptionRice;
+  private double baseYieldRice;
+  private double countryConsumptionOther;
+  private double perCapitaConsumptionOther;
+  private double baseYieldOther;
   private double randomization = 0;
 
   //Base Yield calculations
@@ -600,13 +612,22 @@ public class CountryData
 
   private void calculateCountryConsumption()
   {
-    countryConsumption = getCropTotal(true);
+    //countryConsumption = getCropTotal(true);
+    countryConsumptionCorn = cornProduction - cornExports + cornImports;
+    countryConsumptionWheat = wheatProduction - wheatExports + wheatImports;
+    countryConsumptionSoy = soyProduction - soyExports +soyImports;
+    countryConsumptionRice = riceProduction - riceExports + riceImports;
+    countryConsumptionOther = otherProduction - otherExports + otherImports;
   }
 
   private void calculatePerCapitaConsumption()
   {
     // Based on the Country consumption
-    perCapitaConsumption = countryConsumption/(population-((0.5)*undernourish));
+    perCapitaConsumptionCorn = countryConsumptionCorn/(population-((0.5)*undernourish));
+    perCapitaConsumptionWheat = countryConsumptionWheat/(population-((0.5)*undernourish));
+    perCapitaConsumptionSoy = countryConsumptionSoy/(population-((0.5)*undernourish));
+    perCapitaConsumptionRice = countryConsumptionRice/(population-((0.5)*undernourish));
+    perCapitaConsumptionOther = countryConsumptionOther/(population-((0.5)*undernourish));
   }
 
   /**
@@ -614,8 +635,9 @@ public class CountryData
    */
   private void calculateBaseYield()
   {
-    baseYield = getProdution()/(idealLand+(acceptableLand*acceptableRate)+(poorLand*poorRate));
+    //baseYield = getProdution()/(idealLand+(acceptableLand*acceptableRate)+(poorLand*poorRate));
   }
+
   private double getProdution()
   {
     return (cornProduction + wheatProduction + soyProduction + riceProduction + otherProduction);
@@ -631,9 +653,9 @@ public class CountryData
    * @param metricUnits   boolean for data type
    * @return countryConsumption rate
    */
-  public double getCountryConsumption(boolean metricUnits)
+  public double getCountryConsumptionCorn(boolean metricUnits)
   {
-    return countryConsumption;
+    return countryConsumptionCorn;
   }
 
   /**
@@ -641,9 +663,9 @@ public class CountryData
    * @param metricUnits   boolean for data type
    * @return Per Capita Consumption rate
    */
-  public double getPerCapitaConsumption(boolean metricUnits)
+  public double getPerCapitaConsumptionCorn(boolean metricUnits)
   {
-    return perCapitaConsumption;
+    return perCapitaConsumptionCorn;
   }
 
   /**
@@ -651,11 +673,130 @@ public class CountryData
    * @param metricUnits   boolean for data type
    * @return baseYield rate
    */
-  public double getBaseYield(boolean metricUnits)
+  public double getBaseYieldCorn(boolean metricUnits)
   {
-    return baseYield;
+    return baseYieldCorn;
   }
 
+  /**
+   * Get the Countries Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return countryConsumption rate
+   */
+  public double getCountryConsumptionWheat(boolean metricUnits)
+  {
+    return countryConsumptionWheat;
+  }
+
+  /**
+   * Get the Per Capita Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return Per Capita Consumption rate
+   */
+  public double getPerCapitaConsumptionWheat(boolean metricUnits)
+  {
+    return perCapitaConsumptionWheat;
+  }
+
+  /**
+   * Get the Base Yield rate
+   * @param metricUnits   boolean for data type
+   * @return baseYield rate
+   */
+  public double getBaseYieldWheat(boolean metricUnits)
+  {
+    return baseYieldWheat;
+  }
+
+  /**
+   * Get the Countries Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return countryConsumption rate
+   */
+  public double getCountryConsumptionSoy(boolean metricUnits)
+  {
+    return countryConsumptionSoy;
+  }
+
+  /**
+   * Get the Per Capita Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return Per Capita Consumption rate
+   */
+  public double getPerCapitaConsumptionSoy(boolean metricUnits)
+  {
+    return perCapitaConsumptionSoy;
+  }
+
+  /**
+   * Get the Base Yield rate
+   * @param metricUnits   boolean for data type
+   * @return baseYield rate
+   */
+  public double getBaseYieldSoy(boolean metricUnits)
+  {
+    return baseYieldSoy;
+  }
+
+  /**
+   * Get the Countries Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return countryConsumption rate
+   */
+  public double getCountryConsumptionRice(boolean metricUnits)
+  {
+    return countryConsumptionRice;
+  }
+
+  /**
+   * Get the Per Capita Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return Per Capita Consumption rate
+   */
+  public double getPerCapitaConsumptionRice(boolean metricUnits)
+  {
+    return perCapitaConsumptionRice;
+  }
+
+  /**
+   * Get the Base Yield rate
+   * @param metricUnits   boolean for data type
+   * @return baseYield rate
+   */
+  public double getBaseYieldRice(boolean metricUnits)
+  {
+    return baseYieldRice;
+  }
+
+  /**
+   * Get the Countries Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return countryConsumption rate
+   */
+  public double getCountryConsumptionOther(boolean metricUnits)
+  {
+    return countryConsumptionOther;
+  }
+
+  /**
+   * Get the Per Capita Consumption rate
+   * @param metricUnits   boolean for data type
+   * @return Per Capita Consumption rate
+   */
+  public double getPerCapitaConsumptionOther(boolean metricUnits)
+  {
+    return perCapitaConsumptionOther;
+  }
+
+  /**
+   * Get the Base Yield rate
+   * @param metricUnits   boolean for data type
+   * @return baseYield rate
+   */
+  public double getBaseYieldOther(boolean metricUnits)
+  {
+    return baseYieldOther;
+  }
 
    /*
    *************************************************************
