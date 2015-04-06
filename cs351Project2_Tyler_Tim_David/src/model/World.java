@@ -106,7 +106,6 @@ public class World
     if( currentDate.get(Calendar.YEAR) == 2050 )
     {
       //Call to finish game
-      System.out.println( "Congratulations, you have now destroyed the world!");
       main.Game.gameFinished();
       return false;
     }

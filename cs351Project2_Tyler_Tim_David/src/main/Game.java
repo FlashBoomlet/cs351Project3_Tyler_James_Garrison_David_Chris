@@ -56,6 +56,7 @@ public class Game
   private static WorldFeedPanel worldFeedPanel;
   private static ButtonPanel buttonPanel;
   private static StartScreen startPanel;
+  private static FinishScreen finishPanel;
   private static SettingsScreen settingsScreen;
   private static JPanel defaultScreen;
   private static MapScale mapScale;
@@ -140,6 +141,7 @@ public class Game
     xmlRegions = new AreaXMLLoader().getRegions();
 
     startPanel = new StartScreen(frameWidth,frameHeight);
+    finishPanel = new FinishScreen(frameWidth,frameHeight);
 
     defaultScreen = new JPanel();
     defaultScreen.setBounds(0,0,frameWidth,frameHeight);
@@ -324,6 +326,10 @@ public class Game
       // Add Start Screen
       layeredPane.add(startPanel, new Integer(99) );
 
+      // Add Start Screen
+      layeredPane.add(finishPanel, new Integer(101) );
+      finishPanel.setVisible(false);
+
       // Add Settings Screen
       layeredPane.add(settingsScreen, new Integer(100) );
 
@@ -382,7 +388,9 @@ public class Game
   public static void gameFinished()
   {
     pauseGame();
-    reset();
+    startPanel.setVisible(false);
+    pause();
+    finishPanel.setVisible(true);
   }
 
   /**
@@ -403,6 +411,7 @@ public class Game
     startPanel.setVisible(true);
     settingsScreen.setVisible(false);
     mapScale.setVisible(false);
+    finishPanel.setVisible(false);
   }
 
   /**
