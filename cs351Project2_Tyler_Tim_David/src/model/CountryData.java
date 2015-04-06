@@ -16,6 +16,7 @@ public class CountryData
   private double birthRate;
   private double mortality;
   private double migration;
+  private double prevUndernourish;
   private double undernourish;
   // Corn
   private double cornProduction;
@@ -852,12 +853,17 @@ public class CountryData
    */
   public void iterateYear(Region region)
   {
+    prevUndernourish = undernourish;
     calculateProduction(region);
-    //calculateCountryConsumption();
-    //calculatePerCapitaConsumption();
-    //calculateBaseYield();
+    if( undernourish > prevUndernourish )
+    {
+      mortality = (mortality+((0.2)*(prevUndernourish-undernourish)))/(population/1000);
+    }
+    population = population + (birthRate+migration-mortality)*(population/1000);
+    calculatePerCapitaConsumption();
+    calculateProduction(region);
     // Should be one of the first things as it places the crops based on what the user specifies in the GUI
-    //region.setCrops();
+    region.setCrops();
   }
 
   /**
