@@ -116,7 +116,7 @@ public class World
     {
       for( GUIRegion gr: worldPresenter.getAllRegions() )
       {
-        gr.iterateYear();
+        gr.iterateYear(worldArray);
       }
     }
 

@@ -6,7 +6,7 @@ import gui.regionlooks.RegionView;
 import model.CountryData;
 import model.MiniArea;
 import model.Region;
-
+import model.WorldArray;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Area;
@@ -146,7 +146,7 @@ public class GUIRegion
     return data;
   }
 
-  public void iterateYear()
+  public void iterateYear(WorldArray worldArray)
   {
     /*
      * It shouldn't need a null check but for some reason I am getting a null pointer
@@ -154,7 +154,7 @@ public class GUIRegion
      */
     if( data != null )
     {
-      data.iterateYear();
+      data.iterateYear(worldArray, region);
     }
   }
 

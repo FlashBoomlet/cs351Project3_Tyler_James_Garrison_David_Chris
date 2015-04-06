@@ -162,9 +162,8 @@ public class WorldArray
         deltaOne = (float) ((worldCells[tempX][tempY].getAnnualHigh() - worldCells[tempX][tempY].getAnnualLow()) * .1 * randPercent * (r1 - r2));
         worldCells[tempX][tempY].setAnnualHigh(worldCells[tempX][tempY].getAnnualHigh() + deltaOne);
         worldCells[tempX][tempY].setAnnualLow(worldCells[tempX][tempY].getAnnualLow() + deltaOne);
-        //deltaTwo = (float) ((worldCells[tempX][tempY].getMonthlyDayAvg() - worldCells[tempX][tempY].getMonthlyNightAvg()) * .1 * randPercent * (r1 - r2));
-        //worldCells[tempX][tempY].setMonthlyDayAvg(worldCells[tempX][tempY].getMonthlyDayAvg() + deltaTwo);
-        //worldCells[tempX][tempY].setMonthlyNightAvg(worldCells[tempX][tempY].getMonthlyNightAvg() + deltaTwo);
+        deltaTwo = (float) (worldCells[tempX][tempY].getTempAvg() * .1 * randPercent * (r1 - r2));
+        worldCells[tempX][tempY].setTempAvg(worldCells[tempX][tempY].getTempAvg() + deltaTwo);
         deltaThree = (float) (worldCells[tempX][tempY].getPrecip() * .1 * randPercent * (r1 - r2));
         worldCells[tempX][tempY].setPrecip(worldCells[tempX][tempY].getPrecip() + deltaThree);
         for (int i = -1; i < 2; i++)
@@ -195,8 +194,7 @@ public class WorldArray
   {
     worldCells[x][y].setAnnualHigh(worldCells[x][y].getAnnualHigh() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
     worldCells[x][y].setAnnualLow(worldCells[x][y].getAnnualLow() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
-    //worldCells[x][y].setMonthlyDayAvg(worldCells[x][y].getMonthlyDayAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
-    //worldCells[x][y].setMonthlyNightAvg(worldCells[x][y].getMonthlyNightAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
+    worldCells[x][y].setTempAvg(worldCells[x][y].getTempAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
     worldCells[x][y].setPrecip(worldCells[x][y].getPrecip() + (float) (deltaThree/Math.log(Math.E + 100 * r3)));
   }
 
