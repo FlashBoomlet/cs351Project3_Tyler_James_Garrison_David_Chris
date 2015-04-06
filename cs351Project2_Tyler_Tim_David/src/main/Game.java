@@ -75,6 +75,7 @@ public class Game
    * Frame components
    */
   private static WorldPresenter worldPresenter;
+  public static WorldPresenter getWorldPresenter() { return worldPresenter; }
   public static Timer worldTime;
   public static Timer gameLoop;
   public static JFrame frame;
