@@ -64,7 +64,7 @@ public class OverlaySelect extends JPanel
     setPreferredSize(new Dimension(width,height));
     setLayout(new FlowLayout(SwingConstants.NORTH_EAST,0,0));
 
-    title = new JLabel("Filter Selector:");
+    title = new JLabel("Overlay:");
     title.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     title.setFont(ColorsAndFonts.TOP_FONT);
 

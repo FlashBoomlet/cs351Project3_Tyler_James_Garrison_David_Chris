@@ -5,8 +5,6 @@ import gui.WorldPresenter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
@@ -27,8 +25,8 @@ public class WorldFeedPanel extends JPanel implements Observer
   */
  private static DatePanel datePanel;
  private static OverlaySelect overlaySelect;
- private static BarPanel worldStatPanel;
  private static GameplayControl gameplayControl;
+ private static PopulationAndHappiness popAndHap;
 
  private LayoutManager layout = new FlowLayout(FlowLayout.LEFT,0,0);
  private static final int PADDING = 0;
@@ -50,9 +48,9 @@ public class WorldFeedPanel extends JPanel implements Observer
    * Component Initialization
    */
   datePanel = new DatePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
-  overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.30)),componentHeight);
-  worldStatPanel = new BarPanel(ColorsAndFonts.NAV_MAP_OUTLINE, 0.5, "Population Well-being", " 50%  :  7.2 Billion", 0, 0, (int)(frameWidth*(.30)), height);
-  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.25))),componentHeight);
+  overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.25)),componentHeight);
+  popAndHap = new PopulationAndHappiness(0,0,(int)(frameWidth*(.30)), height);
+  gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.30))),componentHeight);
 
   datePanel.setDate(presenter.getWorldDate());
 
@@ -67,9 +65,14 @@ public class WorldFeedPanel extends JPanel implements Observer
  {
   datePanel.setVisible(trigger);
   overlaySelect.setVisible(trigger);
-  worldStatPanel.setVisible(trigger);
+  popAndHap.setVisible(trigger);
   gameplayControl.setVisible(trigger);
   this.setVisible(trigger);
+ }
+
+ public static void update()
+ {
+  popAndHap.update();
  }
 
  /*
@@ -81,8 +84,7 @@ public class WorldFeedPanel extends JPanel implements Observer
 
   add(overlaySelect);
 
- // add(scalePanel);
-   add(worldStatPanel);
+  add(popAndHap);
   add(datePanel);
   add(gameplayControl);
 

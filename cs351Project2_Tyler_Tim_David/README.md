@@ -21,8 +21,14 @@ find the following files `make.sh` and `run.sh` and...
 ### Inspecting
 * Meta (on mac command) click allows multiple region selection (as does click and drag).
 * num-key 1 displays the default map look
-* num-key 2 displays the 'happiness' index of regions
-* num-key 3 displays the planting zone of each region.
+* num-key 2 displays the percent of Corn in each region.
+* num-key 3 displays the percent of Wheat in each region.
+* num-key 4 displays the percent of Rice in each region.
+* num-key 5 displays the percent of Soy in each region.
+* num-key 6 displays the percent of Other crops in each region.
+* num-key 7 displays the percent land that is Organic in each region.
+* num-key 8 displays the percent land that is Conventional in each region.
+* num-key 9 displays the percent land that is GMO in each region.
 
 ### Time
 
@@ -34,3 +40,8 @@ find the following files `make.sh` and `run.sh` and...
 #### credits
 text editor for XML editing was build using [RSyntaxTextArea](https://github.com/bobbylight).  
 region data from [Natural Earth](http://www.naturalearthdata.com).
+Soy, Wheat and Other approximation numbers are 2011,2012,2013 data respectively from FAOSTAT.
+GMO = Area of Biotech Crops in 2014 (from ISAAA) divided by FAOSTAT 2011 Arable land and Permanent crops area.
+(http://www.isaaa.org/resources/publications/briefs/49/executivesummary/default.asp)
+Temperature data from Berkeley (http://berkeleyearth.org/data)
+Precipitation data (http://climate.geog.udel.edu/~climate/html_pages/download.html#P2011rev)

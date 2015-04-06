@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 /**
  * Created by Tim on 3/15/15.
+ * The class that holds all the World Cells in a 2D array.
  */
 public class WorldArray
 {
@@ -12,6 +13,12 @@ public class WorldArray
   private WorldCell [][] worldCells;
   float randPercent;
 
+  /**
+   * Sets the array based on dimensions passed in.
+   * @param lonLength
+   * @param latHeight
+   * @param randPercent
+   */
   public WorldArray (int lonLength, int latHeight, float randPercent)
   {
     worldCells = new WorldCell [lonLength][latHeight];
@@ -21,6 +28,9 @@ public class WorldArray
     this.randPercent = randPercent;
   }
 
+  /**
+   * Sets all of the cells for the whole globe.
+   */
   private void initCells ()
   {
     double tempLon = 0;
@@ -38,16 +48,29 @@ public class WorldArray
     }
   }
 
+  /**
+   * @return  The width of the array.
+   */
   public int getXSize ()
   {
     return X_CELLS;
   }
 
+  /**
+   * @return  The height of the array.
+   */
   public int getYSize ()
   {
     return Y_CELLS;
   }
 
+  /**
+   * Returns the location of a cell in the array
+   * based on longitude and latitude.
+   * @param lon
+   * @param lat
+   * @return    The cell's x and y position in the array.
+   */
   public int [] getNumber (double lon, double lat)
   {
     int [] out = new int [2];
@@ -59,10 +82,11 @@ public class WorldArray
   }
 
   /**
-   *
+   * Returns a world cell based on longitude and latitude.
    * @param lon
    * @param lat
-   * @return
+   * @param accurate
+   * @return    The relevant World Cell.
    */
   public WorldCell get (double lon, double lat, boolean accurate)
   {
@@ -80,7 +104,8 @@ public class WorldArray
 
   /**
    * Can only deal with going off the edge one direction at a time. get (-1, -1)
-   * will result in an incorrect result.
+   * will result in an incorrect result. Allows looping around the array, but
+   * only in one direction for finding a WorldCell based on relation to another.
    * @param x
    * @param y
    * @return
@@ -138,7 +163,7 @@ public class WorldArray
   }
 
   /**
-   *Somewhat inefficient, could try to visit ocean cells
+   * Adds noise to 10 percent of the cells randomly.
    */
   public void addNoise ()
   {
@@ -162,9 +187,8 @@ public class WorldArray
         deltaOne = (float) ((worldCells[tempX][tempY].getAnnualHigh() - worldCells[tempX][tempY].getAnnualLow()) * .1 * randPercent * (r1 - r2));
         worldCells[tempX][tempY].setAnnualHigh(worldCells[tempX][tempY].getAnnualHigh() + deltaOne);
         worldCells[tempX][tempY].setAnnualLow(worldCells[tempX][tempY].getAnnualLow() + deltaOne);
-        //deltaTwo = (float) ((worldCells[tempX][tempY].getMonthlyDayAvg() - worldCells[tempX][tempY].getMonthlyNightAvg()) * .1 * randPercent * (r1 - r2));
-        //worldCells[tempX][tempY].setMonthlyDayAvg(worldCells[tempX][tempY].getMonthlyDayAvg() + deltaTwo);
-        //worldCells[tempX][tempY].setMonthlyNightAvg(worldCells[tempX][tempY].getMonthlyNightAvg() + deltaTwo);
+        deltaTwo = (float) (worldCells[tempX][tempY].getTempAvg() * .1 * randPercent * (r1 - r2));
+        worldCells[tempX][tempY].setTempAvg(worldCells[tempX][tempY].getTempAvg() + deltaTwo);
         deltaThree = (float) (worldCells[tempX][tempY].getPrecip() * .1 * randPercent * (r1 - r2));
         worldCells[tempX][tempY].setPrecip(worldCells[tempX][tempY].getPrecip() + deltaThree);
         for (int i = -1; i < 2; i++)
@@ -195,8 +219,7 @@ public class WorldArray
   {
     worldCells[x][y].setAnnualHigh(worldCells[x][y].getAnnualHigh() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
     worldCells[x][y].setAnnualLow(worldCells[x][y].getAnnualLow() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
-    //worldCells[x][y].setMonthlyDayAvg(worldCells[x][y].getMonthlyDayAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
-    //worldCells[x][y].setMonthlyNightAvg(worldCells[x][y].getMonthlyNightAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
+    worldCells[x][y].setTempAvg(worldCells[x][y].getTempAvg() + (float) (deltaTwo/Math.log(Math.E + 100 * r3)));
     worldCells[x][y].setPrecip(worldCells[x][y].getPrecip() + (float) (deltaThree/Math.log(Math.E + 100 * r3)));
   }
 

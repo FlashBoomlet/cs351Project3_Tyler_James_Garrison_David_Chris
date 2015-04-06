@@ -617,11 +617,13 @@ public class CountryData
   /**
    * Calculates the the next years data based on data brought in, or rates calculated from it
    */
-  public void iterateYear()
+  public void iterateYear(WorldArray worldArray, Region region)
   {
     //calculateCountryConsumption();
     //calculatePerCapitaConsumption();
     //calculateBaseYield();
+    //worldArray.addNoise();
+    //region.setCrops();
   }
 
   /**

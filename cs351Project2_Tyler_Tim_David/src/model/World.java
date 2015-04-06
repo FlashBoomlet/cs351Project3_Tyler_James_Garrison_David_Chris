@@ -4,6 +4,7 @@ package model;
 import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.hud.DatePanel;
+import gui.hud.PopulationAndHappiness;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -106,7 +107,6 @@ public class World
     if( currentDate.get(Calendar.YEAR) == 2050 )
     {
       //Call to finish game
-      System.out.println( "Congratulations, you have now destroyed the world!");
       main.Game.gameFinished();
       return false;
     }
@@ -116,8 +116,9 @@ public class World
     {
       for( GUIRegion gr: worldPresenter.getAllRegions() )
       {
-        gr.iterateYear();
+        gr.iterateYear(worldArray);
       }
+      main.Game.getWorldFeedPanel().update();
     }
 
     return isPreviousYear;

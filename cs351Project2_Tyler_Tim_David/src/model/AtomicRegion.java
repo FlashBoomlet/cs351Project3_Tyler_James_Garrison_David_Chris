@@ -680,18 +680,19 @@ public class AtomicRegion implements Region, CropIdeals
     boolean inserted = false;
     if (number > 0)
     {
+      CropNum newCropNum = new CropNum(number, crop);
       for (int i = 0; i < cropPriority.size(); i++)
       {
-        if (cropPriority.get(i).num > number)
+        if (cropPriority.get(i).priority > newCropNum.priority)
         {
-          cropPriority.add(i, new CropNum(number, crop));
+          cropPriority.add(i, newCropNum);
           inserted = true;
           break;
         }
       }
       if (!inserted)
       {
-        cropPriority.add(new CropNum(number, crop));
+        cropPriority.add(newCropNum);
       }
     }
   }
@@ -709,7 +710,7 @@ public class AtomicRegion implements Region, CropIdeals
     current.num = current.num - 1;
     for (int i = 0; i < cropPriority.size(); i++)
     {
-      if (cropPriority.get(i).num > current.num)
+      if (cropPriority.get(i).priority > current.priority)
       {
         cropPriority.add(i, current);
         inserted = true;
@@ -785,11 +786,32 @@ public class AtomicRegion implements Region, CropIdeals
   {
     protected int num = 0;
     protected String crop;
+    protected int priority = 0;
 
     public CropNum(int num, String crop)
     {
       this.num = num;
       this.crop = crop;
+      if (crop.equals("Wheat"))
+      {
+        priority = 0;
+      }
+      else if (crop.equals("Soy"))
+      {
+        priority = 1;
+      }
+      else if (crop.equals("Corn"))
+      {
+        priority = 2;
+      }
+      else if (crop.equals("Rice"))
+      {
+        priority = 3;
+      }
+      else if (crop.equals("Other"))
+      {
+        priority = 4;
+      }
     }
   }
 
