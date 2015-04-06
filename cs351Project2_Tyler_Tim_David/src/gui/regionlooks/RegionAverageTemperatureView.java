@@ -1,8 +1,10 @@
 package gui.regionlooks;
 
 
+import gui.Camera;
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
+import gui.WorldPresenter;
 import model.WorldCell;
 import gui.displayconverters.EquirectangularConverter;
 import java.awt.*;
@@ -35,22 +37,21 @@ class RegionAverageTemperatureView implements RegionView
     }
 
     HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
-    if (!gRegion.isActive())
+    if (!gRegion.isActive() && WorldPresenter.calcDistance(main.Game.getCamera()) == Camera.CAM_DISTANCE.CLOSE_UP )
     {
       for(WorldCell cell: relevantCells){
-        //System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
 
-//        int select = (int) (cell.getTempAvg() * LIMIT);
-//        if(select<0) select = 0;
-//        if(select < colors.length)
-//          color = colors[select];
-//        else
-//          color = colors[colors.length-1];
+        int select = (int) (cell.getTempAvg() * LIMIT);
+        if(select<0) select = 0;
+        if(select < colors.length)
+          color = colors[select];
+        else
+          color = colors[colors.length-1];
 
         color = Color.red;
 
         g.setColor(color);
-        g.drawRect((int)converter.lonToX(cell.getLon()),(int)converter.latToY(cell.getLat()),4,4);
+        g.fillOval((int) converter.lonToX(cell.getLon()), (int) converter.latToY(cell.getLat()),990,680);
       }
     }
 

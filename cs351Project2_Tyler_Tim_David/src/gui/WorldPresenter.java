@@ -293,7 +293,7 @@ public class WorldPresenter extends Observable
   /*
    * Creates discrete view steps to handel region presentation rules.
    */
-  private CAM_DISTANCE calcDistance(Camera camera)
+  public static CAM_DISTANCE calcDistance(Camera camera)
   {
     return camera.getDistance();
   }

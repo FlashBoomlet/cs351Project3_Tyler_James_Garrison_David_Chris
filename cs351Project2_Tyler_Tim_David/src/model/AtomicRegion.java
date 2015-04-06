@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.LinkedList;
 import java.awt.geom.Path2D;
+import model.common.CropIdeals;
 
 
 /**
@@ -16,7 +17,7 @@ import java.awt.geom.Path2D;
  * Restructured by:
  * @author Tyler Lynch <lyncht@unm.edu>
  */
-public class AtomicRegion implements Region
+public class AtomicRegion implements Region, CropIdeals
 {
   private List<MiniArea> perimeter;
   private String name;
@@ -25,6 +26,12 @@ public class AtomicRegion implements Region
   private HashSet<WorldCell> relevantCells = new HashSet<>();
   private CountryData data = null;
   private boolean officialCountry = false;
+  private int OTHER_AVG_HIGH;
+  private int OTHER_AVG_LOW;
+  private int OTHER_MAX_HIGH;
+  private int OTHER_MAX_LOW;
+  private int OTHER_RAIN_HIGH;
+  private int OTHER_RAIN_LOW;
 
 
   @Override
@@ -73,6 +80,10 @@ public class AtomicRegion implements Region
         '}';
   }
 
+  /**
+   * Selects land cells for the area based on its mini areas.
+   * @param worldArray  All the World Cells.
+   */
   public void setLandCells (WorldArray worldArray)
   {
     for (MiniArea area: perimeter)
@@ -91,6 +102,9 @@ public class AtomicRegion implements Region
     return relevantCells;
   }
 
+  /**
+   * Sets crops each year after the first in arable land cells.
+   */
   public void setCrops()
   {
     if (data == null)
@@ -207,6 +221,10 @@ public class AtomicRegion implements Region
     clearCells(leftovers3);
   }
 
+  /**
+   * Sets the remaining cells to have no crops.
+   * @param leftovers Cells not used for crop placement.
+   */
   private void clearCells (HashSet<WorldCell> leftovers)
   {
     for (WorldCell cell: leftovers)
@@ -216,8 +234,7 @@ public class AtomicRegion implements Region
   }
 
   /**
-   * Algorithm would be best if crop priority was
-   * based on crop pickiness.
+   * Sets crops in the first year.
    */
   public void setFirstCrops()
   {
@@ -225,6 +242,7 @@ public class AtomicRegion implements Region
     {
       return;
     }
+    setOtherIdeals();
     /*
     for (String s: attributes.getAllCrops())
     {
@@ -345,6 +363,12 @@ public class AtomicRegion implements Region
     finalizeCells(leftovers3, cellsNeeded);
   }
 
+  /**
+   * Grabs the number of arable cells still needed from
+   * the total after crop placement.
+   * @param leftovers   Cells not used yet for crops.
+   * @param cellsNeeded Number of arable land cells.
+   */
   private void finalizeCells (HashSet<WorldCell> leftovers, int cellsNeeded)
   {
     int length = cellsNeeded - relevantCells.size();
@@ -360,11 +384,277 @@ public class AtomicRegion implements Region
     }
   }
 
+  /**
+   * Checks if a cell is ideal for a certain crop.
+   * 0 is ideal.
+   * 1 is acceptable.
+   * -1 is poor.
+   * @param cell  The cell.
+   * @param crop  The crop to check.
+   * @return      Ideal/Acceptable/Poor
+   */
   private int checkIdeal (WorldCell cell, String crop)
   {
-    return 0;
+    float precip = cell.getPrecip();
+    float tAvg = cell.getTempAvg();
+    float tMax = cell.getAnnualHigh();
+    float tMin = cell.getAnnualLow();
+    int ideal = 0;
+    int accept = 0;
+    if (crop.equals("Wheat"))
+    {
+      if (precip > WHEAT_RAIN_LOW && precip < WHEAT_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > WHEAT_RAIN_LOW - ((WHEAT_RAIN_HIGH - WHEAT_RAIN_LOW) * 0.3) &&
+               precip < WHEAT_RAIN_HIGH + ((WHEAT_RAIN_HIGH - WHEAT_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tAvg > WHEAT_AVG_LOW && tAvg < WHEAT_AVG_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > WHEAT_AVG_LOW - ((WHEAT_AVG_HIGH - WHEAT_AVG_LOW) * 0.3) &&
+               precip < WHEAT_AVG_HIGH + ((WHEAT_AVG_HIGH - WHEAT_AVG_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMax < WHEAT_MAX_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip < WHEAT_MAX_HIGH + ((WHEAT_MAX_HIGH - WHEAT_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMin > WHEAT_MAX_LOW)
+      {
+        ideal++;
+      }
+      else if (precip > WHEAT_MAX_LOW - ((WHEAT_MAX_HIGH - WHEAT_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3 && accept == 1)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Soy"))
+    {
+      if (precip > SOY_RAIN_LOW && precip < SOY_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > SOY_RAIN_LOW - ((SOY_RAIN_HIGH - SOY_RAIN_LOW) * 0.3) &&
+              precip < SOY_RAIN_HIGH + ((SOY_RAIN_HIGH - SOY_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tAvg > SOY_AVG_LOW && tAvg < SOY_AVG_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > SOY_AVG_LOW - ((SOY_AVG_HIGH - SOY_AVG_LOW) * 0.3) &&
+              precip < SOY_AVG_HIGH + ((SOY_AVG_HIGH - SOY_AVG_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMax < SOY_MAX_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip < SOY_MAX_HIGH + ((SOY_MAX_HIGH - SOY_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMin > SOY_MAX_LOW)
+      {
+        ideal++;
+      }
+      else if (precip > SOY_MAX_LOW - ((SOY_MAX_HIGH - SOY_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3 && accept == 1)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Corn"))
+    {
+      if (precip > CORN_RAIN_LOW && precip < CORN_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > CORN_RAIN_LOW - ((CORN_RAIN_HIGH - CORN_RAIN_LOW) * 0.3) &&
+              precip < CORN_RAIN_HIGH + ((CORN_RAIN_HIGH - CORN_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tAvg > CORN_AVG_LOW && tAvg < CORN_AVG_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > CORN_AVG_LOW - ((CORN_AVG_HIGH - CORN_AVG_LOW) * 0.3) &&
+              precip < CORN_AVG_HIGH + ((CORN_AVG_HIGH - CORN_AVG_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMax < CORN_MAX_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip < CORN_MAX_HIGH + ((CORN_MAX_HIGH - CORN_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMin > CORN_MAX_LOW)
+      {
+        ideal++;
+      }
+      else if (precip > CORN_MAX_LOW - ((CORN_MAX_HIGH - CORN_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3 && accept == 1)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Rice"))
+    {
+      if (precip > RICE_RAIN_LOW && precip < RICE_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > RICE_RAIN_LOW - ((RICE_RAIN_HIGH - RICE_RAIN_LOW) * 0.3) &&
+              precip < RICE_RAIN_HIGH + ((RICE_RAIN_HIGH - RICE_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tAvg > RICE_AVG_LOW && tAvg < RICE_AVG_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > RICE_AVG_LOW - ((RICE_AVG_HIGH - RICE_AVG_LOW) * 0.3) &&
+              precip < RICE_AVG_HIGH + ((RICE_AVG_HIGH - RICE_AVG_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMax < RICE_MAX_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip < RICE_MAX_HIGH + ((RICE_MAX_HIGH - RICE_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMin > RICE_MAX_LOW)
+      {
+        ideal++;
+      }
+      else if (precip > RICE_MAX_LOW - ((RICE_MAX_HIGH - RICE_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3 && accept == 1)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    else if (crop.equals("Other"))
+    {
+      if (precip > OTHER_RAIN_LOW && precip < OTHER_RAIN_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > OTHER_RAIN_LOW - ((OTHER_RAIN_HIGH - OTHER_RAIN_LOW) * 0.3) &&
+              precip < OTHER_RAIN_HIGH + ((OTHER_RAIN_HIGH - OTHER_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tAvg > OTHER_AVG_LOW && tAvg < OTHER_AVG_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip > OTHER_AVG_LOW - ((OTHER_AVG_HIGH - OTHER_AVG_LOW) * 0.3) &&
+              precip < OTHER_AVG_HIGH + ((OTHER_AVG_HIGH - OTHER_AVG_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMax < OTHER_MAX_HIGH)
+      {
+        ideal++;
+      }
+      else if (precip < OTHER_MAX_HIGH + ((OTHER_MAX_HIGH - OTHER_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (tMin > OTHER_MAX_LOW)
+      {
+        ideal++;
+      }
+      else if (precip > OTHER_MAX_LOW - ((OTHER_MAX_HIGH - OTHER_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
+      if (ideal == 4)
+      {
+        return 0;
+      }
+      else if (ideal == 3 && accept == 1)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+    return -1;
   }
 
+  /**
+   * Sets up the crop linked list
+   * @param arableTotal   Total cells for arable land.
+   * @param cellsNeeded   Land needed to be filled with crops.
+   * @param cropPriority  The linked list of crops and the number of cells to plant each in.
+   */
   private void setPriority (double arableTotal, int cellsNeeded, LinkedList<CropNum> cropPriority)
   {
     int temp = (int) ((data.getCornLand(true)/arableTotal)* cellsNeeded);
@@ -379,6 +669,12 @@ public class AtomicRegion implements Region
     addCrop(temp, "Other", cropPriority);
   }
 
+  /**
+   * Adds a crop to the linked list based on how many to be planted.
+   * @param number        How many to be planted.
+   * @param crop          The crop.
+   * @param cropPriority  The linked list of crops.
+   */
   private void addCrop (int number, String crop, LinkedList<CropNum> cropPriority)
   {
     boolean inserted = false;
@@ -400,6 +696,12 @@ public class AtomicRegion implements Region
     }
   }
 
+  /**
+   * Sorts a crop back into the linked list,
+   * prioritizing least amount remaining.
+   * @param current       The current crop just checked/planted.
+   * @param cropPriority  The linked list of crops.
+   */
   private void resortCrop (CropNum current, LinkedList<CropNum> cropPriority)
   {
     boolean inserted = false;
@@ -420,12 +722,54 @@ public class AtomicRegion implements Region
     }
   }
 
+  /**
+   * Sets the ideals for the Other crop
+   * based on this region's averages.
+   */
+  private void setOtherIdeals ()
+  {
+    float temp = 0;
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getTempAvg();
+    }
+    temp = temp / landCells.size();
+    OTHER_AVG_HIGH = (int) (temp + 5);
+    OTHER_AVG_LOW = (int) (temp - 5);
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getPrecip();
+    }
+    temp = temp / landCells.size();
+    OTHER_RAIN_HIGH = (int) (temp + 20);
+    OTHER_RAIN_LOW = (int) (temp - 20);
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getAnnualHigh();
+    }
+    temp = temp / landCells.size();
+    OTHER_MAX_HIGH = (int) temp;
+    for (WorldCell cell: landCells)
+    {
+      temp = temp + cell.getAnnualLow();
+    }
+    temp = temp / landCells.size();
+    OTHER_MAX_LOW = (int) temp;
+  }
+
+  /**
+   * Set the region's data.
+   * @param data  Country data.
+   */
   public void setCountryData(CountryData data)
   {
-    //System.out.println(name);
     this.data = data;
   }
 
+  /**
+   * Get the region's data.
+   * @return  Country data.
+   */
   public CountryData getCountryData()
   {
     return data;

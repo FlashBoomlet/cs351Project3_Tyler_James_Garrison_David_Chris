@@ -1,5 +1,7 @@
 package model;
 
+import main.SettingsScreen;
+
 /**
  * @author Tyler Lynch <lyncht@unm.edu>
  * @since 4.2.2015
@@ -49,6 +51,7 @@ public class CountryData
   private double countryConsumption;
   private double perCapitaConsumption;
   private double baseYield;
+  private double randomization = 0;
 
   /**
    * Empty constructor
@@ -564,6 +567,11 @@ public class CountryData
   private void calculateBaseYield()
   {
     // yeah....
+  }
+
+  public void randomizePercent()
+  {
+    randomization = 100 * SettingsScreen.getRandomizeBounds();
   }
 
   /**
