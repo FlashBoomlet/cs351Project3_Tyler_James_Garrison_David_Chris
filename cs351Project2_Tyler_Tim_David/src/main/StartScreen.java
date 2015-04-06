@@ -66,8 +66,12 @@ public class StartScreen extends JPanel
         "      At the end of the game you will see how well you have done throughout the game\n" +
         "      \n" +
         "      As always, \"All models are wrong, but some are useful\" \n\n" +
-        " TODO: what the game models \n\n" +
-        " TODO: how to play the game");
+        " To Play: \n" +
+            "      Use 1-9 as well as q,w,e,r,t,y,u,i,o,p and a to filter or select a filter from the dropdown. \n" +
+            "      Temperature and precipitation filters require zooming in to an extent before cell data will display.\n"+
+            "      Hold Shift while clicking and dragging the mouse to select multiple countries. \n"+
+        "      Adjust percentages of crops in the info panel after selecting a country. \n "
+    );
 
     text.setEditable(false);
 
