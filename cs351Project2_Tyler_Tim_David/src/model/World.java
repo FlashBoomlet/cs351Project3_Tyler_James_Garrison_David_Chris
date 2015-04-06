@@ -118,7 +118,7 @@ public class World
       {
         gr.iterateYear(worldArray);
       }
-      PopulationAndHappiness.update();
+      main.Game.getWorldFeedPanel().update();
     }
 
     return isPreviousYear;

@@ -54,6 +54,7 @@ public class Game
   public static InfoPanel infoPanel;
   private static NavMap navMap;
   private static WorldFeedPanel worldFeedPanel;
+  public static WorldFeedPanel getWorldFeedPanel() { return worldFeedPanel; }
   private static ButtonPanel buttonPanel;
   private static StartScreen startPanel;
   private static FinishScreen finishPanel;
