@@ -94,7 +94,7 @@ public class CountryCSVParser {
     GUIRegion currentRegion = null;
     CountryData data = null;
     // To prevent array index out of bounds error, ensure all data is filled out
-    if( atributes.length >= 31 )
+    if( atributes.length >= 33 )
     {
       String country = atributes[0];
       currentRegion = findCurrentRegion(country);
@@ -139,7 +139,9 @@ public class CountryCSVParser {
         data.setConventional( Double.parseDouble(atributes[30]) );
         data.setGmo( Double.parseDouble(atributes[31]) );
 
-        data.calculateZeroOrder();
+        data.setShippingLat(Double.parseDouble(atributes[32]));
+        data.setShippingLon( Double.parseDouble(atributes[33]) );
+
         currentRegion.setOfficialCountry();
         currentRegion.setCountryData(data);
       }
