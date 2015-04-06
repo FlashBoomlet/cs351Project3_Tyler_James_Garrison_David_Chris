@@ -216,17 +216,19 @@ public class WorldArray
         worldCells[tempX][tempY].setPrecip(worldCells[tempX][tempY].getPrecip() + deltaThree);
         for (int i = -1; i < 2; i++)
         {
-          //if land
-          noiseHelp(tempX + i, tempY + 1, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+          if (tempY + 1 < Y_CELLS)
+          {
+            noiseHelp(tempX + i, tempY + 1, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+          }
         }
         for (int j = -1; j < 2; j++)
         {
-          //if land
-          noiseHelp(tempX + j, tempY - 1, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+          if (tempY - 1 > -1)
+          {
+            noiseHelp(tempX + j, tempY - 1, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
+          }
         }
-        //if land
         noiseHelp(tempX + 1, tempY, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
-        //if land
         noiseHelp(tempX - 1, tempY, deltaOne, deltaTwo, deltaThree, rand.nextFloat());
         visited.add(worldCells[tempX][tempY]);
       }
@@ -240,10 +242,10 @@ public class WorldArray
 
   private void noiseHelp (int x, int y, float deltaOne, float deltaTwo, float deltaThree, float r3)
   {
-    worldCells[x][y].setAnnualHigh(worldCells[x][y].getAnnualHigh() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
-    worldCells[x][y].setAnnualLow(worldCells[x][y].getAnnualLow() + (float) (deltaOne/Math.log(Math.E + 100 * r3)));
-    worldCells[x][y].setTempAvg(worldCells[x][y].getTempAvg() + (float) (deltaTwo / Math.log(Math.E + 100 * r3)));
-    worldCells[x][y].setPrecip(worldCells[x][y].getPrecip() + (float) (deltaThree/Math.log(Math.E + 100 * r3)));
+    get(x, y).setAnnualHigh(worldCells[x][y].getAnnualHigh() + (float) (deltaOne / Math.log(Math.E + 100 * r3)));
+    get(x, y).setAnnualLow(worldCells[x][y].getAnnualLow() + (float) (deltaOne / Math.log(Math.E + 100 * r3)));
+    get(x, y).setTempAvg(worldCells[x][y].getTempAvg() + (float) (deltaTwo / Math.log(Math.E + 100 * r3)));
+    get(x, y).setPrecip(worldCells[x][y].getPrecip() + (float) (deltaThree / Math.log(Math.E + 100 * r3)));
   }
 
   /**
