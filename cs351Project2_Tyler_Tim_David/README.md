@@ -1,13 +1,13 @@
-# CS 351 DLP_phase01
-by  
-David Ringo and Winston Riley.
+# CS 351 DLP_phase02
+Originally based on Phase01 by David Ringo and Winston Riley.
+By 
+Tyler Lynch 
+Tim Chavez
+David Matins
 
 ## Building
-find the following files `make.sh` and `run.sh` and...
-
-~~~bash
-./make.sh && ./run.sh
-~~~
+Utalize the run feature in an IDE.
+Run: Src/Main/Game.java
 
 
 ##Controls
@@ -20,6 +20,8 @@ find the following files `make.sh` and `run.sh` and...
 
 ### Inspecting
 * Meta (on mac command) click allows multiple region selection (as does click and drag).
+* Shift + click and draw allows for rapid selection
+* See GUI features
 * num-key 1 displays the default map look
 * num-key 2 displays the percent of Corn in each region.
 * num-key 3 displays the percent of Wheat in each region.
@@ -31,11 +33,7 @@ find the following files `make.sh` and `run.sh` and...
 * num-key 9 displays the percent land that is GMO in each region.
 
 ### Time
-
-* num-key 8 sets the game time to normal
-* num-key 9 speed the game to medium
-* num-key 0 set the game to super fast speed.
-* space bar pauses the game.
+* See GUI Features
 
 #### credits
 text editor for XML editing was build using [RSyntaxTextArea](https://github.com/bobbylight).  
