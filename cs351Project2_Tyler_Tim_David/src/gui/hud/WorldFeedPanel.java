@@ -47,9 +47,9 @@ public class WorldFeedPanel extends JPanel implements Observer
   /*
    * Component Initialization
    */
-  datePanel = new DatePanel(0,0,(int) (frameWidth*(.15)),componentHeight);
+  datePanel = new DatePanel(0,0,(int) (frameWidth*(.20)),componentHeight);
   overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.25)),componentHeight);
-  popAndHap = new PopulationAndHappiness(0,0,(int)(frameWidth*(.30)), height);
+  popAndHap = new PopulationAndHappiness(0,0,(int)(frameWidth*(.25)), height);
   gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.30))),componentHeight);
 
   datePanel.setDate(presenter.getWorldDate());

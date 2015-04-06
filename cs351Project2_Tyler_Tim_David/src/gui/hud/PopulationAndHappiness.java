@@ -65,7 +65,7 @@ public class PopulationAndHappiness extends JPanel {
 
     NumberFormat formatter = new DecimalFormat("#.##");
 
-    pop = "Population: " + formatter.format(worldPop) + " B";
+    pop = "Pop: " + formatter.format(worldPop) + " B";
     wellB = "Well-Being: " + (worldWellBeing) + "%";
 
     g2d.drawString(pop, 0, fontSize+5);
