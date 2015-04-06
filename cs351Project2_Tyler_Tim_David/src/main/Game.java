@@ -141,8 +141,6 @@ public class Game
 
     startPanel = new StartScreen(frameWidth,frameHeight);
 
-    settingsScreen = new SettingsScreen(frameWidth,frameHeight);
-
     defaultScreen = new JPanel();
     defaultScreen.setBounds(0,0,frameWidth,frameHeight);
     defaultScreen.setBackground(ColorsAndFonts.OCEANS);
@@ -162,6 +160,7 @@ public class Game
     worldPresenter = new WorldPresenter(converter, world);
     worldPresenter.setBackgroundRegions(xmlRegions);
     worldPresenter.setModelRegions(xmlRegions);
+    settingsScreen = new SettingsScreen(frameWidth,frameHeight,worldPresenter);
     new CountryCSVParser( worldPresenter.getAllRegions() );
     world.setAllFirstCrops();
     world.setPresenter(worldPresenter );

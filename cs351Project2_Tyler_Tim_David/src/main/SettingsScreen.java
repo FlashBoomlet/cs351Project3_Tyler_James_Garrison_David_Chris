@@ -1,6 +1,8 @@
 package main;
 
 import gui.ColorsAndFonts;
+import gui.GUIRegion;
+import gui.WorldPresenter;
 import gui.hud.InfoPanel;
 import main.Game;
 
@@ -31,12 +33,13 @@ public class SettingsScreen extends JPanel
   private SettingsButtonPanel buttons;
   private algorithmInfluencePanel panelSimulator;
   private GeneralSettings generalSettings;
+  private WorldPresenter worldPresenter;
 
   // J-Radio buttons
   private JRadioButton selectAll;
-  private JRadioButton lowestAccuracy;
-  private JRadioButton mediumAccuracy;
-  private JRadioButton highestAccuracy;
+  private static JRadioButton lowestAccuracy;
+  private static JRadioButton mediumAccuracy;
+  private static JRadioButton highestAccuracy;
   private static JRadioButton units;
 
   /**
@@ -48,13 +51,14 @@ public class SettingsScreen extends JPanel
    * @param frameWidth main frame's width
    * @param frameHeight main frame's height
    */
-  public SettingsScreen(int frameWidth, int frameHeight)
+  public SettingsScreen(int frameWidth, int frameHeight, WorldPresenter worldPresenter)
   {
     super();
     x = frameWidth/SCALE_IN_FACTOR;
     y = frameHeight/SCALE_IN_FACTOR;
     width = frameWidth-(x*4);
     height = frameHeight-(y*5);
+    this.worldPresenter = worldPresenter;
 
     setLayout(new BorderLayout(0,0));
     y*=3;
@@ -171,6 +175,12 @@ public class SettingsScreen extends JPanel
     }
   }
 
+  public static double getRandomizeBounds()
+  {
+    if( lowestAccuracy.isSelected() ) return 0.0;
+    else if( mediumAccuracy.isSelected() ) return 0.5;
+    else return 1.0;
+  }
   private class algorithmInfluencePanel extends JPanel implements ActionListener
   {
     algorithmInfluencePanel()
@@ -247,6 +257,10 @@ public class SettingsScreen extends JPanel
         mediumAccuracy.setSelected(false);
         highestAccuracy.setSelected(true);
         selectAll.setSelected(false);
+      }
+      for( GUIRegion gr : worldPresenter.getAllRegions())
+      {
+        if( gr.getCountryData() != null ) gr.getCountryData().randomizePercent();
       }
     }
   }
