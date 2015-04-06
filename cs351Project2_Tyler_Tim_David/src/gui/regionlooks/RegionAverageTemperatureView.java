@@ -38,7 +38,7 @@ class RegionAverageTemperatureView implements RegionView
     if (!gRegion.isActive())
     {
       for(WorldCell cell: relevantCells){
-        System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
+        //System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
 
 //        int select = (int) (cell.getTempAvg() * LIMIT);
 //        if(select<0) select = 0;

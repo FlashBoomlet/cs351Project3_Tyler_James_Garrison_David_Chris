@@ -48,12 +48,11 @@ public class StartScreen extends JPanel
 
     text = new JTextArea();
     text.setBackground(new Color(0x333333));
-    text.setPreferredSize(new Dimension(500, 500));
+    text.setPreferredSize(new Dimension((int) (getWidth() * (.67)), (int) (getHeight() * (.80))));
     text.setFont(ColorsAndFonts.GUI_FONT);
     text.setForeground(Color.white);
-    text.setText(" * \"World Food Production and Land Management\" version 1.2 developed by: \n" +
-        "   Tyler Lynch, Timothy Chavez, and David Matins \n" +
-        "   with a version 1.1 foundation by: Winston Wriley and David Ringo \n" +
+    text.setText("\n * \"World Food Production and Land Management\" version 1.2 developed by: Tyler Lynch, Timothy Chavez, and David Matins \n" +
+        "   with a version 1.1 foundation by: Winston Wriley and David Ringo \n\n" +
         "   Why:\n" +
         "      You are a policy Maker for the country. Your mission, should you choose to accept it, is to\n" +
         "      further advance the world while maintaining or improving upon the populations over all well being\n" +
@@ -67,8 +66,8 @@ public class StartScreen extends JPanel
         "      At the end of the game you will see how well you have done throughout the game\n" +
         "      \n" +
         "      As always, \"All models are wrong, but some are useful\" \n\n" +
-        "TODO: what the game models \n\n" +
-        "TODO: how to play the game");
+        " TODO: what the game models \n\n" +
+        " TODO: how to play the game");
 
     text.setEditable(false);
 
@@ -94,7 +93,14 @@ public class StartScreen extends JPanel
 
 
     textHolder.add(version);
-    textHolder.add(text);
+
+    JPanel realTextHolder = new JPanel();
+    realTextHolder.add(text);
+
+    JScrollPane scrollFrame = new JScrollPane(realTextHolder);
+    realTextHolder.setAutoscrolls(true);
+    scrollFrame.setPreferredSize(new Dimension((int) (getWidth() * (.70)), (int) (getHeight() * (.75))));
+    textHolder.add(scrollFrame);
     textHolder.setPreferredSize(new Dimension((int) (getWidth() * (.70)), (int) (getHeight() * (.75))));
     add(textHolder);
 
