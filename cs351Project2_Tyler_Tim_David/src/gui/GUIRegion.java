@@ -216,20 +216,52 @@ public class GUIRegion
     return data;
   }
 
+  private NextYear ny;
   /**
    * Advances to the next year.
    */
   public void iterateYear()
   {
-    /*
-     * It shouldn't need a null check but for some reason I am getting a null pointer
-     * exception. This fixes it and updated properly when called by the update function.
-     */
-    if( data != null )
+    ny = new NextYear();
+  }
+
+  public void startIterate()
+  {
+    ny.start();
+  }
+
+  private class NextYear extends Thread
+  {
+    private Thread t;
+    /* Empty Constructor */
+    private NextYear() {}
+
+    public void run()
     {
-      data.iterateYear(region);
+      try
+      {
+        /*
+         * It shouldn't need a null check but for some reason I am getting a null pointer
+         * exception. This fixes it and updated properly when called by the update function.
+         */
+        if( data != null ) { data.iterateYear(region); }
+      }
+      catch (Exception e) {}
+    }
+    /**
+     * start overrides Thread's start
+     * Creates new Thread and then starts said Thread
+     */
+    public void start()
+    {
+      if (t == null)
+      {
+        t = new Thread(this, (String) getName());
+        t.start ();
+      }
     }
   }
+
 
   /**
    * Sets to an official country.

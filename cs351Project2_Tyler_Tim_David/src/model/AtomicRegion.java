@@ -365,6 +365,95 @@ public class AtomicRegion implements Region, CropIdeals
       }
     }
     finalizeCells(leftovers3, cellsNeeded);
+    calculateYield();
+  }
+
+  private void calculateYield ()
+  {
+    int [] landNums = new int[15];
+    for (WorldCell cell: relevantCells)
+    {
+      if (cell.getCrop().equals("None"))
+      {
+        continue;
+      }
+      else if (cell.getCrop().equals("Corn"))
+      {
+        if (cell.getCropState() == 1)
+        {
+          landNums[0] = landNums[0] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.6)
+        {
+          landNums[1] = landNums[1] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.25)
+        {
+          landNums[2] = landNums[2] + 1;
+        }
+      }
+      else if (cell.getCrop().equals("Wheat"))
+      {
+        if (cell.getCropState() == 1)
+        {
+          landNums[3] = landNums[3] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.6)
+        {
+          landNums[4] = landNums[4] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.25)
+        {
+          landNums[5] = landNums[5] + 1;
+        }
+      }
+      else if (cell.getCrop().equals("Soy"))
+      {
+        if (cell.getCropState() == 1)
+        {
+          landNums[6] = landNums[6] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.6)
+        {
+          landNums[7] = landNums[7] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.25)
+        {
+          landNums[8] = landNums[8] + 1;
+        }
+      }
+      else if (cell.getCrop().equals("Rice"))
+      {
+        if (cell.getCropState() == 1)
+        {
+          landNums[9] = landNums[9] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.6)
+        {
+          landNums[10] = landNums[10] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.25)
+        {
+          landNums[11] = landNums[11] + 1;
+        }
+      }
+      else if (cell.getCrop().equals("Other"))
+      {
+        if (cell.getCropState() == 1)
+        {
+          landNums[12] = landNums[12] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.6)
+        {
+          landNums[13] = landNums[13] + 1;
+        }
+        else if (cell.getCropState() == (float) 0.25)
+        {
+          landNums[14] = landNums[14] + 1;
+        }
+      }
+    }
+    data.calculateZeroOrder(landNums);
   }
 
   /**
@@ -661,13 +750,13 @@ public class AtomicRegion implements Region, CropIdeals
    */
   private void setPriority (double arableTotal, int cellsNeeded, LinkedList<CropNum> cropPriority)
   {
-    int temp = (int) ((data.getCornLand(true)/arableTotal)* cellsNeeded);
+    int temp = (int) ((data.getCornLand(true)/arableTotal) * cellsNeeded);
     cropPriority.add(new CropNum(temp, "Corn"));
     data.setCornLand(temp * 100);
-    temp = (int) ((data.getWheatLand(true)/arableTotal)* cellsNeeded);
+    temp = (int) ((data.getWheatLand(true) / arableTotal)* cellsNeeded);
     addCrop(temp, "Wheat", cropPriority);
     data.setWheatLand(temp * 100);
-    temp = (int) ((data.getRiceLand(true)/arableTotal)* cellsNeeded);
+    temp = (int) ((data.getRiceLand(true) / arableTotal)* cellsNeeded);
     addCrop(temp, "Rice", cropPriority);
     data.setRiceLand(temp * 100);
     temp = (int) ((data.getSoyLand(true)/arableTotal)* cellsNeeded);
