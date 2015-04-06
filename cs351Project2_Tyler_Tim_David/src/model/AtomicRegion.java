@@ -33,46 +33,66 @@ public class AtomicRegion implements Region, CropIdeals
   private int OTHER_RAIN_HIGH;
   private int OTHER_RAIN_LOW;
 
-
+  /**
+   * @return name
+   */
   @Override
   public String getName()
   {
     return name;
   }
 
+  /**
+   * @param flagLocation flag's location
+   */
   @Override
   public void setFlag(String flagLocation)
   {
     this.flagLocation = flagLocation;
   }
 
+  /**
+   * @return The flag location or null if none
+   */
   @Override
   public String getFlag()
   {
     if( !flagLocation.contains("\n") ) return flagLocation;
     else return null;
   }
+
+  /**
+   * Set the name of the region.
+   * @param name
+   */
   @Override
   public void setName(String name)
   {
     this.name = name;
   }
 
-
+  /**
+   * @return  All of the mini areas of the region.
+   */
   @Override
   public List<MiniArea> getPerimeter()
   {
     return perimeter;
   }
 
-
+  /**
+   * Set the mini areas of the region.
+   * @param perimeter
+   */
   @Override
   public void setPerimeter(List<MiniArea> perimeter)
   {
     this.perimeter = perimeter;
   }
 
-
+  /**
+   * @return Prints atomic region and the name.
+   */
   public String toString()
   {
     return "AtomicRegion{" +

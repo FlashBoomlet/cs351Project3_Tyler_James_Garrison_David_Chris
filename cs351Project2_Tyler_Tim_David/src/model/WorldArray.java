@@ -248,14 +248,4 @@ public class WorldArray
     get(x, y).setPrecip(get(x, y).getPrecip() + (float) (deltaThree / Math.log(Math.E + 100 * r3)));
   }
 
-  /**
-   public boolean pointInCell (double lonPoint, double latPoint)
-   {
-   if (latPoint >= lat && latPoint < (lat + EDGE_Y_LAT) && lonPoint >= lon && lonPoint < (lon + EDGE_X_LON))
-   {
-   return true;
-   }
-   return false;
-   }
-   */
 }
