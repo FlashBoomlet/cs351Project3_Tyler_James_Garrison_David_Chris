@@ -242,10 +242,10 @@ public class WorldArray
 
   private void noiseHelp (int x, int y, float deltaOne, float deltaTwo, float deltaThree, float r3)
   {
-    get(x, y).setAnnualHigh(worldCells[x][y].getAnnualHigh() + (float) (deltaOne / Math.log(Math.E + 100 * r3)));
-    get(x, y).setAnnualLow(worldCells[x][y].getAnnualLow() + (float) (deltaOne / Math.log(Math.E + 100 * r3)));
-    get(x, y).setTempAvg(worldCells[x][y].getTempAvg() + (float) (deltaTwo / Math.log(Math.E + 100 * r3)));
-    get(x, y).setPrecip(worldCells[x][y].getPrecip() + (float) (deltaThree / Math.log(Math.E + 100 * r3)));
+    get(x, y).setAnnualHigh(get(x, y).getAnnualHigh() + (float) (deltaOne / Math.log(Math.E + 100 * r3)));
+    get(x, y).setAnnualLow(get(x, y).getAnnualLow() + (float) (deltaOne / Math.log(Math.E + 100 * r3)));
+    get(x, y).setTempAvg(get(x, y).getTempAvg() + (float) (deltaTwo / Math.log(Math.E + 100 * r3)));
+    get(x, y).setPrecip(get(x, y).getPrecip() + (float) (deltaThree / Math.log(Math.E + 100 * r3)));
   }
 
   /**
