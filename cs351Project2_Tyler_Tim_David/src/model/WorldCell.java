@@ -1,7 +1,5 @@
 package model;
 
-import model.World;
-import java.util.ArrayList;
 /**
  * Created by Tim on 3/14/15.
  * A cell representing 10 km^2 of
@@ -30,26 +28,6 @@ public class WorldCell
     lat = latIn;
     lon = lonIn;
   }
-/*
-  public boolean isOriginal ()
-  {
-    return originalPrecip;
-  }
-
-  public boolean isOriginalTAVG ()
-  {
-    return originalTAVG;
-  }
-
-  public boolean isOriginalTMAX ()
-  {
-    return originalTMAX;
-  }
-
-  public boolean isOriginalTMIN ()
-  {
-    return originalTMIN;
-  }*/
 
   /**
    * @return  If the cell is assigned to a region.
@@ -74,12 +52,6 @@ public class WorldCell
   {
     return lon;
   }
-
-  /*
-  public double getElevation ()
-  {
-    return elevation;
-  }*/
 
   /**
    * @return The cell's precipitation.
@@ -137,48 +109,6 @@ public class WorldCell
     return currentCropPenalty;
   }
 
-  /*
-  public void setElevation (double elev)
-  {
-    if (elev >= 0 && elev <= 8850)
-    {
-      elevation = elev;
-    }
-    else
-    {
-      System.out.println("Invalid elevation.");
-    }
-  }
-
-  public void setAllPrecip (float[] months)
-  {
-    originalPrecip = true;
-    float temp = 0;
-    if (months.length == 12)
-    {
-      if (annualPrecip == -1)
-      {
-        for (int i = 0; i < 12; i++)
-        {
-          temp = temp + months[i];
-        }
-        annualPrecip = temp;
-      }
-      else
-      {
-        for (int i = 0; i < 12; i++)
-        {
-          temp = temp + months[i];
-        }
-        annualPrecip = (annualPrecip + temp) / 2;
-      }
-    }
-    else
-    {
-      System.out.println("Need 12 months to set Precip");
-    }
-  }*/
-
   /**
    * The cell's precipitation.
    * @param precip
@@ -223,34 +153,6 @@ public class WorldCell
     tempAvg = avg;
   }
 
-/*
-  public void setOriginalTAVG (float avg)
-  {
-    originalTAVG = true;
-    tempAvg = avg;
-  }
-
-  public void setOriginalTMAX (float high)
-  {
-    originalTMAX = true;
-    annualHigh = high;
-  }
-
-  public void setOriginalTMIN (float low)
-  {
-    originalTMIN = true;
-    annualLow = low;
-  }
-
-  public enum CropType
-  {
-    WHEAT,
-    CORN,
-    SOY,
-    RICE,
-    OTHER,
-    NONE
-  }*/
 
   /**
    * Updates the cell's crop for the next year.

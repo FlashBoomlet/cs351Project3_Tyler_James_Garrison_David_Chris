@@ -836,15 +836,18 @@ public class CountryData
         case "Soy":
           soy += cell.getCurrentCropPenalty();
           break;
-        default:
+        case "Other":
           other += cell.getCurrentCropPenalty();
+          break;
+        default:
+          break;
       }
     }
-//    cornProduction = corn * baseYield;
-//    wheatProduction = wheat * baseYield;
-//    riceProduction = rice * baseYield;
-//    soyProduction = soy * baseYield;
-//    otherProduction = other * baseYield;
+    cornProduction = corn * baseYieldCorn;
+    wheatProduction = wheat * baseYieldWheat;
+    riceProduction = rice * baseYieldRice;
+    soyProduction = soy * baseYieldSoy;
+    otherProduction = other * baseYieldOther;
   }
 
   /**
@@ -852,12 +855,11 @@ public class CountryData
    */
   public void iterateYear(Region region)
   {
+    region.setCrops();
     calculateProduction(region);
     //calculateCountryConsumption();
     //calculatePerCapitaConsumption();
     //calculateBaseYield();
-    // Should be one of the first things as it places the crops based on what the user specifies in the GUI
-    //region.setCrops();
   }
 
   /**
