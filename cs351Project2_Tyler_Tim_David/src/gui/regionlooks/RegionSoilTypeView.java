@@ -12,6 +12,8 @@ import java.awt.*;
  * CS 351 spring 2015
  * <p/>
  * Represents the soil types of the regions.
+ *
+ * ISN't USED ANYMORE
  */
 class RegionSoilTypeView implements RegionView
 {

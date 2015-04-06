@@ -51,8 +51,11 @@ public class StartScreen extends JPanel
     text.setPreferredSize(new Dimension((int) (getWidth() * (.67)), (int) (getHeight() * (.80))));
     text.setFont(ColorsAndFonts.GUI_FONT);
     text.setForeground(Color.white);
-    text.setText("\n * \"World Food Production and Land Management\" version 1.2 developed by: Tyler Lynch, Timothy Chavez, and David Matins \n" +
-        "   with a version 1.1 foundation by: Winston Wriley and David Ringo \n\n" +
+    text.setText("\n * \"World Food Production and Land Management\" version 1.2 developed by: \n\n" +
+        " \tTyler Lynch <lyncht@unm.edu>\n" +
+        " \tTimothy Chavez <tchavez22@unm.edu> \n" +
+        " \tDavid Matins <dmatins@unm.edu> \n\n" +
+        "   with a version 1.1 foundation by: Winston Wriley and David Ringo \n\n\n" +
         "   Why:\n" +
         "      You are a policy Maker for the country. Your mission, should you choose to accept it, is to\n" +
         "      further advance the world while maintaining or improving upon the populations over all well being\n" +

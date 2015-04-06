@@ -2,14 +2,13 @@ package gui.regionlooks;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.RegionAttributes;
-
 import java.awt.*;
 
-import static model.RegionAttributes.PLANTING_ATTRIBUTES.POPULATION;
-
 /**
- * Created  by David M on 3/22/2015
+ * Created by David M. on 3/31/2015
+ * CS 351 spring 2015
+ * <p/>
+ * Represents the Population of the region.
  */
 class RegionPopulationView implements RegionView
 {

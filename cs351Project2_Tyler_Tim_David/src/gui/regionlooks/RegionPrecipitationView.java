@@ -11,9 +11,10 @@ import java.awt.*;
 import java.util.HashSet;
 
 /**
- * Created by winston on 2/8/15.
- *
- * Edited by David M on 3/19/2015
+ * Created by David M. on 3/31/2015
+ * CS 351 spring 2015
+ * <p/>
+ * Represents the precipitation of the regions cells.
  */
 class RegionPrecipitationView implements RegionView
 {

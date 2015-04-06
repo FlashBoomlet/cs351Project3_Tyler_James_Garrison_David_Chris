@@ -244,7 +244,9 @@ public class GUIRegion
          * It shouldn't need a null check but for some reason I am getting a null pointer
          * exception. This fixes it and updated properly when called by the update function.
          */
-        if( data != null ) { data.iterateYear(region); }
+        if( data != null ) {
+          data.iterateYear(region);
+        }
       }
       catch (Exception e) {}
     }
