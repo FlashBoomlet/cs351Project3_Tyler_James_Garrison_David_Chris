@@ -411,6 +411,7 @@ public class Game
     startPanel.setVisible(true);
     settingsScreen.setVisible(false);
     mapScale.setVisible(false);
+    finishPanel.setVisible(false);
   }
 
   /**
