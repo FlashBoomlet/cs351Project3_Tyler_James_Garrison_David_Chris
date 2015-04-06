@@ -53,6 +53,13 @@ public class CountryData
   private double baseYield;
   private double randomization = 0;
 
+  //Base Yield calculations
+  private double idealLand = 1;
+  private double acceptableLand = 0;
+  private double acceptableRate = 0;
+  private double poorLand = 0;
+  private double poorRate = 0;
+
   /**
    * Empty constructor
    */
@@ -556,17 +563,25 @@ public class CountryData
 
   private void calculateCountryConsumption()
   {
-    // 2014 = produced + import -export
+    countryConsumption = getCropTotal(true);
   }
 
   private void calculatePerCapitaConsumption()
   {
     // Based on the Country consumption
+    perCapitaConsumption = countryConsumption/(population-((0.5)*undernourish));
   }
 
+  /**
+   * Crop yield base case
+   */
   private void calculateBaseYield()
   {
-    // yeah....
+    baseYield = getProdution()/(idealLand+(acceptableLand*acceptableRate)+(poorLand*poorRate));
+  }
+  private double getProdution()
+  {
+    return (cornProduction + wheatProduction + soyProduction + riceProduction + otherProduction);
   }
 
   public void randomizePercent()
@@ -622,7 +637,8 @@ public class CountryData
     //calculateCountryConsumption();
     //calculatePerCapitaConsumption();
     //calculateBaseYield();
-    //region.setCrops(); Should be one of the first things as it places the crops based on what the user specifies in the GUI
+    // Should be one of the first things as it places the crops based on what the user specifies in the GUI
+    //region.setCrops();
   }
 
   /**

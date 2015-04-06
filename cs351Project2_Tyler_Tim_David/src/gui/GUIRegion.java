@@ -37,6 +37,7 @@ public class GUIRegion
   private BufferedImage image;
   private boolean officialCountry = false;
   private CountryData data = null;
+  private int[] centerOfShipping = new int[2];
 
   /**
    * Loads the region's flag.
@@ -58,6 +59,15 @@ public class GUIRegion
     }
   }
 
+  /**
+   * Get the center of shipping location
+   * @return array where index 0 is the x location and index 1 is the y location
+   */
+  public int[] getCenterOfShipping()
+  {
+    return centerOfShipping;
+  }
+  
   /**
    * @return  Is region active.
    */
