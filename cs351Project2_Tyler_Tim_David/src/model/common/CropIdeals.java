@@ -2,6 +2,8 @@ package model.common;
 
 /**
  * Created by Tim on 4/5/15.
+ * Contains the ideal conditions for the
+ * four crops.
  */
 public interface CropIdeals
 {

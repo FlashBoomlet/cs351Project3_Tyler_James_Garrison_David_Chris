@@ -22,6 +22,9 @@ import java.util.LinkedList;
  *
  * Restructured by:
  * @author Tyler Lynch <lyncht@unm.edu>
+ *
+ * Structure for regions to be displayed by the GUI, dependent on
+ * AtomicRegions.
  */
 public class GUIRegion
 {
@@ -35,6 +38,12 @@ public class GUIRegion
   private boolean officialCountry = false;
   private CountryData data = null;
 
+  /**
+   * Loads the region's flag.
+   * @param region      The appropriate Region.
+   * @param converter   The appropriate MapConverter.
+   * @param look        The appropriate RegionView
+   */
   public GUIRegion(Region region, MapConverter converter, RegionView look)
   {
     this.region = region;
@@ -49,21 +58,35 @@ public class GUIRegion
     }
   }
 
+  /**
+   * @return  Is region active.
+   */
   public boolean isActive()
   {
     return isActive;
   }
 
+  /**
+   * Sets the region to active or not.
+   * @param isActive  Whether the region should be active or not.
+   */
   public void setActive(boolean isActive)
   {
     this.isActive = isActive;
   }
 
+  /**
+   * @return  The region's view.
+   */
   public RegionView getLook()
   {
     return look;
   }
 
+  /**
+   * Set the Region's view.
+   * @param look  The RegionView
+   */
   public void setLook(RegionView look)
   {
     this.look = look;
@@ -74,6 +97,9 @@ public class GUIRegion
     return region.getName();
   }
 
+  /**
+   * Loads the region's flag.
+   */
   public void loadFlag() {
     ClassLoader cl = this.getClass().getClassLoader();
     InputStream in = cl.getResourceAsStream( region.getFlag() );
@@ -87,17 +113,26 @@ public class GUIRegion
     }
   }
 
+  /**
+   * @return Returns if the region has a flag.
+   */
   public boolean flag(){
     if( region.getFlag() != null ) return true;
     return false;
   }
 
+  /**
+   * @return Returns the region's flag.
+   */
   public BufferedImage getFlag()
   {
     loadFlag();
     return image;
   }
 
+  /**
+   * @return  The Polygon representing the region.
+   */
   public LinkedList<Polygon> getPoly()
   {
     polyList.clear();
@@ -108,6 +143,11 @@ public class GUIRegion
     return polyList;
   }
 
+  /**
+   * Returns the surface area of the polygon passed in.
+   * @param p The surface area.
+   * @return
+   */
   public double getSurfaceArea(Polygon p)
   {
     double localSA = 0;
@@ -115,6 +155,9 @@ public class GUIRegion
     return localSA;
   }
 
+  /**
+   * @return  The region's list of AtomicMiniAreas.
+   */
   public LinkedList<Area> getArea()
   {
     for( Polygon p: getPoly() )
@@ -124,28 +167,47 @@ public class GUIRegion
     return area;
   }
 
+  /**
+   * Draws the region.
+   * @param g Graphics
+   */
   public void draw(Graphics g)
   {
     look.draw(g, this);
   }
 
+  /**
+   * Returns the AtomicRegion of this region.
+   * @return  AtomicRegion
+   */
   public Region getRegion()
   {
     return region;
   }
 
-
+  /**
+   * Sets the data of the country of this
+   * and its region.
+   * @param data
+   */
   public void setCountryData(CountryData data)
   {
     region.setCountryData(data);
     this.data = data;
   }
 
+  /**
+   * @return  The Country Data of this region.
+   */
   public CountryData getCountryData()
   {
     return data;
   }
 
+  /**
+   * Advances to the next year.
+   * @param worldArray  All of the World Cells to update.
+   */
   public void iterateYear(WorldArray worldArray)
   {
     /*
@@ -158,11 +220,17 @@ public class GUIRegion
     }
   }
 
+  /**
+   * Sets to an official country.
+   */
   public void setOfficialCountry()
   {
     officialCountry = true;
   }
 
+  /**
+   * @return  Whether an official country or not.
+   */
   public boolean getOfficialCountry()
   {
     return officialCountry;
