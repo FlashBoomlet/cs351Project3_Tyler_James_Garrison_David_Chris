@@ -33,7 +33,7 @@ class RegionHighTemperatureView implements RegionView
       System.out.println("empty daug");
     }
     for(WorldCell cell: relevantCells){
-      System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
+      //System.out.println("lat :"+cell.getLat()+" long :"+cell.getLon());
     }
     double temp = 0; //gRegion.getRegion().getAttributes().getAttribute(AVE_MONTH_TEMP_HI);
     Color color = Color.CYAN;

@@ -375,29 +375,48 @@ public class AtomicRegion implements Region, CropIdeals
     float tMax = cell.getAnnualHigh();
     float tMin = cell.getAnnualLow();
     int ideal = 0;
+    int accept = 0;
     if (crop.equals("Wheat"))
     {
       if (precip > WHEAT_RAIN_LOW && precip < WHEAT_RAIN_HIGH)
       {
         ideal++;
       }
+      else if (precip > WHEAT_RAIN_LOW - ((WHEAT_RAIN_HIGH - WHEAT_RAIN_LOW) * 0.3) &&
+               precip < WHEAT_RAIN_HIGH + ((WHEAT_RAIN_HIGH - WHEAT_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tAvg > WHEAT_AVG_LOW && tAvg < WHEAT_AVG_HIGH)
       {
         ideal++;
+      }
+      else if (precip > WHEAT_AVG_LOW - ((WHEAT_AVG_HIGH - WHEAT_AVG_LOW) * 0.3) &&
+               precip < WHEAT_AVG_HIGH + ((WHEAT_AVG_HIGH - WHEAT_AVG_LOW) * 0.3))
+      {
+        accept++;
       }
       if (tMax < WHEAT_MAX_HIGH)
       {
         ideal++;
       }
+      else if (precip < WHEAT_MAX_HIGH + ((WHEAT_MAX_HIGH - WHEAT_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tMin > WHEAT_MAX_LOW)
       {
         ideal++;
+      }
+      else if (precip > WHEAT_MAX_LOW - ((WHEAT_MAX_HIGH - WHEAT_MAX_LOW) * 0.3))
+      {
+        accept++;
       }
       if (ideal == 4)
       {
         return 0;
       }
-      else if (ideal == 3)
+      else if (ideal == 3 && accept == 1)
       {
         return 1;
       }
@@ -412,23 +431,41 @@ public class AtomicRegion implements Region, CropIdeals
       {
         ideal++;
       }
+      else if (precip > SOY_RAIN_LOW - ((SOY_RAIN_HIGH - SOY_RAIN_LOW) * 0.3) &&
+              precip < SOY_RAIN_HIGH + ((SOY_RAIN_HIGH - SOY_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tAvg > SOY_AVG_LOW && tAvg < SOY_AVG_HIGH)
       {
         ideal++;
+      }
+      else if (precip > SOY_AVG_LOW - ((SOY_AVG_HIGH - SOY_AVG_LOW) * 0.3) &&
+              precip < SOY_AVG_HIGH + ((SOY_AVG_HIGH - SOY_AVG_LOW) * 0.3))
+      {
+        accept++;
       }
       if (tMax < SOY_MAX_HIGH)
       {
         ideal++;
       }
+      else if (precip < SOY_MAX_HIGH + ((SOY_MAX_HIGH - SOY_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tMin > SOY_MAX_LOW)
       {
         ideal++;
+      }
+      else if (precip > SOY_MAX_LOW - ((SOY_MAX_HIGH - SOY_MAX_LOW) * 0.3))
+      {
+        accept++;
       }
       if (ideal == 4)
       {
         return 0;
       }
-      else if (ideal == 3)
+      else if (ideal == 3 && accept == 1)
       {
         return 1;
       }
@@ -443,23 +480,41 @@ public class AtomicRegion implements Region, CropIdeals
       {
         ideal++;
       }
+      else if (precip > CORN_RAIN_LOW - ((CORN_RAIN_HIGH - CORN_RAIN_LOW) * 0.3) &&
+              precip < CORN_RAIN_HIGH + ((CORN_RAIN_HIGH - CORN_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tAvg > CORN_AVG_LOW && tAvg < CORN_AVG_HIGH)
       {
         ideal++;
+      }
+      else if (precip > CORN_AVG_LOW - ((CORN_AVG_HIGH - CORN_AVG_LOW) * 0.3) &&
+              precip < CORN_AVG_HIGH + ((CORN_AVG_HIGH - CORN_AVG_LOW) * 0.3))
+      {
+        accept++;
       }
       if (tMax < CORN_MAX_HIGH)
       {
         ideal++;
       }
+      else if (precip < CORN_MAX_HIGH + ((CORN_MAX_HIGH - CORN_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tMin > CORN_MAX_LOW)
       {
         ideal++;
+      }
+      else if (precip > CORN_MAX_LOW - ((CORN_MAX_HIGH - CORN_MAX_LOW) * 0.3))
+      {
+        accept++;
       }
       if (ideal == 4)
       {
         return 0;
       }
-      else if (ideal == 3)
+      else if (ideal == 3 && accept == 1)
       {
         return 1;
       }
@@ -474,23 +529,41 @@ public class AtomicRegion implements Region, CropIdeals
       {
         ideal++;
       }
+      else if (precip > RICE_RAIN_LOW - ((RICE_RAIN_HIGH - RICE_RAIN_LOW) * 0.3) &&
+              precip < RICE_RAIN_HIGH + ((RICE_RAIN_HIGH - RICE_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tAvg > RICE_AVG_LOW && tAvg < RICE_AVG_HIGH)
       {
         ideal++;
+      }
+      else if (precip > RICE_AVG_LOW - ((RICE_AVG_HIGH - RICE_AVG_LOW) * 0.3) &&
+              precip < RICE_AVG_HIGH + ((RICE_AVG_HIGH - RICE_AVG_LOW) * 0.3))
+      {
+        accept++;
       }
       if (tMax < RICE_MAX_HIGH)
       {
         ideal++;
       }
+      else if (precip < RICE_MAX_HIGH + ((RICE_MAX_HIGH - RICE_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tMin > RICE_MAX_LOW)
       {
         ideal++;
+      }
+      else if (precip > RICE_MAX_LOW - ((RICE_MAX_HIGH - RICE_MAX_LOW) * 0.3))
+      {
+        accept++;
       }
       if (ideal == 4)
       {
         return 0;
       }
-      else if (ideal == 3)
+      else if (ideal == 3 && accept == 1)
       {
         return 1;
       }
@@ -505,23 +578,41 @@ public class AtomicRegion implements Region, CropIdeals
       {
         ideal++;
       }
+      else if (precip > OTHER_RAIN_LOW - ((OTHER_RAIN_HIGH - OTHER_RAIN_LOW) * 0.3) &&
+              precip < OTHER_RAIN_HIGH + ((OTHER_RAIN_HIGH - OTHER_RAIN_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tAvg > OTHER_AVG_LOW && tAvg < OTHER_AVG_HIGH)
       {
         ideal++;
+      }
+      else if (precip > OTHER_AVG_LOW - ((OTHER_AVG_HIGH - OTHER_AVG_LOW) * 0.3) &&
+              precip < OTHER_AVG_HIGH + ((OTHER_AVG_HIGH - OTHER_AVG_LOW) * 0.3))
+      {
+        accept++;
       }
       if (tMax < OTHER_MAX_HIGH)
       {
         ideal++;
       }
+      else if (precip < OTHER_MAX_HIGH + ((OTHER_MAX_HIGH - OTHER_MAX_LOW) * 0.3))
+      {
+        accept++;
+      }
       if (tMin > OTHER_MAX_LOW)
       {
         ideal++;
+      }
+      else if (precip > OTHER_MAX_LOW - ((OTHER_MAX_HIGH - OTHER_MAX_LOW) * 0.3))
+      {
+        accept++;
       }
       if (ideal == 4)
       {
         return 0;
       }
-      else if (ideal == 3)
+      else if (ideal == 3 && accept == 1)
       {
         return 1;
       }

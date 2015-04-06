@@ -29,10 +29,10 @@ public class WorldArray
     {
       for (int j = 0; j < Y_CELLS; j++)
       {
-        tempLon = (i - (X_CELLS/2)) * 180 / (X_CELLS/2);
-        tempLat = (j - (Y_CELLS/2)) / ((float) (Y_CELLS/2));
+        tempLon = (i - (X_CELLS/2.0)) * 180.0 / (X_CELLS/2.0);
+        tempLat = (j - (Y_CELLS/2.0)) / ((float) (Y_CELLS/2.0));
         tempLat = Math.asin(tempLat);
-        tempLat = tempLat * (180 / Math.PI);
+        tempLat = tempLat * (180.0 / Math.PI);
         worldCells [i][j] = new WorldCell(tempLon, tempLat);
       }
     }

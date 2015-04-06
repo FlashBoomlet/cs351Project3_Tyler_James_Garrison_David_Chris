@@ -59,6 +59,11 @@ public class Game
   private static SettingsScreen settingsScreen;
   private static JPanel defaultScreen;
   private static MapScale mapScale;
+  private static Camera cam;
+  public static Camera getCamera()
+  {
+    return cam;
+  }
   public static void repaintMapScale()
   {
     mapScale.updateScale();
@@ -162,7 +167,7 @@ public class Game
     world.setPresenter(worldPresenter );
 
     feedPanelHeight = (int) (frameHeight/25);
-    Camera cam = new Camera(converter);
+    cam = new Camera(converter);
     Dimension dim = new Dimension(frameWidth,(int) (frameHeight-feedPanelHeight) );
     mapPane = new MapPane(cam, worldPresenter,dim,feedPanelHeight);
 
