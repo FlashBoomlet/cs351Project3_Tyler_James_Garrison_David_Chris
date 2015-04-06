@@ -856,7 +856,6 @@ public class CountryData
    */
   public void iterateYear(Region region)
   {
-<<<<<<< HEAD
     prevUndernourish = undernourish;
     calculateProduction(region);
     if( undernourish > prevUndernourish )
@@ -868,13 +867,7 @@ public class CountryData
     calculateProduction(region);
     // Should be one of the first things as it places the crops based on what the user specifies in the GUI
     region.setCrops();
-=======
-    region.setCrops();
     calculateProduction(region);
-    //calculateCountryConsumption();
-    //calculatePerCapitaConsumption();
-    //calculateBaseYield();
->>>>>>> 7eb4ebd73b650002ff924f578e19dbb34e521ebf
   }
 
   /**
