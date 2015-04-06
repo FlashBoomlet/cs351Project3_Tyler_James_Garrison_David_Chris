@@ -45,7 +45,6 @@ class RegionLowTemperatureView implements RegionView
             int cellX = (int) converter.lonToX(cell.getLon());
             int cellY = (int) converter.latToY(cell.getLat());
             if(cameraBounds.contains(cellX, cellY)){
-              System.out.println(cell.getAnnualLow());
               int select = (int) ((cell.getAnnualLow() + 50.0) * LIMIT);
               if (select < 0) select = 0;
               if (select < colors.length)

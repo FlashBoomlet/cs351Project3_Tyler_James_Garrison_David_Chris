@@ -2,6 +2,8 @@ package model;
 
 import main.SettingsScreen;
 
+import java.util.HashSet;
+
 /**
  * @author Tyler Lynch <lyncht@unm.edu>
  * @since 4.2.2015
@@ -807,11 +809,45 @@ public class CountryData
    */
 
 
+  private void calculateProduction(Region region)
+  {
+    HashSet<WorldCell> relevantCells = region.getArableCells();
+    double corn = 0.0;
+    double wheat = 0.0;
+    double rice = 0.0;
+    double soy = 0.0;
+    double other = 0.0;
+    for (WorldCell cell : relevantCells) {
+      switch(cell.getCrop()) {
+        case "Corn":
+          corn += cell.getCurrentCropPenalty();
+          break;
+        case "Wheat":
+          wheat += cell.getCurrentCropPenalty();
+          break;
+        case "Rice":
+          rice += cell.getCurrentCropPenalty();
+          break;
+        case "Soy":
+          soy += cell.getCurrentCropPenalty();
+          break;
+        default:
+          other += cell.getCurrentCropPenalty();
+      }
+    }
+//    cornProduction = corn * baseYield;
+//    wheatProduction = wheat * baseYield;
+//    riceProduction = rice * baseYield;
+//    soyProduction = soy * baseYield;
+//    otherProduction = other * baseYield;
+  }
+
   /**
    * Calculates the the next years data based on data brought in, or rates calculated from it
    */
   public void iterateYear(Region region)
   {
+    calculateProduction(region);
     //calculateCountryConsumption();
     //calculatePerCapitaConsumption();
     //calculateBaseYield();
