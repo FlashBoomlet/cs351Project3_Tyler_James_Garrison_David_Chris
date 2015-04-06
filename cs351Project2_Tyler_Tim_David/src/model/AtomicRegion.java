@@ -91,16 +91,26 @@ public class AtomicRegion implements Region, CropIdeals
       area.setLandCells(worldArray, landCells);
     }
   }
-@Override
+
+  /**
+   * @return  All cells in this region.
+   */
+  @Override
   public HashSet<WorldCell> getAllCells ()
   {
     return landCells;
   }
-@Override
+
+  /**
+   * @return All cells for arable land.
+   */
+  @Override
   public HashSet<WorldCell> getArableCells ()
   {
     return relevantCells;
   }
+
+  //public float get
 
   /**
    * Sets crops each year after the first in arable land cells.
@@ -243,12 +253,6 @@ public class AtomicRegion implements Region, CropIdeals
       return;
     }
     setOtherIdeals();
-    /*
-    for (String s: attributes.getAllCrops())
-    {
-      temp = (int)
-      cropPriority.put((Integer) attributes.getCropP(s), s);
-    }*/
     HashSet <WorldCell> leftovers = new HashSet<>();
     HashSet <WorldCell> leftovers2 = new HashSet<>();
     HashSet <WorldCell> leftovers3 = new HashSet<>();
@@ -659,14 +663,19 @@ public class AtomicRegion implements Region, CropIdeals
   {
     int temp = (int) ((data.getCornLand(true)/arableTotal)* cellsNeeded);
     cropPriority.add(new CropNum(temp, "Corn"));
+    data.setCornLand(temp * 100);
     temp = (int) ((data.getWheatLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Wheat", cropPriority);
+    data.setWheatLand(temp * 100);
     temp = (int) ((data.getRiceLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Rice", cropPriority);
+    data.setRiceLand(temp * 100);
     temp = (int) ((data.getSoyLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Soy", cropPriority);
+    data.setSoyLand(temp * 100);
     temp = (int) ((data.getOtherLand(true)/arableTotal)* cellsNeeded);
     addCrop(temp, "Other", cropPriority);
+    data.setOtherLand(temp * 100);
   }
 
   /**
