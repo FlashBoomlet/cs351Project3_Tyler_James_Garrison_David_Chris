@@ -60,6 +60,10 @@ public class CountryData
   private double poorLand = 0;
   private double poorRate = 0;
 
+  //Country Center
+  private double centerLat;
+  private double centerLon;
+
   /**
    * Empty constructor
    */
@@ -279,6 +283,22 @@ public class CountryData
   public double getGmo(boolean metricUnits)
   {
     return gmo;
+  }
+  /**
+   * get the centerLat
+   * @return centerLat
+   */
+  public double getShippingLat()
+  {
+    return centerLat;
+  }
+  /**
+   * get the centerLon
+   * @return centerLon
+   */
+  public double getShippingLon()
+  {
+    return centerLon;
   }
 
 
@@ -539,6 +559,23 @@ public class CountryData
   {
     this.gmo = gmo;
   }
+  /**
+   * set the centerLat
+   * @param centerLat centerLat
+   */
+  public void setShippingLat(double centerLat)
+  {
+    this.centerLat = centerLat;
+  }
+  /**
+   * set the centerLon
+   * @param centerLon centerLon
+   */
+  public void setShippingLon(double centerLon)
+  {
+    this.centerLon = centerLon;
+  }
+
 
 
 
