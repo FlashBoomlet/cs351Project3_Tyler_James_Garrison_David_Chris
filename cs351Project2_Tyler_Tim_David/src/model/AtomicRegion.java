@@ -132,7 +132,6 @@ public class AtomicRegion implements Region, CropIdeals
     return relevantCells;
   }
 
-  //public float get
 
   /**
    * Sets crops each year after the first in arable land cells.
