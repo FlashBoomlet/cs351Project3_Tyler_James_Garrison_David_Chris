@@ -78,7 +78,7 @@ public class WorldArray
   {
     int [] out = new int [2];
     double tempX = (((lon/180) * X_CELLS/2) + X_CELLS/2);
-    double tempY = ((Y_CELLS/2 * Math.sin(Math.PI * lat/180)/(Math.PI/2)) + Y_CELLS/2);
+    double tempY = (((Y_CELLS/2) * Math.sin(Math.PI * lat/180)) + Y_CELLS/2);
     out [0] = (int) Math.round(tempX);
     out [1] = (int) Math.round(tempY);
     return out;
@@ -94,7 +94,7 @@ public class WorldArray
   public WorldCell get (double lon, double lat, boolean accurate)
   {
     double tempX = (((lon/180) * X_CELLS/2) + X_CELLS/2);
-    double tempY = ((Y_CELLS/2 * Math.sin(Math.PI * lat/180)/(Math.PI/2)) + Y_CELLS/2);
+    double tempY = (((Y_CELLS/2) * Math.sin(Math.PI * lat/180)/(Math.PI/2)) + Y_CELLS/2);
     System.out.println("tempX " + tempX + " tempY " + tempY);
     if (accurate)
     {
