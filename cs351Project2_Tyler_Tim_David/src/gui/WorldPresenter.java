@@ -6,7 +6,7 @@ import gui.regionlooks.RegionView;
 import gui.regionlooks.RegionViewFactory;
 import model.Region;
 import model.World;
-
+import model.WorldArray;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
@@ -86,10 +86,14 @@ public class WorldPresenter extends Observable
    * @param regions set of regions that constitute the model and logical
    *                entities of the game.
    */
-  public void setModelRegions(Collection<Region> regions)
+  public void setModelRegions(Collection<Region> regions, WorldArray worldArray)
   {
     RegionView backG = regionViewFactory.getViewFromDistance(CAM_DISTANCE.LONG);
     modelRegions = wrapRegions(regions, backG);
+    for (GUIRegion guir: modelRegions)
+    {
+      guir.setLandCells(worldArray);
+    }
   }
 
   /*

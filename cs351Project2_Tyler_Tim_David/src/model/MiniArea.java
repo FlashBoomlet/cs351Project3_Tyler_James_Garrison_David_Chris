@@ -1,5 +1,7 @@
 package model;
 
+import gui.displayconverters.MapConverter;
+
 import java.util.List;
 import java.util.HashSet;
 
@@ -19,5 +21,5 @@ public interface MiniArea
 
   void setPerimeter(List<MapPoint> perimeter);
 
-  void setLandCells(WorldArray worldArray, HashSet<WorldCell> cells);
+  void setLandCells(WorldArray worldArray, HashSet<WorldCell> cells, MapConverter mapConverter);
 }

@@ -59,6 +59,11 @@ public class GUIRegion
     }
   }
 
+  public void setLandCells(WorldArray worldArray)
+  {
+    region.setLandCells(worldArray, converter);
+  }
+
   /**
    * Get the center of shipping location
    * @return array where index 0 is the latitude location and index 1 is the longitude location

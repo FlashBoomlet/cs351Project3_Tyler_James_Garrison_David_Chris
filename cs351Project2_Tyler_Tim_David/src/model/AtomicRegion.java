@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.LinkedList;
 import java.awt.geom.Path2D;
+
+import gui.displayconverters.MapConverter;
 import model.common.CropIdeals;
 
 
@@ -104,11 +106,11 @@ public class AtomicRegion implements Region, CropIdeals
    * Selects land cells for the area based on its mini areas.
    * @param worldArray  All the World Cells.
    */
-  public void setLandCells (WorldArray worldArray)
+  public void setLandCells (WorldArray worldArray, MapConverter converter)
   {
     for (MiniArea area: perimeter)
     {
-      area.setLandCells(worldArray, landCells);
+      area.setLandCells(worldArray, landCells, converter);
     }
   }
 

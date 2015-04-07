@@ -38,7 +38,7 @@ class RegionPrecipitationView implements RegionView
 
         Camera.CAM_DISTANCE distance = WorldPresenter.calcDistance(main.Game.getCamera());
         if (!gRegion.isActive() && distance == Camera.CAM_DISTANCE.CLOSE_UP || distance == Camera.CAM_DISTANCE.MEDIUM) {
-          HashSet<WorldCell> relevantCells = gRegion.getRegion().getArableCells();
+          HashSet<WorldCell> relevantCells = gRegion.getRegion().getAllCells();
           for (WorldCell cell : relevantCells) {
             int cellX = (int) converter.lonToX(cell.getLon());
             int cellY = (int) converter.latToY(cell.getLat());

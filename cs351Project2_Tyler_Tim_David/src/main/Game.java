@@ -163,7 +163,7 @@ public class Game
 
     worldPresenter = new WorldPresenter(converter, world);
     worldPresenter.setBackgroundRegions(xmlRegions);
-    worldPresenter.setModelRegions(xmlRegions);
+    worldPresenter.setModelRegions(xmlRegions, world.getWorldArray());
     settingsScreen = new SettingsScreen(frameWidth,frameHeight,worldPresenter);
     new CountryCSVParser( worldPresenter.getAllRegions() );
     world.setAllFirstCrops();

@@ -165,7 +165,7 @@ public class WorldCell
     {
       currentCropPenalty = (float) 0.1;
     }
-    else if (currentCrop.equals(newCrop))
+    else if (!currentCrop.equals(newCrop))
     {
       currentCropPenalty = (float) 0.5;
     }

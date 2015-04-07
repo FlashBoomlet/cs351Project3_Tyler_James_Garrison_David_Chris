@@ -1,6 +1,8 @@
 package model;
 
 
+import gui.displayconverters.MapConverter;
+import java.awt.Polygon;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -57,7 +59,7 @@ public class AtomicMiniArea implements MiniArea
    * relevant cells.
    * @param worldArray
    */
-  public void setLandCells (WorldArray worldArray, HashSet <WorldCell> cells)
+  public void setLandCells (WorldArray worldArray, HashSet <WorldCell> cells, MapConverter mapConverter)
   {
     Path2D.Float tempPerimeter = new Path2D.Float();
     MapPoint current = perimeter.get(0);
@@ -75,7 +77,9 @@ public class AtomicMiniArea implements MiniArea
     int [] end = worldArray.getNumber(bound.getX() + bound.getWidth(), bound.getY() + bound.getHeight());
     int xEnd = end[0];
     int yEnd = end[1];
+    //System.out.println(name + " [" + worldArray.get(xStart, yStart).getLon() + ", " + worldArray.get(xStart, yStart).getLat() + "] [" + worldArray.get(xEnd, yEnd).getLon() + ", " + worldArray.get(xEnd, yEnd).getLat() + "]");
     WorldCell currentCell;
+    //Polygon tempPerim = mapConverter.regionToPolygon(this);
     for (int i = xStart; i < xEnd; i++)
     {
       for (int j = yStart; j < yEnd; j++)

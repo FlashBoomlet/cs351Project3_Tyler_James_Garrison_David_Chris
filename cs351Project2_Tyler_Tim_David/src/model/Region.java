@@ -1,5 +1,7 @@
 package model;
 
+import gui.displayconverters.MapConverter;
+
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public interface Region
 
   void setPerimeter(List<MiniArea> perimeter);
 
-  public void setLandCells(WorldArray worldArray);
+  public void setLandCells(WorldArray worldArray, MapConverter converter);
 
   public void setCountryData(CountryData data);
 
