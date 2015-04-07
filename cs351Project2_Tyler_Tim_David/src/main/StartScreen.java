@@ -69,10 +69,14 @@ public class StartScreen extends JPanel
         "      \n" +
         "      As always, \"All models are wrong, but some are useful\" \n\n" +
         " To Play: \n" +
-            "      Use 1-9 as well as q,w,e,r,t,y,u,i,o,p and a to filter or select a filter from the dropdown. \n" +
-            "      Temperature and precipitation filters require zooming in to an extent before cell data will display.\n"+
-            "      Hold Shift while clicking and dragging the mouse to select multiple countries. \n"+
-        "      Adjust percentages of crops in the info panel after selecting a country. \n "
+            "      Use 1-9 as well as q,w,e,r,t,y,u,i,o,p and a to filter overlays or select an overlay from the dropdown. \n\n" +
+            "      Temperature and precipitation filters require zooming in to an extent before cell data will display.\n\n"+
+            "      Hold Shift while clicking and dragging the mouse to select multiple countries. \n\n"+
+        "      Adjust percentages of crops in the info panel after selecting a country. \n\n"+
+            "      Adjust percentages of crops in the info panel after selecting a country. \n\n"+
+            "      Use [Next Year] [-] [+] to adjust game speed. \n\n"+
+            "      View World Population and well-being, as well as the Timeline/Progress at the top of the map panel. \n\n"+
+        "      Press Pause to view this screen after starting the game. \n\n"
     );
 
     text.setEditable(false);
