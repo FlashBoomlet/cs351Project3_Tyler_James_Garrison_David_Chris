@@ -54,18 +54,23 @@ public class CountryData
   private double countryConsumptionWheat;
   private double perCapitaConsumptionWheat;
   private double baseYieldWheat;
+  private double desiredConsumptionWheat;
   private double countryConsumptionCorn;
   private double perCapitaConsumptionCorn;
   private double baseYieldCorn;
+  private double desiredConsumptionCorn;
   private double countryConsumptionSoy;
   private double perCapitaConsumptionSoy;
   private double baseYieldSoy;
+  private double desiredConsumptionSoy;
   private double countryConsumptionRice;
   private double perCapitaConsumptionRice;
   private double baseYieldRice;
+  private double desiredConsumptionRice;
   private double countryConsumptionOther;
   private double perCapitaConsumptionOther;
   private double baseYieldOther;
+  private double desiredConsumptionOther;
   private double randomization = 0;
 
   //Base Yield calculations
@@ -608,12 +613,12 @@ public class CountryData
    */
   public void calculateZeroOrder(int [] landNums)
   {
-    calculateCountryConsumption();
+    calculateBaseCountryConsumption();
     calculatePerCapitaConsumption();
     calculateBaseYield(landNums);
   }
 
-  private void calculateCountryConsumption()
+  private void calculateBaseCountryConsumption()
   {
     //countryConsumption = getCropTotal(true);
     countryConsumptionCorn = cornProduction - cornExports + cornImports;
@@ -621,6 +626,11 @@ public class CountryData
     countryConsumptionSoy = soyProduction - soyExports +soyImports;
     countryConsumptionRice = riceProduction - riceExports + riceImports;
     countryConsumptionOther = otherProduction - otherExports + otherImports;
+    desiredConsumptionCorn = countryConsumptionCorn;
+    desiredConsumptionWheat = countryConsumptionWheat;
+    desiredConsumptionSoy = countryConsumptionSoy;
+    desiredConsumptionRice = countryConsumptionRice;
+    desiredConsumptionOther = countryConsumptionOther;
   }
 
   private void calculatePerCapitaConsumption()
@@ -644,6 +654,75 @@ public class CountryData
     baseYieldSoy = soyProduction/(landNums[6]+(landNums[7]*acceptableRate)+(landNums[8]*poorRate));
     baseYieldRice = riceProduction/(landNums[9]+(landNums[10]*acceptableRate)+(landNums[11]*poorRate));
     baseYieldOther = otherProduction/(landNums[12]+(landNums[13]*acceptableRate)+(landNums[14]*poorRate));
+  }
+
+  private void updateImportExport ()
+  {
+    updateDesiredConsump();
+    double temp = cornProduction - desiredConsumptionCorn;
+    if (temp <= 0)
+    {
+      cornImports = 0 - temp;
+      cornExports = 0;
+    }
+    else
+    {
+      cornExports = temp;
+      cornImports = 0;
+    }
+    temp = wheatProduction - desiredConsumptionWheat;
+    if (temp <= 0)
+    {
+      wheatImports = 0 - temp;
+      wheatExports = 0;
+    }
+    else
+    {
+      wheatExports = temp;
+      wheatImports = 0;
+    }
+    temp = soyProduction - desiredConsumptionSoy;
+    if (temp <= 0)
+    {
+      soyImports = 0 - temp;
+      soyExports = 0;
+    }
+    else
+    {
+      soyExports = temp;
+      soyImports = 0;
+    }
+    temp = riceProduction - desiredConsumptionRice;
+    if (temp <= 0)
+    {
+      riceImports = 0 - temp;
+      riceExports = 0;
+    }
+    else
+    {
+      riceExports = temp;
+      riceImports = 0;
+    }
+    temp = otherProduction - desiredConsumptionOther;
+    if (temp <= 0)
+    {
+      otherImports = 0 - temp;
+      otherExports = 0;
+    }
+    else
+    {
+      otherExports = temp;
+      otherImports = 0;
+    }
+  }
+
+  private void updateDesiredConsump ()
+  {
+    desiredConsumptionCorn = perCapitaConsumptionCorn * population;
+    desiredConsumptionWheat = perCapitaConsumptionWheat * population;
+    desiredConsumptionSoy = perCapitaConsumptionSoy * population;
+    desiredConsumptionRice = perCapitaConsumptionRice * population;
+    desiredConsumptionOther = perCapitaConsumptionOther * population;
   }
 
   private double getProdution()
@@ -863,7 +942,7 @@ public class CountryData
       mortality = (mortality+((0.2)*(prevUndernourish-undernourish)))/(population/1000);
     }
     population = population + (birthRate+migration-mortality)*(population/1000);
-    calculatePerCapitaConsumption();
+    //calculatePerCapitaConsumption(); //This remains constant.
     calculateProduction(region);
     // Should be one of the first things as it places the crops based on what the user specifies in the GUI
     region.setCrops();
