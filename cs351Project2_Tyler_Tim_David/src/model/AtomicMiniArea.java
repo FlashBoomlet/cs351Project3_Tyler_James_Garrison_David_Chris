@@ -75,12 +75,12 @@ public class AtomicMiniArea implements MiniArea
     int [] start = worldArray.getNumber(bound.getX(), bound.getY());
     int xStart = start[0];
     int yStart = start[1];
-    System.out.println(name + " [" + bound.getX() + ", " + bound.getY() + "] [" + (bound.getX() + bound.getWidth()) + ", " + (bound.getY() + bound.getHeight()) + "]");
+    //System.out.println(name + " [" + bound.getX() + ", " + bound.getY() + "] [" + (bound.getX() + bound.getWidth()) + ", " + (bound.getY() + bound.getHeight()) + "]");
     int [] end = worldArray.getNumber(bound.getX() + bound.getWidth(), bound.getY() + bound.getHeight());
     int xEnd = end[0];
     int yEnd = end[1];
-    System.out.println(name + " [" + xStart + ", " + yStart + "] [" + xEnd + ", " + yEnd + "]");
-    System.out.println(name + " [" + worldArray.get(xStart, yStart).getLon() + ", " + worldArray.get(xStart, yStart).getLat() + "] [" + worldArray.get(xEnd, yEnd).getLon() + ", " + worldArray.get(xEnd, yEnd).getLat() + "]");
+    //System.out.println(name + " [" + xStart + ", " + yStart + "] [" + xEnd + ", " + yEnd + "]");
+    //System.out.println(name + " [" + worldArray.get(xStart, yStart).getLon() + ", " + worldArray.get(xStart, yStart).getLat() + "] [" + worldArray.get(xEnd, yEnd).getLon() + ", " + worldArray.get(xEnd, yEnd).getLat() + "]");
     WorldCell currentCell;
     //Polygon tempPerim = mapConverter.regionToPolygon(this);
     for (int i = xStart; i < xEnd; i++)

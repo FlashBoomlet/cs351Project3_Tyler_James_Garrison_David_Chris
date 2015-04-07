@@ -897,37 +897,88 @@ public class CountryData
   private void calculateProduction(Region region)
   {
     HashSet<WorldCell> relevantCells = region.getArableCells();
-    double corn = 0.0;
-    double wheat = 0.0;
-    double rice = 0.0;
-    double soy = 0.0;
-    double other = 0.0;
+    int [] landNums = new int [15];
     for (WorldCell cell : relevantCells) {
       switch(cell.getCrop()) {
         case "Corn":
-          corn += cell.getCurrentCropPenalty();
+          if (cell.getCropState() == 1)
+          {
+            landNums[0] = landNums[0] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.6)
+          {
+            landNums[1] = landNums[1] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.25)
+          {
+            landNums[2] = landNums[2] + 1;
+          }
           break;
         case "Wheat":
-          wheat += cell.getCurrentCropPenalty();
+          if (cell.getCropState() == 1)
+          {
+            landNums[3] = landNums[3] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.6)
+          {
+            landNums[4] = landNums[4] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.25)
+          {
+            landNums[5] = landNums[5] + 1;
+          }
           break;
         case "Rice":
-          rice += cell.getCurrentCropPenalty();
+          if (cell.getCropState() == 1)
+          {
+            landNums[9] = landNums[9] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.6)
+          {
+            landNums[10] = landNums[10] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.25)
+          {
+            landNums[11] = landNums[11] + 1;
+          }
           break;
         case "Soy":
-          soy += cell.getCurrentCropPenalty();
+          if (cell.getCropState() == 1)
+          {
+            landNums[6] = landNums[6] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.6)
+          {
+            landNums[7] = landNums[7] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.25)
+          {
+            landNums[8] = landNums[8] + 1;
+          }
           break;
         case "Other":
-          other += cell.getCurrentCropPenalty();
+          if (cell.getCropState() == 1)
+          {
+            landNums[12] = landNums[12] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.6)
+          {
+            landNums[13] = landNums[13] + 1;
+          }
+          else if (cell.getCropState() == (float) 0.25)
+          {
+            landNums[14] = landNums[14] + 1;
+          }
           break;
         default:
           break;
       }
     }
-    cornProduction = corn * baseYieldCorn;
-    wheatProduction = wheat * baseYieldWheat;
-    riceProduction = rice * baseYieldRice;
-    soyProduction = soy * baseYieldSoy;
-    otherProduction = other * baseYieldOther;
+    cornProduction = baseYieldCorn * (landNums[0]+(landNums[1]*acceptableRate)+(landNums[2]*poorRate));
+    wheatProduction = baseYieldWheat * (landNums[3]+(landNums[4]*acceptableRate)+(landNums[5]*poorRate));
+    riceProduction = baseYieldRice * (landNums[9]+(landNums[10]*acceptableRate)+(landNums[11]*poorRate));
+    soyProduction = baseYieldSoy * (landNums[6]+(landNums[7]*acceptableRate)+(landNums[8]*poorRate));
+    otherProduction = baseYieldOther * (landNums[12]+(landNums[13]*acceptableRate)+(landNums[14]*poorRate));
   }
 
   /**
