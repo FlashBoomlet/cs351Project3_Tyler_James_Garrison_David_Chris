@@ -169,6 +169,8 @@ public class World
     {
       if( gr.getOfficialCountry() )
       {
+        gr.exportedTo.clear();
+        gr.importedFrom.clear();
         if( gr.canExport() )
         {
           canExport.add(gr);
@@ -189,7 +191,24 @@ public class World
         break;
       default:
         //Easy Algorithm
-
+        GUIRegion bestFit;
+        double bestDiff;
+        for( GUIRegion grX: canExport )
+        {
+          if( needImport.size() > 0 )
+          {
+            bestFit = needImport.get(0);
+            // Set to something crazy and unreachable hopefully
+            bestDiff = 1_000_000_000;
+            for( GUIRegion grI: needImport ) {
+              double diff =  grX.getCountryData().getTotalExport() - grI.getCountryData().getTotalImport();
+              if ( diff < bestDiff && diff > 0) bestFit = grI;
+            }
+            grX.exportedTo.add(bestFit);
+            bestFit.importedFrom.add(grX);
+            needImport.remove(bestFit);
+          }
+        }
     }
   }
 }
