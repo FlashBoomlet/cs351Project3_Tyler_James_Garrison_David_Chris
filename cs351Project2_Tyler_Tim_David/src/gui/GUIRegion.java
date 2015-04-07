@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 
 /**
@@ -41,6 +42,7 @@ public class GUIRegion
   // Could be more advance in the future
   public static ArrayList<GUIRegion> exportedTo = new ArrayList<>();
   public static ArrayList<GUIRegion> importedFrom = new ArrayList<>();
+  public static Collection<GUIRegion> preferedTrade = main.Game.getWorldPresenter().getAllRegions();
 
   /**
    * Loads the region's flag.

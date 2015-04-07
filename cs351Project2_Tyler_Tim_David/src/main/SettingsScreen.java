@@ -33,10 +33,15 @@ public class SettingsScreen extends JPanel
   private SettingsButtonPanel buttons;
   private algorithmInfluencePanel panelSimulator;
   private GeneralSettings generalSettings;
+  private TradeInfluencePanel tradeInfluencePanel;
   private WorldPresenter worldPresenter;
+  private Color fontColor = ColorsAndFonts.REGION_NAME_FONT_C;
 
   // J-Radio buttons
   private JRadioButton selectAll;
+  private static JRadioButton lowestEvent;
+  private static JRadioButton mediumEvent;
+  private static JRadioButton highestEvent;
   private static JRadioButton lowestAccuracy;
   private static JRadioButton mediumAccuracy;
   private static JRadioButton highestAccuracy;
@@ -104,12 +109,15 @@ public class SettingsScreen extends JPanel
       setOpaque(false);
 
       JPanel container = new JPanel();
-      container.setOpaque(false);
+      container.setOpaque(true);
+      container.setBackground(new Color(0xA9A9A9));
 
       panelSimulator = new algorithmInfluencePanel();
       generalSettings = new GeneralSettings();
+      tradeInfluencePanel = new TradeInfluencePanel();
       container.add(panelSimulator);
       container.add(generalSettings);
+      container.add(tradeInfluencePanel);
 
       JPanel DefinitionsPanel = new JPanel();
       DefinitionsPanel.setOpaque(false);
@@ -177,8 +185,8 @@ public class SettingsScreen extends JPanel
 
   public static double getRandomizeBounds()
   {
-    if( lowestAccuracy.isSelected() ) return 0.0;
-    else if( mediumAccuracy.isSelected() ) return 0.5;
+    if( lowestEvent.isSelected() ) return 0.0;
+    else if( mediumEvent.isSelected() ) return 0.5;
     else return 1.0;
   }
   private class algorithmInfluencePanel extends JPanel implements ActionListener
@@ -188,25 +196,113 @@ public class SettingsScreen extends JPanel
       super();
       setOpaque(false);
       setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+      setForeground(fontColor);
+
+      lowestEvent = new JRadioButton("Low Trading Accuracy");
+      lowestEvent.setForeground(fontColor);
+      lowestEvent.setName("LTA");
+      lowestEvent.addActionListener(this);
+
+      mediumEvent = new JRadioButton("Normal Trading Accuracy");
+      mediumEvent.setForeground(fontColor);
+      mediumEvent.setName("MTA");
+      mediumEvent.addActionListener(this);
+
+      highestEvent = new JRadioButton("High Trading Accuracy");
+      highestEvent.setForeground(fontColor);
+      highestEvent.setName("HTA");
+      highestEvent.addActionListener(this);
+
+      add(lowestEvent);
+      add(mediumEvent);
+      add(highestEvent);
+
+      lowestEvent.setSelected(true);
+      mediumEvent.setSelected(false);
+      highestEvent.setSelected(false);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      JRadioButton tempBtn = (JRadioButton) e.getSource();
+      String name = tempBtn.getName();
+
+      if( name == "ALL" )
+      {
+        if( !tempBtn.isSelected() )
+        {
+          lowestEvent.setSelected(false);
+          mediumEvent.setSelected(false);
+          highestEvent.setSelected(false);
+        }
+        else
+        {
+          lowestEvent.setSelected(true);
+          mediumEvent.setSelected(true);
+          highestEvent.setSelected(true);
+        }
+
+      }
+      else if( name == "LTA" )
+      {
+        lowestEvent.setSelected(true);
+        mediumEvent.setSelected(false);
+        highestEvent.setSelected(false);
+      }
+      else if( name == "MTA" )
+      {
+        lowestEvent.setSelected(false);
+        mediumEvent.setSelected(true);
+        highestEvent.setSelected(false);
+      }
+      else if( name == "HTA" )
+      {
+        lowestEvent.setSelected(false);
+        mediumEvent.setSelected(false);
+        highestEvent.setSelected(true);
+      }
+      for( GUIRegion gr : worldPresenter.getAllRegions())
+      {
+        if( gr.getCountryData() != null ) gr.getCountryData().randomizePercent();
+      }
+    }
+  }
+
+
+  public static int getTradeInfluence()
+  {
+    if( highestAccuracy.isSelected() ) return 2;
+    else if( mediumAccuracy.isSelected() ) return 1;
+    return 0;
+  }
+
+  private class TradeInfluencePanel extends JPanel implements ActionListener
+  {
+    TradeInfluencePanel()
+    {
+      super();
+      setOpaque(false);
+      setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+      setForeground(fontColor);
 
       selectAll = new JRadioButton("Select All");
+      selectAll.setForeground(fontColor);
       selectAll.setName("ALL");
-      selectAll.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
       selectAll.addActionListener(this);
 
       lowestAccuracy = new JRadioButton("Low Trading Accuracy");
+      lowestAccuracy.setForeground(fontColor);
       lowestAccuracy.setName("LTA");
-      lowestAccuracy.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
       lowestAccuracy.addActionListener(this);
 
       mediumAccuracy = new JRadioButton("Normal Trading Accuracy");
+      mediumAccuracy.setForeground(fontColor);
       mediumAccuracy.setName("MTA");
-      mediumAccuracy.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
       mediumAccuracy.addActionListener(this);
 
       highestAccuracy = new JRadioButton("High Trading Accuracy");
+      highestAccuracy.setForeground(fontColor);
       highestAccuracy.setName("HTA");
-      highestAccuracy.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
       highestAccuracy.addActionListener(this);
 
       add(lowestAccuracy);
@@ -214,6 +310,10 @@ public class SettingsScreen extends JPanel
       add(highestAccuracy);
       add(selectAll);
       selectAll.setVisible(false);
+
+      lowestAccuracy.setSelected(true);
+      mediumAccuracy.setSelected(false);
+      highestAccuracy.setSelected(false);
     }
 
     @Override
@@ -265,6 +365,12 @@ public class SettingsScreen extends JPanel
     }
   }
 
+
+
+
+
+
+
   public static void updateUnits(boolean show)
   {
     units.setSelected(show);
@@ -283,11 +389,12 @@ public class SettingsScreen extends JPanel
       super();
       setOpaque(false);
       setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+      setForeground(fontColor);
 
       units = new JRadioButton("Metric Units");
+      units.setForeground(fontColor);
       units.setName("UNIT");
       units.setSelected(true);
-      units.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
       units.addActionListener(this);
 
       add(units);

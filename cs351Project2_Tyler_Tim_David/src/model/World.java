@@ -5,6 +5,7 @@ import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.hud.DatePanel;
 import gui.hud.PopulationAndHappiness;
+import main.SettingsScreen;
 
 import java.util.*;
 
@@ -162,9 +163,11 @@ public class World
   private void tradeLeWorldAway()
   {
     //Set level equal to settings panel eventually so that it dictates the difficulty.
-    int level = 0;
+    int level = SettingsScreen.getTradeInfluence();
     ArrayList<GUIRegion> canExport = new ArrayList<>();
     ArrayList<GUIRegion> needImport = new ArrayList<>();
+    GUIRegion bestFit;
+    double bestDiff;
     for( GUIRegion gr: worldPresenter.getAllRegions() )
     {
       if( gr.getOfficialCountry() )
@@ -185,14 +188,57 @@ public class World
     {
       case 2:
         //Hard Algorithm
+        for( GUIRegion grX: canExport )
+        {
+          if( needImport.size() > 0 )
+          {
+            bestFit = needImport.get(0);
+            // Set to something crazy and unreachable hopefully
+            bestDiff = 1_000_000_000;
+            for( GUIRegion grI: needImport ) {
+              double diff =  grX.getCountryData().getTotalExport() - grI.getCountryData().getTotalImport();
+              if ( diff < bestDiff && diff > 0)
+              {
+                /*
+                 * Add check for Trade Distance between countries.
+                 * Add preferred trading with countries that you have treaties with
+                 */
+                if( grX.preferedTrade.contains(grI)) bestFit = grI;
+              }
+            }
+            grX.exportedTo.add(bestFit);
+            bestFit.importedFrom.add(grX);
+            needImport.remove(bestFit);
+          }
+        }
         break;
       case 1:
         //Medium Algorithm
+        for( GUIRegion grX: canExport )
+        {
+          if( needImport.size() > 0 )
+          {
+            bestFit = needImport.get(0);
+            // Set to something crazy and unreachable hopefully
+            bestDiff = 1_000_000_000;
+            for( GUIRegion grI: needImport ) {
+              double diff =  grX.getCountryData().getTotalExport() - grI.getCountryData().getTotalImport();
+              if ( diff < bestDiff && diff > 0)
+              {
+                /*
+                 * Add check for Trade Distance between countries.
+                 */
+                bestFit = grI;
+              }
+            }
+            grX.exportedTo.add(bestFit);
+            bestFit.importedFrom.add(grX);
+            needImport.remove(bestFit);
+          }
+        }
         break;
       default:
         //Easy Algorithm
-        GUIRegion bestFit;
-        double bestDiff;
         for( GUIRegion grX: canExport )
         {
           if( needImport.size() > 0 )
