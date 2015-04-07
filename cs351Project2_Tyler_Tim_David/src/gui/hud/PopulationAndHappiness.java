@@ -22,7 +22,7 @@ public class PopulationAndHappiness extends JPanel {
 
   private static WorldPresenter worldPresenter = main.Game.getWorldPresenter();
   private static int fontSize = 12;
-  private static final Font FONT = new Font("SansSerif", Font.BOLD, fontSize);
+  private static final Font FONT = new Font("SansSerif", Font.CENTER_BASELINE, fontSize);
   private static double worldPop = 0;
   private static int worldWellBeing = 0;
   private String pop = "";
@@ -65,7 +65,7 @@ public class PopulationAndHappiness extends JPanel {
 
     NumberFormat formatter = new DecimalFormat("#.##");
 
-    pop = "Pop: " + formatter.format(worldPop) + " B";
+    pop = "Population: " + formatter.format(worldPop/1000000000) + " B";
     wellB = "Well-Being: " + (worldWellBeing) + "%";
 
     g2d.drawString(pop, 0, fontSize+5);
