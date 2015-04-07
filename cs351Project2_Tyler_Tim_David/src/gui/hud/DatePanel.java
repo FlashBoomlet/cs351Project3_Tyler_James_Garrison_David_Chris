@@ -12,6 +12,7 @@ import java.awt.font.GlyphVector;
 import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -28,6 +29,9 @@ public class DatePanel extends JPanel
   private static final String DATE_PATTERN = "EEE, MMM d, YYYY";
   private static final Font DATE_FONT = ColorsAndFonts.TOP_FONT;
   private static final Color guiBackground = ColorsAndFonts.OCEANS;
+  private static Calendar currentDate = Calendar.getInstance();
+  private static double baseYear;
+  private static double yearRatio;
 
   private SimpleDateFormat formatter;
   private Date date;
@@ -41,7 +45,7 @@ public class DatePanel extends JPanel
   public DatePanel(int x, int y, int width, int height)
   {
     formatter = new SimpleDateFormat(DATE_PATTERN);
-
+    baseYear = currentDate.get(Calendar.YEAR);
     setOpaque(true);
     setBackground(guiBackground);
     setLocation(x,y);
@@ -65,8 +69,12 @@ public class DatePanel extends JPanel
 
     g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
 
+    g2.setColor(new Color(0x00AE14));
+    g2.fillRect(0,0,(int) Math.round(getWidth()*yearRatio),getHeight()/2);
+
+
     g2.setColor(new Color(0xFFFFFF));
-    g2.fillRect(0,0,(int) Math.round(getWidth()*ratio),getHeight());
+    g2.fillRect(0,getHeight()/2,(int) Math.round(getWidth()*ratio),getHeight()/2);
 
     g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
@@ -91,8 +99,9 @@ public class DatePanel extends JPanel
     g2.drawString(s, x, y);
   }
 
-  public static void updateRatio(double newRatio)
+  public static void updateRatio(double newRatio, double currentYear)
   {
+    yearRatio = (currentYear-baseYear)/(2050.0-baseYear);
     ratio = newRatio;
   }
 

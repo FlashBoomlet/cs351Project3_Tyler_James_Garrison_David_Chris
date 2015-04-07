@@ -102,7 +102,7 @@ public class World
     int previousYear = currentDate.get(Calendar.YEAR);
     currentDate.add(Calendar.DATE, numOfDays);
 
-    DatePanel.updateRatio(currentDate.get(Calendar.DAY_OF_YEAR)/365.0);
+    DatePanel.updateRatio(currentDate.get(Calendar.DAY_OF_YEAR)/365.0,currentDate.get(Calendar.YEAR));
 
     if( currentDate.get(Calendar.YEAR) == 2050 )
     {
