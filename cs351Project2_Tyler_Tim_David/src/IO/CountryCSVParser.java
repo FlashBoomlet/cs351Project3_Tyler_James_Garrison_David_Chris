@@ -26,6 +26,9 @@ public class CountryCSVParser {
   private String line = "";
   private int counter = 0;
   private Collection<GUIRegion> regions;
+  private int rowNumber = 0;
+  private int colNumber = 0;
+  private String[] columnNames = new String[33];
 
   /**
    * CountryCSVParser is the constructor to parse data for all countries being utalized in this game
@@ -61,8 +64,10 @@ public class CountryCSVParser {
       {
         String[] varArray = line.split(",");
         // Skip over col titles and types
+        if( counter == 0 ) columnNames = varArray;
         if (counter > 1) assignAttributes(varArray);
         counter++;
+        rowNumber ++;
       }
     }
     catch (IOException e) {}
@@ -97,11 +102,13 @@ public class CountryCSVParser {
     if( atributes.length >= 33 )
     {
       String country = atributes[0];
+      if( country.length() <= 0 ) { /*Error*/ }
       currentRegion = findCurrentRegion(country);
       if( currentRegion != null )
       {
         data = new CountryData();
         data.setPopulation( Double.parseDouble(atributes[1]) );
+        if( Double.parseDouble(atributes[1]) <= 0 ) { /*Error*/ }
         data.setMedianAge( Double.parseDouble(atributes[2]) );
         data.setBirthRate( Double.parseDouble(atributes[3]) );
         data.setMortality( Double.parseDouble(atributes[4]) );
@@ -134,6 +141,7 @@ public class CountryCSVParser {
         data.setOtherLand( Double.parseDouble(atributes[26]) );
 
         data.setLandArea( Double.parseDouble(atributes[27]) );
+        if( Double.parseDouble(atributes[27]) <= 0 ) { /*Error*/ }
         data.setArableOpen( Double.parseDouble(atributes[28]) );
         data.setOrganic( Double.parseDouble(atributes[29]) );
         data.setConventional( Double.parseDouble(atributes[30]) );
