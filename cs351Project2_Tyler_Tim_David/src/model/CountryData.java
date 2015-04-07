@@ -993,7 +993,8 @@ public class CountryData
       mortality = (mortality+((0.2)*(prevUndernourish-undernourish)))/(population/1000);
     }
     population = population + (birthRate+migration-mortality)*(population/1000);
-    //calculatePerCapitaConsumption(); //This remains constant.
+    updateDesiredConsump();
+    updateImportExport();
     calculateProduction(region);
     // Should be one of the first things as it places the crops based on what the user specifies in the GUI
     region.setCrops();
@@ -1169,5 +1170,23 @@ public class CountryData
   private double getLandUseTotal()
   {
     return (conventional + organic + gmo);
+  }
+
+  /**
+   * Get the Total Exports of this country
+   * @return total Exports of country
+   */
+  public double getTotalExport()
+  {
+    return (cornExports + soyExports + riceExports + wheatExports + otherExports);
+  }
+
+  /**
+   * Get the Total Need of this country
+   * @return total Need of country
+   */
+  public double getTotalImport()
+  {
+    return (cornExports + soyExports + riceExports + wheatExports + otherExports);
   }
 }

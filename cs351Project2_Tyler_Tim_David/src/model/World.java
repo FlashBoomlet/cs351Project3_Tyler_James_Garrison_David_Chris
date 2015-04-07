@@ -6,10 +6,7 @@ import gui.WorldPresenter;
 import gui.hud.DatePanel;
 import gui.hud.PopulationAndHappiness;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by winston on 1/23/15.
@@ -116,10 +113,21 @@ public class World
     if (isPreviousYear)
     {
       for( GUIRegion gr: worldPresenter.getAllRegions() ) {
-        gr.iterateYear();
+        //Check to ensure it should be updated so that we don't waste time
+        if( gr.getOfficialCountry() ) gr.iterateYear();
       }
       for( GUIRegion gr: worldPresenter.getAllRegions() ) {
-        gr.startIterate();
+        //Check to ensure it should be updated so that we don't waste time
+        if( gr.getOfficialCountry() ) gr.startIterate();
+      }
+      while(true)
+      {
+        if( doneUpdate() )
+        {
+          //Call to trade
+          tradeLeWorldAway();
+          break;
+        }
       }
       worldArray.updateClimate();
       main.Game.getWorldFeedPanel().update();
@@ -128,11 +136,60 @@ public class World
     return isPreviousYear;
   }
 
+  private static int totalUpdates = 0;
+  public static synchronized boolean doneUpdate()
+  {
+    if( totalUpdates == 193 )
+    {
+      totalUpdates = 0;
+      return true;
+    }
+    totalUpdates ++;
+    return false;
+  }
+
+  /**
+   * Sets the initial crops of a country
+   */
   public void setAllFirstCrops()
   {
     for (Region area: world)
     {
       area.setFirstCrops();
+    }
+  }
+
+  private void tradeLeWorldAway()
+  {
+    //Set level equal to settings panel eventually so that it dictates the difficulty.
+    int level = 0;
+    ArrayList<GUIRegion> canExport = new ArrayList<>();
+    ArrayList<GUIRegion> needImport = new ArrayList<>();
+    for( GUIRegion gr: worldPresenter.getAllRegions() )
+    {
+      if( gr.getOfficialCountry() )
+      {
+        if( gr.canExport() )
+        {
+          canExport.add(gr);
+        }
+        else
+        {
+          needImport.add(gr);
+        }
+      }
+    }
+    switch(level)
+    {
+      case 2:
+        //Hard Algorithm
+        break;
+      case 1:
+        //Medium Algorithm
+        break;
+      default:
+        //Easy Algorithm
+
     }
   }
 }

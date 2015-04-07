@@ -3,10 +3,8 @@ package gui;
 import gui.displayconverters.MapConverter;
 import gui.hud.NavMap;
 import gui.regionlooks.RegionView;
-import model.CountryData;
-import model.MiniArea;
-import model.Region;
-import model.WorldArray;
+import model.*;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Area;
@@ -250,6 +248,10 @@ public class GUIRegion
          */
         if( data != null ) {
           data.iterateYear(region);
+          synchronized (World.class)
+          {
+            World.doneUpdate();
+          }
         }
       }
       catch (Exception e) {}
@@ -283,5 +285,11 @@ public class GUIRegion
   public boolean getOfficialCountry()
   {
     return officialCountry;
+  }
+
+  public boolean canExport()
+  {
+    if( data.getTotalExport() > data.getTotalImport() ) return true;
+    return false;
   }
 }
