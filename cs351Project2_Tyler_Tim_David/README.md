@@ -18,6 +18,9 @@ To JAR up the program:
 * shift + up arrow or down arrow zooms in and out respectively
 * control clicking on a point on the map centers the camera at that point.
 * mouse scroll wheel also zooms in and out
+### GUI 
+* All controls are self explanatory***
+    ***Please note that the update crops in the sidebar will reflect once the year is over.
 
 
 ### Inspecting

@@ -48,7 +48,7 @@ public class StartScreen extends JPanel
 
     text = new JTextArea();
     text.setBackground(new Color(0x333333));
-    text.setPreferredSize(new Dimension((int) (getWidth() * (.67)), (int) (getHeight() * (.80))));
+    text.setPreferredSize(new Dimension((int) (getWidth() * (.67)), (int) (getHeight() * (.90))));
     text.setFont(ColorsAndFonts.GUI_FONT);
     text.setForeground(Color.white);
     text.setText("\n * \"World Food Production and Land Management\" version 1.2 developed by: \n\n" +
@@ -76,7 +76,9 @@ public class StartScreen extends JPanel
             "      Adjust percentages of crops in the info panel after selecting a country. \n\n"+
             "      Use [Next Year] [-] [+] to adjust game speed. \n\n"+
             "      View World Population and well-being, as well as the Timeline/Progress at the top of the map panel. \n\n"+
-        "      Press Pause to view this screen after starting the game. \n\n"
+        "      Press Pause to view this screen after starting the game. \n\n\n\n\n\n" +
+        " ***Please note that the update crops in the sidebar will reflect once the year is over. \n\n\n\n"
+
     );
 
     text.setEditable(false);
