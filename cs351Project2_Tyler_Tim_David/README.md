@@ -49,3 +49,6 @@ GMO = Area of Biotech Crops in 2014 (from ISAAA) divided by FAOSTAT 2011 Arable 
 Temperature data from Berkeley (http://berkeleyearth.org/data)
 Precipitation data (http://climate.geog.udel.edu/~climate/html_pages/download.html#P2011rev)
 Climate Projection from IPCC (http://www.ipcc.ch/ipccreports/tar/wg2/index.php?idp=29)
+
+####Known Issues
+Errors in climate data interpolation leading to lower than realistic crop yield.
