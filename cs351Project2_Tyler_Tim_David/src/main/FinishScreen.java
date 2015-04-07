@@ -1,5 +1,7 @@
 package main;
 
+import gui.ColorsAndFonts;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,8 +34,49 @@ public class FinishScreen extends JPanel implements ActionListener
     reset = new JButton("Reset");
     reset.addActionListener(this);
     reset.setFocusable(false);
+
+    JPanel textHolder = new JPanel();
+    textHolder.setLayout(new BoxLayout(textHolder, BoxLayout.PAGE_AXIS));
+
+
+    JTextArea text = new JTextArea();
+    text.setBackground(new Color(0x333333));
+    text.setPreferredSize(new Dimension((int) (getWidth() * (.67)), (int) (getHeight() * (.80))));
+    text.setFont(ColorsAndFonts.GUI_FONT);
+    text.setForeground(Color.white);
+    text.setText("\n * \"World Food Production and Land Management\" version 1.2 developed by: \n\n" +
+            " \tTyler Lynch <lyncht@unm.edu>\n" +
+            " \tTimothy Chavez <tchavez22@unm.edu> \n" +
+            " \tDavid Matins <dmatins@unm.edu> \n\n" +
+            "   with a version 1.1 foundation by: Winston Wriley and David Ringo \n\n\n" +
+            "      Congratulations, you have now destroyed the world! \n"+
+            "      You fed valiantly, alas models only model so far... blah blah blah yada yada yada\n" +
+            "      As always, \"All models are wrong, but some are useful\" \n\n"
+    );
+
+    text.setEditable(false);
+
+    JTextArea title = new JTextArea();
+    title.setBackground(new Color(0x800000));
+    title.setPreferredSize(new Dimension(125,20));
+    title.setFont(ColorsAndFonts.GUI_FONT);
+    title.setForeground(Color.white);
+    title.setText(" Congratulations!! Everyone has died!!");
+    title.setEditable(false);
+
+    textHolder.add(title);
+
+    JPanel realTextHolder = new JPanel();
+    realTextHolder.add(text);
+
+    JScrollPane scrollFrame = new JScrollPane(realTextHolder);
+    realTextHolder.setAutoscrolls(true);
+    scrollFrame.setPreferredSize(new Dimension((int) (getWidth() * (.70)), (int) (getHeight() * (.75))));
+    textHolder.add(scrollFrame);
+    textHolder.setPreferredSize(new Dimension((int) (getWidth() * (.70)), (int) (getHeight() * (.75))));
+    add(textHolder);
+
     add(reset);
-    add(new JLabel("Congratulations, you have now destroyed the world!"));
   }
 
   /**

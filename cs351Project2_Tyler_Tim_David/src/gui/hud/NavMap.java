@@ -89,12 +89,9 @@ public class NavMap extends JPanel
     varsLabel = new JLabel("");
     varsLabel.setForeground(Color.WHITE);
     add(varsLabel);
-
-    ClassLoader cl = this.getClass().getClassLoader();
-    InputStream in = cl.getResourceAsStream(IMAGE_PATH);
     try
     {
-      image = ImageIO.read(in);
+      image = ImageIO.read(new File(IMAGE_PATH));
     }
     catch(IOException ex)
     {

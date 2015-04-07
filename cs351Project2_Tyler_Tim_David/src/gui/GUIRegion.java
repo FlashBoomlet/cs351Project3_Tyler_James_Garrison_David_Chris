@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -118,15 +119,13 @@ public class GUIRegion
    * Loads the region's flag.
    */
   public void loadFlag() {
-    ClassLoader cl = this.getClass().getClassLoader();
-    InputStream in = cl.getResourceAsStream( region.getFlag() );
     try
     {
-      image = ImageIO.read(in);
+      image = ImageIO.read(new File(region.getFlag()));
     }
     catch(IOException ex)
     {
-      System.out.println("ERROR: Cannot find flag image!");
+      System.out.println("ERROR: Cannot find flag image for" + getName() );
     }
   }
 

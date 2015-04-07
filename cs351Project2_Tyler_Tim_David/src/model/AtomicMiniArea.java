@@ -57,7 +57,8 @@ public class AtomicMiniArea implements MiniArea
   /**
    * More efficient cell retrieval, uses bounding box of area to get
    * relevant cells.
-   * @param worldArray
+   * @param worldArray that you would like to update
+   * @param cells that you wish to update
    */
   public void setLandCells (WorldArray worldArray, HashSet <WorldCell> cells, MapConverter mapConverter)
   {
@@ -85,9 +86,9 @@ public class AtomicMiniArea implements MiniArea
       for (int j = yStart; j < yEnd; j++)
       {
         currentCell = worldArray.get(i, j);
-        if (!currentCell.hasCountry && tempPerimeter.contains(currentCell.getLon(), currentCell.getLat())) ;
+        if (!currentCell.hasCountry && tempPerimeter.contains(currentCell.getLon(), currentCell.getLat()));
         {
-          if( currentCell != null && cells != null )
+          if( cells != null )
           {
             cells.add(currentCell);
             currentCell.setToArea();
