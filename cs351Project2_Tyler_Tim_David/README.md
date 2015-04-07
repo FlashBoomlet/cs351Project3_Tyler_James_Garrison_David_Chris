@@ -8,7 +8,9 @@ David Matins
 ## Building
 Utalize the run feature in an IDE.
 Run: Src/Main/Game.java
-
+OR
+To JAR up the program:
+    ./make.sh && ./run.sh
 
 ##Controls
 ### Navigation
