@@ -69,7 +69,9 @@ public class AtomicMiniArea implements MiniArea
     {
       current = perimeter.get(i);
       tempPerimeter.lineTo(current.getLon(), current.getLat());
+      tempPerimeter.moveTo(current.getLon(), current.getLat());
     }
+    tempPerimeter.lineTo(perimeter.get(0).getLon(), perimeter.get(0).getLat());
     tempPerimeter.closePath();
     Rectangle2D bound = tempPerimeter.getBounds2D();
     int [] start = worldArray.getNumber(bound.getX(), bound.getY());
@@ -79,7 +81,6 @@ public class AtomicMiniArea implements MiniArea
     int xEnd = end[0];
     int yEnd = end[1];
     WorldCell currentCell;
-    //Polygon tempPerim = mapConverter.regionToPolygon(this);
     for (int i = xStart; i < xEnd; i++)
     {
       for (int j = yStart; j < yEnd; j++)
