@@ -24,13 +24,13 @@ class RegionHappyView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-    if (gRegion == null ) //|| gRegion.getRegion().getAttributes() == null)
+    if (gRegion == null )
     {
       System.err.println("(!) GUI REGION or attribute set is null!");
       return;
     }
 
-    double happinessLevel = 0 ;//gRegion.getRegion().getAttributes().getAttribute(HAPPINESS);
+    double happinessLevel = 0 ;
 
     Color color;
     if (gRegion.isActive())
