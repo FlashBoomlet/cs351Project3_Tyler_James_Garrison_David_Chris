@@ -290,7 +290,7 @@ public class GUIRegion
                 synchronized (World.class)
                 {
                   World.doneUpdate();
-                  System.out.println( "Finished updating: " + getName() );
+                  //System.out.println( "Finished updating: " + getName() );
                 }
               }
               setMsg("sync");
