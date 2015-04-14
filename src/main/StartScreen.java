@@ -55,6 +55,7 @@ public class StartScreen extends JPanel
       " \n * \"World Food Production and Land Management\" version 1.3 developed by: \n\n" +
         " \tTyler Lynch <lyncht@unm.edu>\n" +
         " \tJames Lawson <jlawso02@unm.edu> \n" +
+        " \tGarrison Osteen <gosteen@unm.edu> \n" +
         " \tDavid Ringo <davidringo@unm.edu> \n" +
         " \tChris Salinas <casjr13@unm.edu> \n\n" +
 
