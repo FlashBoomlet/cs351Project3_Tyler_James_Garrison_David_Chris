@@ -1,6 +1,7 @@
 package model;
 
 
+import IO.WorldDataParser;
 import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.hud.DatePanel;
@@ -33,6 +34,12 @@ public class World
   private static int Y_CELLS = (int) Math.sqrt((EARTH_SURFACE_AREA/100)/(EQUATORIAL_CIRC/POLE_CIRC)) + 1;
   private WorldArray worldArray;
 
+  public static final String PRECIP_DATA = "resources/data/precip.txt";
+  //public static final String SITES = "resources/data/site_summary.txt";
+  public static final String AVG = "resources/data/tavg.txt";
+  public static final String MAX = "resources/data/tmax.txt";
+  public static final String MIN = "resources/data/tmin.txt";
+
   /**
    * Class constructor. To build a world one must have a collection of regions.
    * @param world collection of regions that we represent the world
@@ -50,12 +57,52 @@ public class World
   {
     this.world = world;
     this.currentDate = cal;
-    worldArray = new WorldArray(X_CELLS, Y_CELLS, (float) 0.5);
+    new LoadWorldArray();
     /*
     for (Region area: world)
     {
       area.setLandCells(worldArray);
     }*/
+  }
+
+  private class LoadWorldArray extends Thread
+  {
+    private Thread t;
+    LoadWorldArray()
+    {
+      this.start();
+    }
+
+    @Override
+    public void run()
+    {
+      try
+      {
+        worldArray = new WorldArray(X_CELLS, Y_CELLS, (float) 0.5);
+        WorldDataParser globalData = new WorldDataParser(main.Game.world);
+        //globalData.parsePrecip(PRECIP_DATA);
+        globalData.parseMaxTemp(MAX);
+        globalData.parseMinTemp(MIN);
+        globalData.parseAvgTemp(AVG);
+        globalData.parsePrecip(PRECIP_DATA);
+
+        worldPresenter.setModelRegions(main.Game.getXmlRegions(), main.Game.world.getWorldArray());
+      }
+      catch (Exception e) {}
+    }
+    /**
+     * start overrides Thread's start
+     * Creates new Thread and then starts said Thread
+     */
+    public void start()
+    {
+      if (t == null)
+      {
+        t = new Thread(this, (String) getName());
+        t.start ();
+      }
+    }
+
   }
 
   public WorldArray getWorldArray()
@@ -121,7 +168,6 @@ public class World
       {
         if( doneUpdate() )
         {
-          System.out.println("\n\n\n\n\n***************\n\n\n\n\n\n");
           //Call to trade
           tradeLeWorldAway();
           break;

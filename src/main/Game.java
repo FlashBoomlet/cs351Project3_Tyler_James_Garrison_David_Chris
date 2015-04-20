@@ -34,18 +34,17 @@ public class Game
    */
   public static final String MODEL_DATA_PATH = "resources/ne_10m_admin_1_states_provinces.kml";
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
-  public static final String PRECIP_DATA = "resources/data/precip.txt";
-  //public static final String SITES = "resources/data/site_summary.txt";
-  public static final String AVG = "resources/data/tavg.txt";
-  public static final String MAX = "resources/data/tmax.txt";
-  public static final String MIN = "resources/data/tmin.txt";
   int frameWidth = 1200;
   int frameHeight = 700;
   final float NAV_HEIGHT_SCALE = (float) .25;
   final float NAV_WIDTH_SCALE = (float) 1.6;
   private final static int DEFAULT_TIME_SPEED = 2000;
   private int feedPanelHeight;
-  private Collection<Region> xmlRegions = new LinkedList<>();
+  private static Collection<Region> xmlRegions = new LinkedList<>();
+  public static Collection<Region> getXmlRegions()
+  {
+    return xmlRegions;
+  }
 
   /*
    * Frame panels
@@ -80,6 +79,7 @@ public class Game
   public static Timer worldTime;
   public static Timer gameLoop;
   public static JFrame frame;
+  public static World world;
 
   /**
    * Constructor for game, handles all init logic.
@@ -152,18 +152,12 @@ public class Game
     List<Region> allRegions = new ArrayList<>(xmlRegions);
     allRegions.addAll(xmlRegions);
 
-    World world = new World(allRegions);
+    world = new World(allRegions);
     MapConverter converter = new EquirectangularConverter();
-    WorldDataParser globalData = new WorldDataParser(world);
-    //globalData.parsePrecip(PRECIP_DATA);
-    globalData.parseMaxTemp(MAX);
-    globalData.parseMinTemp(MIN);
-    globalData.parseAvgTemp(AVG);
-    globalData.parsePrecip(PRECIP_DATA);
 
     worldPresenter = new WorldPresenter(converter, world);
     worldPresenter.setBackgroundRegions(xmlRegions);
-    worldPresenter.setModelRegions(xmlRegions, world.getWorldArray());
+
     settingsScreen = new SettingsScreen(frameWidth,frameHeight,worldPresenter);
     new CountryCSVParser( worldPresenter.getAllRegions() );
     world.setAllFirstCrops();

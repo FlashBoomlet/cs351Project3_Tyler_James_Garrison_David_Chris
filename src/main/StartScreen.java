@@ -3,10 +3,14 @@ package main;
 import gui.ColorsAndFonts;
 import main.Game;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * StartScreen creates the start screen of the game for start up and paused game
@@ -26,11 +30,15 @@ public class StartScreen extends JPanel implements ActionListener
   JTextArea version;
   JTextArea text;
 
+  private String startLabel = "\t\tSTART\t\t";
   private MoreInfo moreInfo;
   private StartUp startUp;
   private BeginScreen beginScreen;
   private int frameWidth;
   private int frameHeight;
+
+  private BufferedImage image;
+  static final String IMAGE_PATH = "resources/images/Starvation_Evasion.png";
 
   /**
    * Initializes a JPanel for the start screen with graphics to be added later and cool stuff
@@ -48,8 +56,8 @@ public class StartScreen extends JPanel implements ActionListener
 
     setLocation(0,0);
     setOpaque(true);
-    setBackground(new Color(0xF7C76D));
-    setSize(frameWidth, frameHeight);
+    setBackground(new Color(0x10749D));
+    setSize(new Dimension(frameWidth, frameHeight));
 
     // Must be created before other components
     back = new JButton("BACK");
@@ -64,6 +72,7 @@ public class StartScreen extends JPanel implements ActionListener
 
     add(beginScreen);
     beginScreen.setVisible(false);
+
 
     add(startUp);
     startUp.setVisible(true);
@@ -97,40 +106,55 @@ public class StartScreen extends JPanel implements ActionListener
     StartUp()
     {
       super();
-      setLocation(0,0);
+      setLocation(0, 0);
       setSize(frameWidth, frameHeight);
 
       // I don't want a background color
       setOpaque(false);
 
-      setLayout(new FlowLayout());
+      setLayout(new BorderLayout());
 
-      start = new JButton("START");
+      start = new JButton(startLabel);
       start.setHorizontalAlignment(SwingConstants.RIGHT);
 
-      info = new JButton("HOW TO");
+      info = new JButton("MORE INFORMATION");
       info.setHorizontalAlignment(SwingConstants.RIGHT);
+
+      JButton skip = new JButton("SKIP");
+      skip.setHorizontalAlignment(SwingConstants.RIGHT);
 
       start.addActionListener(this);
       info.addActionListener(this);
+      skip.addActionListener(this);
       start.setFocusable(false);
       info.setFocusable(false);
+      skip.setFocusable(false);
 
       getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "nextAction");
       getActionMap().put("nextAction", nextAction);
 
+      try
+      {
+        image = ImageIO.read(new File(IMAGE_PATH));
+      }
+      catch(IOException ex)
+      {
+        System.out.println("ERROR: Cannot find Start image!");
+      }
+
       JPanel graphicPanel = new JPanel();
       graphicPanel.setOpaque(false);
-      graphicPanel.setPreferredSize(new Dimension((int) (getWidth() * (.67)), (int) (getHeight() * (.90))));
-      add(graphicPanel);
+      graphicPanel.setPreferredSize(new Dimension((int) (frameWidth), (int) (frameHeight * (.90))));
+      add(graphicPanel, BorderLayout.NORTH);
 
       JPanel buttonCon = new JPanel();
-      buttonCon.setPreferredSize(new Dimension((int) (getWidth() * (.70)), (int) (getHeight() * (.25))));
+      buttonCon.setPreferredSize(new Dimension((int) (frameWidth), (int) (frameHeight * (.10))));
       buttonCon.setOpaque(false);
 
+      buttonCon.add(skip);
       buttonCon.add(info);
       buttonCon.add(start);
-      add(buttonCon);
+      add(buttonCon, BorderLayout.SOUTH);
     }
 
     /**
@@ -149,8 +173,19 @@ public class StartScreen extends JPanel implements ActionListener
 
       buttonAction(name);
     }
-  }
 
+    /**
+     * The paintComponent method overrides the paintComponent method in the
+     * JComponent class.
+     * @param g Graphics
+     */
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+      super.paintComponent(g);
+      g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+    } // End of paintComponent method
+  }
 
   /**
    * Container for the more info and info on how to play the game
@@ -328,7 +363,7 @@ public class StartScreen extends JPanel implements ActionListener
   {
     switch(title)
     {
-      case "START":
+      case "\t\tSTART\t\t":
         startUp.setVisible(false);
         moreInfo.setVisible(false);
         beginScreen.setVisible(true);
@@ -340,7 +375,7 @@ public class StartScreen extends JPanel implements ActionListener
         beginScreen.setVisible(false);
         startMethod();
         break;
-      case "HOW TO":
+      case "MORE INFORMATION":
         startUp.setVisible(false);
         moreInfo.setVisible(true);
         beginScreen.setVisible(false);
