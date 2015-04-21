@@ -10,11 +10,15 @@ import gui.hud.*;
 import model.Region;
 import model.World;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import javax.swing.JLayeredPane;
@@ -52,6 +56,7 @@ public class Game
   private static MapPane mapPane;
   public static InfoPanel infoPanel;
   private static NavMap navMap;
+  private static Ticker ticker;
   private static WorldFeedPanel worldFeedPanel;
   public static WorldFeedPanel getWorldFeedPanel() { return worldFeedPanel; }
   private static ButtonPanel buttonPanel;
@@ -80,6 +85,12 @@ public class Game
   public static Timer gameLoop;
   public static JFrame frame;
   public static World world;
+
+  /*
+   * Stuff for the startUp image
+   */
+  private BufferedImage image;
+  static final String IMAGE_PATH = "resources/images/Starvation_Evasion.png";
 
   /**
    * Constructor for game, handles all init logic.
@@ -140,52 +151,98 @@ public class Game
    */
   private void init()
   {
-    xmlRegions = new AreaXMLLoader().getRegions();
+    //Load the startSceen Image so that the frame doesn't populate white for some reason
+    try
+    {
+      image = ImageIO.read(new File(IMAGE_PATH));
+    }
+    catch(IOException ex)
+    {
+      System.out.println("ERROR: Cannot find Start image!");
+    }
 
-    startPanel = new StartScreen(frameWidth,frameHeight);
-    finishPanel = new FinishScreen(frameWidth,frameHeight);
+    startPanel = new StartScreen(frameWidth,frameHeight,image);
+    new leParseStuff();
 
-    defaultScreen = new JPanel();
-    defaultScreen.setBounds(0,0,frameWidth,frameHeight);
-    defaultScreen.setBackground(ColorsAndFonts.OCEANS);
+  }
 
-    List<Region> allRegions = new ArrayList<>(xmlRegions);
-    allRegions.addAll(xmlRegions);
+  private class leParseStuff extends Thread
+  {
+    private Thread t;
+    leParseStuff()
+    {
+      this.start();
+    }
 
-    world = new World(allRegions);
-    MapConverter converter = new EquirectangularConverter();
+    @Override
+    public void run()
+    {
+      try
+      {
+        //Do stuff here
+        xmlRegions = new AreaXMLLoader().getRegions();
 
-    worldPresenter = new WorldPresenter(converter, world);
-    worldPresenter.setBackgroundRegions(xmlRegions);
+        finishPanel = new FinishScreen(frameWidth,frameHeight);
 
-    settingsScreen = new SettingsScreen(frameWidth,frameHeight,worldPresenter);
-    new CountryCSVParser( worldPresenter.getAllRegions() );
-    world.setAllFirstCrops();
-    world.setPresenter(worldPresenter );
+        defaultScreen = new JPanel();
+        defaultScreen.setBounds(0,0,frameWidth,frameHeight);
+        defaultScreen.setBackground(ColorsAndFonts.OCEANS);
 
-    feedPanelHeight = (int) (frameHeight/25);
-    cam = new Camera(converter);
-    Dimension dim = new Dimension(frameWidth,(int) (frameHeight-feedPanelHeight) );
-    mapPane = new MapPane(cam, worldPresenter,dim,feedPanelHeight);
+        List<Region> allRegions = new ArrayList<>(xmlRegions);
+        allRegions.addAll(xmlRegions);
 
-    worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight);
-    worldPresenter.addObserver(worldFeedPanel);
+        world = new World(allRegions);
+        MapConverter converter = new EquirectangularConverter();
 
-    infoPanel = new InfoPanel(frameWidth/(6),(frameHeight-feedPanelHeight),feedPanelHeight);
-    infoPanel.setPresenter(worldPresenter);
+        worldPresenter = new WorldPresenter(converter, world);
+        worldPresenter.setBackgroundRegions(xmlRegions);
 
-    final int NAV_WIDTH = (int) Math.floor(frameWidth/4);
-    final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
-    final int NAV_X = frameWidth-NAV_WIDTH;
-    final int NAV_Y = frameHeight-NAV_HEIGHT;
-    navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
+        settingsScreen = new SettingsScreen(frameWidth,frameHeight,worldPresenter);
+        new CountryCSVParser( worldPresenter.getAllRegions() );
+        world.setAllFirstCrops();
+        world.setPresenter(worldPresenter );
 
-    buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
+        feedPanelHeight = (int) (frameHeight/25);
+        cam = new Camera(converter);
+        Dimension dim = new Dimension(frameWidth,(int) (frameHeight-feedPanelHeight) );
+        mapPane = new MapPane(cam, worldPresenter,dim,feedPanelHeight);
 
-    mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,cam);
+        worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight);
+        worldPresenter.addObserver(worldFeedPanel);
 
-    initFrame();
-    setupControlls();
+        infoPanel = new InfoPanel(frameWidth/(6),(frameHeight-feedPanelHeight),feedPanelHeight);
+        infoPanel.setPresenter(worldPresenter);
+
+        final int NAV_WIDTH = (int) Math.floor(frameWidth/4);
+        final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
+        final int NAV_X = frameWidth-NAV_WIDTH;
+        final int NAV_Y = frameHeight-NAV_HEIGHT;
+        navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
+
+        int tickerHeight = (int) (frameHeight*(.10));
+        ticker = new Ticker(0,frameHeight-tickerHeight,NAV_X,tickerHeight);
+
+        buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
+
+        mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,cam);
+
+        initFrame();
+        setupControlls();
+      }
+      catch (Exception e) {}
+    }
+    /**
+     * start overrides Thread's start
+     * Creates new Thread and then starts said Thread
+     */
+    public void start()
+    {
+      if (t == null)
+      {
+        t = new Thread(this, (String) getName());
+        t.start ();
+      }
+    }
   }
 
   /**
@@ -339,7 +396,7 @@ public class Game
 
       // Side panel with all information
       infoPanel.setBounds(0,feedPanelHeight,frameWidth/6,frameHeight-feedPanelHeight);
-      layeredPane.add(infoPanel, new Integer(3)) ;
+      layeredPane.add(infoPanel, new Integer(80)) ;
       infoPanel.setVisible(false);
 
       // Navigation in the lower right hand corner
@@ -351,7 +408,11 @@ public class Game
       // Map Scale in the lower right hand corner above the Nav Map
       layeredPane.add(mapScale, new Integer(5) );
 
+      // Ticker at the bottom of the screen
+      layeredPane.add(ticker, new Integer(6) );
+
       pauseGame();
+      repaint();
     }
   }
 
@@ -372,6 +433,7 @@ public class Game
     startPanel.setVisible(false);
     settingsScreen.setVisible(false);
     mapScale.setVisible(true);
+    ticker.setVisible(true);
   }
 
   /**
@@ -408,6 +470,7 @@ public class Game
     settingsScreen.setVisible(false);
     mapScale.setVisible(false);
     finishPanel.setVisible(false);
+    ticker.setVisible(false);
   }
 
   /**

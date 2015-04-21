@@ -66,6 +66,7 @@ public class InfoPanel extends JPanel implements Observer
    */
   public InfoPanel(int frameWidth, int frameHeight,int y)
   {
+    super();
     // init
     miniViewBox = new MiniViewBox(" ",frameWidth, frameHeight);
     stats = new StatPane("REGION(S) DATA:",frameWidth,frameHeight);
@@ -85,7 +86,7 @@ public class InfoPanel extends JPanel implements Observer
     this.setBorder(BorderFactory.createLineBorder(ColorsAndFonts.GUI_TEXT_COLOR.darker()));
 
     //to ensure that the entire bargraph is shown
-    int statsWidth = (int) (frameWidth*.99);
+    int statsWidth = (int) (frameWidth*.99)-5;
 
     //wire
     miniViewBox.setPreferredSize(new Dimension(statsWidth, (frameHeight / 4)));
@@ -113,8 +114,8 @@ public class InfoPanel extends JPanel implements Observer
     JScrollPane scrollFrame = new JScrollPane(scrollCon);
     scrollFrame.setOpaque(false);
     scrollFrame.setBackground(GUI_BACKGROUND);
-    scrollFrame.setPreferredSize(new Dimension( statsWidth, generalHeight+landHeight+cropHeight ));
-    scrollFrame.getVerticalScrollBar().setPreferredSize(new Dimension(2, 100));
+    scrollFrame.setPreferredSize(new Dimension( frameWidth, generalHeight+landHeight+cropHeight ));
+    scrollFrame.getVerticalScrollBar().setPreferredSize(new Dimension(5, 100));
     scrollFrame.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
     scrollFrame.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
 

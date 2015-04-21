@@ -39,7 +39,7 @@ public class StartScreen extends JPanel implements ActionListener
   private int frameHeight;
 
   private BufferedImage image;
-  static final String IMAGE_PATH = "resources/images/Starvation_Evasion.png";
+
 
   /**
    * Initializes a JPanel for the start screen with graphics to be added later and cool stuff
@@ -49,11 +49,12 @@ public class StartScreen extends JPanel implements ActionListener
    * @param frameWidth main frame's width
    * @param frameHeight main frame's height
    */
-  public StartScreen(int frameWidth, int frameHeight)
+  public StartScreen(int frameWidth, int frameHeight, BufferedImage image)
   {
     super();
     this.frameWidth = frameWidth;
     this.frameHeight = frameHeight;
+    this.image = image;
 
     setLocation(0,0);
     setOpaque(true);
@@ -87,7 +88,7 @@ public class StartScreen extends JPanel implements ActionListener
   {
     @Override
     public void actionPerformed(ActionEvent e) {
-      buttonAction("START");
+      buttonAction(startLabel);
     }
   };
   private Action startAction = new AbstractAction()
@@ -134,14 +135,6 @@ public class StartScreen extends JPanel implements ActionListener
       getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "nextAction");
       getActionMap().put("nextAction", nextAction);
 
-      try
-      {
-        image = ImageIO.read(new File(IMAGE_PATH));
-      }
-      catch(IOException ex)
-      {
-        System.out.println("ERROR: Cannot find Start image!");
-      }
 
       JPanel graphicPanel = new JPanel();
       graphicPanel.setOpaque(false);
@@ -312,6 +305,7 @@ public class StartScreen extends JPanel implements ActionListener
       setOpaque(false);
       setLocation(0,0);
       setSize(frameWidth, frameHeight);
+      setLayout(new BorderLayout());
 
       beginGame = new JButton("BEGIN");
       beginGame.addActionListener(this);
@@ -319,8 +313,17 @@ public class StartScreen extends JPanel implements ActionListener
       getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "startaction");
       getActionMap().put("startaction", startAction);
 
-      add(back);
-      add(beginGame);
+      JPanel contentHolder = new JPanel();
+      contentHolder.setOpaque(false);
+      contentHolder.setPreferredSize(new Dimension((int) (getWidth()), (int) (getHeight() * (.90))));
+      add(contentHolder, BorderLayout.NORTH);
+
+      JPanel buttonCon = new JPanel();
+      buttonCon.setPreferredSize(new Dimension((int) (frameWidth), (int) (frameHeight * (.10))));
+      buttonCon.setOpaque(false);
+      buttonCon.add(back);
+      buttonCon.add(beginGame);
+      add( buttonCon, BorderLayout.SOUTH);
     }
 
     /**

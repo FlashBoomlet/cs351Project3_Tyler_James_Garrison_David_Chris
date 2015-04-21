@@ -7,24 +7,35 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- @author david
- created: 2015-02-05
-
- description:
- Ticker is mostly a placeholder class at the moment.  The idea is that it will
- scroll relevant game information across the screen as the model changes through
- time, alerting the player to situations that need attention (maybe with some
- kind of priority queue?)
+ * Ticker is the game component that gives news station a run for their
+ * moeny
+ *
+ * @author Tyler Lynch <lyncht@unm.edu>
+ *   Based on the original version by David Ringo.
+ * @since 04.20.2015
  */
-public class Ticker extends JPanel
+public class Ticker extends JPanel implements ActionListener
 {
-  private static final Font MARQUIS_FONT = ColorsAndFonts.GUI_FONT;
-  private static final int INSET = 5;
+  private static int width;
+  private static int height;
+  private static int x;
+  private static int y;
+  private static int stringLocation;
+  private static int padding = 50;
+  private static String stringToDraw = "";
+
+  AffineTransform aTrans = new AffineTransform();
+  FontRenderContext frc = new FontRenderContext(aTrans,true,true);
+  //Convert to ColorsAndFonts when then font is set.
+  Font font = new Font("Tahoma", Font.BOLD, 12);
 
   private final static String[] testStrings =
     {
@@ -39,27 +50,50 @@ public class Ticker extends JPanel
   /* timer controls rate of scroll/repaint */
   private Timer timer;
 
-  public Ticker()
+  public Ticker(int x, int y, int width, int height)
   {
+    super();
     marquisStr = new String();
     setMarquisText(Arrays.asList(testStrings));
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
 
-    int h = getFontMetrics(MARQUIS_FONT).getHeight() + INSET;
-    int w = 600;
-    
+    stringLocation = width - padding;
+
+    setOpaque(true);
+    //setBackground( ColorsAndFonts.GUI_BACKGROUND );
     /* config */
-    setMinimumSize(new Dimension(0, h));
-    setPreferredSize(new Dimension(w, h));
-    setMaximumSize(getPreferredSize());
-    //setBackground(ColorsAndFonts.GUI_BACKGROUND);
-    setBackground(Color.red);
+    setLocation(x,y);
+    setSize(new Dimension(width, height));
+
+    timer = new Timer(50, this);
+    start();
   }
-
+  public static final int MARQUEE_SPEED_DIV = 5;
+  public static final int REPAINT_WITHIN_MS = 5;
+  /**
+   * The paintComponent method overrides the paintComponent method in the
+   * JComponent class.
+   * @param g Graphics
+   */
   @Override
-  protected void paintComponent(Graphics g)
+  public void paint(Graphics g)
   {
+    super.paint(g); // Do not touch this line
+    Graphics2D g2d = (Graphics2D) g;
 
+    g2d.setColor( ColorsAndFonts.GUI_BACKGROUND );
+    g2d.fillRect(0, 0, width, height);
 
+    stringToDraw = "TEST";
+    // Calculate the adjusted ride height
+    int rideHeight = (int) ((height - font.getSize() )/2 );
+
+    g2d.setFont(font);
+    g2d.setColor( Color.RED );
+    g2d.drawString(stringToDraw,stringLocation,rideHeight);//stringLocation,rideHeight);
   }
 
   /**
@@ -123,5 +157,26 @@ public class Ticker extends JPanel
   public void pause()
   {
     timer.stop();
+  }
+
+  /**
+   *
+   * @param e
+   */
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    // Les calculate movement!
+    int stringLength = (int)(font.getStringBounds(stringToDraw, frc).getWidth() );
+    // Sets the corrected location to the end of the string
+    int location = ( Math.abs(stringLocation) + stringLength );
+    if( location <= padding )
+    {
+      stringLocation = width-padding;
+    }
+    else
+    {
+      stringLocation -= 2;
+    }
+    repaint();
   }
 }
