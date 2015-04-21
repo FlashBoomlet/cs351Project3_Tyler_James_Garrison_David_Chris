@@ -2,6 +2,7 @@ package IO;
 
 import gui.GUIRegion;
 import model.CountryData;
+import model.PolicyData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,24 +25,9 @@ public class PolicyCSVParser {
   private BufferedReader br = null;
   private String line = "";
   private int counter = 0;
-  private Collection<GUIRegion> regions;
   private int rowNumber = 0;
   private int colNumber = 0;
   private String[] columnNames = new String[14];
-
-  /**
-   * CountryCSVParser is the constructor to parse data for all countries being utalized in this game
-   *
-   * @author Tyler Lynch <lyncht@unm.edu>
-   * @since 4.13.2015
-   *
-   * @param regions in the world
-   */
-  public PolicyCSVParser(Collection<GUIRegion> regions)
-  {
-    this.regions = regions;
-    parseCSV();
-  }
 
   /**
    * parseCSV reads one line of a csv file in at a time.
@@ -53,7 +39,7 @@ public class PolicyCSVParser {
    * @since 4.13.2015
    *
    */
-  private void parseCSV()
+  public PolicyCSVParser()
   {
     try
     {
@@ -95,13 +81,29 @@ public class PolicyCSVParser {
    */
   private void assignAttributes(String[] atributes)
   {
-    GUIRegion currentRegion = null;
-    CountryData data = null;
+    PolicyData data = null;
     // To prevent array index out of bounds error, ensure all data is filled out
-    if( atributes.length >= 14 )
+    if( atributes.length >= 16 )
     {
-      Double.parseDouble(atributes[1]);
+      data = new PolicyData();
 
+      // Assign values
+      data.setId(Integer.parseInt(atributes[0]));
+      data.setPolicy((atributes[1]));
+      data.setTag((atributes[2]));
+      data.setDescription((atributes[3]));
+      data.setLikelyhood(Double.parseDouble(atributes[4]));
+      data.setPro((atributes[5]));
+      data.setCon((atributes[6]));
+      data.setGmo(Double.parseDouble(atributes[7]));
+      data.setOrganic(Double.parseDouble(atributes[8]));
+      data.setConventional(Double.parseDouble(atributes[9]));
+      data.setCorn(Double.parseDouble(atributes[10]));
+      data.setSoy(Double.parseDouble(atributes[11]));
+      data.setRice(Double.parseDouble(atributes[12]));
+      data.setWheat(Double.parseDouble(atributes[13]));
+      data.setOther(Double.parseDouble(atributes[14]));
+      data.setLevel(Double.parseDouble(atributes[15]));
     }
     else{
       JOptionPane.showMessageDialog(null, "Not enough data in csv in row: "+ counter, "Error in CSV", JOptionPane.ERROR_MESSAGE);
@@ -114,11 +116,13 @@ public class PolicyCSVParser {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     JTextArea errorMsg = new JTextArea("Error in csv column: "+col+" row: "+row);
-//    String rowData[][] = new String[1][atributes.length];
-//    rowData[0] = atributes;
-//    System.out.println(columnNames);
-//    System.out.println(rowData);
-//    JTable table = new JTable(rowData, columnNames);
+   /*
+    String rowData[][] = new String[1][atributes.length];
+    rowData[0] = atributes;
+    System.out.println(columnNames);
+    System.out.println(rowData);
+    JTable table = new JTable(rowData, columnNames);
+    */
 
     //JScrollPane scrollPane = new JScrollPane(table);
     JButton save = new JButton("Save");

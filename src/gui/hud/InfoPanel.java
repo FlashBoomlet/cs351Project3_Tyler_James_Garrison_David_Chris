@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
+import static javax.swing.ScrollPaneConstants.*;
 
 import static gui.ColorsAndFonts.BAR_GRAPH_NEG;
 import static gui.ColorsAndFonts.GUI_BACKGROUND;
@@ -93,16 +94,32 @@ public class InfoPanel extends JPanel implements Observer
     int generalHeight = ( (frameHeight*3) / 16);
     int landHeight = ( (frameHeight*3) / 16);
     int cropHeight = frameHeight - ( ((frameHeight*5) / 16) + generalHeight + landHeight);
+
+    JPanel scrollCon = new JPanel();
+    scrollCon.setOpaque(true);
+    scrollCon.setLayout(new FlowLayout());
+    scrollCon.setPreferredSize(new Dimension(statsWidth, frameHeight));
+    scrollCon.setBackground(GUI_BACKGROUND);
     //General
     stats.setPreferredSize(new Dimension( statsWidth, generalHeight));
-    this.add(stats);
+    scrollCon.add(stats);
     //Land
     landStats.setPreferredSize(new Dimension( statsWidth, landHeight));
-    this.add(landStats);
+    scrollCon.add(landStats);
     //Crops
     cropStats.setPreferredSize(new Dimension( statsWidth, cropHeight));
-    this.add(cropStats);
+    scrollCon.add(cropStats);
+
+    JScrollPane scrollFrame = new JScrollPane(scrollCon);
+    scrollFrame.setOpaque(false);
+    scrollFrame.setBackground(GUI_BACKGROUND);
+    scrollFrame.setPreferredSize(new Dimension( statsWidth, generalHeight+landHeight+cropHeight ));
+    scrollFrame.getVerticalScrollBar().setPreferredSize(new Dimension(2, 100));
+    scrollFrame.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+    scrollFrame.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
+
     //User Controls
+    add(scrollFrame);
     infoPanelUserControls.setPreferredSize(new Dimension( statsWidth, ((frameHeight*1)/40) ));
     this.add(infoPanelUserControls);
 

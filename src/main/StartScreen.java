@@ -25,6 +25,7 @@ public class StartScreen extends JPanel implements ActionListener
   JButton start;
   JButton info;
   JButton back;
+  JButton skip;
   JButton beginGame;
 
   JTextArea version;
@@ -120,7 +121,7 @@ public class StartScreen extends JPanel implements ActionListener
       info = new JButton("MORE INFORMATION");
       info.setHorizontalAlignment(SwingConstants.RIGHT);
 
-      JButton skip = new JButton("SKIP");
+      skip = new JButton("SKIP");
       skip.setHorizontalAlignment(SwingConstants.RIGHT);
 
       start.addActionListener(this);
@@ -196,7 +197,7 @@ public class StartScreen extends JPanel implements ActionListener
     MoreInfo()
     {
       super();
-      setLocation(0,0);
+      setLocation(0, 0);
       setOpaque(false);
       setSize(frameWidth, frameHeight);
       setLayout(new BorderLayout());
@@ -207,7 +208,7 @@ public class StartScreen extends JPanel implements ActionListener
 
       text = new JTextArea();
       text.setBackground(new Color(0x333333));
-      text.setPreferredSize(new Dimension((int) (getWidth() * (.90)), (int) (getHeight() * (.80))));
+      text.setPreferredSize(new Dimension((int) (getWidth() ), (int) (getHeight() * (.90))));
       text.setFont(ColorsAndFonts.GUI_FONT);
       text.setForeground(Color.white);
       text.setText(
@@ -268,14 +269,18 @@ public class StartScreen extends JPanel implements ActionListener
 
       JScrollPane scrollFrame = new JScrollPane(realTextHolder);
       realTextHolder.setAutoscrolls(true);
-      scrollFrame.setPreferredSize(new Dimension((int) (getWidth() * (.90)), (int) (getHeight() * (.80))));
+      scrollFrame.setSize((int) (getWidth()), (int) (getHeight() * (.90)));
       textHolder.add(scrollFrame);
-      textHolder.setPreferredSize(new Dimension((int) (getWidth() * (.90)), (int) (getHeight() * (.80))));
+      textHolder.setPreferredSize(new Dimension((int) (getWidth() ), (int) (getHeight() * (.90))));
       add(textHolder, BorderLayout.CENTER);
 
+      JPanel buttonCon = new JPanel();
+      buttonCon.setPreferredSize(new Dimension((int) (frameWidth), (int) (frameHeight * (.10))));
+      buttonCon.setOpaque(false);
       back = new JButton("BACK");
       back.addActionListener(this);
-      add(this.back, BorderLayout.SOUTH);
+      buttonCon.add(this.back);
+      add(buttonCon, BorderLayout.SOUTH);
     }
 
     /**
@@ -368,13 +373,6 @@ public class StartScreen extends JPanel implements ActionListener
         moreInfo.setVisible(false);
         beginScreen.setVisible(true);
         break;
-      case "BEGIN":
-        // Very important to reset the screen so that pause works right
-        startUp.setVisible(true);
-        moreInfo.setVisible(false);
-        beginScreen.setVisible(false);
-        startMethod();
-        break;
       case "MORE INFORMATION":
         startUp.setVisible(false);
         moreInfo.setVisible(true);
@@ -386,6 +384,12 @@ public class StartScreen extends JPanel implements ActionListener
         beginScreen.setVisible(false);
         break;
       default:
+        // Very important to reset the screen so that pause works right
+        startUp.setVisible(true);
+        moreInfo.setVisible(false);
+        beginScreen.setVisible(false);
+        startMethod();
+        break;
     }
   }
 }
