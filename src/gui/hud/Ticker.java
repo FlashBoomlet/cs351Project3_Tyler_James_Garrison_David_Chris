@@ -1,16 +1,17 @@
 package gui.hud;
 
 import gui.ColorsAndFonts;
-import gui.WorldPresenter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,11 +32,15 @@ public class Ticker extends JPanel implements ActionListener
   private static int stringLocation;
   private static int padding = 50;
   private static String stringToDraw = "";
+  private static String stringSpacing = "                     ";
+
+  private BufferedImage image;
+  static final String IMAGE_PATH = "resources/images/tickerOverlay.png";
 
   AffineTransform aTrans = new AffineTransform();
   FontRenderContext frc = new FontRenderContext(aTrans,true,true);
   //Convert to ColorsAndFonts when then font is set.
-  Font font = new Font("Tahoma", Font.BOLD, 12);
+  Font font = new Font("Tahoma", Font.BOLD, 14);
 
   private final static String[] testStrings =
     {
@@ -62,8 +67,16 @@ public class Ticker extends JPanel implements ActionListener
 
     stringLocation = width - padding;
 
+    try
+    {
+      image = ImageIO.read(new File(IMAGE_PATH));
+    }
+    catch(IOException ex)
+    {
+      System.out.println("ERROR: Cannot find News Ticker Overlay!");
+    }
+
     setOpaque(true);
-    //setBackground( ColorsAndFonts.GUI_BACKGROUND );
     /* config */
     setLocation(x,y);
     setSize(new Dimension(width, height));
@@ -87,13 +100,19 @@ public class Ticker extends JPanel implements ActionListener
     g2d.setColor( ColorsAndFonts.GUI_BACKGROUND );
     g2d.fillRect(0, 0, width, height);
 
-    stringToDraw = "TEST";
+    stringToDraw = "";
+    for( String s: testStrings ) {
+      stringToDraw += s;
+      stringToDraw += stringSpacing;
+    }
     // Calculate the adjusted ride height
-    int rideHeight = (int) ((height - font.getSize() )/2 );
+    int rideHeight = (height + font.getSize() )/2;
 
     g2d.setFont(font);
-    g2d.setColor( Color.RED );
+    g2d.setColor( Color.WHITE  );
     g2d.drawString(stringToDraw,stringLocation,rideHeight);//stringLocation,rideHeight);
+
+    g.drawImage(image, 0, -10, getWidth(), getHeight(), null);
   }
 
   /**
@@ -168,10 +187,10 @@ public class Ticker extends JPanel implements ActionListener
     // Les calculate movement!
     int stringLength = (int)(font.getStringBounds(stringToDraw, frc).getWidth() );
     // Sets the corrected location to the end of the string
-    int location = ( Math.abs(stringLocation) + stringLength );
+    int location = ( Math.abs(stringLocation + stringLength)  );
     if( location <= padding )
     {
-      stringLocation = width-padding;
+      stringLocation = width;
     }
     else
     {

@@ -40,6 +40,7 @@ public class Game
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
   int frameWidth = 1200;
   int frameHeight = 700;
+  int tickerHeight;
   final float NAV_HEIGHT_SCALE = (float) .25;
   final float NAV_WIDTH_SCALE = (float) 1.6;
   private final static int DEFAULT_TIME_SPEED = 2000;
@@ -133,7 +134,7 @@ public class Game
       frameHeight = (int) Math.floor(frameWidth*.50);
     }
 
-    frame.setTitle("GAME");
+    frame.setTitle("STARVATION EVASION");
     frame.setPreferredSize(new Dimension(frameWidth, frameHeight) );
     frame.setSize(frame.getPreferredSize());
     frame.setLocation(0,0);
@@ -179,6 +180,14 @@ public class Game
     {
       try
       {
+        tickerHeight = (int) (frameHeight*(.10));
+        feedPanelHeight = (int) (frameHeight/25);
+        final int NAV_WIDTH = (int) Math.floor(frameWidth/4);
+        final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
+        final int NAV_X = frameWidth-NAV_WIDTH;
+        final int NAV_Y = frameHeight-NAV_HEIGHT;
+
+
         //Do stuff here
         xmlRegions = new AreaXMLLoader().getRegions();
 
@@ -202,7 +211,6 @@ public class Game
         world.setAllFirstCrops();
         world.setPresenter(worldPresenter );
 
-        feedPanelHeight = (int) (frameHeight/25);
         cam = new Camera(converter);
         Dimension dim = new Dimension(frameWidth,(int) (frameHeight-feedPanelHeight) );
         mapPane = new MapPane(cam, worldPresenter,dim,feedPanelHeight);
@@ -210,16 +218,11 @@ public class Game
         worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight);
         worldPresenter.addObserver(worldFeedPanel);
 
-        infoPanel = new InfoPanel(frameWidth/(6),(frameHeight-feedPanelHeight),feedPanelHeight);
+        infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight+20),(int) (feedPanelHeight));
         infoPanel.setPresenter(worldPresenter);
 
-        final int NAV_WIDTH = (int) Math.floor(frameWidth/4);
-        final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
-        final int NAV_X = frameWidth-NAV_WIDTH;
-        final int NAV_Y = frameHeight-NAV_HEIGHT;
         navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
-        int tickerHeight = (int) (frameHeight*(.10));
         ticker = new Ticker(0,frameHeight-tickerHeight,NAV_X,tickerHeight);
 
         buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
@@ -395,8 +398,8 @@ public class Game
       layeredPane.add(worldFeedPanel, new Integer(2));
 
       // Side panel with all information
-      infoPanel.setBounds(0,feedPanelHeight,frameWidth/6,frameHeight-feedPanelHeight);
-      layeredPane.add(infoPanel, new Integer(80)) ;
+      infoPanel.setBounds(0,feedPanelHeight,frameWidth/6,frameHeight-feedPanelHeight-tickerHeight);
+      layeredPane.add(infoPanel, new Integer(6)) ;
       infoPanel.setVisible(false);
 
       // Navigation in the lower right hand corner
@@ -409,7 +412,7 @@ public class Game
       layeredPane.add(mapScale, new Integer(5) );
 
       // Ticker at the bottom of the screen
-      layeredPane.add(ticker, new Integer(6) );
+      layeredPane.add(ticker, new Integer(7) );
 
       pauseGame();
       repaint();

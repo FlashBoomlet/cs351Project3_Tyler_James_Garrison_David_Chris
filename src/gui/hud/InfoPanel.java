@@ -51,6 +51,8 @@ public class InfoPanel extends JPanel implements Observer
   private Region region = null;
   private static JButton hide;
   private static JButton units;
+  private static JButton policy;
+  private static JButton trade;
   /*
    * Variables
    */
@@ -96,11 +98,18 @@ public class InfoPanel extends JPanel implements Observer
     int landHeight = ( (frameHeight*3) / 16);
     int cropHeight = frameHeight - ( ((frameHeight*5) / 16) + generalHeight + landHeight);
 
+    policy = new JButton("POLICY");
+    trade = new JButton("TRADE");
+
     JPanel scrollCon = new JPanel();
     scrollCon.setOpaque(true);
     scrollCon.setLayout(new FlowLayout());
     scrollCon.setPreferredSize(new Dimension(statsWidth, frameHeight));
     scrollCon.setBackground(GUI_BACKGROUND);
+
+    //Policy Button and Trade Button
+    scrollCon.add(policy);
+    scrollCon.add(trade);
     //General
     stats.setPreferredSize(new Dimension( statsWidth, generalHeight));
     scrollCon.add(stats);
