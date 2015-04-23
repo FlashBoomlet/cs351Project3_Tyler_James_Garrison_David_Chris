@@ -7,6 +7,7 @@ import gui.*;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
 import gui.hud.*;
+import model.AtomicRegion;
 import model.Region;
 import model.World;
 
@@ -86,6 +87,12 @@ public class Game
   public static Timer gameLoop;
   public static JFrame frame;
   public static World world;
+
+
+  /*
+   * users selected country
+   */
+  public static GUIRegion userCountry;
 
   /*
    * Stuff for the startUp image
@@ -403,7 +410,7 @@ public class Game
       infoPanel.setVisible(false);
 
       // Navigation in the lower right hand corner
-      layeredPane.add(navMap, new Integer(3) );
+      layeredPane.add(navMap, new Integer(3));
 
       // Button panel in the lower right hand corner
       layeredPane.add(buttonPanel, new Integer(4) );

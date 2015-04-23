@@ -2,6 +2,7 @@ package main;
 
 import gui.ColorsAndFonts;
 import main.Game;
+import model.World;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -31,6 +32,8 @@ public class StartScreen extends JPanel implements ActionListener
   JTextArea version;
   JTextArea text;
 
+  JComboBox countryChoose;
+
   private String startLabel = "\t\tSTART\t\t";
   private MoreInfo moreInfo;
   private StartUp startUp;
@@ -38,7 +41,11 @@ public class StartScreen extends JPanel implements ActionListener
   private int frameWidth;
   private int frameHeight;
 
+
   private BufferedImage image;
+
+  //only two countries for now fo debugging
+  private String[] countryNames = {"Germany", "United Kingdom","United States"};
 
 
   /**
@@ -299,16 +306,18 @@ public class StartScreen extends JPanel implements ActionListener
    */
   private class BeginScreen extends JPanel implements ActionListener
   {
-    BeginScreen()
-    {
+    BeginScreen() {
       super();
       setOpaque(false);
-      setLocation(0,0);
+      setLocation(0, 0);
       setSize(frameWidth, frameHeight);
       setLayout(new BorderLayout());
 
       beginGame = new JButton("BEGIN");
       beginGame.addActionListener(this);
+
+      countryChoose = new JComboBox(countryNames);
+      countryChoose.setBounds(this.getWidth(), this.getHeight(),50,20);
 
       getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "startaction");
       getActionMap().put("startaction", startAction);
@@ -316,6 +325,7 @@ public class StartScreen extends JPanel implements ActionListener
       JPanel contentHolder = new JPanel();
       contentHolder.setOpaque(false);
       contentHolder.setPreferredSize(new Dimension((int) (getWidth()), (int) (getHeight() * (.90))));
+      contentHolder.add(countryChoose);
       add(contentHolder, BorderLayout.NORTH);
 
       JPanel buttonCon = new JPanel();

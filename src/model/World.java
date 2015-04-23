@@ -105,6 +105,26 @@ public class World
 
   }
 
+  /**
+   *
+   * @return an array of all country names
+   */
+  public String[] getCountryNames()
+  {
+    String[] names = new String[world.size()];
+    int count = 0;
+
+    for(Region r: world)
+    {
+      r.getName();
+      names[count] = r.getName();
+      count++;
+    }
+
+    return names;
+  }
+
+
   public WorldArray getWorldArray()
   {
     return worldArray;

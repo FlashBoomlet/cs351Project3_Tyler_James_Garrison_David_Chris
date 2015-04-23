@@ -256,6 +256,9 @@ public class InfoPanel extends JPanel implements Observer
     double migration = 0;
     double undernourish = 0;
 
+
+
+
     if( singeCountry )
     {
       CountryData cd = countryDataList.get(0);
@@ -350,15 +353,15 @@ public class InfoPanel extends JPanel implements Observer
     /*
      * Crop Information
      */
-    BarPanel bp14 = getBarPanel( cornTotal, "Corn", totalCrops, true );
+    BarPanel bp14 = getBarPanel( cornTotal, "Corn", totalCrops, false );
     statPane.addBar(bp14);
-    BarPanel bp13 = getBarPanel( wheatTotal, "Wheat", totalCrops, true );
+    BarPanel bp13 = getBarPanel( wheatTotal, "Wheat", totalCrops, false);
     statPane.addBar(bp13);
-    BarPanel bp12 = getBarPanel( riceTotal, "Rice", totalCrops, true );
+    BarPanel bp12 = getBarPanel( riceTotal, "Rice", totalCrops, false );
     statPane.addBar(bp12);
-    BarPanel bp11 = getBarPanel( soyTotal, "Soy", totalCrops, true );
+    BarPanel bp11 = getBarPanel( soyTotal, "Soy", totalCrops, false );
     statPane.addBar(bp11);
-    BarPanel bp10 = getBarPanel( otherTotal, "Other", totalCrops, true );
+    BarPanel bp10 = getBarPanel( otherTotal, "Other", totalCrops, false );
     statPane.addBar(bp10);
   }
 

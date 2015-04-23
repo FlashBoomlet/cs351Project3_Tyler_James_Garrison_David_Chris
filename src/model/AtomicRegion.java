@@ -35,6 +35,8 @@ public class AtomicRegion implements Region, CropIdeals
   private int OTHER_RAIN_HIGH;
   private int OTHER_RAIN_LOW;
 
+
+
   /**
    * @return name
    */
