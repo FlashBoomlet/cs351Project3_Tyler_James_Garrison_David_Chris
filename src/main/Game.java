@@ -201,7 +201,7 @@ public class Game
         finishPanel = new FinishScreen(frameWidth,frameHeight);
 
         defaultScreen = new JPanel();
-        defaultScreen.setBounds(0,0,frameWidth,frameHeight);
+        defaultScreen.setBounds(0, 0, frameWidth, frameHeight);
         defaultScreen.setBackground(ColorsAndFonts.OCEANS);
 
         List<Region> allRegions = new ArrayList<>(xmlRegions);
@@ -235,6 +235,7 @@ public class Game
         buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
         mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,cam);
+
 
         initFrame();
         setupControlls();
@@ -444,6 +445,8 @@ public class Game
     settingsScreen.setVisible(false);
     mapScale.setVisible(true);
     ticker.setVisible(true);
+
+
   }
 
   /**
@@ -509,6 +512,13 @@ public class Game
       start();
       startGame();
     }
+  }
+
+  public static void setUserCountry(String name)
+  {
+    userCountry = worldPresenter.getSingleRegion(name);
+
+    System.out.println(name+" "+userCountry.getName());
   }
 }
 

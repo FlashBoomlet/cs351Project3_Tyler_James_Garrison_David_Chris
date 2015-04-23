@@ -265,6 +265,25 @@ public class WorldPresenter extends Observable
     return backgroundRegions;
   }
 
+  /**
+   *
+   * method will return null if a GUIRegion doesn't
+   * exist with the specified name
+   *
+   * @param name of theGUIRegion to find
+   * @return the GUIRegion with the given name
+   */
+  public GUIRegion getSingleRegion(String name)
+  {
+    for (GUIRegion gr: backgroundRegions)
+    {
+      
+      if (gr.getName().trim().equals(name.trim())) return gr;
+    }
+
+    return null;
+  }
+
   public Rectangle2D getViewBox(Camera camera)
   {
     return camera.getViewBounds();
