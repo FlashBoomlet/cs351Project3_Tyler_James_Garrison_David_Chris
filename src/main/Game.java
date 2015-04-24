@@ -87,7 +87,8 @@ public class Game
   public static Timer gameLoop;
   public static JFrame frame;
   public static World world;
-
+  private static CardSelector policySelector;
+  private static CardSelector tradeSelector;
 
   /*
    * users selected country
@@ -194,7 +195,6 @@ public class Game
         final int NAV_X = frameWidth-NAV_WIDTH;
         final int NAV_Y = frameHeight-NAV_HEIGHT;
 
-
         //Do stuff here
         xmlRegions = new AreaXMLLoader().getRegions();
 
@@ -227,6 +227,11 @@ public class Game
 
         infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight+20),(int) (feedPanelHeight));
         infoPanel.setPresenter(worldPresenter);
+        // Card Selectors
+        policySelector = new CardSelector(275,75,600,500,"POLICY");
+        infoPanel.setCardSelector(policySelector, "POLICY");
+        tradeSelector = new CardSelector(275,75,600,500,"TRADE");
+        infoPanel.setCardSelector(tradeSelector, "TRADE");
 
         navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
@@ -421,6 +426,10 @@ public class Game
 
       // Ticker at the bottom of the screen
       layeredPane.add(ticker, new Integer(7) );
+
+      // Card selectors for Game play
+      layeredPane.add(policySelector, new Integer(8) );
+      layeredPane.add(tradeSelector, new Integer(8) );
 
       pauseGame();
       repaint();

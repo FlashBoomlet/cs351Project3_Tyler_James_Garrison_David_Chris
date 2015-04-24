@@ -32,7 +32,7 @@ import static gui.ColorsAndFonts.GUI_BACKGROUND;
  * @since 4.3.15
  *
  */
-public class InfoPanel extends JPanel implements Observer
+public class InfoPanel extends JPanel implements Observer, ActionListener
 {
   /* width = 1 allows panel to be resized intelligently upon container
      instantiation.  Height is important, however, to ensure the child components
@@ -53,6 +53,8 @@ public class InfoPanel extends JPanel implements Observer
   private static JButton units;
   private static JButton policy;
   private static JButton trade;
+  private static CardSelector policySelector;
+  private static CardSelector tradeSelector;
   /*
    * Variables
    */
@@ -99,7 +101,10 @@ public class InfoPanel extends JPanel implements Observer
     int cropHeight = frameHeight - ( ((frameHeight*5) / 16) + generalHeight + landHeight);
 
     policy = new JButton("POLICY");
+    policy.addActionListener(this);
+
     trade = new JButton("TRADE");
+    trade.addActionListener(this);
 
     JPanel scrollCon = new JPanel();
     scrollCon.setOpaque(true);
@@ -163,6 +168,51 @@ public class InfoPanel extends JPanel implements Observer
     });
 
   }
+
+  /**
+   * Set the Card Selector
+   * @param selector component
+   * @param name of the cardSelector
+   */
+  public void setCardSelector(CardSelector selector, String name)
+  {
+    switch (name)
+    {
+      case "POLICY":
+        policySelector = selector;
+        policySelector.setVisible(false);
+        break;
+      case "TRADE":
+        tradeSelector = selector;
+        tradeSelector.setVisible(false);
+        break;
+      default:
+    }
+  }
+
+  /**
+   * Overrides action performed.
+   * Detects which button is clicked and either pauses the game or shows the settings
+   *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   *
+   * @param e
+   */
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    JButton tempBtn = (JButton) e.getSource();
+    String name = tempBtn.getText();
+
+    if( name == "POLICY" )
+    {
+      policySelector.setVisible(true);
+    }
+    else if( name == "TRADE" )
+    {
+      tradeSelector.setVisible( true );
+    }
+  }
+
 
   /**
    * Retuns the word presenter object, provides some safety if the object has
@@ -547,6 +597,8 @@ public class InfoPanel extends JPanel implements Observer
    */
   public void clearDisplay()
   {
+    policySelector.setVisible(false);
+    tradeSelector.setVisible(false);
     miniViewBox.setTitle(" ");
     miniViewBox.setDrawableRegions(null);
     stats.clearBarPlots();
@@ -654,6 +706,8 @@ public class InfoPanel extends JPanel implements Observer
   {
     getPresenter().clearActiveList();
     main.Game.infoPanel.update(null, null);
+    policySelector.setVisible(false);
+    tradeSelector.setVisible(false);
     this.setVisible(false);
   }
 
