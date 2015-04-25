@@ -277,7 +277,7 @@ public class WorldPresenter extends Observable
   {
     for (GUIRegion gr: backgroundRegions)
     {
-      
+
       if (gr.getName().trim().equals(name.trim())) return gr;
     }
 

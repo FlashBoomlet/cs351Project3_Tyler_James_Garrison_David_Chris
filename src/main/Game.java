@@ -57,6 +57,7 @@ public class Game
    */
   private static MapPane mapPane;
   public static InfoPanel infoPanel;
+  private static PlayerCountryInfo playerCountryInfo;
   private static NavMap navMap;
   private static Ticker ticker;
   private static WorldFeedPanel worldFeedPanel;
@@ -216,7 +217,7 @@ public class Game
         settingsScreen = new SettingsScreen(frameWidth,frameHeight,worldPresenter);
         new CountryCSVParser( worldPresenter.getAllRegions() );
         world.setAllFirstCrops();
-        world.setPresenter(worldPresenter );
+        world.setPresenter(worldPresenter);
 
         cam = new Camera(converter);
         Dimension dim = new Dimension(frameWidth,(int) (frameHeight-feedPanelHeight) );
@@ -227,6 +228,10 @@ public class Game
 
         infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight+20),(int) (feedPanelHeight));
         infoPanel.setPresenter(worldPresenter);
+
+        userCountry = worldPresenter.getSingleRegion("United States of America");
+        playerCountryInfo = new PlayerCountryInfo(userCountry,frameWidth/5);
+
         // Card Selectors
         policySelector = new CardSelector(275,75,600,500,"POLICY");
         infoPanel.setCardSelector(policySelector, "POLICY");
@@ -339,15 +344,14 @@ public class Game
 
 
     inputMap.put(KeyStroke.getKeyStroke("SPACE"), "pause");
-    actionMap.put("pause", new AbstractAction()
-    {
-      @Override
-      public void actionPerformed(ActionEvent e)
-      {
-        if (isRunning()) pause();
-        else start();
-      }
-    });
+    actionMap.put("pause", new AbstractAction() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                if (isRunning()) pause();
+                else start();
+              }
+            }
+    );
     GameplayControl.updateDisplaySpeed();
   }
 
@@ -360,7 +364,7 @@ public class Game
 
     frame.setResizable(false);
     frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
-    frame.setContentPane(new CenterPanel(mapPane, infoPanel, worldFeedPanel));
+    frame.setContentPane(new CenterPanel(mapPane, infoPanel, worldFeedPanel, playerCountryInfo));
 
     frame.addKeyListener(mapPane);
     frame.pack();
@@ -387,13 +391,13 @@ public class Game
    */
   class CenterPanel extends JPanel
   {
-    CenterPanel(MapPane mapPane,InfoPanel infoPanel,WorldFeedPanel worldFeedPanel)
+    CenterPanel(MapPane mapPane,InfoPanel infoPanel,WorldFeedPanel worldFeedPanel,PlayerCountryInfo playerCountryInfo)
     {
       super();
       JLayeredPane layeredPane = frame.getLayeredPane();
 
       // Add Start Screen
-      layeredPane.add(startPanel, new Integer(99) );
+      layeredPane.add(startPanel, new Integer(99));
 
       // Add Start Screen
       layeredPane.add(finishPanel, new Integer(101) );
@@ -404,16 +408,20 @@ public class Game
 
       layeredPane.add(defaultScreen, new Integer(0));
 
-      mapPane.setBounds(0,0,frameWidth,frameHeight);
+      mapPane.setBounds(0, 0, frameWidth, frameHeight);
       layeredPane.add(mapPane, new Integer(1));
 
-      worldFeedPanel.setBounds(0,0,frameWidth,feedPanelHeight);
+      worldFeedPanel.setBounds(0, 0, frameWidth, feedPanelHeight);
       layeredPane.add(worldFeedPanel, new Integer(2));
 
       // Side panel with all information
       infoPanel.setBounds(0,feedPanelHeight,frameWidth/6,frameHeight-feedPanelHeight-tickerHeight);
       layeredPane.add(infoPanel, new Integer(6)) ;
       infoPanel.setVisible(false);
+
+      //info panel for users country
+      playerCountryInfo.setLocation((frameWidth-(frameWidth/5)),feedPanelHeight);
+      layeredPane.add(playerCountryInfo, new Integer(6));
 
       // Navigation in the lower right hand corner
       layeredPane.add(navMap, new Integer(3));
@@ -454,6 +462,7 @@ public class Game
     settingsScreen.setVisible(false);
     mapScale.setVisible(true);
     ticker.setVisible(true);
+    playerCountryInfo.setVisible(true);
 
 
   }
@@ -493,6 +502,7 @@ public class Game
     mapScale.setVisible(false);
     finishPanel.setVisible(false);
     ticker.setVisible(false);
+    playerCountryInfo.setVisible(false);
   }
 
   /**
@@ -521,13 +531,6 @@ public class Game
       start();
       startGame();
     }
-  }
-
-  public static void setUserCountry(String name)
-  {
-    userCountry = worldPresenter.getSingleRegion(name);
-
-    System.out.println(name+" "+userCountry.getName());
   }
 }
 

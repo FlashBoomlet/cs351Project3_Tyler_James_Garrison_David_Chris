@@ -33,8 +33,6 @@ public class StartScreen extends JPanel implements ActionListener
   JTextArea version;
   JTextArea text;
 
-  JComboBox countryChoose;
-
 
   private String startLabel = "\t\tSTART\t\t";
   private MoreInfo moreInfo;
@@ -46,10 +44,7 @@ public class StartScreen extends JPanel implements ActionListener
 
   private BufferedImage image;
 
-  //only two countries for now fo debugging
-  private String[] countryNames = {"Germany", "United Kingdom","United States"};
 
-  private String playerCountry;
 
   /**
    * Initializes a JPanel for the start screen with graphics to be added later and cool stuff
@@ -319,9 +314,6 @@ public class StartScreen extends JPanel implements ActionListener
       beginGame = new JButton("BEGIN");
       beginGame.addActionListener(this);
 
-      countryChoose = new JComboBox(countryNames);
-      countryChoose.setSize( 50, 20);
-      countryChoose.setSelectedIndex(2);
 
       getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "startaction");
       getActionMap().put("startaction", startAction);
@@ -329,7 +321,6 @@ public class StartScreen extends JPanel implements ActionListener
       JPanel contentHolder = new JPanel();
       contentHolder.setOpaque(false);
       contentHolder.setPreferredSize(new Dimension((int) (getWidth()), (int) (getHeight() * (.90))));
-      contentHolder.add(countryChoose);
       add(contentHolder, BorderLayout.NORTH);
 
       JPanel buttonCon = new JPanel();
@@ -358,36 +349,8 @@ public class StartScreen extends JPanel implements ActionListener
     }
   }
 
-  /**
-   *
-   * @return the name of the country that the user wants to play as
-   */
-  public String getPlayerCountry()
-  {
-    return playerCountry;
-  }
 
 
-  /*
-  gets the full name of the selected country
-   */
-  private String playerCountry()
-  {
-    switch(countryChoose.getSelectedIndex())
-    {
-      case 0:
-        return "Germany";
-
-      case 1:
-        return "United Kingdom of Great Britain and Northern Ireland";
-
-      case 2:
-        return "United States of America";
-
-      default:
-        return "United States of America";
-    }
-  }
 
   /**
    * Overrides action performed.
@@ -431,8 +394,6 @@ public class StartScreen extends JPanel implements ActionListener
         break;
       default:
         // Very important to reset the screen so that pause works right
-        playerCountry = playerCountry();
-        Game.setUserCountry(playerCountry);
         startUp.setVisible(true);
         moreInfo.setVisible(false);
         beginScreen.setVisible(false);
