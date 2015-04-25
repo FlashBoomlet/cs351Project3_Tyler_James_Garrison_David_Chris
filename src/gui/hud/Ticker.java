@@ -112,7 +112,7 @@ public class Ticker extends JPanel implements ActionListener
     g2d.setColor( Color.WHITE  );
     g2d.drawString(stringToDraw,stringLocation,rideHeight);//stringLocation,rideHeight);
 
-    g.drawImage(image, 0, -10, getWidth(), getHeight(), null);
+    g.drawImage(image, 0, 0, width, height, null);
   }
 
   /**

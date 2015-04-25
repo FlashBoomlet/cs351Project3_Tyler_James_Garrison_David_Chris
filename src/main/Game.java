@@ -226,7 +226,7 @@ public class Game
         worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight);
         worldPresenter.addObserver(worldFeedPanel);
 
-        infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight+20),(int) (feedPanelHeight));
+        infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight),(int) (feedPanelHeight));
         infoPanel.setPresenter(worldPresenter);
 
         userCountry = worldPresenter.getSingleRegion("United States of America");
@@ -240,7 +240,7 @@ public class Game
 
         navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
-        ticker = new Ticker(0,frameHeight-tickerHeight,NAV_X,tickerHeight);
+        ticker = new Ticker(0,frameHeight-tickerHeight-20,NAV_X,tickerHeight);
 
         buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
