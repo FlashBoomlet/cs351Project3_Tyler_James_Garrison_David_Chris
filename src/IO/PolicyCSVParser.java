@@ -1,6 +1,7 @@
 package IO;
 
 import gui.GUIRegion;
+import gui.hud.CardSelector;
 import model.CountryData;
 import model.PolicyData;
 
@@ -28,6 +29,7 @@ public class PolicyCSVParser {
   private int rowNumber = 0;
   private int colNumber = 0;
   private String[] columnNames = new String[14];
+  private CardSelector cs;
 
   /**
    * parseCSV reads one line of a csv file in at a time.
@@ -39,8 +41,9 @@ public class PolicyCSVParser {
    * @since 4.13.2015
    *
    */
-  public PolicyCSVParser()
+  public PolicyCSVParser(CardSelector cs)
   {
+    this.cs = cs;
     try
     {
       br = new BufferedReader(new FileReader(csvLocation));
@@ -108,7 +111,7 @@ public class PolicyCSVParser {
     else{
       JOptionPane.showMessageDialog(null, "Not enough data in csv in row: "+ counter, "Error in CSV", JOptionPane.ERROR_MESSAGE);
     }
-
+    cs.add(data);
   }
 
   private void errors(String msg, String[] atributes, int col, int row){

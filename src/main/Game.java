@@ -246,7 +246,6 @@ public class Game
 
         mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,cam);
 
-
         initFrame();
         setupControlls();
       }
