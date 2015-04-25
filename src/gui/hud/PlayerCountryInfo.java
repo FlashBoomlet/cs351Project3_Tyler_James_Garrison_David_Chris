@@ -4,6 +4,7 @@ import gui.ColorsAndFonts;
 import gui.GUIRegion;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,8 +19,10 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
 {
 
   private final int MIN_HEIGHT = 20;
-  private final int MAX_HEIGHT = 300;
+  private final int MAX_HEIGHT = 400;
   private final int STANDARD_WIDTH;
+
+  Border border = BorderFactory.createRaisedBevelBorder();
 
   private OpenerThread openerThread;
 
@@ -40,6 +43,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
     STANDARD_WIDTH = width;
 
 
+    this.setBorder(border);
     this.setFocusable(true);
     this.setSize(width, MIN_HEIGHT);
     this.addMouseListener(this);
@@ -58,8 +62,8 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
 
     g2.setColor(Color.WHITE);
 
-    g2.drawString("click for "+playerCountry.getName(),1, 12);
-    g2.drawLine(0,19,this.STANDARD_WIDTH,19);
+    g2.drawString("click for "+playerCountry.getName(),4, 14);
+    g2.drawLine(0,20,this.STANDARD_WIDTH,20);
 
   }
 
@@ -113,30 +117,38 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
     {
       if (isOpen)
       {
-        for (int i = MAX_HEIGHT; i>= MIN_HEIGHT;i-=5)
+        for (int i = MAX_HEIGHT; i>= MIN_HEIGHT;i-=8)
         {
           setSize(STANDARD_WIDTH,i);
 
-          try {
+          try
+          {
             this.sleep(4);
           }
-          catch (InterruptedException e) {
+          catch (InterruptedException e)
+          {
             e.printStackTrace();
           }
         }
+
+        setSize(STANDARD_WIDTH,MIN_HEIGHT);
       }
       else
       {
-        for (int i = MIN_HEIGHT; i<=MAX_HEIGHT; i+=5) {
+        for (int i = MIN_HEIGHT; i<=MAX_HEIGHT; i+=8)
+        {
           setSize(STANDARD_WIDTH, i);
 
-          try {
+          try
+          {
             this.sleep(4);
           }
-          catch (InterruptedException e) {
+          catch (InterruptedException e)
+          {
             e.printStackTrace();
           }
         }
+        setSize(STANDARD_WIDTH,MAX_HEIGHT);
       }
       isOpen = !isOpen;
       this.interrupt();
