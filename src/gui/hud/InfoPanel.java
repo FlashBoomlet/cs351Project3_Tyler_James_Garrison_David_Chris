@@ -62,6 +62,13 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
   private boolean singeCountry = true;
   private static List<CountryData> countryDataList = new LinkedList<>();
   private static List<GUIRegion> officialRegions = new LinkedList<>();
+  private final int MIN_WIDTH = 0;
+  private final int MAX_WIDTH;
+  private final int STANDARD_HEIGHT;
+  // if true all info will be displayed
+  //if false show a small collapsed version
+  private static boolean isOpen = false;
+  private OpenerThread openerThread;
 
   /**
    Instantiate the InfoPanel
@@ -79,6 +86,10 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     infoPanelUserControls = new InfoPanelUserControls();
 
     metricUnits = SettingsScreen.getUnits();
+
+    // Variable for the smooth movement, oh yeah, its silky smooth
+    STANDARD_HEIGHT = frameHeight;
+    MAX_WIDTH = frameWidth;
 
     //config
     this.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
@@ -166,7 +177,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
         update(null, null);
       }
     });
-
   }
 
   /**
@@ -665,9 +675,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
       }
     }
 
-    if (officialRegions.size() == 0 || activeRegions == null )
+    if (officialRegions.size() == 0 || activeRegions == null || activeRegions.size() == 0 )
     {
-      // HIDE PANEL
       this.setVisible(false);
       clearDisplay();
     }
@@ -675,6 +684,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     {
       // SHOW PANEL
       this.setVisible(true);
+      fancyShow();
       displayAllGUIRegions(officialRegions);
     }
   }
@@ -756,6 +766,71 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
         SettingsScreen.updateUnits(false);
       }
       main.Game.infoPanel.update(null, null);
+    }
+  }
+
+
+
+  private void fancyShow()
+  {
+    /*
+     * create thread for silky smooth open and close
+     */
+    if (openerThread == null || !openerThread.isAlive())
+    {
+      openerThread = new OpenerThread();
+      openerThread.start();
+    }
+  }
+
+  /*
+  * runs to set the size of the panel through an
+  * animation, a thread is used so that players
+  * can continue to manipulate the map while the resizing is happening
+  */
+  private class OpenerThread extends Thread
+  {
+
+    //I just played with the values until I got something that felt right
+    @Override
+    public void run()
+    {
+      if (!isVisible())
+      {
+        for (int i = MAX_WIDTH; i>= MIN_WIDTH;i-=8)
+        {
+          setSize(i,STANDARD_HEIGHT);
+
+          try
+          {
+            this.sleep(1);
+          }
+          catch (InterruptedException e)
+          {
+            e.printStackTrace();
+          }
+        }
+
+        setSize(MIN_WIDTH,STANDARD_HEIGHT);
+      }
+      else
+      {
+        for (int i = MIN_WIDTH; i<=MAX_WIDTH; i+=8)
+        {
+          setSize(i,STANDARD_HEIGHT);
+
+          try
+          {
+            this.sleep(1);
+          }
+          catch (InterruptedException e)
+          {
+            e.printStackTrace();
+          }
+        }
+        setSize(MAX_WIDTH,STANDARD_HEIGHT);
+      }
+      this.interrupt();
     }
   }
 

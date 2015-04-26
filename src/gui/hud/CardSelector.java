@@ -35,6 +35,26 @@ public class CardSelector extends JPanel implements ActionListener
   private int ly;
   private int rx;
   private int ry;
+  private int realX;
+  private int realWidth;
+  private int realHeight;
+  private int realY;
+
+  /*
+   * Components for the main card
+   */
+  private JTextArea policyTA = new JTextArea();
+  private JTextArea descriptionTA = new JTextArea();
+  private JLabel pro = new JLabel( "PRO: ");
+  private JLabel con = new JLabel( "CON: ");
+  private JButton sponsor = new JButton("SPONSOR");
+
+  /*
+   *
+   */
+  private JPanel middleCon;
+  private JPanel topCon;
+
 
   /**
    * Class constructor
@@ -66,8 +86,13 @@ public class CardSelector extends JPanel implements ActionListener
     ly = my - 20;
     rx = mx + (cardWidth + cardWidth*(1/8));
     ry = my - 20;
+    realWidth = (int) (cardWidth * (1.25));
+    realHeight = (int) (cardHeight * (1.25));
+    realX = (int) (mx * (.75));
+    realY = (int) (my * (.65));
 
-    JPanel topCon = new JPanel();
+
+    topCon = new JPanel();
     topCon.setOpaque(false);
     topCon.setSize(width,(int)(height*(.10)));
     JLabel title = new JLabel(label);
@@ -78,14 +103,13 @@ public class CardSelector extends JPanel implements ActionListener
     add(topCon, BorderLayout.NORTH);
 
     // Really just a way of adding padding because I'm lazy
-    JPanel middleCon = new JPanel();
+    middleCon = new JPanel();
     middleCon.setOpaque(false);
     middleCon.setSize(width, (int) (height * (.90)));
-    PolicyData d = masterPolicyData.get(policyMiddle);
-    //middleCon.add(new JTextArea(d.getDescription()));
     add(middleCon, BorderLayout.CENTER);
 
-
+    repaint();
+    drawCard();
   }
 
 
@@ -106,6 +130,11 @@ public class CardSelector extends JPanel implements ActionListener
     {
       this.setVisible(false);
     }
+    else if ( name == "SPONSOR" )
+    {
+      // Do something
+      sponsor.setText("SPONSORED");
+    }
   }
 
 
@@ -114,9 +143,9 @@ public class CardSelector extends JPanel implements ActionListener
    * @param g graphics you with to have
    */
   @Override
-  public void paint(Graphics g)
+  public void paintComponent(Graphics g)
   {
-    super.paint(g);
+    super.paintComponent(g);
     // Pop off left
     if( policyMiddle >= 0 )
     {
@@ -141,23 +170,59 @@ public class CardSelector extends JPanel implements ActionListener
       if( policyMiddle <  masterPolicyData.size() )
       {
         PolicyData d = masterPolicyData.get(policyMiddle);
-        g.setColor( new Color(1f,1f,1f,1.0f) );
-        g.fillRect((int) (mx * (.75)), my, (int) (cardWidth * (1.25)), (int) (cardHeight * (1.25)));
-        g.setColor(Color.RED);
-        g.drawString(d.getDescription(),mx,my+20);
+        g.setColor( new Color(0.627451f, 0.627451f, 0.627451f, 1.0f) );
+        g.fillRect(realX, my, realWidth, realHeight);
       }
     }
-
   }
 
 
-  private void drawCard(Graphics g, PolicyData card, int x, int y)
+  private void drawCard()
   {
-    super.paint(g);
 
-    g.setColor( Color.white );
-    g.fillRect(x,y,cardWidth,cardHeight);
-    //g.drawString(card.getDescription(),x,y);
+    PolicyData d = masterPolicyData.get(policyMiddle);
+    middleCon.setLayout(null);
+
+    policyTA.setText(d.getPolicy());
+    policyTA.setLocation((int) (realX+ realWidth*(.05)),realY);
+    policyTA.setSize((int) (realWidth*(.90)) / 2, (int) (realHeight * (.05)));
+    policyTA.setOpaque(false);
+    middleCon.add(policyTA);
+
+    descriptionTA.setText(d.getDescription());
+    descriptionTA.setBounds(policyTA.getX(), policyTA.getHeight() + policyTA.getY() + 10, (int) (realWidth*(.90)), (int) (realHeight * (.20)));
+    descriptionTA.setLineWrap(true);
+    descriptionTA.setOpaque(false);
+    middleCon.add(descriptionTA);
+
+    pro.setBounds(descriptionTA.getX(), descriptionTA.getY()+descriptionTA.getHeight() + 10, (int) (realWidth*(.90))/2, (int) (realHeight *(.05)));
+    pro.setOpaque(false);
+    middleCon.add(pro);
+
+    con.setBounds(pro.getX()+pro.getWidth(), pro.getY(), pro.getWidth(), pro.getHeight());
+    con.setOpaque(false);
+    middleCon.add(con);
+
+    /*
+     * Place graph of pro here
+     */
+    JPanel proGraph = new JPanel();
+    proGraph.setOpaque(true);
+    proGraph.setBackground(Color.PINK);
+    proGraph.setBounds(pro.getX(), pro.getY() + pro.getHeight(), pro.getWidth(), (int)(con.getWidth()*(1.0)));
+    middleCon.add(proGraph);
+
+    JPanel conGraph = new JPanel();
+    conGraph.setOpaque(true);
+    conGraph.setBackground(Color.CYAN);
+    conGraph.setBounds(con.getX(),con.getY()+con.getHeight(),con.getWidth(),proGraph.getHeight());
+    middleCon.add(conGraph);
+
+    /*
+     * Place graph of con here
+     */
+    sponsor.addActionListener(this);
+    middleCon.add( sponsor );
   }
 
 
