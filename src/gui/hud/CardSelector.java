@@ -4,17 +4,23 @@ import IO.PolicyCSVParser;
 import gui.ColorsAndFonts;
 import model.PolicyData;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * Created by Lyncht on 4/23/15.
  */
-public class CardSelector extends JPanel implements ActionListener
+public class CardSelector extends JPanel implements ActionListener, MouseListener
 {
   private int x;
   private int y;
@@ -23,6 +29,7 @@ public class CardSelector extends JPanel implements ActionListener
   private JButton close;
   private ArrayList<PolicyData> masterPolicyData = new ArrayList<>();
   private int policyMiddle;
+  private int currentPol;
 
   /*
    * Formatting for the Card
@@ -48,7 +55,12 @@ public class CardSelector extends JPanel implements ActionListener
   private JLabel pro = new JLabel( "PRO: ");
   private JLabel con = new JLabel( "CON: ");
   private JButton sponsor = new JButton("SPONSOR");
-
+  private JPanel rightArrow;
+  private JPanel leftArrow;
+  private BufferedImage lArrow;
+  private BufferedImage rArrow;
+  private String lArrowPath = "resources/images/leftArrow.png";
+  private String rArrowPath = "resources/images/rightArrow.png";
   /*
    *
    */
@@ -64,7 +76,7 @@ public class CardSelector extends JPanel implements ActionListener
     super();
 
     new PolicyCSVParser(this);
-    policyMiddle = (masterPolicyData.size())/2;
+    currentPol = policyMiddle = (masterPolicyData.size())/2;
 
     setOpaque(true);
     setBackground(ColorsAndFonts.GUI_BACKGROUND);
@@ -91,6 +103,15 @@ public class CardSelector extends JPanel implements ActionListener
     realX = (int) (mx * (.75));
     realY = (int) (my * (.65));
 
+    try
+    {
+      lArrow = ImageIO.read(new File(lArrowPath));
+      rArrow = ImageIO.read(new File(rArrowPath));
+    }
+    catch(IOException ex)
+    {
+      System.out.println("ERROR: Cannot find policy selector arrows!");
+    }
 
     topCon = new JPanel();
     topCon.setOpaque(false);
@@ -98,8 +119,10 @@ public class CardSelector extends JPanel implements ActionListener
     JLabel title = new JLabel(label);
     topCon.add(title);
     close = new JButton("CLOSE");
+    close.setName("CLOSE");
     close.addActionListener(this);
     topCon.add(close);
+    close.setLocation(width-close.getWidth(),0);
     add(topCon, BorderLayout.NORTH);
 
     // Really just a way of adding padding because I'm lazy
@@ -124,16 +147,16 @@ public class CardSelector extends JPanel implements ActionListener
   @Override
   public void actionPerformed(ActionEvent e) {
     JButton tempBtn = (JButton) e.getSource();
-    String name = tempBtn.getText();
-
-    if( name == "CLOSE" )
-    {
-      this.setVisible(false);
-    }
-    else if ( name == "SPONSOR" )
-    {
-      // Do something
-      sponsor.setText("SPONSORED");
+    String name = tempBtn.getName();
+    switch(name) {
+      case "CLOSE":
+        this.setVisible(false);
+        break;
+      case "SPONSOR":
+        // Do something
+        sponsor.setText("SPONSORED");
+        break;
+      default:
     }
   }
 
@@ -169,11 +192,16 @@ public class CardSelector extends JPanel implements ActionListener
       // Pop off middle /Main
       if( policyMiddle <  masterPolicyData.size() )
       {
-        PolicyData d = masterPolicyData.get(policyMiddle);
+        PolicyData d = masterPolicyData.get(currentPol);
         g.setColor( new Color(0.627451f, 0.627451f, 0.627451f, 1.0f) );
         g.fillRect(realX, my, realWidth, realHeight);
       }
     }
+    Graphics2D g2d = (Graphics2D) g;
+    g2d.setColor(Color.RED);
+    // The images wouldn't line up with were the jpanel it is referencing is lining up....
+    g2d.drawImage(lArrow,(int) leftArrow.getX(), (int) (leftArrow.getY()*(1.275)), (int) leftArrow.getWidth(), (int) leftArrow.getHeight(), null);
+    g2d.drawImage(rArrow,(int) rightArrow.getX(), (int) (rightArrow.getY()*(1.275)), (int) rightArrow.getWidth(), (int) rightArrow.getHeight(), null);
   }
 
 
@@ -181,15 +209,16 @@ public class CardSelector extends JPanel implements ActionListener
   {
 
     PolicyData d = masterPolicyData.get(policyMiddle);
+    updateCard(d);
     middleCon.setLayout(null);
 
-    policyTA.setText(d.getPolicy());
+
     policyTA.setLocation((int) (realX+ realWidth*(.05)),realY);
     policyTA.setSize((int) (realWidth*(.90)) / 2, (int) (realHeight * (.05)));
     policyTA.setOpaque(false);
     middleCon.add(policyTA);
 
-    descriptionTA.setText(d.getDescription());
+
     descriptionTA.setBounds(policyTA.getX(), policyTA.getHeight() + policyTA.getY() + 10, (int) (realWidth*(.90)), (int) (realHeight * (.20)));
     descriptionTA.setLineWrap(true);
     descriptionTA.setOpaque(false);
@@ -223,9 +252,34 @@ public class CardSelector extends JPanel implements ActionListener
      */
     sponsor.addActionListener(this);
     middleCon.add( sponsor );
+
+
+    int arrowW = width/16;
+    int arrowH = height/4;
+    int arrowY = realY+realHeight/4;
+    rightArrow = new JPanel();
+    rightArrow.setName(">");
+    rightArrow.setBounds(realX + realWidth+(width*3 / 32), arrowY, arrowW, arrowH);
+    rightArrow.addMouseListener(this);
+    rightArrow.setBackground(Color.PINK);
+
+    leftArrow = new JPanel();
+    leftArrow.setName("<");
+    leftArrow.setBounds((width / 32), arrowY, arrowW, arrowH);
+    leftArrow.addMouseListener(this);
+    leftArrow.setBackground(Color.PINK);
+
+    middleCon.add(leftArrow);
+    leftArrow.setOpaque(false);
+    middleCon.add(rightArrow);
+    rightArrow.setOpaque(false);
   }
 
-
+  private void updateCard(PolicyData d)
+  {
+    policyTA.setText(d.getPolicy());
+    descriptionTA.setText(d.getDescription());
+  }
   /*
    * Functions to help out with creating and bringing in the policy data
    */
@@ -233,4 +287,38 @@ public class CardSelector extends JPanel implements ActionListener
   {
     masterPolicyData.add(d);
   }
+
+
+  @Override
+  public void mouseClicked(MouseEvent e)
+  {
+    /* Do nothing */
+  }
+
+  @Override
+  public void mousePressed(MouseEvent e) { /* Do nothing */ }
+
+  @Override
+  public void mouseReleased(MouseEvent e)
+  {
+    JPanel tempPnl = (JPanel) e.getSource();
+    String name = tempPnl.getName();
+    switch(name) {
+      case "<":
+        if( currentPol > 0 ) currentPol--;
+        break;
+      case ">":
+        if( currentPol < masterPolicyData.size()-1 ) currentPol++;
+        break;
+      default:
+    }
+    PolicyData d = masterPolicyData.get(currentPol);
+    updateCard(d);
+  }
+
+  @Override
+  public void mouseEntered(MouseEvent e) { /* Do nothing */ }
+
+  @Override
+  public void mouseExited(MouseEvent e) { /* Do nothing */ }
 }
