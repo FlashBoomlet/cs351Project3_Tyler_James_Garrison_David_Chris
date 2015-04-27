@@ -326,7 +326,7 @@ public class Game
       }
     });
 
-    gameLoop = new Timer(20, new ActionListener()
+    gameLoop = new Timer(30, new ActionListener()
     {
       @Override
       public void actionPerformed(ActionEvent e)
@@ -419,7 +419,7 @@ public class Game
       infoPanel.setVisible(false);
 
       //info panel for users country
-      playerCountryInfo.setLocation((frameWidth-(frameWidth/5)),feedPanelHeight);
+      playerCountryInfo.setLocation((frameWidth-(frameWidth/5)-20),feedPanelHeight);
       layeredPane.add(playerCountryInfo, new Integer(6));
 
       // Navigation in the lower right hand corner

@@ -386,7 +386,7 @@ public class MapPane extends JPanel
 
     if (cam.getDistance() == Camera.CAM_DISTANCE.CLOSE_UP || cam.getDistance() == Camera.CAM_DISTANCE.MEDIUM) {
       //for antialiasing
-      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+     // g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
     g2.setTransform(cam.getTransform());
 

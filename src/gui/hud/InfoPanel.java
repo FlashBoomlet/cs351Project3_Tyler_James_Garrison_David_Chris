@@ -807,7 +807,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
 
           try
           {
-            this.sleep(1);
+            this.sleep(5);
           }
           catch (InterruptedException e)
           {
@@ -825,7 +825,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
 
           try
           {
-            this.sleep(1);
+            this.sleep(5);
           }
           catch (InterruptedException e)
           {

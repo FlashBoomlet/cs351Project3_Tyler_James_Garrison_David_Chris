@@ -2,10 +2,13 @@ package gui.hud;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
+import model.CountryData;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -17,18 +20,32 @@ import java.awt.event.MouseListener;
  */
 public class PlayerCountryInfo extends JPanel implements MouseListener
 {
+  private final int STEP_SIZE = 12;
 
-  private final int MIN_HEIGHT = 20;
+  private final int MIN_HEIGHT = 30;
   private final int MAX_HEIGHT = 400;
   private final int STANDARD_WIDTH;
 
+  private int currentHeigtht = MIN_HEIGHT;
+
+  private JPanel clickPanel;
+  private JLabel clickLabel;
+
+
   Border border = BorderFactory.createRaisedBevelBorder();
 
-  private OpenerThread openerThread;
+  private Font tile = new Font(Font.SANS_SERIF,Font.BOLD,18);
+
 
   // if true all info will be displayed
   //if false show a small collapsed version
   boolean isOpen = false;
+  boolean useAnimation = false;
+
+  //thread to animate the Panel
+  OpenerThread openerThread;
+
+  Timer timer;
 
   //players country for access to information
   private GUIRegion playerCountry;
@@ -42,11 +59,60 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
     this.playerCountry = playerCountry;
     STANDARD_WIDTH = width;
 
+//    timer = new Timer(40, new ActionListener() {
+//      @Override
+//      public void actionPerformed(ActionEvent e) {
+//        if (currentHeigtht > MAX_HEIGHT)
+//        {
+//          currentHeigtht = MAX_HEIGHT;
+//          setSize(STANDARD_WIDTH,MAX_HEIGHT);
+//          timer.stop();
+//          isOpen =! isOpen;
+//        }
+//        else if(currentHeigtht < MIN_HEIGHT)
+//        {
+//          currentHeigtht = MIN_HEIGHT;
+//          setSize(STANDARD_WIDTH,MIN_HEIGHT);
+//          timer.stop();
+//          isOpen =! isOpen;
+//        }
+//        else
+//        {
+//          if (isOpen)
+//          {
+//            currentHeigtht -= STEP_SIZE;
+//            setSize(STANDARD_WIDTH,currentHeigtht);
+//          }
+//          else
+//          {
+//            currentHeigtht+= STEP_SIZE;
+//            setSize(STANDARD_WIDTH,currentHeigtht);
+//          }
+//        }
+//      }
+//    }
+//    );
 
+    clickPanel = new JPanel();
+    clickPanel.setBorder(border);
+    clickPanel.setBounds(0, 0, width, MIN_HEIGHT);
+    clickPanel.addMouseListener(this);
+
+    clickLabel = new JLabel();
+    clickLabel.setText("Click for data");
+    clickLabel.setVerticalTextPosition(0);
+
+    clickPanel.add(clickLabel);
+
+
+
+
+    this.setLayout(null);
     this.setBorder(border);
-    this.setFocusable(true);
     this.setSize(width, MIN_HEIGHT);
-    this.addMouseListener(this);
+
+    this.add(clickPanel);
+
   }
 
 
@@ -55,17 +121,83 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
   {
     Graphics2D g2 = (Graphics2D)g;
 
-    g2.setFont(ColorsAndFonts.HUD_TITLE);
-
-    g2.setColor(Color.DARK_GRAY);
+    g2.setColor(Color.GRAY);
     g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+
 
     g2.setColor(Color.WHITE);
 
-    g2.drawString("click for "+playerCountry.getName(),4, 14);
-    g2.drawLine(0,20,this.STANDARD_WIDTH,20);
+     CountryData playerData = playerCountry.getCountryData();
+
+    g.setFont(tile);
+    g.drawString("United Sates of America", 10, MIN_HEIGHT + 15);
+    g.drawLine(0,MIN_HEIGHT+20,STANDARD_WIDTH,MIN_HEIGHT+20);
+
+    drawGeneralCountryInfo(g, playerData);
 
   }
+
+  private void drawGeneralCountryInfo( Graphics g, CountryData data)
+  {
+    int yPos = MIN_HEIGHT +35;
+    g.setFont(ColorsAndFonts.HUD_TITLE);
+
+    g.setColor(Color.BLACK);
+    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
+
+    g.setColor(Color.WHITE);
+    g.drawString("Population: " + (int) (data.getPopulation(true)), 3, yPos);
+
+
+    yPos+=20;
+    g.setColor(Color.BLACK);
+    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
+
+    g.setColor(Color.WHITE);
+    g.drawString("Percent undernourished: " +  (data.getUndernourish(true))+"%", 3, yPos);
+
+    yPos+=20;
+    g.setColor(Color.BLACK);
+    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
+
+    g.setColor(Color.WHITE);
+    g.drawString("Total Corn: " + (int) (data.getCornTotal(true))+" metric tons", 3, yPos);
+
+    yPos+=20;
+    g.setColor(Color.BLACK);
+    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
+
+    g.setColor(Color.WHITE);
+    g.drawString("Total Wheat: " + (int) (data.getWheatTotal(true))+" metric tons", 3, yPos);
+
+    yPos+=20;
+    g.setColor(Color.BLACK);
+    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
+
+    g.setColor(Color.WHITE);
+    g.drawString("Total Rice: " +  (int)(data.getRiceTotal(true))+" metric tons", 3, yPos);
+
+    yPos+=20;
+    g.setColor(Color.BLACK);
+    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
+
+    g.setColor(Color.WHITE);
+    g.drawString("Total Soy: " + (int) (data.getSoyTotal(true))+" metric tons", 3, yPos);
+
+
+    yPos+=20;
+    g.setColor(Color.BLACK);
+    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
+
+    g.setColor(Color.WHITE);
+    g.drawString("Total Other: " +  (int)(data.getOtherTotal(true))+" metric tons", 3, yPos);
+
+
+
+
+
+  }
+
 
   @Override
   public void mouseClicked(MouseEvent e) {
@@ -80,11 +212,28 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
   @Override
   public void mouseReleased(MouseEvent e) {
 
-    if (openerThread == null || !openerThread.isAlive())
+    if (useAnimation)
     {
-      openerThread = new OpenerThread();
-      openerThread.start();
+      if (openerThread == null || !openerThread.isAlive())
+      {
+        openerThread = new OpenerThread();
+        openerThread.start();
+      }
+     // timer.start();
     }
+    else
+    {
+      if (isOpen)
+      {
+        setSize(STANDARD_WIDTH, MIN_HEIGHT);
+      }
+      else
+      {
+        setSize(STANDARD_WIDTH, MAX_HEIGHT);
+      }
+      isOpen =!isOpen;
+    }
+
 
   }
 
@@ -103,11 +252,12 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
     return playerCountry;
   }
 
+
   /*
-   * runs to set the size of the panel through an
-   * animation, a thread is used so that players
-   * can continue to manipulate the map while the resizing is happening
-   */
+  * runs to set the size of the panel through an
+  * animation, a thread is used so that players
+  * can continue to manipulate the map while the resizing is happening
+  */
   private class OpenerThread extends Thread
   {
 
@@ -117,13 +267,13 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
     {
       if (isOpen)
       {
-        for (int i = MAX_HEIGHT; i>= MIN_HEIGHT;i-=8)
+        for (int i = MAX_HEIGHT; i>= MIN_HEIGHT;i-=10)
         {
           setSize(STANDARD_WIDTH,i);
 
           try
           {
-            this.sleep(4);
+            this.sleep(10);
           }
           catch (InterruptedException e)
           {
@@ -135,23 +285,26 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
       }
       else
       {
-        for (int i = MIN_HEIGHT; i<=MAX_HEIGHT; i+=8)
+        for (int i = MIN_HEIGHT; i<=MAX_HEIGHT; i+=10)
         {
           setSize(STANDARD_WIDTH, i);
 
           try
           {
-            this.sleep(4);
+            this.sleep(10);
           }
           catch (InterruptedException e)
           {
             e.printStackTrace();
           }
         }
-        setSize(STANDARD_WIDTH,MAX_HEIGHT);
+        setSize(STANDARD_WIDTH, MAX_HEIGHT);
       }
-      isOpen = !isOpen;
+      isOpen =!isOpen;
+      //repaint();
       this.interrupt();
+
     }
   }
+
 }
