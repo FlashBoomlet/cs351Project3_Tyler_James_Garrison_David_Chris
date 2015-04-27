@@ -164,6 +164,8 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
 
   }
 
+  //===========================================LISTENERS============================================
+
 
   @Override
   public void mouseClicked(MouseEvent e) {

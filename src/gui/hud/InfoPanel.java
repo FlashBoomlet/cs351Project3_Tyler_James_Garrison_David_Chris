@@ -682,7 +682,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
       tradeSelector.resetLocation();
       clearDisplay();
     }
-    else
+    //only show the panel if isn't already visible, no need to keep reanimating it
+    else if(!this.isVisible())
     {
       // SHOW PANEL
       this.setVisible(true);
