@@ -18,9 +18,9 @@ import java.awt.event.MouseListener;
  * class that will show info about the players country,
  * that they are playing as.
  */
-public class PlayerCountryInfo extends JPanel implements MouseListener
+public class PlayerCountryInfo extends JPanel implements MouseListener, ActionListener
 {
-  private final int STEP_SIZE = 12;
+  private final int STEP_SIZE = 10;
 
   private final int MIN_HEIGHT = 30;
   private final int MAX_HEIGHT = 400;
@@ -42,8 +42,6 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
   boolean isOpen = false;
   boolean useAnimation = true;
 
-  //thread to animate the Panel
-  OpenerThread openerThread;
 
   Timer timer;
 
@@ -59,39 +57,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
     this.playerCountry = playerCountry;
     STANDARD_WIDTH = width;
 
-//    timer = new Timer(40, new ActionListener() {
-//      @Override
-//      public void actionPerformed(ActionEvent e) {
-//        if (currentHeigtht > MAX_HEIGHT)
-//        {
-//          currentHeigtht = MAX_HEIGHT;
-//          setSize(STANDARD_WIDTH,MAX_HEIGHT);
-//          timer.stop();
-//          isOpen =! isOpen;
-//        }
-//        else if(currentHeigtht < MIN_HEIGHT)
-//        {
-//          currentHeigtht = MIN_HEIGHT;
-//          setSize(STANDARD_WIDTH,MIN_HEIGHT);
-//          timer.stop();
-//          isOpen =! isOpen;
-//        }
-//        else
-//        {
-//          if (isOpen)
-//          {
-//            currentHeigtht -= STEP_SIZE;
-//            setSize(STANDARD_WIDTH,currentHeigtht);
-//          }
-//          else
-//          {
-//            currentHeigtht+= STEP_SIZE;
-//            setSize(STANDARD_WIDTH,currentHeigtht);
-//          }
-//        }
-//      }
-//    }
-//    );
+    timer = new Timer(30, this);
 
     clickPanel = new JPanel();
     clickPanel.setBorder(border);
@@ -214,12 +180,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
 
     if (useAnimation)
     {
-      if (openerThread == null || !openerThread.isAlive())
-      {
-        openerThread = new OpenerThread();
-        openerThread.start();
-      }
-     // timer.start();
+      timer.start();
     }
     else
     {
@@ -252,62 +213,46 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
     return playerCountry;
   }
 
-
-  /*
-  * runs to set the size of the panel through an
-  * animation, a thread is used so that players
-  * can continue to manipulate the map while the resizing is happening
-  */
-  private class OpenerThread extends Thread
+  @Override
+  public void actionPerformed(ActionEvent e)
   {
 
-    //I just played with the values until I got something that felt right
-    @Override
-    public void run()
+    if (isOpen)
     {
-      if (isOpen)
-      {
-        for (int i = MAX_HEIGHT; i>= MIN_HEIGHT;i-=10)
-        {
-          setSize(STANDARD_WIDTH,i);
+      currentHeigtht -= STEP_SIZE;
+    }
+    else
+    {
+      currentHeigtht+= STEP_SIZE;
+    }
 
-          getParent().repaint();
+    if (currentHeigtht > MAX_HEIGHT)
+    {
+      currentHeigtht = MAX_HEIGHT;
+      setSize(STANDARD_WIDTH,MAX_HEIGHT);
+      //call to fix the jittering
+      getParent().repaint();
 
-          try
-          {
-            this.sleep(10);
-          }
-          catch (InterruptedException e)
-          {
-            e.printStackTrace();
-          }
-        }
+      timer.stop();
+      isOpen =! isOpen;
+    }
+    else if(currentHeigtht < MIN_HEIGHT)
+    {
+      currentHeigtht = MIN_HEIGHT;
+      setSize(STANDARD_WIDTH,MIN_HEIGHT);
+      //call to fix the jittering
+      getParent().repaint();
 
-        setSize(STANDARD_WIDTH,MIN_HEIGHT);
-      }
-      else
-      {
-        for (int i = MIN_HEIGHT; i<=MAX_HEIGHT; i+=10)
-        {
-          setSize(STANDARD_WIDTH, i);
-
-          getParent().repaint();
-          try
-          {
-            this.sleep(10);
-          }
-          catch (InterruptedException e)
-          {
-            e.printStackTrace();
-          }
-        }
-        setSize(STANDARD_WIDTH, MAX_HEIGHT);
-      }
-      isOpen =!isOpen;
-      //repaint();
-      this.interrupt();
-
+      timer.stop();
+      isOpen =! isOpen;
+    }
+    else
+    {
+      setSize(STANDARD_WIDTH,currentHeigtht);
+      //call to fix the jittering
+      getParent().repaint();
     }
   }
+
 
 }
