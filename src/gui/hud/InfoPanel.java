@@ -805,6 +805,9 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
         {
           setSize(i,STANDARD_HEIGHT);
 
+          //call to fix the jittering
+          getParent().repaint();
+
           try
           {
             this.sleep(5);
@@ -823,6 +826,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
         {
           setSize(i,STANDARD_HEIGHT);
 
+          //call to fix the jittering
+          getParent().repaint();
           try
           {
             this.sleep(5);

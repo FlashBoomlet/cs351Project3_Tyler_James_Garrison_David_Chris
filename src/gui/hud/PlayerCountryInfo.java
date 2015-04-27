@@ -40,7 +40,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
   // if true all info will be displayed
   //if false show a small collapsed version
   boolean isOpen = false;
-  boolean useAnimation = false;
+  boolean useAnimation = true;
 
   //thread to animate the Panel
   OpenerThread openerThread;
@@ -271,6 +271,8 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
         {
           setSize(STANDARD_WIDTH,i);
 
+          getParent().repaint();
+
           try
           {
             this.sleep(10);
@@ -289,6 +291,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener
         {
           setSize(STANDARD_WIDTH, i);
 
+          getParent().repaint();
           try
           {
             this.sleep(10);
