@@ -678,6 +678,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     if (officialRegions.size() == 0 || activeRegions == null || activeRegions.size() == 0 )
     {
       this.setVisible(false);
+      policySelector.resetLocation();
+      tradeSelector.resetLocation();
       clearDisplay();
     }
     else
@@ -719,6 +721,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     policySelector.setVisible(false);
     tradeSelector.setVisible(false);
     this.setVisible(false);
+    policySelector.resetLocation();
+    tradeSelector.resetLocation();
   }
 
   class InfoPanelUserControls extends JPanel implements ActionListener

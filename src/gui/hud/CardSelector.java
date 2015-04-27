@@ -6,27 +6,29 @@ import model.PolicyData;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
- * Created by Lyncht on 4/23/15.
+ * CardSelector is a coverFlow framework for some really cool card selection in this game!
+ *
+ * @author Tyler Lynch <lyncht@unm.edu>
+ * @since 4.3.15
  */
-public class CardSelector extends JPanel implements ActionListener, MouseListener
+public class CardSelector extends JPanel implements ActionListener, MouseListener,MouseMotionListener,MouseWheelListener
 {
   private int x;
   private int y;
   private int width;
   private int height;
-  private JButton close;
+  private JPanel close;
+  private JLabel closeLabel;
   private ArrayList<PolicyData> masterPolicyData = new ArrayList<>();
   private int policyMiddle;
   private int currentPol;
@@ -48,25 +50,60 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   private int realY;
 
   /*
+   * Forground colors for the main playing card
+   */
+  private float fontR = 0.0f;
+  private float fontG = 0.0f;
+  private float fontB = 0.0f;
+
+  /*
+   * Overall transparentcy of everything pretty much
+   */
+  private float alpha = 1.0f;
+  private float mAlpha = 1.0f;
+  private float lAlpha = 0.5f;
+  private float rAlpha = 0.5f;
+
+  /*
    * Components for the main card
    */
   private JTextArea policyTA = new JTextArea();
   private JTextArea descriptionTA = new JTextArea();
   private JLabel pro = new JLabel( "PRO: ");
   private JLabel con = new JLabel( "CON: ");
-  private JButton sponsor = new JButton("SPONSOR");
+  private JPanel sponsor;
+  private JLabel sponsorLabel;
   private JPanel rightArrow;
   private JPanel leftArrow;
   private BufferedImage lArrow;
   private BufferedImage rArrow;
   private String lArrowPath = "resources/images/leftArrow.png";
   private String rArrowPath = "resources/images/rightArrow.png";
+  private OpenerThread openerThread;
+  private boolean nextSelect = false;
+  private boolean previousSelect = false;
+  private JPanel proGraph;
+  private JPanel conGraph;
+
   /*
-   *
+   * Rectangles/Cards
+   */
+  private Rectangle middleCard;
+  private Rectangle leftCard;
+  private Rectangle rightCard;
+  private Rectangle leftDummyCard;
+  private Rectangle rightDummyCard;
+
+  /*
+   * Random stuff that I am too lazy to really move -TLynch
    */
   private JPanel middleCon;
   private JPanel topCon;
-
+  Point dragFrom;
+  Font CLOSE_FONT = new Font("SansSerif", Font.BOLD, 14);
+  Font CARD_FONT = new Font("SansSerif", Font.BOLD, 12);
+  public static final EmptyBorder PADDING_BORDER = new EmptyBorder(2, 2, 2, 2);
+  private final static Color BORDER_COL = ColorsAndFonts.GUI_TEXT_COLOR.darker();
 
   /**
    * Class constructor
@@ -84,24 +121,33 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
     setLocation(x,y);
     setLayout(new BorderLayout());
 
+    // Fighting the map for who is superiror so this fixes that
+    addMouseListener(this);
+    setName("MainContainer");
+
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
 
-
-    cardWidth = width /2;
-    cardHeight = height /2;
+    cardWidth = (int) ( width /2* (1.25));
+    cardHeight = (int) (height /2* (1.25));
     mx = cardWidth/2;
-    my = (int) (getHeight() * (.20));
+    my = (int) (getHeight() * (.2));
     lx = mx - (cardWidth + (cardWidth*(5/8)));
     ly = my - 20;
-    rx = mx + (cardWidth + cardWidth*(1/8));
-    ry = my - 20;
-    realWidth = (int) (cardWidth * (1.25));
-    realHeight = (int) (cardHeight * (1.25));
-    realX = (int) (mx * (.75));
-    realY = (int) (my * (.65));
+    realWidth = cardWidth ;
+    realHeight = cardHeight ;
+    realX = (int) (mx * (.65));
+    realY =  (my);
+    rx = (realX+realWidth)-(lx+cardWidth-realX);
+    ry = ly;
+
+    middleCard = new Rectangle(realX, my, realWidth, realHeight);
+    leftCard = new Rectangle(lx,ly,cardWidth,cardHeight);
+    leftDummyCard = new Rectangle(lx,ly,cardWidth,cardHeight);
+    rightCard = new Rectangle(rx,ry,cardWidth,cardHeight);
+    rightDummyCard = new Rectangle(rx,ry,cardWidth,cardHeight);
 
     try
     {
@@ -115,26 +161,56 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
 
     topCon = new JPanel();
     topCon.setOpaque(false);
+    topCon.setLocation(0,0);
     topCon.setSize(width,(int)(height*(.10)));
-    JLabel title = new JLabel(label);
-    topCon.add(title);
-    close = new JButton("CLOSE");
+    JLabel title = new JLabel( "     " + label );
+    title.setForeground(new Color(0xA0A0A0));
+    title.setFont(CARD_FONT);
+    title.setHorizontalAlignment(SwingConstants.LEFT);
+    topCon.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, BORDER_COL), PADDING_BORDER));
+
+    /*
+     * Make-shift close custom button so I can place it where ever I would like and make it look amazing
+     */
+    close = new JPanel();
+    close.setOpaque(false);
+    close.setBackground(Color.GRAY);
     close.setName("CLOSE");
-    close.addActionListener(this);
-    topCon.add(close);
-    close.setLocation(width-close.getWidth(),0);
+    close.addMouseListener(this);
+    close.setSize(75,25);
+    close.setLocation(topCon.getWidth() - close.getWidth(), 0);
+
+    closeLabel = new JLabel("X");
+    closeLabel.setFont(CLOSE_FONT);
+    Color closeColor = new Color(0xff0000);
+    closeLabel.setForeground(closeColor);
+    closeLabel.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, closeColor), PADDING_BORDER));
+    close.add(closeLabel);
+
+    topCon.addMouseListener(this);
+    topCon.addMouseMotionListener(this);
+    topCon.setName("topCon");
+
+    topCon.setLayout(new GridLayout(1,2));
+    topCon.add(title);
+    JPanel holder = new JPanel();
+    holder.setOpaque(false);
+    holder.setLayout(new FlowLayout(SwingConstants.RIGHT,0,0));
+    holder.add(close);
+    topCon.add(holder);
     add(topCon, BorderLayout.NORTH);
 
     // Really just a way of adding padding because I'm lazy
     middleCon = new JPanel();
     middleCon.setOpaque(false);
+    middleCon.setLocation(0, topCon.getX() + topCon.getHeight());
     middleCon.setSize(width, (int) (height * (.90)));
+    middleCon.addMouseWheelListener(this);
     add(middleCon, BorderLayout.CENTER);
 
     repaint();
     drawCard();
   }
-
 
   /**
    * Overrides action performed.
@@ -149,17 +225,10 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
     JButton tempBtn = (JButton) e.getSource();
     String name = tempBtn.getName();
     switch(name) {
-      case "CLOSE":
-        this.setVisible(false);
-        break;
-      case "SPONSOR":
-        // Do something
-        sponsor.setText("SPONSORED");
-        break;
       default:
+        break;
     }
   }
-
 
   /**
    * Override paint components
@@ -169,94 +238,104 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   public void paintComponent(Graphics g)
   {
     super.paintComponent(g);
-    // Pop off left
+    Graphics2D g2d = (Graphics2D) g;
+
     if( policyMiddle >= 0 )
     {
-      g.setColor( new Color(1f,1f,1f,0.75f) );
+      // Pop off left
       if( policyMiddle-1 >= 0 )
       {
-        g.fillRect(lx,ly,cardWidth,cardHeight);
-        //g.drawString(card.getDescription(),lx,ly);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,lAlpha) );
+        g2d.fill(leftCard);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.75f) );
+        g2d.fill(leftDummyCard);
       }
 
       // Pop off right
       if( policyMiddle+1 < masterPolicyData.size())
       {
-        g.fillRect(rx,ry,cardWidth,cardHeight);
-        //g.drawString(card.getDescription(),rx,ry);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,rAlpha) );
+        g2d.fill(rightCard);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.75f) );
+        g2d.fill(rightDummyCard);
       }
 
       g.setColor( new Color(.25f,.25f,.25f,0.75f) );
-      g.fillRect(0,(int)(height*(.10)),width,(int)(height*(.90)));
+      //g.fillRect(middleCon.getX(),middleCon.getY(),middleCon.getWidth(),middleCon.getHeight());
 
       // Pop off middle /Main
       if( policyMiddle <  masterPolicyData.size() )
       {
         PolicyData d = masterPolicyData.get(currentPol);
-        g.setColor( new Color(0.627451f, 0.627451f, 0.627451f, 1.0f) );
-        g.fillRect(realX, my, realWidth, realHeight);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f, mAlpha) );
+        g2d.fill(middleCard);
       }
     }
-    Graphics2D g2d = (Graphics2D) g;
     g2d.setColor(Color.RED);
     // The images wouldn't line up with were the jpanel it is referencing is lining up....
-    g2d.drawImage(lArrow,(int) leftArrow.getX(), (int) (leftArrow.getY()*(1.275)), (int) leftArrow.getWidth(), (int) leftArrow.getHeight(), null);
-    g2d.drawImage(rArrow,(int) rightArrow.getX(), (int) (rightArrow.getY()*(1.275)), (int) rightArrow.getWidth(), (int) rightArrow.getHeight(), null);
+    g2d.drawImage(lArrow,leftArrow.getX(),  (leftArrow.getY()+middleCon.getY()), leftArrow.getWidth(),  leftArrow.getHeight(), null);
+    g2d.drawImage(rArrow,rightArrow.getX(),  (rightArrow.getY()+middleCon.getY()), rightArrow.getWidth(),  rightArrow.getHeight(), null);
   }
 
 
+  /**
+   * Handles drawing all of the components for the Main card that the user interacts with
+   */
   private void drawCard()
   {
-
-    PolicyData d = masterPolicyData.get(policyMiddle);
-    updateCard(d);
     middleCon.setLayout(null);
 
-
-    policyTA.setLocation((int) (realX+ realWidth*(.05)),realY);
-    policyTA.setSize((int) (realWidth*(.90)) / 2, (int) (realHeight * (.05)));
+    policyTA.setLocation((int) (realX + middleCon.getWidth() * (.02)), (int) (realY * (.70)));
+    policyTA.setSize((int) (realWidth * (.90)) / 2, (int) (realHeight * (.05)));
     policyTA.setOpaque(false);
     middleCon.add(policyTA);
 
-
-    descriptionTA.setBounds(policyTA.getX(), policyTA.getHeight() + policyTA.getY() + 10, (int) (realWidth*(.90)), (int) (realHeight * (.20)));
+    descriptionTA.setBounds(policyTA.getX(), policyTA.getHeight() + policyTA.getY() + 10, (int) (realWidth * (.90)), (int) (realHeight * (.20)));
     descriptionTA.setLineWrap(true);
     descriptionTA.setOpaque(false);
     middleCon.add(descriptionTA);
 
-    pro.setBounds(descriptionTA.getX(), descriptionTA.getY()+descriptionTA.getHeight() + 10, (int) (realWidth*(.90))/2, (int) (realHeight *(.05)));
+    pro.setBounds(descriptionTA.getX(), descriptionTA.getY() + descriptionTA.getHeight() + 10, (int) (realWidth * (.90)) / 2, (int) (realHeight * (.05)));
     pro.setOpaque(false);
     middleCon.add(pro);
 
-    con.setBounds(pro.getX()+pro.getWidth(), pro.getY(), pro.getWidth(), pro.getHeight());
+    con.setBounds(pro.getX() + pro.getWidth(), pro.getY(), pro.getWidth(), pro.getHeight());
     con.setOpaque(false);
     middleCon.add(con);
 
     /*
      * Place graph of pro here
      */
-    JPanel proGraph = new JPanel();
-    proGraph.setOpaque(true);
-    proGraph.setBackground(Color.PINK);
-    proGraph.setBounds(pro.getX(), pro.getY() + pro.getHeight(), pro.getWidth(), (int)(con.getWidth()*(1.0)));
+    proGraph = new JPanel();
+    proGraph.setBounds(pro.getX(), pro.getY() + pro.getHeight(), (int) (pro.getWidth()*(.90)), (int)(con.getWidth()*(0.9)));
     middleCon.add(proGraph);
-
-    JPanel conGraph = new JPanel();
-    conGraph.setOpaque(true);
-    conGraph.setBackground(Color.CYAN);
-    conGraph.setBounds(con.getX(),con.getY()+con.getHeight(),con.getWidth(),proGraph.getHeight());
-    middleCon.add(conGraph);
-
     /*
      * Place graph of con here
      */
-    sponsor.addActionListener(this);
+    conGraph = new JPanel();
+    conGraph.setBounds(con.getX(),con.getY()+con.getHeight(),(int) (con.getWidth()*(.90)),proGraph.getHeight());
+    middleCon.add(conGraph);
+
+    /*
+     * Component to sponsor the bill
+     */
+    sponsor = new JPanel();
+    sponsor.setOpaque(false);
+    sponsor.setBackground(Color.GRAY);
+    sponsor.setName("SPONSOR");
+    sponsor.addMouseListener(this);
+    sponsor.setSize(100, 25);
+    sponsor.setLocation( (int) (middleCard.getX()+middleCard.getWidth() - sponsor.getWidth()), (int) (middleCard.getY()+middleCard.getHeight() - sponsor.getHeight()*3) );
+    sponsorLabel = new JLabel("SPONSOR");
+    sponsor.add(sponsorLabel);
     middleCon.add( sponsor );
 
-
+    /*
+     * adding el arrows
+     */
     int arrowW = width/16;
     int arrowH = height/4;
-    int arrowY = realY+realHeight/4;
+    int arrowY = realY+realHeight/8;
     rightArrow = new JPanel();
     rightArrow.setName(">");
     rightArrow.setBounds(realX + realWidth+(width*3 / 32), arrowY, arrowW, arrowH);
@@ -273,12 +352,49 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
     leftArrow.setOpaque(false);
     middleCon.add(rightArrow);
     rightArrow.setOpaque(false);
+
+    setComponentForColor();
+
+    PolicyData d = masterPolicyData.get(policyMiddle);
+    updateCard(d);
   }
 
+  /**
+   * This helps with color transitions in the Cards on movement
+   */
+  private void setComponentForColor()
+  {
+    policyTA.setForeground(new Color(fontR, fontG, fontB, alpha));
+    descriptionTA.setForeground(new Color(fontR, fontG, fontB, alpha));
+    pro.setForeground(new Color(fontR, fontG, fontB, alpha));
+    con.setForeground(new Color(fontR, fontG, fontB, alpha));
+    sponsorLabel.setForeground(new Color(fontR, fontG, fontB, alpha));
+
+    if( alpha < .4f)
+    {
+      proGraph.setVisible(false);
+      conGraph.setVisible(false);
+    }
+    else
+    {
+      proGraph.setVisible(true);
+      conGraph.setVisible(true);
+    }
+    Color proColor = new Color(0.67f,0.67f,0.67f,alpha);
+    Color conColor = new Color(0.67f,0.67f,0.67f,alpha);
+    proGraph.setBackground(proColor);
+    conGraph.setBackground(conColor);
+  }
+
+  /**
+   * Update Card information
+   * @param d -Current Policy for the Main card
+   */
   private void updateCard(PolicyData d)
   {
     policyTA.setText(d.getPolicy());
     descriptionTA.setText(d.getDescription());
+    sponsorLabel.setText(d.getSponsor());
   }
   /*
    * Functions to help out with creating and bringing in the policy data
@@ -288,6 +404,13 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
     masterPolicyData.add(d);
   }
 
+  /**
+   * Called to reset the location of the card
+   */
+  public void resetLocation()
+  {
+    setLocation(x,y);
+  }
 
   @Override
   public void mouseClicked(MouseEvent e)
@@ -296,24 +419,71 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   }
 
   @Override
-  public void mousePressed(MouseEvent e) { /* Do nothing */ }
+  public void mousePressed(MouseEvent e) {
+    JPanel tempPnl = (JPanel) e.getSource();
+    String name = tempPnl.getName();
+    switch(name) {
+      case "topCon":
+        // Let make a custom pop up to annoy the user because, I can!
+        dragFrom = e.getPoint();
+        System.out.println( "We detected a click!" );
+        break;
+      default:
+        break;
+    }
+  }
 
   @Override
   public void mouseReleased(MouseEvent e)
   {
     JPanel tempPnl = (JPanel) e.getSource();
     String name = tempPnl.getName();
+
     switch(name) {
+      case "CLOSE":
+        this.setVisible(false);
+        setLocation(x,y);
+        break;
       case "<":
         if( currentPol > 0 ) currentPol--;
+        previousSelect = true;
+        fancyFlip();
         break;
       case ">":
         if( currentPol < masterPolicyData.size()-1 ) currentPol++;
+        nextSelect = true;
+        fancyFlip();
+        break;
+      case "SPONSOR":
+        // Do something
+        PolicyData d = masterPolicyData.get(currentPol);
+        d.setSponsor("SPONSORED");
+        sponsorLabel.setText(d.getSponsor());
         break;
       default:
+        break;
     }
-    PolicyData d = masterPolicyData.get(currentPol);
-    updateCard(d);
+  }
+
+  /**
+   Overridden mouseWheelMoved controls zooming on the map
+   @param e MouseWheelEvent fired by mouse wheel motion
+   */
+  @Override
+  public void mouseWheelMoved(MouseWheelEvent e)
+  {
+    if( e.getPreciseWheelRotation() > 0 )
+    {
+      if( currentPol > 0 ) currentPol--;
+      previousSelect = true;
+      fancyFlip();
+    }
+    else
+    {
+      if( currentPol < masterPolicyData.size()-1 ) currentPol++;
+      nextSelect = true;
+      fancyFlip();
+    }
   }
 
   @Override
@@ -321,4 +491,119 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
 
   @Override
   public void mouseExited(MouseEvent e) { /* Do nothing */ }
+
+  public void mouseMoved(MouseEvent e) { /* Do nothing */ }
+
+  public void mouseDragged(MouseEvent e) {
+    double dx = (dragFrom.getX() - e.getPoint().getX() );
+    double dy = (dragFrom.getY() - e.getPoint().getY() );
+    setLocation( (int) (x-dx), (int) (y-dy) );
+  }
+
+  /**
+   * Lets make the cards shuffle/moves!
+   */
+  private void fancyFlip()
+  {
+    if (openerThread == null || !openerThread.isAlive())
+    {
+      openerThread = new OpenerThread();
+      openerThread.start();
+    }
+  }
+
+  /*
+  * Thread to make the cards shuffle.
+  * It's like taking a water balloon and popping it while recording it in slow motion and watching it back
+  *   its pretty fancy
+  */
+  private class OpenerThread extends Thread
+  {
+    /**
+     * Overrides run for thread and runs a thread
+     */
+    @Override
+    public void run()
+    {
+      int transitionSpeed = 4;
+      // For the main alpha
+      float adjustBy = .04f;
+      int mod = 1;
+      float adjustTo = 100f;
+      float dy = Math.abs(ry - realY)/adjustTo * mod;
+        // lx is off screen at a negative position
+      float dx = Math.abs(rx - realX)/adjustTo * mod;
+      float adjustBackAlpha = (1.0f-0.5f)/adjustTo;
+
+      float tLX = (float) leftCard.getX();
+      float tLY = (float) leftCard.getY();
+
+      float tRX = (float) rightCard.getX();
+      float tRY = (float) rightCard.getY();
+
+      float tMX = (float) middleCard.getX();
+      float tMY = (float) middleCard.getY();
+          /*
+       * Set the alpha's to zero
+       */
+      for( int i = 0; i < adjustTo ; i++ )
+      {
+
+        if (i < adjustTo / 4) alpha -= adjustBy;
+        else if (i > (adjustTo - (adjustTo / 4))) alpha += adjustBy;
+
+        if( i == adjustTo/2 )
+        {
+          PolicyData d = masterPolicyData.get(currentPol);
+          updateCard(d);
+        }
+        //mAlpha = alpha;
+        if (nextSelect)
+        {
+          if( i % mod == 0 ) {
+            rightCard.setBounds((int) (tRX -= dx), (int) (tRY += dy), cardWidth, cardHeight);
+            middleCard.setBounds((int) (tMX -= dx), (int) (tMY -= dy), cardWidth, cardHeight);
+          }
+          rAlpha += adjustBackAlpha;
+        }
+        else if( previousSelect )
+        {
+          if( i % mod == 0 ) {
+            leftCard.setBounds((int) (tLX += dx), (int) (tLY += dy), cardWidth, cardHeight);
+            middleCard.setBounds((int) (tMX += dx), (int) (tMY -= dy), cardWidth, cardHeight);
+          }
+          lAlpha += adjustBackAlpha;
+        }
+        repaint();
+        setComponentForColor();
+        try
+        {
+          this.sleep(transitionSpeed);
+        }
+        catch (InterruptedException e)
+        {
+          e.printStackTrace();
+        }
+      }
+      //Relocate the cards to the original positions of the dummy
+      resetCardLocations();
+      nextSelect = false;
+      previousSelect = false;
+      this.interrupt();
+    }
+  }
+
+  /**
+   * Touch up to my slow motion film of a water balloon popping or my card movement
+   */
+  private void resetCardLocations()
+  {
+    middleCard.setBounds(realX, realY, cardWidth, cardHeight);
+    leftCard.setBounds(lx, ly, cardWidth, cardHeight);
+    rightCard.setBounds(rx, ry, cardWidth, cardHeight);
+    alpha = 1.0f;
+    mAlpha = 1.0f;
+    lAlpha = 0.5f;
+    rAlpha = 0.5f;
+  }
 }
