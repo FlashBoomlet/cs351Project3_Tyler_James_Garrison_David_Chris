@@ -1,8 +1,6 @@
 package gui.hud;
 
-import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import model.CountryData;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 
 /**
  * Created by James Lawson on 4/25/2015.
@@ -18,23 +17,29 @@ import java.awt.event.MouseListener;
  * class that will show info about the players country,
  * that they are playing as.
  */
-public class PlayerCountryInfo extends JPanel implements MouseListener, ActionListener
+public class PlayerCountryInfo extends JPanel implements ActionListener
 {
   private final int STEP_SIZE = 10;
+  private final int WSTEP_SIZE = (int)((double)STEP_SIZE/1.66666d);
 
-  private final int MIN_HEIGHT = 30;
-  private final int MAX_HEIGHT = 400;
-  private final int STANDARD_WIDTH;
+  private final int MIN_HEIGHT;
+  private final int MAX_HEIGHT;
+  private final int MIN_WIDTH;
+  private final int MAX_WIDTH;
 
-  private int currentHeigtht = MIN_HEIGHT;
-
-  private JPanel clickPanel;
-  private JLabel clickLabel;
+  private int currentHeigtht;
+  private int currentWidth;
 
 
-  Border border = BorderFactory.createRaisedBevelBorder();
 
-  PlayerCountryDisplay playerCountryDisplay;
+  private ClickPanel clickPanel;
+
+
+  private Border border = BorderFactory.createRaisedBevelBorder();
+
+  private PlayerCountryDisplay playerCountryDisplay;
+
+  private BufferedImage flagIMG;
 
 
   // if true all info will be displayed
@@ -43,7 +48,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
   boolean useAnimation = true;
 
 
-  Timer timer;
+  private Timer timer;
 
   //players country for access to information
   private GUIRegion playerCountry;
@@ -52,36 +57,37 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
    *
    * @param playerCountry country the player is controlling
    */
-  public PlayerCountryInfo(GUIRegion playerCountry, int width)
+  public PlayerCountryInfo(GUIRegion playerCountry, int Maxwidth)
   {
     this.playerCountry = playerCountry;
-    STANDARD_WIDTH = width;
+    flagIMG = playerCountry.getFlag();
+
+    MIN_WIDTH = flagIMG.getWidth();
+    MAX_WIDTH = Maxwidth;
+
+    MIN_HEIGHT = flagIMG.getHeight();
+    MAX_HEIGHT = 400;
+
+    currentWidth = MIN_WIDTH;
+    currentHeigtht = MIN_HEIGHT;
+
 
     timer = new Timer(30, this);
 
-    clickPanel = new JPanel();
-    clickPanel.setBorder(border);
-    clickPanel.setBounds(0, 0, width, MIN_HEIGHT);
-    clickPanel.addMouseListener(this);
-    clickPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    clickPanel.setBackground(Color.GRAY);
-    clickPanel.setToolTipText("click");
-
-    clickLabel = new JLabel();
-    clickLabel.setText("Click for United States Of America");
-    clickLabel.setBackground(Color.GRAY);
-
-
-    clickPanel.add(clickLabel);
+    clickPanel = new ClickPanel();
 
 
 
-    playerCountryDisplay = new PlayerCountryDisplay(playerCountry,STANDARD_WIDTH,MAX_HEIGHT-MIN_HEIGHT);
-    playerCountryDisplay.setLocation(0,MIN_HEIGHT);
+    playerCountryDisplay = new PlayerCountryDisplay(playerCountry,MAX_WIDTH,MAX_HEIGHT-MIN_HEIGHT);
+    playerCountryDisplay.setLocation(0, MIN_HEIGHT);
+
 
     this.setLayout(null);
     this.setBorder(border);
-    this.setSize(width, MIN_HEIGHT);
+    this.setSize(MIN_WIDTH, MIN_HEIGHT);
+    this.setBackground(Color.GRAY);
+    this.setFocusable(true);
+
 
     this.add(clickPanel);
     this.add(playerCountryDisplay);
@@ -89,77 +95,58 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
   }
 
 
-
-  //===========================================LISTENERS============================================
-
-
-  @Override
-  public void mouseClicked(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mousePressed(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mouseReleased(MouseEvent e) {
-
-    if (useAnimation)
-    {
-      timer.start();
-    }
-    else
-    {
-      if (isOpen)
-      {
-        setSize(STANDARD_WIDTH, MIN_HEIGHT);
-      }
-      else
-      {
-        setSize(STANDARD_WIDTH, MAX_HEIGHT);
-      }
-      isOpen =!isOpen;
-    }
-
-
-  }
-
-  @Override
-  public void mouseEntered(MouseEvent e)
-  {
-    clickPanel.setBackground(Color.LIGHT_GRAY);
-  }
-
-  @Override
-  public void mouseExited(MouseEvent e)
-  {
-    clickPanel.setBackground(Color.GRAY);
-  }
-
   public GUIRegion getPlayerCountry()
   {
     return playerCountry;
+  }
+
+  public void paintComponent(Graphics g)
+  {
+    g.setColor(Color.GRAY);
+    g.fillRect(0,0,getWidth(),getHeight());
+
+    g.setColor(Color.WHITE);
+    g.drawString(playerCountry.getName(), 70, 20);
   }
 
   @Override
   public void actionPerformed(ActionEvent e)
   {
 
+
+
     if (isOpen)
     {
       currentHeigtht -= STEP_SIZE;
+      if (currentWidth > MIN_WIDTH)
+      {
+        currentWidth -= WSTEP_SIZE;
+        setLocation(getX()+WSTEP_SIZE, getY());
+      }
+      else
+      {
+        currentWidth = MIN_WIDTH;
+      }
     }
     else
     {
       currentHeigtht+= STEP_SIZE;
+      if (currentWidth < MAX_WIDTH)
+      {
+        currentWidth += WSTEP_SIZE;
+        setLocation(getX()-WSTEP_SIZE, getY());
+      }
+      else
+      {
+        currentWidth = MAX_WIDTH;
+      }
     }
 
     if (currentHeigtht > MAX_HEIGHT)
     {
       currentHeigtht = MAX_HEIGHT;
-      setSize(STANDARD_WIDTH,MAX_HEIGHT);
+      currentWidth = MAX_WIDTH;
+      setSize(MAX_WIDTH,MAX_HEIGHT);
       //call to fix the jittering
       getParent().repaint();
 
@@ -169,7 +156,8 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
     else if(currentHeigtht < MIN_HEIGHT)
     {
       currentHeigtht = MIN_HEIGHT;
-      setSize(STANDARD_WIDTH,MIN_HEIGHT);
+      currentWidth = MIN_WIDTH;
+      setSize(MIN_HEIGHT,MIN_HEIGHT);
       //call to fix the jittering
       getParent().repaint();
 
@@ -178,10 +166,86 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
     }
     else
     {
-      setSize(STANDARD_WIDTH,currentHeigtht);
+      setSize(currentWidth,currentHeigtht);
       //call to fix the jittering
       getParent().repaint();
     }
+  }
+
+
+  private class ClickPanel extends JPanel implements MouseListener
+  {
+    private boolean highlight = false;
+
+    private Color highlightColor = new Color(255,255,255,100);
+
+    public ClickPanel()
+    {
+      this.setBounds(0, 0, MIN_WIDTH, MIN_WIDTH);
+      this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      this.addMouseListener(this);
+      this.setToolTipText("click");
+    }
+
+
+    public void paintComponent(Graphics g)
+    {
+      g.drawImage(flagIMG,0,-7,null);
+
+      if (highlight) {
+        g.setColor(highlightColor);
+        g.fillRect(0,0,getWidth(),getHeight()-15);
+      }
+    }
+
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+      if (useAnimation)
+      {
+        timer.start();
+      }
+      else
+      {
+        if (isOpen)
+        {
+          setSize(MIN_WIDTH, MIN_HEIGHT);
+        }
+        else
+        {
+          setSize(MIN_HEIGHT, MAX_HEIGHT);
+        }
+        isOpen =!isOpen;
+      }
+
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e)
+    {
+      highlight = true;
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e)
+    {
+      highlight = false;
+    }
+
+
   }
 
 

@@ -2,7 +2,6 @@ package gui.hud;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
-import main.Game;
 import model.CountryData;
 
 import javax.swing.*;
@@ -12,12 +11,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by James Lawson on 4/27/2015.
  *
  * display class to show specific country info
+ * will probably add a scroll pane in the future
+ * to allow for more data to be displayed
+ *
+ * todo:add a JScrollPane
  */
 public class PlayerCountryDisplay extends JPanel
 {
@@ -49,7 +51,7 @@ public class PlayerCountryDisplay extends JPanel
 
     this.setLayout(null);
     holderPanel = new JPanel();
-    holderPanel.setBounds(0,40,this.getWidth(),this.getHeight()-21);
+    holderPanel.setBounds(0,0,this.getWidth(),this.getHeight());
     holderPanel.setBackground(Color.GRAY);
     holderPanel.setBorder(border);
 
@@ -60,6 +62,7 @@ public class PlayerCountryDisplay extends JPanel
     addBars();
   }
 
+  //init all the data bars
   private void setBars()
   {
     CountryData data = playerCountry.getCountryData();
@@ -134,6 +137,7 @@ public class PlayerCountryDisplay extends JPanel
 
   }
 
+  //add the bars to the holder pane
   private void addBars()
   {
     for (InfoBar bar:bars)
@@ -150,10 +154,6 @@ public class PlayerCountryDisplay extends JPanel
 
     g2.setColor(Color.GRAY);
     g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-    g2.drawImage(playerCountry.getFlag(),getWidth()/2-25,-4,null);
-
-    g2.drawLine(0, 20, getWidth(), 20);
   }
 
 

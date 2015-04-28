@@ -420,7 +420,7 @@ public class Game
       infoPanel.setVisible(false);
 
       //info panel for users country
-      playerCountryInfo.setLocation((frameWidth-(frameWidth/5)-20),feedPanelHeight);
+      playerCountryInfo.setLocation((frameWidth-54),feedPanelHeight);
       layeredPane.add(playerCountryInfo, new Integer(6));
 
       // Navigation in the lower right hand corner
