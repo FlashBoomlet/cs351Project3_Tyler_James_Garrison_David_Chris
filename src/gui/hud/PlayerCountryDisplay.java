@@ -27,7 +27,6 @@ public class PlayerCountryDisplay extends JPanel
   private JPanel holderPanel;
 
   //JPanel prettiness
-  private Font title = new Font(Font.SANS_SERIF,Font.BOLD,18);
   private Border border = BorderFactory.createRaisedBevelBorder();
 
   //holds the display bars
@@ -66,8 +65,6 @@ public class PlayerCountryDisplay extends JPanel
   private void setBars()
   {
     CountryData data = playerCountry.getCountryData();
-
-
 
     InfoBar pop = new InfoBar("Population: " + NumberFormat.getIntegerInstance().format((int) data.getPopulation(true)),
             "population");
@@ -231,7 +228,10 @@ public class PlayerCountryDisplay extends JPanel
     public void mouseReleased(MouseEvent e) { }
 
     @Override
-    public void mouseEntered(MouseEvent e) { highlight = true;}
+    public void mouseEntered(MouseEvent e)
+    {
+      highlight = true;
+    }
 
     @Override
     public void mouseExited(MouseEvent e) { highlight = false;}

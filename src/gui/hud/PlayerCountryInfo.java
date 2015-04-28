@@ -41,6 +41,8 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
 
   private BufferedImage flagIMG;
 
+  private Font title = new Font(Font.SANS_SERIF,Font.BOLD,16);
+
 
   // if true all info will be displayed
   //if false show a small collapsed version
@@ -103,10 +105,11 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
   public void paintComponent(Graphics g)
   {
     g.setColor(Color.GRAY);
-    g.fillRect(0,0,getWidth(),getHeight());
+    g.fillRect(0, 0, getWidth(), getHeight());
 
+    g.setFont(title);
     g.setColor(Color.WHITE);
-    g.drawString(playerCountry.getName(), 70, 20);
+    g.drawString(playerCountry.getName(), 50, 20);
   }
 
   @Override
@@ -172,7 +175,7 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     }
   }
 
-
+// panel that draws a flag and has a click listener to open up the panel
   private class ClickPanel extends JPanel implements MouseListener
   {
     private boolean highlight = false;
@@ -229,8 +232,6 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
         }
         isOpen =!isOpen;
       }
-
-
     }
 
     @Override
@@ -244,9 +245,5 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     {
       highlight = false;
     }
-
-
   }
-
-
 }
