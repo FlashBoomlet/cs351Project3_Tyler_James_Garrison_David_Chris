@@ -49,7 +49,7 @@ public class PlayerCountryDisplay extends JPanel
 
     this.setLayout(null);
     holderPanel = new JPanel();
-    holderPanel.setBounds(0,21,this.getWidth(),this.getHeight()-21);
+    holderPanel.setBounds(0,40,this.getWidth(),this.getHeight()-21);
     holderPanel.setBackground(Color.GRAY);
     holderPanel.setBorder(border);
 
@@ -76,6 +76,16 @@ public class PlayerCountryDisplay extends JPanel
     pop.setMinimumSize(barDim);
 
     bars.add(pop);
+
+    InfoBar mal = new InfoBar("Malnourished: " + NumberFormat.getIntegerInstance().format((int) data.getUndernourish(true))+"%",
+            "percent of pop that is malnourished");
+
+
+    mal.setPreferredSize(barDim);
+    mal.setMaximumSize(barDim);
+    mal.setMinimumSize(barDim);
+
+    bars.add(mal);
 
     InfoBar corn = new InfoBar("Corn: " + NumberFormat.getIntegerInstance().format((int) data.getCornTotal(true)),
             "In Metric Tons");
@@ -113,6 +123,15 @@ public class PlayerCountryDisplay extends JPanel
 
     bars.add(soy);
 
+    InfoBar other = new InfoBar("Other: " + NumberFormat.getIntegerInstance().format((int) data.getOtherTotal(true)),
+            "In Metric Tons");
+
+    other.setPreferredSize(barDim);
+    other.setMaximumSize(barDim);
+    other.setMinimumSize(barDim);
+
+    bars.add(other);
+
   }
 
   private void addBars()
@@ -132,11 +151,8 @@ public class PlayerCountryDisplay extends JPanel
     g2.setColor(Color.GRAY);
     g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 
+    g2.drawImage(playerCountry.getFlag(),getWidth()/2-25,-4,null);
 
-    g2.setColor(Color.WHITE);
-
-    g2.setFont(title);
-    g2.drawString("United Sates of America", 10, 17);
     g2.drawLine(0, 20, getWidth(), 20);
   }
 
@@ -155,7 +171,7 @@ public class PlayerCountryDisplay extends JPanel
 
     public InfoBar(String text,String tooltip)
     {
-      System.out.println(text);
+      //System.out.println(text);
 
       this.text = text;
       TTtext = tooltip;
