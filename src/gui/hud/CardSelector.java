@@ -2,6 +2,7 @@ package gui.hud;
 
 import IO.PolicyCSVParser;
 import gui.ColorsAndFonts;
+import gui.regionlooks.RegionViewFactory;
 import model.PolicyData;
 
 import javax.imageio.ImageIO;
@@ -19,9 +20,10 @@ import java.util.ArrayList;
  * CardSelector is a coverFlow framework for some really cool card selection in this game!
  *
  * @author Tyler Lynch <lyncht@unm.edu>
- * @since 4.3.15
+ * @since 4.23.15
  */
-public class CardSelector extends JPanel implements ActionListener, MouseListener,MouseMotionListener,MouseWheelListener
+public class CardSelector extends JPanel
+  implements ActionListener, MouseListener, MouseMotionListener, MouseWheelListener
 {
   private int x;
   private int y;
@@ -50,14 +52,14 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   private int realY;
 
   /*
-   * Forground colors for the main playing card
+   * Foreground colors for the main playing card
    */
   private float fontR = 0.0f;
   private float fontG = 0.0f;
   private float fontB = 0.0f;
 
   /*
-   * Overall transparentcy of everything pretty much
+   * Overall transparency of everything pretty much
    */
   private float alpha = 1.0f;
   private float mAlpha = 1.0f;
@@ -121,9 +123,10 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
     setLocation(x,y);
     setLayout(new BorderLayout());
 
-    // Fighting the map for who is superiror so this fixes that
+    // Fighting the map for who is superior so this fixes that
     addMouseListener(this);
     setName("MainContainer");
+    //Ensure the key listener works for this panel and not the map
 
     this.x = x;
     this.y = y;
@@ -206,77 +209,20 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
     middleCon.setLocation(0, topCon.getX() + topCon.getHeight());
     middleCon.setSize(width, (int) (height * (.90)));
     middleCon.addMouseWheelListener(this);
+    middleCon.requestFocusInWindow();
     add(middleCon, BorderLayout.CENTER);
+
+    /*
+     * Setting up key-bindings for the card selection
+     */
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "left");
+    getActionMap().put("left", leftNavigate);
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "right");
+    getActionMap().put("right", rightNavigate);
 
     repaint();
     drawCard();
   }
-
-  /**
-   * Overrides action performed.
-   * Detects which button is clicked and either pauses the game or shows the settings
-   *
-   * @author Tyler Lynch <lyncht@unm.edu>
-   *
-   * @param e
-   */
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    JButton tempBtn = (JButton) e.getSource();
-    String name = tempBtn.getName();
-    switch(name) {
-      default:
-        break;
-    }
-  }
-
-  /**
-   * Override paint components
-   * @param g graphics you with to have
-   */
-  @Override
-  public void paintComponent(Graphics g)
-  {
-    super.paintComponent(g);
-    Graphics2D g2d = (Graphics2D) g;
-
-    if( policyMiddle >= 0 )
-    {
-      // Pop off left
-      if( policyMiddle-1 >= 0 )
-      {
-        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,lAlpha) );
-        g2d.fill(leftCard);
-        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.75f) );
-        g2d.fill(leftDummyCard);
-      }
-
-      // Pop off right
-      if( policyMiddle+1 < masterPolicyData.size())
-      {
-        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,rAlpha) );
-        g2d.fill(rightCard);
-        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.75f) );
-        g2d.fill(rightDummyCard);
-      }
-
-      g.setColor( new Color(.25f,.25f,.25f,0.75f) );
-      //g.fillRect(middleCon.getX(),middleCon.getY(),middleCon.getWidth(),middleCon.getHeight());
-
-      // Pop off middle /Main
-      if( policyMiddle <  masterPolicyData.size() )
-      {
-        PolicyData d = masterPolicyData.get(currentPol);
-        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f, mAlpha) );
-        g2d.fill(middleCard);
-      }
-    }
-    g2d.setColor(Color.RED);
-    // The images wouldn't line up with were the jpanel it is referencing is lining up....
-    g2d.drawImage(lArrow,leftArrow.getX(),  (leftArrow.getY()+middleCon.getY()), leftArrow.getWidth(),  leftArrow.getHeight(), null);
-    g2d.drawImage(rArrow,rightArrow.getX(),  (rightArrow.getY()+middleCon.getY()), rightArrow.getWidth(),  rightArrow.getHeight(), null);
-  }
-
 
   /**
    * Handles drawing all of the components for the Main card that the user interacts with
@@ -288,11 +234,13 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
     policyTA.setLocation((int) (realX + middleCon.getWidth() * (.02)), (int) (realY * (.70)));
     policyTA.setSize((int) (realWidth * (.90)) / 2, (int) (realHeight * (.05)));
     policyTA.setOpaque(false);
+    policyTA.setEditable(false);
     middleCon.add(policyTA);
 
     descriptionTA.setBounds(policyTA.getX(), policyTA.getHeight() + policyTA.getY() + 10, (int) (realWidth * (.90)), (int) (realHeight * (.20)));
     descriptionTA.setLineWrap(true);
     descriptionTA.setOpaque(false);
+    descriptionTA.setEditable(false);
     middleCon.add(descriptionTA);
 
     pro.setBounds(descriptionTA.getX(), descriptionTA.getY() + descriptionTA.getHeight() + 10, (int) (realWidth * (.90)) / 2, (int) (realHeight * (.05)));
@@ -321,12 +269,14 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
      */
     sponsor = new JPanel();
     sponsor.setOpaque(false);
-    sponsor.setBackground(Color.GRAY);
+    sponsor.setBackground(new Color(0xD9D9D9));
     sponsor.setName("SPONSOR");
     sponsor.addMouseListener(this);
+    sponsor.addMouseMotionListener(this);
     sponsor.setSize(100, 25);
-    sponsor.setLocation( (int) (middleCard.getX()+middleCard.getWidth() - sponsor.getWidth()), (int) (middleCard.getY()+middleCard.getHeight() - sponsor.getHeight()*3) );
+    sponsor.setLocation((int) (middleCard.getX() + middleCard.getWidth() - sponsor.getWidth()), (int) (middleCard.getY() + middleCard.getHeight() - sponsor.getHeight() * 3));
     sponsorLabel = new JLabel("SPONSOR");
+    sponsorLabel.setHorizontalAlignment(SwingConstants.CENTER);
     sponsor.add(sponsorLabel);
     middleCon.add( sponsor );
 
@@ -387,21 +337,122 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   }
 
   /**
-   * Update Card information
-   * @param d -Current Policy for the Main card
-   */
-  private void updateCard(PolicyData d)
-  {
-    policyTA.setText(d.getPolicy());
-    descriptionTA.setText(d.getDescription());
-    sponsorLabel.setText(d.getSponsor());
-  }
-  /*
    * Functions to help out with creating and bringing in the policy data
    */
   public void add(PolicyData d)
   {
     masterPolicyData.add(d);
+  }
+
+  /**
+   * Lets make the cards shuffle/ moves!
+   */
+  private void fancyFlip()
+  {
+    if (openerThread == null || !openerThread.isAlive())
+    {
+      openerThread = new OpenerThread();
+      openerThread.start();
+    }
+  }
+
+  /*
+  * Thread to make the cards shuffle.
+  * It's like taking a water balloon and popping it while recording it in slow motion and watching it back
+  *   its pretty fancy
+  */
+  private class OpenerThread extends Thread
+  {
+    /**
+     * Overrides run for thread and runs a thread
+     */
+    @Override
+    public void run()
+    {
+      int transitionSpeed = 4;
+      // For the main alpha
+      float adjustBy = .04f;
+      int mod = 1;
+      float adjustTo = 100f;
+      float dy = Math.abs(ry - realY)/adjustTo * mod;
+      // lx is off screen at a negative position
+      float dx = Math.abs(rx - realX)/adjustTo * mod;
+      float adjustBackAlpha = (1.0f-0.5f)/adjustTo;
+
+      float tLX = (float) leftCard.getX();
+      float tLY = (float) leftCard.getY();
+
+      float tRX = (float) rightCard.getX();
+      float tRY = (float) rightCard.getY();
+
+      float tMX = (float) middleCard.getX();
+      float tMY = (float) middleCard.getY();
+          /*
+       * Set the alpha's to zero
+       */
+      for( int i = 0; i < adjustTo ; i++ )
+      {
+
+        if (i < adjustTo / 4) alpha -= adjustBy;
+        else if (i > (adjustTo - (adjustTo / 4))) alpha += adjustBy;
+
+        if( i == adjustTo/2 )
+        {
+          PolicyData d = masterPolicyData.get(currentPol);
+          updateCard(d);
+        }
+        //mAlpha = alpha;
+        if (nextSelect)
+        {
+          if( i % mod == 0 ) {
+            rightCard.setBounds((int) (tRX -= dx), (int) (tRY += dy), cardWidth, cardHeight);
+            middleCard.setBounds((int) (tMX -= dx), (int) (tMY -= dy), cardWidth, cardHeight);
+          }
+          rAlpha += adjustBackAlpha;
+        }
+        else if( previousSelect )
+        {
+          if( i % mod == 0 ) {
+            leftCard.setBounds((int) (tLX += dx), (int) (tLY += dy), cardWidth, cardHeight);
+            middleCard.setBounds((int) (tMX += dx), (int) (tMY -= dy), cardWidth, cardHeight);
+          }
+          lAlpha += adjustBackAlpha;
+        }
+        repaint();
+        setComponentForColor();
+        try
+        {
+          this.sleep(transitionSpeed);
+        }
+        catch (InterruptedException e)
+        {
+          e.printStackTrace();
+        }
+      }
+      //Relocate the cards to the original positions of the dummy
+      resetCardLocations();
+
+
+      nextSelect = false;
+      previousSelect = false;
+      this.interrupt();
+    }
+  }
+
+  /**
+   * Touch up to my slow motion film of a water balloon popping or my card movement
+   */
+  private void resetCardLocations()
+  {
+    alpha = 1.0f;
+    mAlpha = 1.0f;
+    lAlpha = 0.5f;
+    rAlpha = 0.5f;
+
+    leftCard.setBounds(lx, ly, cardWidth, cardHeight);
+    rightCard.setBounds(rx, ry, cardWidth, cardHeight);
+    middleCard.setBounds(realX, realY, cardWidth, cardHeight);
+    repaint();
   }
 
   /**
@@ -411,6 +462,89 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   {
     setLocation(x,y);
   }
+
+  /**
+   * Update Card information
+   * @param d -Current Policy for the Main card
+   */
+  private void updateCard(PolicyData d)
+  {
+    policyTA.setText(d.getPolicy());
+    descriptionTA.setText(d.getDescription());
+    sponsorLabel.setText(d.getSponsor());
+  }
+
+  /**
+   * Override paint components
+   * @param g graphics you with to have
+   */
+  @Override
+  public void paintComponent(Graphics g)
+  {
+    super.paintComponent(g);
+    Graphics2D g2d = (Graphics2D) g;
+    Color borderLColor = new Color(0.0f,0.0f,0.0f, lAlpha);
+    Color borderMColor = new Color(0.0f,0.0f,0.0f, alpha);
+    Color borderRColor = new Color(0.0f,0.0f,0.0f, rAlpha);
+
+    /*
+     * Draw the table like feature
+     */
+    g2d.setColor( new Color(0.24705882f, 0.24705882f, 0.24705882f, 1.0f));
+    Rectangle tempTop = new Rectangle(0,((height*11)/16),width, ((height*1) / 6) );
+    int tempTopEnd = (int) (tempTop.getY()+tempTop.getHeight());
+    g2d.fill(tempTop);
+
+    g2d.setColor( new Color(0.28627452f, 0.28627452f, 0.28627452f, 1.0f));
+    g2d.fillRect(0,tempTopEnd,width,height-(tempTopEnd) );
+
+    //g2d.setColor(new Color(0.67058825f, 0.67058825f, 0.67058825f,  0.1f));
+    g2d.setColor(new Color(0.1764706f, 0.1764706f, 0.1764706f, 1.0f));
+    g2d.drawLine(0,tempTopEnd,width,tempTopEnd);
+
+    /*
+     * Set up actual cards
+     */
+    if( policyMiddle >= 0 )
+    {
+      // Pop off left
+      if( policyMiddle-1 >= 0 )
+      {
+        g2d.setColor(new Color(0.627451f, 0.627451f, 0.627451f, lAlpha));
+        g2d.fill(leftCard);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.75f) );
+        g2d.fill(leftDummyCard);
+        g2d.setColor(borderLColor);
+        g2d.draw(leftDummyCard);
+      }
+
+      // Pop off right
+      if( policyMiddle+1 < masterPolicyData.size())
+      {
+        g2d.setColor(new Color(0.627451f, 0.627451f, 0.627451f,rAlpha) );
+        g2d.fill(rightCard);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.75f) );
+        g2d.fill(rightDummyCard);
+        g2d.setColor(borderRColor);
+        g2d.draw(rightDummyCard);
+      }
+
+      // Pop off middle /Main
+      if( policyMiddle <  masterPolicyData.size() )
+      {
+        PolicyData d = masterPolicyData.get(currentPol);
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f, mAlpha) );
+        g2d.fill(middleCard);
+        g2d.setColor(borderMColor);
+        g2d.draw(middleCard);
+      }
+    }
+    g2d.setColor(Color.RED);
+    // The images wouldn't line up with were the jpanel it is referencing is lining up....
+    g2d.drawImage(lArrow,leftArrow.getX(),  (leftArrow.getY()+middleCon.getY()), leftArrow.getWidth(),  leftArrow.getHeight(), null);
+    g2d.drawImage(rArrow,rightArrow.getX(),  (rightArrow.getY()+middleCon.getY()), rightArrow.getWidth(),  rightArrow.getHeight(), null);
+  }
+
 
   @Override
   public void mouseClicked(MouseEvent e)
@@ -487,10 +621,37 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   }
 
   @Override
-  public void mouseEntered(MouseEvent e) { /* Do nothing */ }
+  public void mouseEntered(MouseEvent e)
+  {
+    JPanel tempPnl = (JPanel) e.getSource();
+    String name = tempPnl.getName();
+    switch(name)
+    {
+      case "SPONSOR":
+        sponsor.setOpaque(true);
+        sponsor.setBackground(new Color(0xD9D9D9));
+        repaint();
+        break;
+      default:
+        break;
+    }
+  }
 
   @Override
-  public void mouseExited(MouseEvent e) { /* Do nothing */ }
+  public void mouseExited(MouseEvent e)
+  {
+    JPanel tempPnl = (JPanel) e.getSource();
+    String name = tempPnl.getName();
+    switch(name)
+    {
+      case "SPONSOR":
+        sponsor.setOpaque(false);
+        repaint();
+        break;
+      default:
+        break;
+    }
+  }
 
   public void mouseMoved(MouseEvent e) { /* Do nothing */ }
 
@@ -501,109 +662,49 @@ public class CardSelector extends JPanel implements ActionListener, MouseListene
   }
 
   /**
-   * Lets make the cards shuffle/moves!
+   * Overrides action performed.
+   * Detects which button is clicked and either pauses the game or shows the settings
+   *
+   * @author Tyler Lynch <lyncht@unm.edu>
+   *
+   * @param e
    */
-  private void fancyFlip()
-  {
-    if (openerThread == null || !openerThread.isAlive())
-    {
-      openerThread = new OpenerThread();
-      openerThread.start();
-    }
-  }
-
-  /*
-  * Thread to make the cards shuffle.
-  * It's like taking a water balloon and popping it while recording it in slow motion and watching it back
-  *   its pretty fancy
-  */
-  private class OpenerThread extends Thread
-  {
-    /**
-     * Overrides run for thread and runs a thread
-     */
-    @Override
-    public void run()
-    {
-      int transitionSpeed = 4;
-      // For the main alpha
-      float adjustBy = .04f;
-      int mod = 1;
-      float adjustTo = 100f;
-      float dy = Math.abs(ry - realY)/adjustTo * mod;
-        // lx is off screen at a negative position
-      float dx = Math.abs(rx - realX)/adjustTo * mod;
-      float adjustBackAlpha = (1.0f-0.5f)/adjustTo;
-
-      float tLX = (float) leftCard.getX();
-      float tLY = (float) leftCard.getY();
-
-      float tRX = (float) rightCard.getX();
-      float tRY = (float) rightCard.getY();
-
-      float tMX = (float) middleCard.getX();
-      float tMY = (float) middleCard.getY();
-          /*
-       * Set the alpha's to zero
-       */
-      for( int i = 0; i < adjustTo ; i++ )
-      {
-
-        if (i < adjustTo / 4) alpha -= adjustBy;
-        else if (i > (adjustTo - (adjustTo / 4))) alpha += adjustBy;
-
-        if( i == adjustTo/2 )
-        {
-          PolicyData d = masterPolicyData.get(currentPol);
-          updateCard(d);
-        }
-        //mAlpha = alpha;
-        if (nextSelect)
-        {
-          if( i % mod == 0 ) {
-            rightCard.setBounds((int) (tRX -= dx), (int) (tRY += dy), cardWidth, cardHeight);
-            middleCard.setBounds((int) (tMX -= dx), (int) (tMY -= dy), cardWidth, cardHeight);
-          }
-          rAlpha += adjustBackAlpha;
-        }
-        else if( previousSelect )
-        {
-          if( i % mod == 0 ) {
-            leftCard.setBounds((int) (tLX += dx), (int) (tLY += dy), cardWidth, cardHeight);
-            middleCard.setBounds((int) (tMX += dx), (int) (tMY -= dy), cardWidth, cardHeight);
-          }
-          lAlpha += adjustBackAlpha;
-        }
-        repaint();
-        setComponentForColor();
-        try
-        {
-          this.sleep(transitionSpeed);
-        }
-        catch (InterruptedException e)
-        {
-          e.printStackTrace();
-        }
-      }
-      //Relocate the cards to the original positions of the dummy
-      resetCardLocations();
-      nextSelect = false;
-      previousSelect = false;
-      this.interrupt();
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    JButton tempBtn = (JButton) e.getSource();
+    String name = tempBtn.getName();
+    switch(name) {
+      default:
+        break;
     }
   }
 
   /**
-   * Touch up to my slow motion film of a water balloon popping or my card movement
+   * Key actions for the left Navigation
    */
-  private void resetCardLocations()
+  private Action leftNavigate = new AbstractAction()
   {
-    middleCard.setBounds(realX, realY, cardWidth, cardHeight);
-    leftCard.setBounds(lx, ly, cardWidth, cardHeight);
-    rightCard.setBounds(rx, ry, cardWidth, cardHeight);
-    alpha = 1.0f;
-    mAlpha = 1.0f;
-    lAlpha = 0.5f;
-    rAlpha = 0.5f;
-  }
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      if( currentPol > 0 ) currentPol--;
+      previousSelect = true;
+      fancyFlip();
+    }
+  };
+
+  /**
+   * Key actions for the right Navigation
+   */
+  private Action rightNavigate = new AbstractAction()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      if( currentPol < masterPolicyData.size()-1 ) currentPol++;
+      nextSelect = true;
+      fancyFlip();
+    }
+  };
+
 }

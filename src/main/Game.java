@@ -148,6 +148,7 @@ public class Game
     frame.setSize(frame.getPreferredSize());
     frame.setLocation(0,0);
     frame.setBackground(ColorsAndFonts.OCEANS);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     init();
   }

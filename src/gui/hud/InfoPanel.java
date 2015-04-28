@@ -113,9 +113,11 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
 
     policy = new JButton("POLICY");
     policy.addActionListener(this);
+    policy.setFocusable(false);
 
     trade = new JButton("TRADE");
     trade.addActionListener(this);
+    trade.setFocusable(false);
 
     JPanel scrollCon = new JPanel();
     scrollCon.setOpaque(true);
