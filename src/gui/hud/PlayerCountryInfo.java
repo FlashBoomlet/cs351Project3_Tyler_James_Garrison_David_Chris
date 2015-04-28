@@ -64,6 +64,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
     clickPanel.setBounds(0, 0, width, MIN_HEIGHT);
     clickPanel.addMouseListener(this);
     clickPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    clickPanel.setBackground(Color.GRAY);
 
     clickLabel = new JLabel();
     clickLabel.setText("Click for data");

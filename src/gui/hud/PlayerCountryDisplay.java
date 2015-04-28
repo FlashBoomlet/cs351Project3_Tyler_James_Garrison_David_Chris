@@ -2,6 +2,7 @@ package gui.hud;
 
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
+import main.Game;
 import model.CountryData;
 
 import javax.swing.*;
@@ -9,24 +10,37 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * Created by James Lawson on 4/27/2015.
+ *
+ * display class to show specific country info
  */
 public class PlayerCountryDisplay extends JPanel
 {
 
   private JPanel holderPanel;
 
+  //JPanel prettiness
   private Font title = new Font(Font.SANS_SERIF,Font.BOLD,18);
   private Border border = BorderFactory.createRaisedBevelBorder();
 
+  //holds the display bars
   private ArrayList<InfoBar> bars = new ArrayList<>();
 
+  //players country
   private GUIRegion playerCountry;
 
+  /**
+   * initializes everything needed
+   *
+   * @param playerCountry
+   * @param width
+   * @param height
+   */
   public PlayerCountryDisplay(GUIRegion playerCountry,int width, int height)
   {
     this.playerCountry = playerCountry;
@@ -49,18 +63,56 @@ public class PlayerCountryDisplay extends JPanel
   private void setBars()
   {
     CountryData data = playerCountry.getCountryData();
-    int yPos = 50;
 
 
-    InfoBar bar = new InfoBar("Population: " + (int) data.getPopulation(true), "population");
+
+    InfoBar pop = new InfoBar("Population: " + NumberFormat.getIntegerInstance().format((int) data.getPopulation(true)),
+            "population");
 
     Dimension barDim = new Dimension(this.getWidth(),20);
 
-    bar.setPreferredSize(barDim);
-    bar.setMaximumSize(barDim);
-    bar.setMinimumSize(barDim);
+    pop.setPreferredSize(barDim);
+    pop.setMaximumSize(barDim);
+    pop.setMinimumSize(barDim);
 
-    bars.add(bar);
+    bars.add(pop);
+
+    InfoBar corn = new InfoBar("Corn: " + NumberFormat.getIntegerInstance().format((int) data.getCornTotal(true)),
+            "In Metric Tons");
+
+    corn.setPreferredSize(barDim);
+    corn.setMaximumSize(barDim);
+    corn.setMinimumSize(barDim);
+
+    bars.add(corn);
+
+    InfoBar wheat = new InfoBar("Wheat: " + NumberFormat.getIntegerInstance().format((int) data.getWheatTotal(true)),
+            "In Metric Tons");
+
+    wheat.setPreferredSize(barDim);
+    wheat.setMaximumSize(barDim);
+    wheat.setMinimumSize(barDim);
+
+    bars.add(wheat);
+
+    InfoBar rice = new InfoBar("Rice: " + NumberFormat.getIntegerInstance().format((int) data.getRiceTotal(true)),
+            "In Metric Tons");
+
+    rice.setPreferredSize(barDim);
+    rice.setMaximumSize(barDim);
+    rice.setMinimumSize(barDim);
+
+    bars.add(rice);
+
+    InfoBar soy = new InfoBar("Soy: " + NumberFormat.getIntegerInstance().format((int) data.getSoyTotal(true)),
+            "In Metric Tons");
+
+    soy.setPreferredSize(barDim);
+    soy.setMaximumSize(barDim);
+    soy.setMinimumSize(barDim);
+
+    bars.add(soy);
+
   }
 
   private void addBars()
@@ -83,8 +135,6 @@ public class PlayerCountryDisplay extends JPanel
 
     g2.setColor(Color.WHITE);
 
-    CountryData playerData = playerCountry.getCountryData();
-
     g2.setFont(title);
     g2.drawString("United Sates of America", 10, 17);
     g2.drawLine(0, 20, getWidth(), 20);
@@ -92,10 +142,11 @@ public class PlayerCountryDisplay extends JPanel
 
 
 
-
+//class to draw a very simple attribute bar
   private class InfoBar extends JPanel implements MouseListener
   {
     private String text;
+    private String TTtext;
 
     private boolean highlight = false;
 
@@ -104,14 +155,27 @@ public class PlayerCountryDisplay extends JPanel
 
     public InfoBar(String text,String tooltip)
     {
+      System.out.println(text);
 
       this.text = text;
+      TTtext = tooltip;
+      this.setBorder(border);
 
       this.setVisible(true);
 
       this.addMouseListener(this);
       this.setToolTipText(tooltip);
 
+    }
+
+    public void setDisplayText(String text)
+    {
+      this.text = text;
+    }
+
+    public void setToolTip(String TTtext)
+    {
+      this.TTtext = TTtext;
     }
 
     @Override
@@ -125,19 +189,19 @@ public class PlayerCountryDisplay extends JPanel
 
 
         g.setColor(Color.BLACK);
-        g.fillRect(3, getY(), this.getWidth()-7, this.getHeight());
+        g.fillRect(3, 0, this.getWidth()-7, this.getHeight());
 
         g.setColor(Color.WHITE);
-        g.drawString(text, getX()+3, getY()+11);
+        g.drawString(text, 3, 14);
 
       }
       else
       {
         g.setColor(Color.WHITE);
-        g.fillRect(3, getY(), this.getWidth()-7, this.getHeight());
+        g.fillRect(3, 0, this.getWidth()-7, this.getHeight());
 
         g.setColor(Color.BLACK);
-        g.drawString(text, getX()+3, getY()+11);
+        g.drawString(text, 3, 14);
       }
     }
 
