@@ -34,7 +34,7 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
 
   Border border = BorderFactory.createRaisedBevelBorder();
 
-  private Font tile = new Font(Font.SANS_SERIF,Font.BOLD,18);
+  PlayerCountryDisplay playerCountryDisplay;
 
 
   // if true all info will be displayed
@@ -63,106 +63,29 @@ public class PlayerCountryInfo extends JPanel implements MouseListener, ActionLi
     clickPanel.setBorder(border);
     clickPanel.setBounds(0, 0, width, MIN_HEIGHT);
     clickPanel.addMouseListener(this);
+    clickPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
     clickLabel = new JLabel();
     clickLabel.setText("Click for data");
-    clickLabel.setVerticalTextPosition(0);
+
 
     clickPanel.add(clickLabel);
 
 
 
+    playerCountryDisplay = new PlayerCountryDisplay(playerCountry,STANDARD_WIDTH,MAX_HEIGHT-MIN_HEIGHT);
+    playerCountryDisplay.setLocation(0,MIN_HEIGHT);
 
     this.setLayout(null);
     this.setBorder(border);
     this.setSize(width, MIN_HEIGHT);
 
     this.add(clickPanel);
+    this.add(playerCountryDisplay);
 
   }
 
 
-  @Override
-  protected void paintComponent(Graphics g)
-  {
-    Graphics2D g2 = (Graphics2D)g;
-
-    g2.setColor(Color.GRAY);
-    g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-
-    g2.setColor(Color.WHITE);
-
-     CountryData playerData = playerCountry.getCountryData();
-
-    g.setFont(tile);
-    g.drawString("United Sates of America", 10, MIN_HEIGHT + 15);
-    g.drawLine(0,MIN_HEIGHT+20,STANDARD_WIDTH,MIN_HEIGHT+20);
-
-    drawGeneralCountryInfo(g, playerData);
-
-  }
-
-  private void drawGeneralCountryInfo( Graphics g, CountryData data)
-  {
-    int yPos = MIN_HEIGHT +35;
-    g.setFont(ColorsAndFonts.HUD_TITLE);
-
-    g.setColor(Color.BLACK);
-    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
-
-    g.setColor(Color.WHITE);
-    g.drawString("Population: " + (int) (data.getPopulation(true)), 3, yPos);
-
-
-    yPos+=20;
-    g.setColor(Color.BLACK);
-    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
-
-    g.setColor(Color.WHITE);
-    g.drawString("Percent undernourished: " +  (data.getUndernourish(true))+"%", 3, yPos);
-
-    yPos+=20;
-    g.setColor(Color.BLACK);
-    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
-
-    g.setColor(Color.WHITE);
-    g.drawString("Total Corn: " + (int) (data.getCornTotal(true))+" metric tons", 3, yPos);
-
-    yPos+=20;
-    g.setColor(Color.BLACK);
-    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
-
-    g.setColor(Color.WHITE);
-    g.drawString("Total Wheat: " + (int) (data.getWheatTotal(true))+" metric tons", 3, yPos);
-
-    yPos+=20;
-    g.setColor(Color.BLACK);
-    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
-
-    g.setColor(Color.WHITE);
-    g.drawString("Total Rice: " +  (int)(data.getRiceTotal(true))+" metric tons", 3, yPos);
-
-    yPos+=20;
-    g.setColor(Color.BLACK);
-    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
-
-    g.setColor(Color.WHITE);
-    g.drawString("Total Soy: " + (int) (data.getSoyTotal(true))+" metric tons", 3, yPos);
-
-
-    yPos+=20;
-    g.setColor(Color.BLACK);
-    g.fillRect(0, yPos - 12, STANDARD_WIDTH, ColorsAndFonts.HUD_TITLE.getSize() + 4);
-
-    g.setColor(Color.WHITE);
-    g.drawString("Total Other: " +  (int)(data.getOtherTotal(true))+" metric tons", 3, yPos);
-
-
-
-
-
-  }
 
   //===========================================LISTENERS============================================
 
