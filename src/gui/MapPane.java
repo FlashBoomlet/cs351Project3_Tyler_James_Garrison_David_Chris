@@ -64,6 +64,8 @@ public class MapPane extends JPanel
   private boolean doMultiSelect;
   private boolean dynamicNameDrawing;
 
+  private Cursor move = new Cursor(Cursor.MOVE_CURSOR);
+
   /* Actions associated with the KeyBinding mapping framework */
   //"OVERLAY-DOC" make sure to update and read RegionViewFactory.java as well as OverlaySelect
   //Create an action for each overlay you would like
@@ -603,6 +605,7 @@ public class MapPane extends JPanel
     doMultiSelect = false;
     drawMultiSelect = false;
     presenter.setActivelyDragging(false);
+    this.setCursor(Cursor.getDefaultCursor());
   }
 
 
@@ -652,6 +655,7 @@ public class MapPane extends JPanel
   public void mouseDragged(MouseEvent e)
   {
 
+
     if (doMultiSelect)
     {
       drawMultiSelect = true;
@@ -662,11 +666,13 @@ public class MapPane extends JPanel
     }
     else
     {
+      this.setCursor(move);
       double dx = -(e.getPoint().getX() - dragFrom.getX());
       double dy = -(e.getPoint().getY() - dragFrom.getY());
       cam.translateRelativeToView(dx, dy);
       dragFrom = e.getPoint();
     }
+
 
   }
 
