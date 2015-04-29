@@ -25,6 +25,8 @@ public class PlayerCountryDisplay extends JPanel implements MouseListener
 
   private Font title = new Font(Font.SANS_SERIF,Font.BOLD,16);
 
+  private JLabel nameLabel;
+
   //players country
   private GUIRegion playerCountry;
 
@@ -43,6 +45,11 @@ public class PlayerCountryDisplay extends JPanel implements MouseListener
     this.addMouseListener(this);
     this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+    nameLabel = new JLabel(playerCountry.getName());
+    nameLabel.setFont(title);
+    nameLabel.setForeground(Color.WHITE);
+    this.add(nameLabel);
+
   }
 
   @Override
@@ -50,14 +57,10 @@ public class PlayerCountryDisplay extends JPanel implements MouseListener
   {
     Graphics2D g2 = (Graphics2D)g;
 
-    g2.setColor(Color.GRAY);
+    g2.setColor(Color.DARK_GRAY);
     g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-    g2.drawImage(playerCountry.getFlag(), 3, -8, null);
-
-    g2.setFont(title);
-    g2.setColor(Color.WHITE);
-    g2.drawString(playerCountry.getName(), 55, 15);
+    g2.drawImage(playerCountry.getFlag(), getWidth()-55, -8, null);
 
     if (highlight)
     {
