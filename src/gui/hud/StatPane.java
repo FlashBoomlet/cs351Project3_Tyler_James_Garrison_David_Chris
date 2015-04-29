@@ -3,6 +3,8 @@ package gui.hud;
 
 
 import gui.ColorsAndFonts;
+import gui.hud.PieChart.ChartKey;
+import gui.hud.PieChart.PieChart;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -84,6 +86,16 @@ public class StatPane extends JPanel
   {
     barPanel.setAlignmentY(TOP_ALIGNMENT);
     barGraphsPanel.add(barPanel);
+  }
+
+  public void add(PieChart chart)
+  {
+    barGraphsPanel.add(chart);
+  }
+
+  public void add(ChartKey key)
+  {
+    barGraphsPanel.add(key);
   }
 
   /**

@@ -5,6 +5,9 @@ import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.displayconverters.DisplayUnitConverter;
+import gui.hud.PieChart.ChartKey;
+import gui.hud.PieChart.PieChart;
+import gui.hud.PieChart.Slice;
 import main.Game;
 import main.SettingsScreen;
 import model.CountryData;
@@ -132,7 +135,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     stats.setPreferredSize(new Dimension( statsWidth, generalHeight));
     scrollCon.add(stats);
     //Land
-    landStats.setPreferredSize(new Dimension( statsWidth, landHeight));
+    int landChartHeight = (int) ( statsWidth )*2;
+    landStats.setPreferredSize(new Dimension( statsWidth, landChartHeight));
     scrollCon.add(landStats);
     //Crops
     cropStats.setPreferredSize(new Dimension( statsWidth, cropHeight));
@@ -462,15 +466,27 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
       conventional /= countryDataList.size();
       gmo /= countryDataList.size();
     }
-    /*
-     * Land Information
-     */
-    BarPanel bp7 = getBarPanel( organic, "Organic" , 1, true);
-    statPane.addBar(bp7);
-    BarPanel bp8 = getBarPanel( conventional, "Conventional" , 1, true);
-    statPane.addBar(bp8);
-    BarPanel bp9 = getBarPanel( gmo, "GMO" , 1, true);
-    statPane.addBar(bp9);
+
+    /**/
+    ArrayList<Slice> landUseArray = new ArrayList<>();
+
+    Slice[] slices = { new Slice(organic*100, new Color(0x66FF33), "Organic"),
+      new Slice(conventional*100, new Color(0x996633),  "Conventional" ),
+      new Slice(gmo*100, new Color(0xFF5050), "GMO" ) };
+    landUseArray.clear();
+    for( int i = 0; i < slices.length ; i++)
+    {
+      landUseArray.add(slices[i]);
+    }
+
+    int chartWidth = (int) ( statPane.getWidth() * (.75));
+    int chartX = (statPane.getWidth()-chartWidth)/2;
+    Rectangle landRect = new Rectangle(chartX,0,chartWidth,chartWidth);
+    Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
+
+    statPane.add(new PieChart(landRect, landUseArray ));
+    statPane.add(new ChartKey( keyRect, landUseArray ));
+
   }
 
   /**
@@ -684,8 +700,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
       tradeSelector.resetLocation();
       clearDisplay();
     }
-    //only show the panel if isn't already visible, no need to keep reanimating it
-    else if(!this.isVisible())
+    else
     {
       // SHOW PANEL
       this.setVisible(true);

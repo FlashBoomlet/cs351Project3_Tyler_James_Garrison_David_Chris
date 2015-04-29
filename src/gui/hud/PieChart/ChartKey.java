@@ -13,8 +13,10 @@ import java.util.ArrayList;
  */
 public class ChartKey extends JComponent
 {
+  Rectangle area;
   ArrayList<Slice> slices = new ArrayList<>();
-  ArrayList<Rectangle> rects = new ArrayList<>();
+  ArrayList<Rectangle> rectArray = new ArrayList<>();
+
   Color outline = new Color(0.0f,0.0f,0.0f,1.0f);
   Color textColor = new Color(0.75f,0.75f,0.75f);
   private int rectSide = 0;
@@ -38,11 +40,22 @@ public class ChartKey extends JComponent
    */
   public ChartKey(Rectangle area, ArrayList<Slice> sliceArray)
   {
+    this.area = area;
     slices = sliceArray;
     width = (int) area.getWidth();
     total = sliceArray.size();
     individualHeight = (int) (area.getHeight()/total);
     rectSide = (int) (individualHeight*(.50));
+    setOpaque(false);
+
+    for( int i = 0; i < total; i++ )
+    {
+      Rectangle sqr = new Rectangle();
+      int tempY = (individualHeight - rectSide) / 2;
+      sqr.setBounds(tempY, tempY + compY, rectSide, rectSide);
+      rectArray.add(sqr);
+      compY += individualHeight;
+    }
 
     setToolTipText("");
     UIManager.put("ToolTip.background", new Color(0.0f,0.0f,0.0f,1.0f));
@@ -66,31 +79,25 @@ public class ChartKey extends JComponent
    */
   private void drawKey(Graphics2D g2d)
   {
-    rects.clear();
     for (int i = 0; i < total; i++)
     {
       Slice s = slices.get(i);
-      Rectangle sqr = new Rectangle();
-      rects.add(sqr);
-      int tempY = (individualHeight-rectSide)/2;
-      sqr.setBounds(tempY,tempY+compY,rectSide,rectSide);
+      Rectangle sqr = rectArray.get(i);
+
       g2d.setColor(s.getColor());
       g2d.fill(sqr);
       g2d.setColor(outline);
       g2d.draw(sqr);
-
       int fontY = (int) (sqr.getY() + font.getSize());
       g2d.setColor(textColor);
-      if( rectSide > 10 ) g2d.setFont(font);
-      else
+      g2d.setFont(font);
+      if( rectSide < 10 )
       {
         fontY = (int) (sqr.getY() + fontSmall.getSize());
         g2d.setFont(fontSmall);
-        System.out.println( "RectSide: " + rectSide + ", " + sqr.getHeight() );
       }
       g2d.drawString(s.getName(), (int) (sqr.getX() + sqr.getWidth() + 10), fontY  );
-
-      compY += individualHeight;
+      // System.out.println("Creating key for: " + s.getName() + ", Color:" + s.getColor());
     }
   }
 
@@ -107,8 +114,8 @@ public class ChartKey extends JComponent
     String name = "";
     Double value = 0.0D;
     Double percent = 0.0D;
-    for (int i = 0; i < rects.size(); i++) {
-      Rectangle r = rects.get(i);
+    for (int i = 0; i < total; i++) {
+      Rectangle r = rectArray.get(i);
       if( r.contains(loc) )
       {
         Slice s = slices.get(i);

@@ -14,7 +14,8 @@ import javax.swing.*;
  */
 public class PieChart extends JComponent
 {
-  private static double total = 0.0D;
+  Rectangle area;
+  private double total = 0.0D;
   ArrayList<Slice> slices = new ArrayList<>();
 
   /**
@@ -28,9 +29,11 @@ public class PieChart extends JComponent
    */
   public PieChart(Rectangle area, ArrayList<Slice> sliceArray)
   {
+    this.area = area;
     slices = sliceArray;
     double curValue = 0.0D;
     int startAngle;
+    setOpaque(false);
 
     // Calculate the length
     for (int i = 0; i < slices.size(); i++) {
@@ -79,7 +82,7 @@ public class PieChart extends JComponent
       g2d.fill(s.getArc());
 
       // Draw the outline of the arc -Make more bold first
-      g2d.setStroke(new BasicStroke(2));
+      g2d.setStroke(new BasicStroke(1));
       g2d.setColor(Color.BLACK);
       g2d.draw( s.getArc() );
     }
