@@ -61,6 +61,20 @@ public class Slice
   }
 
   /**
+   * Update the crop
+   *
+   * @param color -of the slice
+   * @param name -of the slice
+   * @param value -of the slice being represented (Not a percentage, the percentage will be calculated separately)
+   */
+  public void updateSlice(double value, Color color, String name) {
+    this.color = color;
+    this.name = name;
+    this.value = value;
+    arc = new Arc2D.Double(Arc2D.PIE);
+  }
+
+  /**
    * Set the angle of the slice
    * @param angle -of a pie (double)
    */

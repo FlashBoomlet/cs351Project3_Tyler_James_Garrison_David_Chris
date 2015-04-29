@@ -58,7 +58,7 @@ public class ChartKey extends JComponent
     }
 
     setToolTipText("");
-    UIManager.put("ToolTip.background", new Color(0.0f,0.0f,0.0f,1.0f));
+    UIManager.put("ToolTip.background", new Color(0.0f,0.0f,0.0f,0.75f));
     UIManager.put("ToolTip.foreground", new Color(1.0f,1.0f,1.0f,1.0f));
   }
 
@@ -97,7 +97,6 @@ public class ChartKey extends JComponent
         g2d.setFont(fontSmall);
       }
       g2d.drawString(s.getName(), (int) (sqr.getX() + sqr.getWidth() + 10), fontY  );
-      // System.out.println("Creating key for: " + s.getName() + ", Color:" + s.getColor());
     }
   }
 
@@ -114,6 +113,7 @@ public class ChartKey extends JComponent
     String name = "";
     Double value = 0.0D;
     Double percent = 0.0D;
+    String rtnStr = "";
     for (int i = 0; i < total; i++) {
       Rectangle r = rectArray.get(i);
       if( r.contains(loc) )
@@ -121,10 +121,10 @@ public class ChartKey extends JComponent
         Slice s = slices.get(i);
         name = s.getName();
         value = s.getValue();
-        percent = s.getPercent();
+        rtnStr = String.format("<html>%s<br>" + "Value:%.2f<br>" + "Percent:%.2f%%</html>", name, value, percent);
         break;
       }
     }
-    return String.format("<html>%s<br>" + "Value:%.2f<br>" + "Percent:%.2f%%</html>", name, value, percent);
+    return rtnStr;
   }
 }

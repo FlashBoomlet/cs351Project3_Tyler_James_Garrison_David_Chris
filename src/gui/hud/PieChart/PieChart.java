@@ -51,7 +51,7 @@ public class PieChart extends JComponent
     }
 
     setToolTipText("");
-    UIManager.put("ToolTip.background", new Color(0.0f,0.0f,0.0f,1.0f));
+    UIManager.put("ToolTip.background", new Color(0.0f,0.0f,0.0f,0.75f));
     UIManager.put("ToolTip.foreground", new Color(1.0f,1.0f,1.0f,1.0f));
   }
 
@@ -101,6 +101,7 @@ public class PieChart extends JComponent
     String name = "";
     Double value = 0.0D;
     Double percent = 0.0D;
+    String rtnStr = "";
     for (int i = 0; i < slices.size(); i++) {
       Slice s = slices.get(i);
       if( s.getArc().contains(loc) )
@@ -108,9 +109,10 @@ public class PieChart extends JComponent
         name = s.getName();
         value = s.getValue();
         percent = s.getPercent();
+        rtnStr = String.format("<html>%s<br>" + "Value:%.2f<br>" + "Percent:%.2f%%</html>", name, value, percent);
         break;
       }
     }
-    return String.format("<html>%s<br>" + "Value:%.2f<br>" + "Percent:%.2f%%</html>", name, value, percent);
+    return rtnStr;
   }
 }

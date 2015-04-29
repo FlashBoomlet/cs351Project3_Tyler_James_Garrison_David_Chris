@@ -68,6 +68,20 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
   private final int MIN_WIDTH = 0;
   private final int MAX_WIDTH;
   private final int STANDARD_HEIGHT;
+  private ArrayList<Slice> landUseArray = new ArrayList<>();
+  Slice[] landSlices = {
+    new Slice(0, new Color(102,255,51,155), "Organic"),
+    new Slice(0, new Color(153,102,51,155),  "Conventional" ),
+    new Slice(0, new Color(255,80,80,155), "GMO" ) };
+  private ArrayList<Slice> cropArray = new ArrayList<>();
+  Slice[] cropSlices = {
+    new Slice(0, new Color(235,235,51,155), "Corn"),
+    new Slice(0, new Color(255,153,0,155),  "Wheat" ),
+    new Slice(0, new Color(230,230,230,155), "Rice" ),
+    new Slice(0, new Color(194,163,133,155), "Soy"),
+    new Slice(0, new Color(255,102,255,155), "Other")
+  };
+
   // if true all info will be displayed
   //if false show a small collapsed version
   private static boolean isOpen = false;
@@ -125,21 +139,21 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     JPanel scrollCon = new JPanel();
     scrollCon.setOpaque(true);
     scrollCon.setLayout(new FlowLayout());
-    scrollCon.setPreferredSize(new Dimension(statsWidth, frameHeight));
+    scrollCon.setPreferredSize(new Dimension(statsWidth, (frameHeight*5)/3) );
     scrollCon.setBackground(GUI_BACKGROUND);
 
     //Policy Button and Trade Button
     scrollCon.add(policy);
     scrollCon.add(trade);
     //General
-    stats.setPreferredSize(new Dimension( statsWidth, generalHeight));
+    stats.setPreferredSize(new Dimension( statsWidth, (generalHeight*3)/2) );
     scrollCon.add(stats);
     //Land
     int landChartHeight = (int) ( statsWidth )*2;
     landStats.setPreferredSize(new Dimension( statsWidth, landChartHeight));
     scrollCon.add(landStats);
     //Crops
-    cropStats.setPreferredSize(new Dimension( statsWidth, cropHeight));
+    cropStats.setPreferredSize(new Dimension( statsWidth, landChartHeight ));
     scrollCon.add(cropStats);
 
     JScrollPane scrollFrame = new JScrollPane(scrollCon);
@@ -388,7 +402,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     double soyTotal = 0;
     double otherTotal = 0;
 
-    double totalCrops = 0;
 
     if( singeCountry )
     {
@@ -400,7 +413,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
       soyTotal = cd.getSoyTotal(metricUnits);
       otherTotal = cd.getOtherTotal(metricUnits);
 
-      totalCrops = cd.getCropTotal(metricUnits);
     }
     else
     {
@@ -413,22 +425,31 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
         soyTotal += cd.getSoyTotal(metricUnits);
         otherTotal += cd.getOtherTotal(metricUnits);
 
-        totalCrops += cd.getCropTotal(metricUnits);
       }
     }
-    /*
-     * Crop Information
-     */
-    BarPanel bp14 = getBarPanel( cornTotal, "Corn", totalCrops, false );
-    statPane.addBar(bp14);
-    BarPanel bp13 = getBarPanel( wheatTotal, "Wheat", totalCrops, false);
-    statPane.addBar(bp13);
-    BarPanel bp12 = getBarPanel( riceTotal, "Rice", totalCrops, false );
-    statPane.addBar(bp12);
-    BarPanel bp11 = getBarPanel( soyTotal, "Soy", totalCrops, false );
-    statPane.addBar(bp11);
-    BarPanel bp10 = getBarPanel( otherTotal, "Other", totalCrops, false );
-    statPane.addBar(bp10);
+
+
+    // Update the slice information
+    cropSlices[0].updateSlice(cornTotal, new Color(235,235,51,100), "Corn");
+    cropSlices[1].updateSlice(wheatTotal, new Color(255,153,0,100),  "Wheat" );
+    cropSlices[2].updateSlice(riceTotal, new Color(230,230,230,100), "Rice" );
+    cropSlices[3].updateSlice(soyTotal, new Color(194,163,133,100), "Soy");
+    cropSlices[4].updateSlice(otherTotal, new Color(255,102,255,100), "Other");
+
+    cropArray.clear();
+    for( int i = 0; i < cropSlices.length ; i++)
+    {
+      cropArray.add(cropSlices[i]);
+    }
+
+    int chartWidth = (int) ( statPane.getWidth() * (.75));
+    int chartX = (statPane.getWidth()-chartWidth)/2;
+    Rectangle landRect = new Rectangle(chartX,0,chartWidth,chartWidth);
+    Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
+
+    statPane.add(new PieChart(landRect, cropArray ));
+    statPane.add(new ChartKey( keyRect, cropArray ));
+
   }
 
   /**
@@ -467,16 +488,15 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
       gmo /= countryDataList.size();
     }
 
-    /**/
-    ArrayList<Slice> landUseArray = new ArrayList<>();
+    // Update the slice information
+    landSlices[0].updateSlice(organic*100, new Color(102,255,51,100), "Organic");
+    landSlices[1].updateSlice(conventional*100, new Color(153,102,51,100),  "Conventional" );
+    landSlices[2].updateSlice(gmo*100, new Color(255,80,80,100), "GMO" );
 
-    Slice[] slices = { new Slice(organic*100, new Color(0x66FF33), "Organic"),
-      new Slice(conventional*100, new Color(0x996633),  "Conventional" ),
-      new Slice(gmo*100, new Color(0xFF5050), "GMO" ) };
     landUseArray.clear();
-    for( int i = 0; i < slices.length ; i++)
+    for( int i = 0; i < landSlices.length ; i++)
     {
-      landUseArray.add(slices[i]);
+      landUseArray.add(landSlices[i]);
     }
 
     int chartWidth = (int) ( statPane.getWidth() * (.75));
