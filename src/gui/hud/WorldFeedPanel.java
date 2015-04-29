@@ -2,6 +2,7 @@ package gui.hud;
 
 import gui.ColorsAndFonts;
 import gui.WorldPresenter;
+import main.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +27,7 @@ public class WorldFeedPanel extends JPanel implements Observer
  private static DatePanel datePanel;
  private static OverlaySelect overlaySelect;
  private static GameplayControl gameplayControl;
+ private static PlayerCountryDisplay playerCountryDisplay;
  private static PopulationAndHappiness popAndHap;
 
  private LayoutManager layout = new FlowLayout(FlowLayout.LEFT,0,0);
@@ -51,6 +53,7 @@ public class WorldFeedPanel extends JPanel implements Observer
   overlaySelect = new OverlaySelect(0,0,(int) (frameWidth*(.25)),componentHeight);
   popAndHap = new PopulationAndHappiness(0,0,(int)(frameWidth*(.25)), height);
   gameplayControl = new GameplayControl(0,0,(int) ((frameWidth*(.30))),componentHeight);
+  playerCountryDisplay = new PlayerCountryDisplay(Game.userCountry, (int) ((frameWidth*(.30))),componentHeight);
 
   datePanel.setDate(presenter.getWorldDate());
 
@@ -66,7 +69,8 @@ public class WorldFeedPanel extends JPanel implements Observer
   datePanel.setVisible(trigger);
   overlaySelect.setVisible(trigger);
   popAndHap.setVisible(trigger);
-  gameplayControl.setVisible(trigger);
+  playerCountryDisplay.setVisible(trigger);
+  //gameplayControl.setVisible(trigger);
   this.setVisible(trigger);
  }
 
@@ -86,7 +90,8 @@ public class WorldFeedPanel extends JPanel implements Observer
 
   add(popAndHap);
   add(datePanel);
-  add(gameplayControl);
+  add(playerCountryDisplay);
+  //add(gameplayControl);
 
   setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, ColorsAndFonts.GUI_TEXT_COLOR.darker()  ));
  }

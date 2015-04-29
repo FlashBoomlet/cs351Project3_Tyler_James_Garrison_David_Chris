@@ -57,7 +57,7 @@ public class Game
    */
   private static MapPane mapPane;
   public static InfoPanel infoPanel;
-  private static PlayerCountryInfo playerCountryInfo;
+  public static PlayerCountryInfo playerCountryInfo;
   private static NavMap navMap;
   private static Ticker ticker;
   private static WorldFeedPanel worldFeedPanel;
@@ -224,14 +224,16 @@ public class Game
         Dimension dim = new Dimension(frameWidth,(int) (frameHeight-feedPanelHeight) );
         mapPane = new MapPane(cam, worldPresenter,dim,feedPanelHeight);
 
+        userCountry = worldPresenter.getSingleRegion("United States of America");
+
         worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight);
         worldPresenter.addObserver(worldFeedPanel);
 
         infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight),(int) (feedPanelHeight));
         infoPanel.setPresenter(worldPresenter);
 
-        userCountry = worldPresenter.getSingleRegion("United States of America");
-        playerCountryInfo = new PlayerCountryInfo(userCountry,frameWidth/5);
+
+        playerCountryInfo = new PlayerCountryInfo(userCountry,frameWidth,feedPanelHeight,300,400);
 
         // Card Selectors
         policySelector = new CardSelector(275,75,600,500,"POLICY");
@@ -415,13 +417,12 @@ public class Game
       layeredPane.add(worldFeedPanel, new Integer(2));
 
       // Side panel with all information
-      infoPanel.setBounds(0,feedPanelHeight,frameWidth/6,frameHeight-feedPanelHeight-tickerHeight);
+      infoPanel.setBounds(0,feedPanelHeight,frameWidth / 6, frameHeight - feedPanelHeight-tickerHeight);
       layeredPane.add(infoPanel, new Integer(6)) ;
       infoPanel.setVisible(false);
 
-      //info panel for users country
-      playerCountryInfo.setLocation((frameWidth-54),feedPanelHeight);
       layeredPane.add(playerCountryInfo, new Integer(6));
+
 
       // Navigation in the lower right hand corner
       layeredPane.add(navMap, new Integer(3));
@@ -462,7 +463,6 @@ public class Game
     settingsScreen.setVisible(false);
     mapScale.setVisible(true);
     ticker.setVisible(true);
-    playerCountryInfo.setVisible(true);
 
 
   }
@@ -502,7 +502,6 @@ public class Game
     mapScale.setVisible(false);
     finishPanel.setVisible(false);
     ticker.setVisible(false);
-    playerCountryInfo.setVisible(false);
   }
 
   /**
