@@ -72,6 +72,7 @@ public class PieChart extends JComponent
    */
   private void drawPie(Graphics2D g2d)
   {
+    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
     for (int i = 0; i < slices.size(); i++)
     {
       //Get the arc

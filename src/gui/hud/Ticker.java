@@ -23,7 +23,7 @@ import java.util.List;
  *   Based on the original version by David Ringo.
  * @since 04.20.2015
  */
-public class Ticker extends JPanel implements ActionListener
+public class Ticker extends JPanel
 {
   private static int width;
   private static int height;
@@ -33,6 +33,7 @@ public class Ticker extends JPanel implements ActionListener
   private static int padding = 50;
   private static String stringToDraw = "";
   private static String stringSpacing = "                     ";
+  private OpenerThread openerThread;
 
   private BufferedImage image;
   static final String IMAGE_PATH = "resources/images/tickerOverlay.png";
@@ -52,8 +53,6 @@ public class Ticker extends JPanel implements ActionListener
 
   private String marquisStr;
 
-  /* timer controls rate of scroll/repaint */
-  private Timer timer;
 
   public Ticker(int x, int y, int width, int height)
   {
@@ -81,8 +80,8 @@ public class Ticker extends JPanel implements ActionListener
     setLocation(x,y);
     setSize(new Dimension(width, height));
 
-    timer = new Timer(50, this);
-    start();
+    openerThread = new OpenerThread();
+    openerThread.start();
   }
   public static final int MARQUEE_SPEED_DIV = 5;
   public static final int REPAINT_WITHIN_MS = 5;
@@ -162,40 +161,43 @@ public class Ticker extends JPanel implements ActionListener
     for(String s : newsList) addMarquisText(s);
   }
 
-  /**
-   start marquis scrolling
-   */
-  public void start()
+  /*
+  * runs to set the size of the panel through an
+  * animation, a thread is used so that players
+  * can continue to manipulate the map while the resizing is happening
+  */
+  private class OpenerThread extends Thread
   {
-    timer.start();
-  }
 
-  /**
-   pause marquis scrolling
-   */
-  public void pause()
-  {
-    timer.stop();
-  }
-
-  /**
-   *
-   * @param e
-   */
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    // Les calculate movement!
-    int stringLength = (int)(font.getStringBounds(stringToDraw, frc).getWidth() );
-    // Sets the corrected location to the end of the string
-    int location = ( Math.abs(stringLocation + stringLength)  );
-    if( location <= padding )
+    //I just played with the values until I got something that felt right
+    @Override
+    public void run()
     {
-      stringLocation = width;
+      try
+      {
+        while( !this.isInterrupted() )
+        {
+          // Les calculate movement!
+          int stringLength = (int)(font.getStringBounds(stringToDraw, frc).getWidth() );
+          // Sets the corrected location to the end of the string
+          int location = ( Math.abs(stringLocation + stringLength)  );
+          if( location <= padding )
+          {
+            stringLocation = width;
+          }
+          else
+          {
+            stringLocation -= 2;
+          }
+          repaint();
+          this.sleep(50);
+        }
+      }
+      catch (InterruptedException e)
+      {
+        e.printStackTrace();
+      }
+      //this.interrupt();
     }
-    else
-    {
-      stringLocation -= 2;
-    }
-    repaint();
   }
 }

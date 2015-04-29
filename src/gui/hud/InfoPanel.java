@@ -82,9 +82,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     new Slice(0, new Color(255,102,255,155), "Other")
   };
 
-  // if true all info will be displayed
-  //if false show a small collapsed version
-  private static boolean isOpen = false;
   private OpenerThread openerThread;
 
   /**
