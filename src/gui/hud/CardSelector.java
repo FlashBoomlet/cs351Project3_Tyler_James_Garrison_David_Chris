@@ -476,7 +476,7 @@ public class CardSelector extends JPanel
 
   /**
    * Override paint components
-   * @param g graphics you with to have
+   * @param g graphics you wish to have
    */
   @Override
   public void paintComponent(Graphics g)
