@@ -51,7 +51,8 @@ public class PanelTester
     */
 
 
-    f.add(new Notification(new Rectangle(200,200,150,75)));
+    f.add(new AvailableCropsBar("test", new Color(134,255, 109,255),100,60,300,50));
+    f.pack();
   }
 
   /**
@@ -65,8 +66,8 @@ public class PanelTester
     f = new JFrame();
 
     f.setTitle("STARVATION EVASION");
-    f.setPreferredSize(new Dimension(width, height));
-    f.setSize(f.getPreferredSize());
+    //f.setPreferredSize(new Dimension(width, height));
+    //f.setSize(f.getPreferredSize());
     f.setLocation(0, 0);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
