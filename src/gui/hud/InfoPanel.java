@@ -37,6 +37,8 @@ import static gui.ColorsAndFonts.GUI_BACKGROUND;
  */
 public class InfoPanel extends JPanel implements Observer, ActionListener
 {
+
+  private int updateCountryCount = 0;
   /* width = 1 allows panel to be resized intelligently upon container
      instantiation.  Height is important, however, to ensure the child components
      are able to display their info correctly */
@@ -502,7 +504,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
 
     statPane.add(new PieChart(landRect, landUseArray ));
-    statPane.add(new ChartKey( keyRect, landUseArray ));
+    statPane.add(new ChartKey(keyRect, landUseArray));
 
     //System.out.print(statPane.getLayout());
 
@@ -714,18 +716,22 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
 
     if (officialRegions.size() == 0 || activeRegions == null || activeRegions.size() == 0 )
     {
+      updateCountryCount = officialRegions.size();
       this.setVisible(false);
       policySelector.resetLocation();
       tradeSelector.resetLocation();
       clearDisplay();
     }
-    else
+    else if(updateCountryCount != officialRegions.size() && !presenter.isActivelyDragging())
     {
       // SHOW PANEL
+      updateCountryCount = officialRegions.size();
+
+      if (!this.isVisible()) fancyShow();
       this.setVisible(true);
-      fancyShow();
       displayAllGUIRegions(officialRegions);
     }
+
   }
 
   /**

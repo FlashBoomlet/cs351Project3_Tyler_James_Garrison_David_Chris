@@ -67,6 +67,7 @@ public class PieChart extends JComponent
   @Override
   public void paint(Graphics g)
   {
+
     drawPie((Graphics2D) g);
   }
 
