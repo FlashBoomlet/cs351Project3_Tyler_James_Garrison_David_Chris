@@ -1,6 +1,11 @@
 package main.StartScreen;
 
 import gui.ColorsAndFonts;
+import gui.GUIRegion;
+import gui.WorldPresenter;
+import main.Trigger;
+import model.PolicyData;
+import model.Region;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -8,6 +13,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Collection;
 
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 
@@ -22,13 +30,15 @@ class BeginScreen extends JPanel implements ActionListener
   private JButton beginGame;
   private int frameWidth;
   private int frameHeight;
-
+  Font FONT = new Font("Tahoma", Font.PLAIN, 14);
+  private GUIRegion selectedCoutnry = null;
 
   /*
    * Components for the begin screen
    */
   private CountrySelect countrySelect;
   private CountryPreview countryPreview;
+  private Trigger trigger;
 
   private Action startAction = new AbstractAction()
   {
@@ -41,10 +51,10 @@ class BeginScreen extends JPanel implements ActionListener
   /**
    * Constructor
    */
-  BeginScreen()
+  BeginScreen(Trigger trigger)
   {
     super();
-
+    this.trigger = trigger;
     this.frameWidth = main.Game.frameWidth;
     this.frameHeight = main.Game.frameHeight;
 
@@ -95,17 +105,19 @@ class BeginScreen extends JPanel implements ActionListener
     JButton tempBtn = (JButton) e.getSource();
     String name = tempBtn.getText();
 
+    trigger.setPlayer(selectedCoutnry);
     StartScreen.buttonAction(name);
   }
 
   /**
    *  Panel to select what country you would like
    */
-  private class CountrySelect extends JPanel
+  private class CountrySelect extends JPanel implements MouseListener
   {
     public final EmptyBorder PADDING_BORDER = new EmptyBorder(2, 2, 2, 2);
     // Null color basically
     private final Color BORDER_COL = new Color(0.0f,0.0f,0.0f,0.0f);
+    Collection<GUIRegion> guiRegions;
 
     private CountrySelect()
     {
@@ -120,32 +132,87 @@ class BeginScreen extends JPanel implements ActionListener
       int height = (int) (frameHeight*(.75));
       int x = ((frameWidth/4)-(width/2));
       int y = (frameHeight-height)/4;
+      int scrollW = 10;
 
       /*
        * Taking hacking of the positioning to a whole new level.
        */
       setBorder(new CompoundBorder(BorderFactory.createMatteBorder(y, x, frameHeight-(height+y),(frameWidth/2)-(width+x), BORDER_COL), PADDING_BORDER));
 
-
+      guiRegions = WorldPresenter.getAllRegions();
+      int regionCount = guiRegions.size();
+      int labelH = (int) (FONT.getSize()*(1.2));
+      int countryHeight = (int) (regionCount * (labelH) );
       JPanel countries = new JPanel();
       countries.setBackground(Color.CYAN);
-      countries.setPreferredSize(new Dimension(width, height * 5));
-      countries.setLayout(new FlowLayout());
-      countries.add(new JLabel("Use Logic from Chart Key to            "));
-      countries.add(new JLabel( "handle sizing & creating             \n " ));
-      countries.add(new JLabel( " a custom list                  "));
-      countries.add(new JLabel( "               "));
-      for( int i = 0; i < 50; i ++ ) countries.add(new JLabel("Countries will go here"));
+      countries.setPreferredSize(new Dimension(width-scrollW, countryHeight));
+      countries.setLayout(new BoxLayout(countries,BoxLayout.PAGE_AXIS));
+      countries.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
+
+      setFont(FONT);
+      for (GUIRegion r : guiRegions)
+      {
+        JLabel tempLabel = new JLabel(r.getName());
+        tempLabel.addMouseListener(this);
+        countries.add( tempLabel );
+      }
 
       JScrollPane scrollPane = new JScrollPane(countries);
       scrollPane.setOpaque(false);
-      scrollPane.setLocation(0,0);
+      scrollPane.setLocation(0, 0);
+      scrollPane.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
       scrollPane.setPreferredSize(new Dimension(width, height));
-      scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10, 10));
-      scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(10, 10));
-      //scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
+      scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(scrollW, 10));
+      scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(scrollW, 10));
+      scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
       add(scrollPane );
 
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+      /* Do nothing */
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e)
+    {
+      /* Do nothing */
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e)
+    {
+      JLabel temp = (JLabel) e.getSource();
+      String name = temp.getText();
+
+      selectedCoutnry = fetchCountry(name);
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e)
+    {
+      /* Do nothing */
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e)
+    {
+      /* Do nothing */
+    }
+
+    /**
+     *
+     * @return a GUIRegion country that the player selects
+     */
+    private GUIRegion fetchCountry(String name)
+    {
+      for (GUIRegion r : guiRegions)
+      {
+        if( r.getName() == name ) return r;
+      }
+      return null;
     }
   }
 

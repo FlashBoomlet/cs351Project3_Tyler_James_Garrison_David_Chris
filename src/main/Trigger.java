@@ -1,5 +1,6 @@
 package main;
 
+import gui.GUIRegion;
 import gui.hud.Ticker.News;
 import gui.hud.Ticker.Ticker;
 
@@ -71,5 +72,15 @@ public class Trigger
       return true;
     }
     return false;
+  }
+
+  /**
+   * Set the player of the game
+   *
+   * @param gRegion for the player to play as
+   */
+  public void setPlayer(GUIRegion gRegion)
+  {
+    System.out.println( "You have selected to play as: " + gRegion.getName() );
   }
 }

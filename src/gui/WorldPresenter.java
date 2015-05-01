@@ -27,7 +27,7 @@ public class WorldPresenter extends Observable
   private CAM_DISTANCE lastDistance;
   public MapConverter mpConverter;
   private Collection<GUIRegion> modelRegions;
-  private Collection<GUIRegion> backgroundRegions;
+  private static Collection<GUIRegion> backgroundRegions;
   private ActiveRegionList activeRegions;
   private static World world;
   private boolean activelyDraging;
@@ -260,7 +260,7 @@ public class WorldPresenter extends Observable
     return regionsInView;
   }
 
-  public Collection<GUIRegion> getAllRegions()
+  public static Collection<GUIRegion> getAllRegions()
   {
     return backgroundRegions;
   }

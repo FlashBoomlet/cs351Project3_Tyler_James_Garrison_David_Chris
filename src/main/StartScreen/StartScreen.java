@@ -3,6 +3,7 @@ package main.StartScreen;
 import gui.ColorsAndFonts;
 import gui.WorldPresenter;
 import main.Game;
+import main.Trigger;
 import model.World;
 
 import javax.imageio.ImageIO;
@@ -40,7 +41,7 @@ public class StartScreen extends JPanel implements ActionListener
   private static BeginScreen beginScreen;
   private int frameWidth;
   private int frameHeight;
-
+  private Trigger trigger;
 
   private BufferedImage image;
 
@@ -54,12 +55,13 @@ public class StartScreen extends JPanel implements ActionListener
    * @param frameWidth main frame's width
    * @param frameHeight main frame's height
    */
-  public StartScreen(int frameWidth, int frameHeight, BufferedImage image)
+  public StartScreen(int frameWidth, int frameHeight, BufferedImage image, Trigger trigger)
   {
     super();
     this.frameWidth = frameWidth;
     this.frameHeight = frameHeight;
     this.image = image;
+    this.trigger = trigger;
 
     setLocation(0,0);
     setOpaque(true);
@@ -72,7 +74,7 @@ public class StartScreen extends JPanel implements ActionListener
 
     startUp = new StartUp();
     moreInfo = new MoreInfo();
-    beginScreen = new BeginScreen();
+    beginScreen = new BeginScreen(trigger);
 
     add(moreInfo);
     moreInfo.setVisible(false);

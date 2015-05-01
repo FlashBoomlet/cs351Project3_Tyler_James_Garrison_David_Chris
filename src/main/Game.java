@@ -70,6 +70,7 @@ public class Game
   private static MapScale mapScale;
   private static Camera cam;
   private static Notification notification;
+  private static Trigger trigger;
   public static Camera getCamera()
   {
     return cam;
@@ -173,7 +174,6 @@ public class Game
       System.out.println("ERROR: Cannot find Start image!");
     }
 
-    startPanel = new StartScreen(frameWidth,frameHeight,image);
     new leParseStuff();
 
   }
@@ -197,6 +197,7 @@ public class Game
         final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
         final int NAV_X = frameWidth-NAV_WIDTH;
         final int NAV_Y = frameHeight-NAV_HEIGHT;
+        trigger = new Trigger();
 
         //Do stuff here
         xmlRegions = new AreaXMLLoader().getRegions();
@@ -255,9 +256,12 @@ public class Game
         Rectangle tempRect = new Rectangle(alertX,mapScale.getY(),alertW,alertH);
         notification =  new Notification(tempRect);
 
+        startPanel = new StartScreen(frameWidth,frameHeight,image,trigger);
 
         initFrame();
         setupControlls();
+
+        this.interrupt();
       }
       catch (Exception e) {}
     }
