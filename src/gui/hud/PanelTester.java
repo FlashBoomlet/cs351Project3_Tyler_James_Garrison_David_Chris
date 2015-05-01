@@ -3,6 +3,7 @@ package gui.hud;
 import gui.hud.PieChart.ChartKey;
 import gui.hud.PieChart.PieChart;
 import gui.hud.PieChart.Slice;
+import main.Notification;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +28,7 @@ public class PanelTester
    */
   private PanelTester()
   {
+    /*
     //f.add(new CardSelector(0, 0, width, height, "TEST"));
 
     // 73 Total
@@ -43,9 +45,13 @@ public class PanelTester
     {
       sliceArray.add( slices[i] );
     }
-    f.add(new PieChart( f.getBounds(), sliceArray ) );
+    //f.add(new PieChart( f.getBounds(), sliceArray ) );
     Rectangle temp = new Rectangle(0,0,100,100);
     //f.add(new ChartKey(temp, sliceArray ));
+    */
+
+
+    f.add(new Notification(new Rectangle(200,200,150,75)));
   }
 
   /**

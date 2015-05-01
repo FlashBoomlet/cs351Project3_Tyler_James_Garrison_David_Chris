@@ -560,7 +560,6 @@ public class CardSelector extends JPanel
       case "topCon":
         // Let make a custom pop up to annoy the user because, I can!
         dragFrom = e.getPoint();
-        System.out.println( "We detected a click!" );
         break;
       default:
         break;
@@ -655,10 +654,13 @@ public class CardSelector extends JPanel
 
   public void mouseMoved(MouseEvent e) { /* Do nothing */ }
 
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(MouseEvent e)
+  {
     double dx = (dragFrom.getX() - e.getPoint().getX() );
     double dy = (dragFrom.getY() - e.getPoint().getY() );
+    getParent().repaint();
     setLocation( (int) (x-dx), (int) (y-dy) );
+    getParent().repaint();
   }
 
   /**

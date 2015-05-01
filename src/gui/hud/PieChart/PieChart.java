@@ -30,6 +30,9 @@ public class PieChart extends JComponent
   public PieChart(Rectangle area, ArrayList<Slice> sliceArray)
   {
     this.area = area;
+    setLocation(0,0);
+    setSize(area.width,area.height);
+
     slices = sliceArray;
     double curValue = 0.0D;
     int startAngle;
@@ -46,7 +49,7 @@ public class PieChart extends JComponent
       s.setAngle((s.getValue() * 360 / total));
       s.setPercent((s.getValue()/total)*100);
       s.setArcStartAngle(startAngle);
-      s.setFrame(area);
+      s.setFrame(0,0,getWidth(),getHeight());
       curValue += s.getValue();
     }
 
@@ -84,7 +87,7 @@ public class PieChart extends JComponent
 
       // Draw the outline of the arc -Make more bold first
       g2d.setStroke(new BasicStroke(1));
-      g2d.setColor(Color.BLACK);
+      g2d.setColor(Color.LIGHT_GRAY);
       g2d.draw( s.getArc() );
     }
   }

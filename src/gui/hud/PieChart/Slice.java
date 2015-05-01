@@ -40,11 +40,14 @@ public class Slice
   /**
    * Set the frame that the arc will sit in
    *
-   * @param area of which the arc may be in
+   * @param x
+   * @param y
+   * @param width
+   * @param height
    */
-  public void setFrame(Rectangle area)
+  public void setFrame(int x, int y, int width, int height)
   {
-    arc.setFrame(area.x, area.y, area.width, area.height);
+    arc.setFrame(x, y, width, height);
   }
 
   /**

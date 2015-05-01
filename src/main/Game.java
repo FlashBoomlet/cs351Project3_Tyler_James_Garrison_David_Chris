@@ -69,6 +69,7 @@ public class Game
   private static JPanel defaultScreen;
   private static MapScale mapScale;
   private static Camera cam;
+  private static Notification notification;
   public static Camera getCamera()
   {
     return cam;
@@ -232,7 +233,6 @@ public class Game
         infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight),(int) (feedPanelHeight));
         infoPanel.setPresenter(worldPresenter);
 
-
         playerCountryInfo = new PlayerCountryInfo(userCountry,frameWidth,feedPanelHeight,300,400);
 
         // Card Selectors
@@ -248,6 +248,13 @@ public class Game
         buttonPanel = new ButtonPanel(NAV_Y,frameWidth,NAV_WIDTH);
 
         mapScale = new MapScale(NAV_X,NAV_Y-20,150,20,cam);
+
+        int alertW = 150;
+        int alertH = (int) ((ticker.getY()-mapScale.getY())*(.75));
+        int alertX = mapScale.getX()-mapScale.getHeight()-alertW;
+        Rectangle tempRect = new Rectangle(alertX,mapScale.getY(),alertW,alertH);
+        notification =  new Notification(tempRect);
+
 
         initFrame();
         setupControlls();
@@ -369,6 +376,8 @@ public class Game
     frame.setContentPane(new CenterPanel(mapPane, infoPanel, worldFeedPanel, playerCountryInfo));
 
     frame.addKeyListener(mapPane);
+    // For future implementation should I choose to implement keyListener -TLynch 4.32.15
+    //frame.addKeyListener(policySelector);
     frame.pack();
     frame.setVisible(true);
   }
@@ -440,6 +449,8 @@ public class Game
       layeredPane.add(policySelector, new Integer(8) );
       layeredPane.add(tradeSelector, new Integer(8) );
 
+      layeredPane.add(notification, new Integer(9) );
+
       pauseGame();
       repaint();
     }
@@ -462,8 +473,8 @@ public class Game
     startPanel.setVisible(false);
     settingsScreen.setVisible(false);
     mapScale.setVisible(true);
+    notification.setVisible(true);
     ticker.setVisible(true);
-
 
   }
 
@@ -500,6 +511,7 @@ public class Game
     startPanel.setVisible(true);
     settingsScreen.setVisible(false);
     mapScale.setVisible(false);
+    notification.setVisible(false);
     finishPanel.setVisible(false);
     ticker.setVisible(false);
   }
