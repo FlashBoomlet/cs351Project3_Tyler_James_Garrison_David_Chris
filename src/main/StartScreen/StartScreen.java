@@ -1,4 +1,4 @@
-package main;
+package main.StartScreen;
 
 import gui.ColorsAndFonts;
 import gui.WorldPresenter;
@@ -26,7 +26,7 @@ public class StartScreen extends JPanel implements ActionListener
 
   JButton start;
   JButton info;
-  JButton back;
+  static JButton back;
   JButton skip;
   JButton beginGame;
 
@@ -34,10 +34,10 @@ public class StartScreen extends JPanel implements ActionListener
   JTextArea text;
 
 
-  private String startLabel = "\t\tSTART\t\t";
-  private MoreInfo moreInfo;
-  private StartUp startUp;
-  private BeginScreen beginScreen;
+  private static String startLabel = "\t\tSTART\t\t";
+  private static MoreInfo moreInfo;
+  private static StartUp startUp;
+  private static BeginScreen beginScreen;
   private int frameWidth;
   private int frameHeight;
 
@@ -85,7 +85,7 @@ public class StartScreen extends JPanel implements ActionListener
     startUp.setVisible(true);
 
   }
-  private void startMethod(){
+  private static void startMethod(){
     Game.startGame();
     Game.settingsDisplay(false);
   }
@@ -299,57 +299,6 @@ public class StartScreen extends JPanel implements ActionListener
     }
   }
 
-  /**
-   * Container for the country selection and preview
-   */
-  private class BeginScreen extends JPanel implements ActionListener
-  {
-    BeginScreen() {
-      super();
-      setOpaque(false);
-      setLocation(0, 0);
-      setSize(frameWidth, frameHeight);
-      setLayout(new BorderLayout());
-
-      beginGame = new JButton("BEGIN");
-      beginGame.addActionListener(this);
-
-
-      getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "startaction");
-      getActionMap().put("startaction", startAction);
-
-      JPanel contentHolder = new JPanel();
-      contentHolder.setOpaque(false);
-      contentHolder.setPreferredSize(new Dimension((int) (getWidth()), (int) (getHeight() * (.90))));
-      add(contentHolder, BorderLayout.NORTH);
-
-      JPanel buttonCon = new JPanel();
-      buttonCon.setPreferredSize(new Dimension((int) (frameWidth), (int) (frameHeight * (.10))));
-      buttonCon.setOpaque(false);
-      buttonCon.add(back);
-      buttonCon.add(beginGame);
-      add( buttonCon, BorderLayout.SOUTH);
-    }
-
-    /**
-     * Overrides action performed.
-     * Detects which button is clicked, gets the text and passes it along to buttonClicked
-     *
-     * @author Tyler Lynch <lyncht@unm.edu>
-     *
-     * @param e
-     */
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-      JButton tempBtn = (JButton) e.getSource();
-      String name = tempBtn.getText();
-
-      buttonAction(name);
-    }
-  }
-
-
 
 
   /**
@@ -373,7 +322,7 @@ public class StartScreen extends JPanel implements ActionListener
    * Switches which screen is being showed
    * @param title of the button clicked
    */
-  private void buttonAction(String title)
+  static void buttonAction(String title)
   {
     switch(title)
     {

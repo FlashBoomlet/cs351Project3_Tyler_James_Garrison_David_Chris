@@ -7,6 +7,7 @@ import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
 import gui.hud.*;
 import gui.hud.Ticker.Ticker;
+import main.StartScreen.StartScreen;
 import model.Region;
 import model.World;
 
@@ -38,8 +39,8 @@ public class Game
    */
   public static final String MODEL_DATA_PATH = "resources/ne_10m_admin_1_states_provinces.kml";
   public static final String BG_DATA_PATH = "resources/countries_world.xml";
-  int frameWidth = 1200;
-  int frameHeight = 700;
+  public static int frameWidth = 1200;
+  public static int frameHeight = 700;
   int tickerHeight;
   final float NAV_HEIGHT_SCALE = (float) .25;
   final float NAV_WIDTH_SCALE = (float) 1.6;
