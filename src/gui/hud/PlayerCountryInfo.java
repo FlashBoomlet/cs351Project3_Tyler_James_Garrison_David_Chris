@@ -44,16 +44,20 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
 
 
   //display prettiness
-  JPanel holder;
+  private JPanel holder;
+  private JScrollPane holderSCR;
 
-  Color[] cropColor = {new Color(125, 235, 232,255),
+  Color[] cropColor = {
+          new Color(125, 235, 232,255),
           new Color(255,153,0,255),
           new Color(230,230,230,255),
           new Color(194,163,133,255),
           new Color(255,102,255,255),
           new Color(102,255,51,255),
           new Color(153,102,51,255),
-          new Color(255,80,80,255)
+          new Color(255,80,80,255),
+          new Color(27, 35, 153,255),
+          new Color(223, 22, 255,255)
 
   };
 
@@ -72,6 +76,22 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
           new Slice(0, cropColor[6],  "Conventional" ),
           new Slice(0, cropColor[7], "GMO" )
   };
+
+  private ArrayList<Slice> hungryArray = new ArrayList<>();
+  Slice[] hungrySlices = {
+          new Slice(0, cropColor[8], "Nourished"),
+          new Slice(0, cropColor[9],  "Hungry" )
+  };
+
+  private ArrayList<Slice> popArray = new ArrayList<>();
+  Slice[] popSlices = {
+          new Slice(0, cropColor[8], "Stable"),
+          new Slice(0, cropColor[9],  "New" ),
+          new Slice(0, cropColor[9],  "Gone" )
+
+  };
+
+
 
   //players country for access to information
   private GUIRegion playerCountry;
@@ -103,18 +123,29 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
 
     holder = new JPanel();
     holder.setLocation(0, 0);
-    holder.setSize(MAX_WIDTH, MAX_HEIGHT);
-    holder.setBackground(new Color(0, 0, 0, 100));
-    holder.setBorder(border);
-    holder.setLayout(new GridLayout(2,2));
+    holder.setSize(MAX_WIDTH, MAX_HEIGHT * 2);
+    holder.setPreferredSize(new Dimension(MAX_WIDTH, MAX_HEIGHT * 2));
+    holder.setLayout(new GridLayout(4, 2));
+    holder.setBackground(new Color(0, 0, 0, 0));
 
     initCrops();
     initLand();
+    initHungry();
+    initPop();
+
+    holderSCR = new JScrollPane(holder);
+    holderSCR.setBounds(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    holderSCR.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    holderSCR.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    holderSCR.getVerticalScrollBar().setPreferredSize(new Dimension(5, holderSCR.getHeight()));
+    holderSCR.setBackground(Color.DARK_GRAY);
+
+
 
     this.setLayout(null);
     this.setSize(MIN_WIDTH, MIN_HEIGHT);
-    this.setFocusable(true);
-    this.add(holder);
+    //this.setFocusable(true);
+    this.add(holderSCR);
 
 
 
@@ -199,6 +230,67 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
 
     holder.add(new PieChart(landRect, landArray));
     holder.add(new ChartKey(keyRect, landArray));
+  }
+
+  //
+  private void initHungry()
+  {
+    CountryData cd = playerCountry.getCountryData();
+
+    double pop = cd.getPopulation(true);
+    double unnur = cd.getUndernourish(true);
+
+    double totUnourished = pop*(unnur/1000);
+    double full = pop - totUnourished;
+
+    hungrySlices[0].updateSlice((int) full, cropColor[8], "Nourished");
+    hungrySlices[1].updateSlice((int)totUnourished,cropColor[9],  "Hungry" );
+
+    hungryArray.clear();
+    for( int i = 0; i < hungrySlices.length ; i++)
+    {
+      hungryArray.add(hungrySlices[i]);
+    }
+
+
+    Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
+    Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);
+
+    holder.add(new PieChart(landRect, hungryArray));
+    holder.add(new ChartKey(keyRect, hungryArray));
+  }
+
+
+
+  private void initPop()
+  {
+    CountryData cd = playerCountry.getCountryData();
+
+    double pop = cd.getPopulation(true);
+    double newPop = cd.getBirthRate(true) + cd.getMigration(true);
+    double deadPop = cd.getMortality(true);
+
+    double deadNum = pop*(deadPop/1000);
+    double newNum = pop*(newPop/1000);
+    double stable = pop +newNum -deadNum;
+
+    popSlices[0].updateSlice(stable,cropColor[7],"Stable pop.");
+    popSlices[1].updateSlice(newNum,cropColor[8],"New pop.");
+    popSlices[2].updateSlice(deadNum,cropColor[9],"Dead pop.");
+
+
+    popArray.clear();
+    for( int i = 0; i < popSlices.length ; i++)
+    {
+      popArray.add(popSlices[i]);
+    }
+
+
+    Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
+    Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);
+
+    holder.add(new PieChart(landRect, popArray));
+    holder.add(new ChartKey(keyRect, popArray));
   }
 
   /**
