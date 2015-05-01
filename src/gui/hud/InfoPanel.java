@@ -439,7 +439,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
       cropArray.add(cropSlices[i]);
     }
 
-    int chartWidth = (int) ( statPane.getWidth() * (.75));
+    int chartWidth = (int) (statPane.getWidth() * (.75));
     int chartX = (statPane.getWidth()-chartWidth)/2;
     Rectangle landRect = new Rectangle(chartX,0,chartWidth,chartWidth);
     Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
@@ -503,6 +503,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
 
     statPane.add(new PieChart(landRect, landUseArray ));
     statPane.add(new ChartKey( keyRect, landUseArray ));
+
+    //System.out.print(statPane.getLayout());
 
   }
 

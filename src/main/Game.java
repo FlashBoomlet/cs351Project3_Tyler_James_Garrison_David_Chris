@@ -233,7 +233,7 @@ public class Game
         infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight),(int) (feedPanelHeight));
         infoPanel.setPresenter(worldPresenter);
 
-        playerCountryInfo = new PlayerCountryInfo(userCountry,frameWidth,feedPanelHeight,300,400);
+        playerCountryInfo = new PlayerCountryInfo(userCountry,frameWidth-15,feedPanelHeight,300,400);
 
         // Card Selectors
         policySelector = new CardSelector(275,75,600,500,"POLICY");
