@@ -56,6 +56,8 @@ public class PieChart extends JComponent
     setToolTipText("");
     UIManager.put("ToolTip.background", new Color(0.0f,0.0f,0.0f,0.75f));
     UIManager.put("ToolTip.foreground", new Color(1.0f,1.0f,1.0f,1.0f));
+
+
   }
 
   /**

@@ -12,10 +12,6 @@ import java.awt.event.MouseListener;
  * Created by James Lawson on 4/27/2015.
  *
  * display class to show specific country info
- * will probably add a scroll pane in the future
- * to allow for more data to be displayed
- *
- * todo:add a JScrollPane
  */
 public class PlayerCountryDisplay extends JPanel implements MouseListener
 {
@@ -44,6 +40,7 @@ public class PlayerCountryDisplay extends JPanel implements MouseListener
     this.setLocation(0, 0);
     this.addMouseListener(this);
     this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    this.setToolTipText("click for data");
 
     nameLabel = new JLabel(playerCountry.getName());
     nameLabel.setFont(title);
