@@ -2,12 +2,11 @@ package main;
 
 import IO.AreaXMLLoader;
 import IO.CountryCSVParser;
-import IO.WorldDataParser;
 import gui.*;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
 import gui.hud.*;
-import model.AtomicRegion;
+import gui.hud.Ticker.Ticker;
 import model.Region;
 import model.World;
 

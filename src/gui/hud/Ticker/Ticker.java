@@ -1,4 +1,4 @@
-package gui.hud;
+package gui.hud.Ticker;
 
 import gui.ColorsAndFonts;
 

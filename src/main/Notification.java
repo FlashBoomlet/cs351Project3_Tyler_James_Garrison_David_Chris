@@ -7,12 +7,13 @@ import java.awt.*;
  *
  *
  * @author Tyler Lynch <lyncht@unm.edu>
- * @since 4.23.15
+ * @since 4.30.15
  */
 public class Notification extends JComponent
 {
   private Rectangle area;
   private float alpha = 0.0f;
+  private float alphaMax = 0.75f;
   private String title = "fhsfnfgn";
   private String description = "cvnxnxcv";
   private OpenerThread openerThread;
@@ -54,9 +55,9 @@ public class Notification extends JComponent
     super.paint(g);
     Graphics2D g2d = (Graphics2D) g;
 
-    g2d.setColor( new Color(1.0f,1.0f,0.0f,1.0f));
+    g2d.setColor( new Color(1.0f,1.0f,0.0f,alpha));
     g2d.fillRect(0, 0,getWidth(),getHeight() );
-    g2d.setColor( new Color(0.0f,1.0f,1.0f,1.0f));
+    g2d.setColor( new Color(0.0f,1.0f,1.0f,alpha));
     int fontY = font.getSize();
     g2d.drawString(frontPadding + title, 0, fontY + getHeight()/4 );
     g2d.drawString(frontPadding + description, 0, fontY + getHeight()/2  );
@@ -67,10 +68,17 @@ public class Notification extends JComponent
    *
    * Take the parameter of an alert object in the future.
    */
-  private void updateAlert()
+
+  /**
+   * Create a new news alert to be sent out
+   *
+   * @param title of the alert
+   * @param description of the alert
+   */
+  public void updateAlert(String title, String description)
   {
-    title = "test";
-    description = "blah blah";
+    this.title = title;
+    this.description = description;
     /*
      * create thread for silky smooth open and close
      */
