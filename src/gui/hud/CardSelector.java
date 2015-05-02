@@ -3,7 +3,6 @@ package gui.hud;
 import IO.PolicyCSVParser;
 import gui.ColorsAndFonts;
 import gui.regionlooks.RegionViewFactory;
-import main.Player;
 import main.Trigger;
 import model.PolicyData;
 

@@ -32,27 +32,27 @@ public class PanelTester
     //f.add(new CardSelector(0, 0, width, height, "TEST"));
 
     // 73 Total
-    Slice[] slices2 = { new Slice(5, Color.BLACK,"BLACK"),
-      new Slice(33, Color.GREEN,"GREEN"),
-      new Slice(20, Color.YELLOW,"YELLOW"), new Slice(15, Color.RED,"RED") };
-
-    Slice[] slices = { new Slice(0.64, Color.GREEN, "Organic"),
-      new Slice(52.6590008, Color.BLUE,  "Conventional" ),
-    new Slice(46.7009992, Color.RED, "GMO" ) };
-
-    ArrayList<Slice> sliceArray = new ArrayList<>();
-    for( int i = 0; i < slices.length ; i++)
-    {
-      sliceArray.add( slices[i] );
-    }
-    f.add(new PieChart( f.getBounds(), sliceArray ) );
-    Rectangle temp = new Rectangle(0,0,100,100);
+//    Slice[] slices2 = { new Slice(5, Color.BLACK,"BLACK"),
+//      new Slice(33, Color.GREEN,"GREEN"),
+//      new Slice(20, Color.YELLOW,"YELLOW"), new Slice(15, Color.RED,"RED") };
+//
+//    Slice[] slices = { new Slice(0.64, Color.GREEN, "Organic"),
+//            new Slice(52.6590008, Color.BLUE,  "Conventional" ),
+//            new Slice(46.7009992, Color.RED, "GMO" ) };
+//
+//    ArrayList<Slice> sliceArray = new ArrayList<>();
+//    for( int i = 0; i < slices.length ; i++)
+//    {
+//      sliceArray.add( slices[i] );
+//    }
+//    f.add(new PieChart( f.getBounds(), sliceArray ) );
+//    Rectangle temp = new Rectangle(0,0,100,100);
     //f.add(new ChartKey(temp, sliceArray ));
     /**/
 
 
 
-    //f.add(new AvailableCropsBar("test", new Color(134,255, 109,255),100,60,300,50));
+    f.add(new AvailableCropsBar("test", new Color(134,255, 109,255),100,60,20,300,50));
 
 
 

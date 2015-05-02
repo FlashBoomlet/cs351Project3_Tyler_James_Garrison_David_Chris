@@ -44,13 +44,15 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
 
 
   //display prettiness
+  private JPanel pieHolder;
+  private JPanel availableCrops;
   private JPanel holder;
   private JScrollPane holderSCR;
 
   Color[] cropColor = {
           new Color(125, 235, 232,255),
           new Color(255,153,0,255),
-          new Color(230,230,230,255),
+          new Color(22, 152, 19,255),
           new Color(194,163,133,255),
           new Color(255,102,255,255),
           new Color(102,255,51,255),
@@ -120,18 +122,32 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
 
     timer = new Timer(30, this);
 
+    availableCrops = new JPanel();
 
-    holder = new JPanel();
-    holder.setLocation(0, 0);
-    holder.setSize(MAX_WIDTH, MAX_HEIGHT * 2);
-    holder.setPreferredSize(new Dimension(MAX_WIDTH, MAX_HEIGHT * 2));
-    holder.setLayout(new GridLayout(4, 2));
-    holder.setBackground(new Color(0, 0, 0, 0));
+    availableCrops.setSize(MAX_WIDTH, MAX_HEIGHT);
+    availableCrops.setPreferredSize(new Dimension(MAX_WIDTH, MAX_HEIGHT));
+    availableCrops.setLayout(new GridLayout(5, 1, 0, 0));
+    availableCrops.setBackground(Color.DARK_GRAY);
+
+    initAvailableCrops();
+
+    pieHolder = new JPanel();
+    pieHolder.setLocation(0, MAX_HEIGHT);
+    pieHolder.setSize(MAX_WIDTH, MAX_HEIGHT * 2);
+    pieHolder.setPreferredSize(new Dimension(MAX_WIDTH, MAX_HEIGHT * 2));
+    pieHolder.setLayout(new GridLayout(4, 2));
+    pieHolder.setBackground(Color.DARK_GRAY);
 
     initCrops();
     initLand();
     initHungry();
     initPop();
+
+    holder = new JPanel();
+    holder.setPreferredSize(new Dimension(MAX_WIDTH,MAX_HEIGHT*3));
+    holder.setBackground(Color.DARK_GRAY);
+    holder.add(availableCrops);
+    holder.add(pieHolder);
 
     holderSCR = new JScrollPane(holder);
     holderSCR.setBounds(0, 0, MAX_WIDTH, MAX_HEIGHT);
@@ -140,15 +156,10 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     holderSCR.getVerticalScrollBar().setPreferredSize(new Dimension(5, holderSCR.getHeight()));
     holderSCR.setBackground(Color.DARK_GRAY);
 
-
-
     this.setLayout(null);
     this.setSize(MIN_WIDTH, MIN_HEIGHT);
     //this.setFocusable(true);
     this.add(holderSCR);
-
-
-
   }
 
 
@@ -158,6 +169,51 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
   {
     return playerCountry;
   }
+
+  //======
+  private void initAvailableCrops()
+  {
+    CountryData cd = playerCountry.getCountryData();
+
+    double corntotal = cd.getCornTotal(true);
+    double cornneed = cd.getPerCapitaConsumptionCorn(true);
+
+
+    AvailableCropsBar cornBar = new AvailableCropsBar("Corn",cropColor[0], 100,65,0,MAX_WIDTH-20,MAX_HEIGHT);
+
+    availableCrops.add(cornBar);
+
+    double wheattotal = cd.getWheatTotal(true);
+    double wheatneed = cd.getCountryConsumptionWheat(true);
+
+    AvailableCropsBar wheatBar = new AvailableCropsBar("Wheat",cropColor[1], 100,20,34,MAX_WIDTH-20,MAX_HEIGHT);
+
+    availableCrops.add(wheatBar);
+
+    double ricetotal = cd.getRiceTotal(true);
+    double riceneed = cd.getCountryConsumptionRice(true);
+
+    AvailableCropsBar riceBar = new AvailableCropsBar("Rice",cropColor[2], 100,90,2,MAX_WIDTH-20,MAX_HEIGHT);
+
+    availableCrops.add(riceBar);
+
+    double soytotal = cd.getCornTotal(true);
+    double soyneed = cd.getCountryConsumptionCorn(true);
+
+
+    AvailableCropsBar soyBar = new AvailableCropsBar("Soy",cropColor[3], 100,60,15,MAX_WIDTH-20,MAX_HEIGHT);
+
+    availableCrops.add(soyBar);
+
+    double othertotal = cd.getOtherTotal(true);
+    double otherneed = cd.getCountryConsumptionOther(true);
+
+
+    AvailableCropsBar otherBar = new AvailableCropsBar("Other",cropColor[4], 100,50,45,MAX_WIDTH-20,MAX_HEIGHT);
+
+    availableCrops.add(otherBar);
+  }
+
 
   private void initCrops()
   {
@@ -194,8 +250,8 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
     Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);
 
-    holder.add(new PieChart(landRect, cropArray ));
-    holder.add(new ChartKey( keyRect, cropArray ));
+    pieHolder.add(new PieChart(landRect, cropArray));
+    pieHolder.add(new ChartKey(keyRect, cropArray));
   }
 
 
@@ -228,8 +284,8 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
     Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);
 
-    holder.add(new PieChart(landRect, landArray));
-    holder.add(new ChartKey(keyRect, landArray));
+    pieHolder.add(new PieChart(landRect, landArray));
+    pieHolder.add(new ChartKey(keyRect, landArray));
   }
 
   //
@@ -256,8 +312,8 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
     Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);
 
-    holder.add(new PieChart(landRect, hungryArray));
-    holder.add(new ChartKey(keyRect, hungryArray));
+    pieHolder.add(new PieChart(landRect, hungryArray));
+    pieHolder.add(new ChartKey(keyRect, hungryArray));
   }
 
 
@@ -289,8 +345,8 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
     Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);
 
-    holder.add(new PieChart(landRect, popArray));
-    holder.add(new ChartKey(keyRect, popArray));
+    pieHolder.add(new PieChart(landRect, popArray));
+    pieHolder.add(new ChartKey(keyRect, popArray));
   }
 
   /**
