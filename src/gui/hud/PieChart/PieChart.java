@@ -2,6 +2,7 @@ package gui.hud.PieChart;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -17,6 +18,7 @@ public class PieChart extends JComponent
   Rectangle area;
   private double total = 0.0D;
   ArrayList<Slice> slices = new ArrayList<>();
+  private int animationStep = 1; /* used to start and stop animation */
 
   /**
    * Pie chart creates all of the components for a custom pie chart
@@ -56,8 +58,6 @@ public class PieChart extends JComponent
     setToolTipText("");
     UIManager.put("ToolTip.background", new Color(0.0f,0.0f,0.0f,0.75f));
     UIManager.put("ToolTip.foreground", new Color(1.0f,1.0f,1.0f,1.0f));
-
-
   }
 
   /**
@@ -67,7 +67,7 @@ public class PieChart extends JComponent
   @Override
   public void paint(Graphics g)
   {
-
+    super.paint(g);
     drawPie((Graphics2D) g);
   }
 
@@ -78,20 +78,26 @@ public class PieChart extends JComponent
    */
   private void drawPie(Graphics2D g2d)
   {
+    if( animationStep < 100 ) animationStep += 2;
+
     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-    for (int i = 0; i < slices.size(); i++)
-    {
+
+    for (int i = 0; i < slices.size(); i++) {
       //Get the arc
       Slice s = slices.get(i);
 
-      // Fill the slice/arc
-      g2d.setColor(s.getColor() );
-      g2d.fill(s.getArc());
+        s.updateAngle((s.getMaxAngle()*animationStep)/100);
+        //g2d.setColor(s.getColor());
+        //g2d.fill(temp);
+        g2d.setColor(s.getColor());
+        g2d.fill( s.getArc()  );
 
-      // Draw the outline of the arc -Make more bold first
-      g2d.setStroke(new BasicStroke(1));
-      g2d.setColor(Color.LIGHT_GRAY);
-      g2d.draw( s.getArc() );
+
+        // Draw the outline of the arc -Make more bold first
+        g2d.setStroke(new BasicStroke(1));
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.draw( s.getArc() );
+
     }
   }
 
@@ -116,10 +122,15 @@ public class PieChart extends JComponent
         name = s.getName();
         value = s.getValue();
         percent = s.getPercent();
-        rtnStr = String.format("<html>%s<br>" + "Value:%.2f<br>" + "Percent:%.2f%%</html>", name, value, percent);
+        rtnStr = String.format(
+          "<html>%s<br>"
+            + "Value:%.2f<br>"
+            + "Percent:%.2f%%</html>"
+          , name, value, percent);
         break;
       }
     }
     return rtnStr;
   }
+
 }

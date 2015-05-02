@@ -28,7 +28,7 @@ public class PanelTester
    */
   private PanelTester()
   {
-    /*
+    /**/
     //f.add(new CardSelector(0, 0, width, height, "TEST"));
 
     // 73 Total
@@ -45,14 +45,20 @@ public class PanelTester
     {
       sliceArray.add( slices[i] );
     }
-    //f.add(new PieChart( f.getBounds(), sliceArray ) );
+    f.add(new PieChart( f.getBounds(), sliceArray ) );
     Rectangle temp = new Rectangle(0,0,100,100);
     //f.add(new ChartKey(temp, sliceArray ));
-    */
+    /**/
 
 
-    f.add(new AvailableCropsBar("test", new Color(134,255, 109,255),100,60,300,50));
-    f.pack();
+
+    //f.add(new AvailableCropsBar("test", new Color(134,255, 109,255),100,60,300,50));
+
+
+
+
+
+    //f.pack();
   }
 
   /**
@@ -66,8 +72,8 @@ public class PanelTester
     f = new JFrame();
 
     f.setTitle("STARVATION EVASION");
-    //f.setPreferredSize(new Dimension(width, height));
-    //f.setSize(f.getPreferredSize());
+    f.setPreferredSize(new Dimension(width, height));
+    f.setSize(f.getPreferredSize());
     f.setLocation(0, 0);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

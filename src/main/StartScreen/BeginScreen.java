@@ -31,7 +31,9 @@ class BeginScreen extends JPanel implements ActionListener
   private int frameWidth;
   private int frameHeight;
   Font FONT = new Font("Tahoma", Font.PLAIN, 14);
-  private GUIRegion selectedCoutnry = null;
+  private GUIRegion selectedCountry = null;
+  private JLabel selectedCountryLabel;
+  Collection<GUIRegion> guiRegions;
 
   /*
    * Components for the begin screen
@@ -88,6 +90,8 @@ class BeginScreen extends JPanel implements ActionListener
     buttonCon.setOpaque(false);
     buttonCon.add(StartScreen.back);
     buttonCon.add(beginGame);
+    selectedCountryLabel = new JLabel("United States of America");
+    buttonCon.add(selectedCountryLabel);
     add( buttonCon, BorderLayout.SOUTH);
   }
 
@@ -105,8 +109,21 @@ class BeginScreen extends JPanel implements ActionListener
     JButton tempBtn = (JButton) e.getSource();
     String name = tempBtn.getText();
 
-    trigger.setPlayer(selectedCoutnry);
+    trigger.setPlayer(selectedCountry);
     StartScreen.buttonAction(name);
+  }
+
+  /**
+   *
+   * @return a GUIRegion country that the player selects
+   */
+  private GUIRegion fetchCountry(String name)
+  {
+    for (GUIRegion r : guiRegions)
+    {
+      if( r.getName() == name ) return r;
+    }
+    return null;
   }
 
   /**
@@ -117,7 +134,6 @@ class BeginScreen extends JPanel implements ActionListener
     public final EmptyBorder PADDING_BORDER = new EmptyBorder(2, 2, 2, 2);
     // Null color basically
     private final Color BORDER_COL = new Color(0.0f,0.0f,0.0f,0.0f);
-    Collection<GUIRegion> guiRegions;
 
     private CountrySelect()
     {
@@ -153,6 +169,11 @@ class BeginScreen extends JPanel implements ActionListener
       for (GUIRegion r : guiRegions)
       {
         JLabel tempLabel = new JLabel(r.getName());
+
+        if( r.getName().equalsIgnoreCase("United States of America" ) )
+        {
+          selectedCountry = r;
+        }
         tempLabel.addMouseListener(this);
         countries.add( tempLabel );
       }
@@ -187,7 +208,8 @@ class BeginScreen extends JPanel implements ActionListener
       JLabel temp = (JLabel) e.getSource();
       String name = temp.getText();
 
-      selectedCoutnry = fetchCountry(name);
+      selectedCountry = fetchCountry(name);
+      selectedCountryLabel.setText( selectedCountry.getName() );
     }
 
     @Override
@@ -202,18 +224,6 @@ class BeginScreen extends JPanel implements ActionListener
       /* Do nothing */
     }
 
-    /**
-     *
-     * @return a GUIRegion country that the player selects
-     */
-    private GUIRegion fetchCountry(String name)
-    {
-      for (GUIRegion r : guiRegions)
-      {
-        if( r.getName() == name ) return r;
-      }
-      return null;
-    }
   }
 
   /**

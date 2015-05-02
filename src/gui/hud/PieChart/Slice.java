@@ -16,6 +16,8 @@ public class Slice
   private double value;
   private Arc2D.Double arc;
   private double percent;
+  private double animationStep = 0;
+
 
   /**
    * Get the Arc graphic for slice
@@ -87,6 +89,20 @@ public class Slice
     this.angle = angle;
   }
 
+  public double getMaxAngle()
+  {
+     return angle;
+  }
+
+  /**
+   * Update the angle of the slice
+   * @param angle -of a pie (double)
+   */
+  public void updateAngle(double angle)
+  {
+    arc.setAngleExtent( angle );
+  }
+
   /**
    * Set the percentage of the slice
    *
@@ -104,7 +120,7 @@ public class Slice
    */
   public double getPercent()
   {
-    return percent;
+    return arc.getAngleExtent()/360.0D;
   }
 
   /**
@@ -137,5 +153,11 @@ public class Slice
   {
     return name;
   }
+
+  public Double getDiff() { return arc.getAngleExtent(); }
+
+  public Double getAnimationStep() { return animationStep; }
+
+  public void setAnimationStep(Double animationStep) { this.animationStep = animationStep; }
 
 }
