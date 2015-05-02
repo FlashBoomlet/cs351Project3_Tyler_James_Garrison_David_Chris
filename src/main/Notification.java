@@ -55,9 +55,9 @@ public class Notification extends JComponent
     super.paint(g);
     Graphics2D g2d = (Graphics2D) g;
 
-    g2d.setColor( new Color(1.0f,1.0f,0.0f,alpha));
+    g2d.setColor( new Color(1.0f,0.6f,0.0f,alpha));
     g2d.fillRect(0, 0,getWidth(),getHeight() );
-    g2d.setColor( new Color(0.0f,1.0f,1.0f,alpha));
+    g2d.setColor( new Color(0.0f,0.0f,0.0f,alpha));
     int fontY = font.getSize();
     g2d.drawString(frontPadding + title, 0, fontY + getHeight()/4 );
     g2d.drawString(frontPadding + description, 0, fontY + getHeight()/2  );
@@ -99,9 +99,9 @@ public class Notification extends JComponent
     @Override
     public void run()
     {
-      float adjustBy = .04f;
-      int mod = 1;
-      float adjustTo = 100f;
+      float adjustBy = .005f;
+      int mod = 10;
+      float adjustTo = 150f;
 
       getParent().repaint();
       try
@@ -110,9 +110,10 @@ public class Notification extends JComponent
          * Set the alpha to one
          */
         for (int i = 0; i < adjustTo; i++) {
-          alpha += adjustBy;
 
-          this.sleep(5);
+          alpha += adjustBy;
+          if( alpha == alphaMax ) break;
+          this.sleep(mod);
         }
       }
       catch (InterruptedException e)
@@ -125,7 +126,7 @@ public class Notification extends JComponent
       // Pause! So the user can see the alert
       try
       {
-        this.sleep(5000);
+        this.sleep(10000);
       }
       catch (InterruptedException e)
       {
@@ -140,9 +141,10 @@ public class Notification extends JComponent
          * Set the alpha to zero
          */
         for (int i = 0; i < adjustTo; i++) {
-          alpha -= adjustBy;
 
-          this.sleep(5);
+          if( alpha-adjustBy >= 0 ) alpha -= adjustBy;
+
+          this.sleep(mod);
         }
       }
       catch (InterruptedException e)

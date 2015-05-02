@@ -12,6 +12,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class Ticker extends JPanel
       "Chocolate Chips Outlawed As Scone Ingredient; Scone Farmers Rejoice",
       "Lorem Ipsum Dolor Sit Amet"
     };
+  private static List<String> marquisArray = new ArrayList<>();
   private static final String SPACING = "   ";
 
   private String marquisStr;
@@ -58,13 +60,17 @@ public class Ticker extends JPanel
   {
     super();
     marquisStr = new String();
-    setMarquisText(Arrays.asList(testStrings));
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
 
     stringLocation = width - padding;
+
+    for( int i = 0; i < testStrings.length; i++ )
+    {
+      marquisArray.add(testStrings[i]);
+    }
 
     try
     {
@@ -100,7 +106,7 @@ public class Ticker extends JPanel
     g2d.fillRect(0, 0, width, height);
 
     stringToDraw = "";
-    for( String s: testStrings ) {
+    for( String s: marquisArray ) {
       stringToDraw += s;
       stringToDraw += stringSpacing;
     }
@@ -119,46 +125,17 @@ public class Ticker extends JPanel
    */
   public void clearMarquisText()
   {
-    marquisStr = "";
+    marquisArray.clear();
   }
 
-  /**
-   set the marquis source of text to the contents of a list
-   @param newsList  list to source Strings from
-   */
-  public void setMarquisText(List<String> newsList)
-  {
-    clearMarquisText();
-    addMarquisText(newsList);
-  }
-
-  /**
-   Set the marquis text to a single String
-   @param news    String to set marquis to
-   */
-  public void setMarquisText(String news)
-  {
-    clearMarquisText();
-    addMarquisText(news);
-  }
 
   /**
    add a String to the marquis
    @param news  String to add
    */
-  public void addMarquisText(String news)
+  public static void addMarquisText(String news)
   {
-    marquisStr += news + SPACING;
-  }
-
-
-  /**
-   Add a list of Strings to the marquis
-   @param newsList  list to source Strings from
-   */
-  public void addMarquisText(List<String> newsList)
-  {
-    for(String s : newsList) addMarquisText(s);
+    marquisArray.add(news + SPACING);
   }
 
   /*

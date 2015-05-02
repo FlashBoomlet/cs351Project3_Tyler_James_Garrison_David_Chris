@@ -3,6 +3,8 @@ package gui.hud;
 import IO.PolicyCSVParser;
 import gui.ColorsAndFonts;
 import gui.regionlooks.RegionViewFactory;
+import main.Player;
+import main.Trigger;
 import model.PolicyData;
 
 import javax.imageio.ImageIO;
@@ -106,14 +108,15 @@ public class CardSelector extends JPanel
   Font CARD_FONT = new Font("SansSerif", Font.BOLD, 12);
   public static final EmptyBorder PADDING_BORDER = new EmptyBorder(2, 2, 2, 2);
   private final static Color BORDER_COL = ColorsAndFonts.GUI_TEXT_COLOR.darker();
+  private Trigger trigger;
 
   /**
    * Class constructor
    */
-  public CardSelector(int x, int y, int width, int height,String label)
+  public CardSelector(int x, int y, int width, int height,String label, Trigger trigger)
   {
     super();
-
+    this.trigger = trigger;
     new PolicyCSVParser(this);
     currentPol = policyMiddle = (masterPolicyData.size())/2;
 
@@ -592,6 +595,7 @@ public class CardSelector extends JPanel
         PolicyData d = masterPolicyData.get(currentPol);
         d.setSponsor("SPONSORED");
         sponsorLabel.setText(d.getSponsor());
+        trigger.sponsoredBill(d.getPolicy(),d.getDescription());
         break;
       default:
         break;

@@ -15,6 +15,8 @@ public class Trigger
 {
   private Notification notification = null;
   private Ticker ticker = null;
+  private GUIRegion r;
+  private String name = "";
 
   /**
    * Constructor
@@ -60,6 +62,12 @@ public class Trigger
     return false;
   }
 
+  public void sponsoredBill(String title, String description)
+  {
+    sendAlert("News",title);
+    newsAlert(new News("Breaking! In " + name + " they have signed a bill that " + description));
+  }
+
   /**
    *
    * @param news that you would like to send out to the ticker
@@ -69,6 +77,7 @@ public class Trigger
   {
     if( news != null )
     {
+      Ticker.addMarquisText(news.getNews());
       return true;
     }
     return false;
@@ -81,6 +90,8 @@ public class Trigger
    */
   public void setPlayer(GUIRegion gRegion)
   {
-    System.out.println( "You have selected to play as: " + gRegion.getName() );
+    r = gRegion;
+    name = gRegion.getName();
+    System.out.println( "You have selected to play as: " + name );
   }
 }

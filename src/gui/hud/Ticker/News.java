@@ -8,11 +8,18 @@ package gui.hud.Ticker;
  */
 public class News
 {
+  private String news;
   /**
    * News Constructor
    */
-  public News()
+  public News(String news )
   {
     /* Do nothing */
+    this.news = news;
+  }
+
+  public String getNews()
+  {
+    return news;
   }
 }

@@ -237,9 +237,9 @@ public class Game
         playerCountryInfo = new PlayerCountryInfo(userCountry,frameWidth-15,feedPanelHeight,300,400);
 
         // Card Selectors
-        policySelector = new CardSelector(275,75,600,500,"POLICY");
+        policySelector = new CardSelector(275,75,600,500,"POLICY",trigger);
         infoPanel.setCardSelector(policySelector, "POLICY");
-        tradeSelector = new CardSelector(275,75,600,500,"TRADE");
+        tradeSelector = new CardSelector(275,75,600,500,"TRADE",trigger);
         infoPanel.setCardSelector(tradeSelector, "TRADE");
 
         navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
@@ -454,6 +454,9 @@ public class Game
       layeredPane.add(tradeSelector, new Integer(8) );
 
       layeredPane.add(notification, new Integer(9) );
+
+      trigger.setupNotifications(notification);
+      trigger.setupTicker(ticker);
 
       pauseGame();
       repaint();
