@@ -37,6 +37,7 @@ public class GUIRegion
   private LinkedList<Polygon> polyList = new LinkedList<>();
   private BufferedImage image;
   private boolean officialCountry = false;
+  private boolean playerStatus = false;
   private CountryData data = null;
   private double[] centerOfShipping = new double[2];
   // Could be more advance in the future
@@ -367,6 +368,23 @@ public class GUIRegion
   public boolean getOfficialCountry()
   {
     return officialCountry;
+  }
+
+
+  /**
+   * @return  Whether an this is the player
+   */
+  public boolean getPlayerStatus()
+  {
+    return playerStatus;
+  }
+
+  /**
+   * Set this country as the player
+   */
+  public void setAsPlayer()
+  {
+     this.playerStatus = true;
   }
 
   public boolean canExport()

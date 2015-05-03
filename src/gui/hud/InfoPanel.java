@@ -706,7 +706,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     if (activeRegions != null)
     {
       for (GUIRegion gr : activeRegions) {
-        if ( gr.getOfficialCountry() )
+        if ( gr.getOfficialCountry() && !gr.getPlayerStatus() )
         {
           if( gr.getCountryData() != null ) countryDataList.add(gr.getCountryData());
           officialRegions.add(gr);

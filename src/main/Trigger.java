@@ -107,6 +107,7 @@ public class Trigger
   {
     r = gRegion;
     name = gRegion.getName();
+    r.setAsPlayer();
     playerCountryInfo.updatePlayerCountry(r);
     if( playerCountryDisplay != null ) playerCountryDisplay.updatePlayerCountry(r);
     System.out.println( "You have selected to play as: " + name );
