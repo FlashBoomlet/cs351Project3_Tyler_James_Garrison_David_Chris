@@ -5,6 +5,7 @@ import gui.hud.PlayerCountryDisplay;
 import gui.hud.PlayerCountryInfo;
 import gui.hud.Ticker.News;
 import gui.hud.Ticker.Ticker;
+import model.PolicyData;
 
 /**
  * Trigger is a system that you reference to update things.
@@ -25,16 +26,23 @@ public class Trigger
   /**
    * Constructor
    */
-  public Trigger()
-  {
-    /* Do nothing */
-  }
+  public Trigger() { /* Do nothing */ }
 
+  /**
+   * Set the playerCountryInfo Object
+   *
+   * @param playerCountryInfo object that holds the info
+   */
   public void setPlayCountryInfo(PlayerCountryInfo playerCountryInfo)
   {
     this.playerCountryInfo = playerCountryInfo;
   }
 
+  /**
+   * Set the playerCountryDisplay Object
+   *
+   * @param playerCountryDisplay object that holds the display name and flag
+   */
   public void setPlayerCountryDisplay(PlayerCountryDisplay playerCountryDisplay)
   {
     this.playerCountryDisplay = playerCountryDisplay;
@@ -76,11 +84,24 @@ public class Trigger
     return false;
   }
 
-  public void sponsoredBill(String title, String description)
+  /**
+   * Called by the cardSelector to Sponsor a bill
+   *
+   * @param policyData that is being sponsored
+   */
+  public void sponsoredBill(PolicyData policyData)
   {
-    // Make a call to adjust the data.
-    sendAlert("News",title);
-    newsAlert(new News("Breaking! In " + name + " they have signed a bill that " + description));
+    if( r != null ) {
+      // Make a call to adjust the data.
+      sendAlert("News", policyData.getPolicy());
+      newsAlert(new News("Breaking! In " + name + " they have signed a bill that " + policyData.getDescription()));
+
+      r.signBill(policyData);
+    }
+    else
+    {
+      System.out.println( "Please Select Country" );
+    }
   }
 
   /**
@@ -106,7 +127,7 @@ public class Trigger
   public void setPlayer(GUIRegion gRegion)
   {
     r = gRegion;
-    name = gRegion.getName();
+    name = r.getName();
     r.setAsPlayer();
     playerCountryInfo.updatePlayerCountry(r);
     if( playerCountryDisplay != null ) playerCountryDisplay.updatePlayerCountry(r);

@@ -21,7 +21,7 @@ public class PolicyData
   double wheat;
   double other;
   double level;
-  static String sponsor = "SPONSOR";
+  private String sponsor = "SPONSOR";
 
   /**
    *
@@ -188,7 +188,7 @@ public class PolicyData
     this.level = level;
   }
 
-  public static String getSponsor() { return sponsor; }
+  public String getSponsor() { return sponsor; }
 
   public void setSponsor(String sponsor) { this.sponsor = sponsor; }
 

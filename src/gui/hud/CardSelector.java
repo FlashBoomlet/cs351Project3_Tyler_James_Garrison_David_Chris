@@ -2,7 +2,6 @@ package gui.hud;
 
 import IO.PolicyCSVParser;
 import gui.ColorsAndFonts;
-import gui.regionlooks.RegionViewFactory;
 import main.Trigger;
 import model.PolicyData;
 
@@ -35,6 +34,8 @@ public class CardSelector extends JPanel
   private ArrayList<PolicyData> masterPolicyData = new ArrayList<>();
   private int policyMiddle;
   private int currentPol;
+  private boolean hideRight = false;
+  private boolean hideLeft = false;
 
   /*
    * Formatting for the Card
@@ -358,7 +359,7 @@ public class CardSelector extends JPanel
     }
   }
 
-  /*
+  /**
   * Thread to make the cards shuffle.
   * It's like taking a water balloon and popping it while recording it in slow motion and watching it back
   *   its pretty fancy
@@ -474,6 +475,7 @@ public class CardSelector extends JPanel
     policyTA.setText(d.getPolicy());
     descriptionTA.setText(d.getDescription());
     sponsorLabel.setText(d.getSponsor());
+    sponsor.setName(d.getSponsor());
   }
 
   /**
@@ -510,7 +512,7 @@ public class CardSelector extends JPanel
     if( policyMiddle >= 0 )
     {
       // Pop off left
-      if( policyMiddle-1 >= 0 )
+      if( !hideLeft )
       {
         g2d.setColor(new Color(0.627451f, 0.627451f, 0.627451f, lAlpha));
         g2d.fill(leftCard);
@@ -519,9 +521,15 @@ public class CardSelector extends JPanel
         g2d.setColor(borderLColor);
         g2d.draw(leftDummyCard);
       }
+      else
+      {
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.0f) );
+        g2d.fill(leftCard);
+        g2d.fill(leftDummyCard);
+      }
 
       // Pop off right
-      if( policyMiddle+1 < masterPolicyData.size())
+      if( !hideRight )
       {
         g2d.setColor(new Color(0.627451f, 0.627451f, 0.627451f,rAlpha) );
         g2d.fill(rightCard);
@@ -529,6 +537,12 @@ public class CardSelector extends JPanel
         g2d.fill(rightDummyCard);
         g2d.setColor(borderRColor);
         g2d.draw(rightDummyCard);
+      }
+      else
+      {
+        g2d.setColor( new Color(0.627451f, 0.627451f, 0.627451f,0.0f) );
+        g2d.fill(rightCard);
+        g2d.fill(rightDummyCard);
       }
 
       // Pop off middle /Main
@@ -547,13 +561,22 @@ public class CardSelector extends JPanel
     g2d.drawImage(rArrow,rightArrow.getX(),  (rightArrow.getY()+middleCon.getY()), rightArrow.getWidth(),  rightArrow.getHeight(), null);
   }
 
-
+  /**
+   * Override Mouse Clicked
+   *
+   * @param e MouseEvent
+   */
   @Override
   public void mouseClicked(MouseEvent e)
   {
     /* Do nothing */
   }
 
+  /**
+   * Override Mouse Pressed
+   *
+   * @param e MouseEvent
+   */
   @Override
   public void mousePressed(MouseEvent e) {
     JPanel tempPnl = (JPanel) e.getSource();
@@ -568,6 +591,11 @@ public class CardSelector extends JPanel
     }
   }
 
+  /**
+   * Override Mouse Released
+   *
+   * @param e MouseEvent
+   */
   @Override
   public void mouseReleased(MouseEvent e)
   {
@@ -580,21 +608,20 @@ public class CardSelector extends JPanel
         setLocation(x,y);
         break;
       case "<":
-        if( currentPol > 0 ) currentPol--;
-        previousSelect = true;
-        fancyFlip();
+        previous();
         break;
       case ">":
-        if( currentPol < masterPolicyData.size()-1 ) currentPol++;
-        nextSelect = true;
-        fancyFlip();
+        next();
         break;
       case "SPONSOR":
         // Do something
         PolicyData d = masterPolicyData.get(currentPol);
         d.setSponsor("SPONSORED");
+
         sponsorLabel.setText(d.getSponsor());
-        trigger.sponsoredBill(d.getPolicy(),d.getDescription());
+        sponsor.setName(d.getSponsor());
+
+        trigger.sponsoredBill(d);
         break;
       default:
         break;
@@ -602,26 +629,68 @@ public class CardSelector extends JPanel
   }
 
   /**
-   Overridden mouseWheelMoved controls zooming on the map
-   @param e MouseWheelEvent fired by mouse wheel motion
+   * Move to the next card
+   */
+  private void next()
+  {
+    if( currentPol < masterPolicyData.size()-1 )
+    {
+      currentPol++;
+      nextSelect = true;
+      fancyFlip();
+    }
+    checkSides();
+  }
+
+  /**
+   * Move to the previous card
+   */
+  private void previous()
+  {
+    if( currentPol > 0 )
+    {
+      currentPol--;
+      previousSelect = true;
+      fancyFlip();
+    }
+    checkSides();
+  }
+
+  /**
+   * Check the sides to toggle whether or not the side(s) should be shown
+   */
+  private void checkSides()
+  {
+    if( currentPol < masterPolicyData.size()-1 )  hideRight = false;
+    else hideRight = true;
+
+    if( currentPol > 0 )  hideLeft = false;
+    else hideLeft = true;
+  }
+
+
+  /**
+   * Overridden mouseWheelMoved controls zooming on the map
+   * @param e MouseWheelEvent fired by mouse wheel motion
    */
   @Override
   public void mouseWheelMoved(MouseWheelEvent e)
   {
     if( e.getPreciseWheelRotation() > 0 )
     {
-      if( currentPol > 0 ) currentPol--;
-      previousSelect = true;
-      fancyFlip();
+      previous();
     }
     else
     {
-      if( currentPol < masterPolicyData.size()-1 ) currentPol++;
-      nextSelect = true;
-      fancyFlip();
+      next();
     }
   }
 
+  /**
+   * Override Mouse Entered
+   *
+   * @param e MouseEvent
+   */
   @Override
   public void mouseEntered(MouseEvent e)
   {
@@ -639,6 +708,11 @@ public class CardSelector extends JPanel
     }
   }
 
+  /**
+   * Override Mouse Exited
+   *
+   * @param e MouseEvent
+   */
   @Override
   public void mouseExited(MouseEvent e)
   {
@@ -655,8 +729,18 @@ public class CardSelector extends JPanel
     }
   }
 
+  /**
+   * Implementation of Mouse moved
+   *
+   * @param e MouseEvent
+   */
   public void mouseMoved(MouseEvent e) { /* Do nothing */ }
 
+  /**
+   * Implementation of Mouse Dragged
+   *
+   * @param e MouseEvent
+   */
   public void mouseDragged(MouseEvent e)
   {
     double dx = (dragFrom.getX() - e.getPoint().getX() );
@@ -692,9 +776,7 @@ public class CardSelector extends JPanel
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      if( currentPol > 0 ) currentPol--;
-      previousSelect = true;
-      fancyFlip();
+      previous();
     }
   };
 
@@ -706,9 +788,7 @@ public class CardSelector extends JPanel
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      if( currentPol < masterPolicyData.size()-1 ) currentPol++;
-      nextSelect = true;
-      fancyFlip();
+      next();
     }
   };
 

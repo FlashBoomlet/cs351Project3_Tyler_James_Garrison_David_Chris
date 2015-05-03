@@ -91,7 +91,6 @@ public class Game
   public static JFrame frame;
   public static World world;
   private static CardSelector policySelector;
-  private static CardSelector tradeSelector;
 
   /*
    * users selected country
@@ -239,8 +238,6 @@ public class Game
         // Card Selectors
         policySelector = new CardSelector(275,75,600,500,"POLICY",trigger);
         infoPanel.setCardSelector(policySelector, "POLICY");
-        tradeSelector = new CardSelector(275,75,600,500,"TRADE",trigger);
-        infoPanel.setCardSelector(tradeSelector, "TRADE");
 
         navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
 
@@ -452,7 +449,6 @@ public class Game
 
       // Card selectors for Game play
       layeredPane.add(policySelector, new Integer(8) );
-      layeredPane.add(tradeSelector, new Integer(8) );
 
       layeredPane.add(notification, new Integer(9) );
 

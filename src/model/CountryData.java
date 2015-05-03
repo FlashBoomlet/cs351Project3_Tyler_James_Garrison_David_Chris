@@ -1189,4 +1189,24 @@ public class CountryData
   {
     return (cornExports + soyExports + riceExports + wheatExports + otherExports);
   }
+
+  public void signBill(PolicyData p)
+  {
+    //Update GMO
+    gmo *= p.getGmo();
+    //Update Organic
+    organic *= p.getOrganic();
+    //Update Conventional
+    conventional *= p.getConventional();
+    //Update Corn
+    cornProduction *= p.getCorn();
+    //Update Soy
+    soyProduction *= p.getSoy();
+    //Update Rice
+    riceProduction *= p.getRice();
+    //Update Wheat
+    wheatProduction *= p.getWheat();
+    //Update Other
+    otherProduction *= p.getOther();
+  }
 }

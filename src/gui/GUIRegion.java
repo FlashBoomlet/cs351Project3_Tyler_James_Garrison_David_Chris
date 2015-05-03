@@ -392,4 +392,9 @@ public class GUIRegion
     if( data.getTotalExport() > data.getTotalImport() ) return true;
     return false;
   }
+
+  public void signBill(PolicyData policyData)
+  {
+    data.signBill(policyData);
+  }
 }

@@ -211,10 +211,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
         policySelector = selector;
         policySelector.setVisible(false);
         break;
-      case "TRADE":
-        tradeSelector = selector;
-        tradeSelector.setVisible(false);
-        break;
       default:
     }
   }
@@ -238,7 +234,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     }
     else if( name == "TRADE" )
     {
-      tradeSelector.setVisible( true );
+      //Create and place custom trade/treaty module here
+      //tradeSelector.setVisible( true );
     }
   }
 
@@ -647,7 +644,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
   public void clearDisplay()
   {
     policySelector.setVisible(false);
-    tradeSelector.setVisible(false);
     miniViewBox.setTitle(" ");
     miniViewBox.setDrawableRegions(null);
     stats.clearBarPlots();
@@ -706,20 +702,45 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     if (activeRegions != null)
     {
       for (GUIRegion gr : activeRegions) {
-        if ( gr.getOfficialCountry() && !gr.getPlayerStatus() )
+        if ( gr.getOfficialCountry() )
         {
-          if( gr.getCountryData() != null ) countryDataList.add(gr.getCountryData());
+          if( gr.getCountryData() != null )
+          {
+            countryDataList.add(gr.getCountryData());
+          }
           officialRegions.add(gr);
         }
       }
     }
+
+    /*
+     * Toggle the side bar to determine if the policy and trade buttons should be shown
+     */
+    if( officialRegions.size() == 1 )
+    {
+      if( officialRegions.get(0).getPlayerStatus() )
+      {
+        policy.setVisible(true);
+        trade.setVisible(false);
+      }
+      else
+      {
+        policy.setVisible(false);
+        trade.setVisible(true);
+      }
+    }
+    else
+    {
+      policy.setVisible(false);
+      trade.setVisible(true);
+    }
+
 
     if (officialRegions.size() == 0 || activeRegions == null || activeRegions.size() == 0 )
     {
       updateCountryCount = officialRegions.size();
       this.setVisible(false);
       policySelector.resetLocation();
-      tradeSelector.resetLocation();
       clearDisplay();
     }
     else if(updateCountryCount != officialRegions.size() && !presenter.isActivelyDragging())
@@ -762,10 +783,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     getPresenter().clearActiveList();
     main.Game.infoPanel.update(null, null);
     policySelector.setVisible(false);
-    tradeSelector.setVisible(false);
     this.setVisible(false);
     policySelector.resetLocation();
-    tradeSelector.resetLocation();
   }
 
   class InfoPanelUserControls extends JPanel implements ActionListener
