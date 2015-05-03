@@ -3,6 +3,7 @@ package gui.hud;
 import gui.ColorsAndFonts;
 import gui.WorldPresenter;
 import main.Game;
+import main.Trigger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +43,7 @@ public class WorldFeedPanel extends JPanel implements Observer
   @param frameWidth width of main frame
   @param height height of this particular panel
   */
- public WorldFeedPanel(WorldPresenter presenter, int frameWidth, int height)
+ public WorldFeedPanel(WorldPresenter presenter, int frameWidth, int height, Trigger trigger)
  {
   componentWidth = (int) (frameWidth*(.20));
   componentHeight = (int) (height*(0.95));
@@ -62,6 +63,7 @@ public class WorldFeedPanel extends JPanel implements Observer
   initLayout();
   setLocation(0, 0);
   setPreferredSize(new Dimension(frameWidth, height));
+  trigger.setPlayerCountryDisplay(playerCountryDisplay);
  }
 
  public void showAll(boolean trigger)

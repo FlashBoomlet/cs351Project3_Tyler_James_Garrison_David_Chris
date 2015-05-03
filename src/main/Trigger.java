@@ -1,6 +1,8 @@
 package main;
 
 import gui.GUIRegion;
+import gui.hud.PlayerCountryDisplay;
+import gui.hud.PlayerCountryInfo;
 import gui.hud.Ticker.News;
 import gui.hud.Ticker.Ticker;
 
@@ -17,6 +19,8 @@ public class Trigger
   private Ticker ticker = null;
   private GUIRegion r;
   private String name = "";
+  private PlayerCountryInfo playerCountryInfo;
+  private PlayerCountryDisplay playerCountryDisplay;
 
   /**
    * Constructor
@@ -24,6 +28,16 @@ public class Trigger
   public Trigger()
   {
     /* Do nothing */
+  }
+
+  public void setPlayCountryInfo(PlayerCountryInfo playerCountryInfo)
+  {
+    this.playerCountryInfo = playerCountryInfo;
+  }
+
+  public void setPlayerCountryDisplay(PlayerCountryDisplay playerCountryDisplay)
+  {
+    this.playerCountryDisplay = playerCountryDisplay;
   }
 
   /**
@@ -64,6 +78,7 @@ public class Trigger
 
   public void sponsoredBill(String title, String description)
   {
+    // Make a call to adjust the data.
     sendAlert("News",title);
     newsAlert(new News("Breaking! In " + name + " they have signed a bill that " + description));
   }
@@ -92,6 +107,8 @@ public class Trigger
   {
     r = gRegion;
     name = gRegion.getName();
+    playerCountryInfo.updatePlayerCountry(r);
+    if( playerCountryDisplay != null ) playerCountryDisplay.updatePlayerCountry(r);
     System.out.println( "You have selected to play as: " + name );
   }
 }

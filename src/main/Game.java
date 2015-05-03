@@ -228,7 +228,7 @@ public class Game
 
         userCountry = worldPresenter.getSingleRegion("United States of America");
 
-        worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight);
+        worldFeedPanel = new WorldFeedPanel(worldPresenter,frameWidth,feedPanelHeight,trigger);
         worldPresenter.addObserver(worldFeedPanel);
 
         infoPanel = new InfoPanel(frameWidth/(6),(int) (frameHeight-feedPanelHeight-tickerHeight),(int) (feedPanelHeight));
@@ -257,6 +257,7 @@ public class Game
         notification =  new Notification(tempRect);
 
         startPanel = new StartScreen(frameWidth,frameHeight,image,trigger);
+        trigger.setPlayCountryInfo(playerCountryInfo);
 
         initFrame();
         setupControlls();

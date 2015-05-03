@@ -98,6 +98,19 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
   //players country for access to information
   private GUIRegion playerCountry;
 
+
+  public void updatePlayerCountry(GUIRegion playerCountry)
+  {
+    this.playerCountry = playerCountry;
+    initCrops();
+    initHungry();
+    initLand();
+    initPop();
+    initAvailableCrops();
+
+    repaint();
+  }
+
   /**
    *
    * @param playerCountry country the player is controlling
@@ -170,7 +183,7 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     return playerCountry;
   }
 
-  //======
+
   private void initAvailableCrops()
   {
     CountryData cd = playerCountry.getCountryData();

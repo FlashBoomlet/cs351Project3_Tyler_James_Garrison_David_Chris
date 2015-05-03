@@ -34,6 +34,11 @@ class BeginScreen extends JPanel implements ActionListener
   private GUIRegion selectedCountry = null;
   private JLabel selectedCountryLabel;
   Collection<GUIRegion> guiRegions;
+  Color backGround = new Color(0, 255, 254);
+  private LowerLeft left;
+  private RightLeft right;
+  private MiniMapDisplay miniMap;
+
 
   /*
    * Components for the begin screen
@@ -160,7 +165,7 @@ class BeginScreen extends JPanel implements ActionListener
       int labelH = (int) (FONT.getSize()*(1.2));
       int countryHeight = (int) (regionCount * (labelH) );
       JPanel countries = new JPanel();
-      countries.setBackground(Color.CYAN);
+      countries.setBackground(backGround);
       countries.setPreferredSize(new Dimension(width-scrollW, countryHeight));
       countries.setLayout(new BoxLayout(countries,BoxLayout.PAGE_AXIS));
       countries.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
@@ -210,20 +215,36 @@ class BeginScreen extends JPanel implements ActionListener
 
       selectedCountry = fetchCountry(name);
       selectedCountryLabel.setText( selectedCountry.getName() );
+      refreshDisplay();
     }
 
     @Override
     public void mouseEntered(MouseEvent e)
     {
-      /* Do nothing */
+      JLabel temp = (JLabel) e.getSource();
+      String name = temp.getText();
+
+      temp.setOpaque(true);
+      temp.setBackground(Color.WHITE);
     }
 
     @Override
     public void mouseExited(MouseEvent e)
     {
-      /* Do nothing */
+      JLabel temp = (JLabel) e.getSource();
+      String name = temp.getText();
+
+      temp.setOpaque(false);
+      temp.setBackground(backGround );
     }
 
+  }
+
+  private void refreshDisplay()
+  {
+    left.repaint();
+    right.repaint();
+    miniMap.repaint();
   }
 
   /**
@@ -250,9 +271,7 @@ class BeginScreen extends JPanel implements ActionListener
        *
        * Add a constructor for something to this
        */
-      JPanel miniMap = new JPanel();
-      miniMap.setOpaque(true);
-      miniMap.setBackground(Color.RED);
+      miniMap = new MiniMapDisplay();
       add(miniMap);
 
       /*
@@ -267,8 +286,7 @@ class BeginScreen extends JPanel implements ActionListener
        *
        * Add a constructor for something to this
        */
-      JPanel left = new JPanel();
-      left.setBackground( Color.CYAN );
+      left = new LowerLeft();
       lowerCon.add( left );
 
       /*
@@ -276,11 +294,71 @@ class BeginScreen extends JPanel implements ActionListener
        *
        * Add a constructor for something to this
        */
-      JPanel right = new JPanel();
-      right.setBackground( Color.PINK );
+      right = new RightLeft();
       lowerCon.add( right );
 
       add(lowerCon);
+      refreshDisplay();
+    }
+  }
+
+  private class LowerLeft extends JPanel
+  {
+    /**
+     * Constructor
+     */
+    private LowerLeft()
+    {
+      super();
+      setOpaque( true );
+      setBackground(Color.CYAN);
+    }
+
+    @Override
+    public void paintComponent(Graphics g)
+    {
+      Graphics2D g2d = (Graphics2D) g;
+      g2d.setColor( Color.BLACK );
+      g2d.drawString(selectedCountry.getName(),10, 40 );
+    }
+  }
+
+  private class RightLeft extends JPanel
+  {
+    /**
+     * Constructor
+     */
+    private RightLeft()
+    {
+      super();
+      setOpaque( true );
+      setBackground(Color.PINK);
+    }
+
+    @Override
+    public void paintComponent(Graphics g)
+    {
+      Graphics2D g2d = (Graphics2D) g;
+      g2d.setColor( Color.BLACK );
+      g2d.drawString(selectedCountry.getName(),10, 40 );
+    }
+  }
+
+  private class MiniMapDisplay extends JPanel
+  {
+    private MiniMapDisplay()
+    {
+      super();
+      setOpaque(true);
+      setBackground( Color.WHITE );
+    }
+
+    @Override
+    public void paintComponent(Graphics g)
+    {
+      Graphics2D g2d = (Graphics2D) g;
+      g2d.setColor( Color.BLACK );
+      g2d.drawString(selectedCountry.getName(),10, 40 );
     }
   }
 }

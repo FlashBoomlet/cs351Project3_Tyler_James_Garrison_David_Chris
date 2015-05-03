@@ -49,6 +49,12 @@ public class PlayerCountryDisplay extends JPanel implements MouseListener
 
   }
 
+  public void updatePlayerCountry(GUIRegion playerCountry)
+  {
+    this.playerCountry = playerCountry;
+    nameLabel.setText(playerCountry.getName());
+  }
+
   @Override
   public void paintComponent(Graphics g)
   {
