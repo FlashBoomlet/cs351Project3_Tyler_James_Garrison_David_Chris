@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
@@ -34,6 +35,7 @@ class BeginScreen extends JPanel implements ActionListener
   private GUIRegion selectedCountry = null;
   private JLabel selectedCountryLabel;
   Collection<GUIRegion> guiRegions;
+  ArrayList<GUIRegion> guiRegionsOfficial = new ArrayList<>();
   Color backGround = new Color(0, 255, 254);
   private LowerLeft left;
   private RightLeft right;
@@ -51,6 +53,7 @@ class BeginScreen extends JPanel implements ActionListener
   {
     @Override
     public void actionPerformed(ActionEvent e) {
+      trigger.setPlayer(selectedCountry);
       StartScreen.buttonAction("BEGIN");
     }
   };
@@ -161,7 +164,14 @@ class BeginScreen extends JPanel implements ActionListener
       setBorder(new CompoundBorder(BorderFactory.createMatteBorder(y, x, frameHeight-(height+y),(frameWidth/2)-(width+x), BORDER_COL), PADDING_BORDER));
 
       guiRegions = WorldPresenter.getAllRegions();
-      int regionCount = guiRegions.size();
+
+      for (GUIRegion r : guiRegions) {
+        if (r.getOfficialCountry()) {
+          guiRegionsOfficial.add(r);
+        }
+      }
+      
+      int regionCount = guiRegionsOfficial.size();
       int labelH = (int) (FONT.getSize()*(1.2));
       int countryHeight = (int) (regionCount * (labelH) );
       JPanel countries = new JPanel();
@@ -171,16 +181,14 @@ class BeginScreen extends JPanel implements ActionListener
       countries.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
 
       setFont(FONT);
-      for (GUIRegion r : guiRegions)
+      for (GUIRegion r : guiRegionsOfficial)
       {
         JLabel tempLabel = new JLabel(r.getName());
-
-        if( r.getName().equalsIgnoreCase("United States of America" ) )
-        {
+        if (r.getName().equalsIgnoreCase("United States of America")) {
           selectedCountry = r;
         }
         tempLabel.addMouseListener(this);
-        countries.add( tempLabel );
+        countries.add(tempLabel);
       }
 
       JScrollPane scrollPane = new JScrollPane(countries);
@@ -222,7 +230,6 @@ class BeginScreen extends JPanel implements ActionListener
     public void mouseEntered(MouseEvent e)
     {
       JLabel temp = (JLabel) e.getSource();
-      String name = temp.getText();
 
       temp.setOpaque(true);
       temp.setBackground(Color.WHITE);
@@ -232,7 +239,6 @@ class BeginScreen extends JPanel implements ActionListener
     public void mouseExited(MouseEvent e)
     {
       JLabel temp = (JLabel) e.getSource();
-      String name = temp.getText();
 
       temp.setOpaque(false);
       temp.setBackground(backGround );

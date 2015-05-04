@@ -44,6 +44,7 @@ public class GUIRegion
   public static ArrayList<GUIRegion> exportedTo = new ArrayList<>();
   public static ArrayList<GUIRegion> importedFrom = new ArrayList<>();
   public static Collection<GUIRegion> preferedTrade = main.Game.getWorldPresenter().getAllRegions();
+  public static ArrayList<PolicyData> policiesMade = new ArrayList<>();
 
   /**
    * Loads the region's flag.
@@ -350,9 +351,7 @@ public class GUIRegion
         monitor.notify();
       }
     }
-
   }
-
 
   /**
    * Sets to an official country.
@@ -393,8 +392,14 @@ public class GUIRegion
     return false;
   }
 
+  /**
+   * Sign a bill into action
+   *
+   * @param policyData -PolicyData that is being added
+   */
   public void signBill(PolicyData policyData)
   {
     data.signBill(policyData);
+    policiesMade.add(policyData);
   }
 }

@@ -25,7 +25,7 @@ public class StartScreen extends JPanel implements ActionListener
 {
   JPanel textHolder;
 
-  JButton start;
+  static JButton start;
   JButton info;
   static JButton back;
   JButton skip;
@@ -34,7 +34,6 @@ public class StartScreen extends JPanel implements ActionListener
   JTextArea version;
   JTextArea text;
 
-
   private static String startLabel = "\t\tSTART\t\t";
   private static MoreInfo moreInfo;
   private static StartUp startUp;
@@ -42,9 +41,7 @@ public class StartScreen extends JPanel implements ActionListener
   private int frameWidth;
   private int frameHeight;
   private Trigger trigger;
-
   private BufferedImage image;
-
 
 
   /**
@@ -87,10 +84,12 @@ public class StartScreen extends JPanel implements ActionListener
     startUp.setVisible(true);
 
   }
+
   private static void startMethod(){
     Game.startGame();
     Game.settingsDisplay(false);
   }
+
   private Action nextAction = new AbstractAction()
   {
     @Override
@@ -131,6 +130,7 @@ public class StartScreen extends JPanel implements ActionListener
 
       skip = new JButton("SKIP");
       skip.setHorizontalAlignment(SwingConstants.RIGHT);
+      skip.setVisible(false);
 
       start.addActionListener(this);
       info.addActionListener(this);
@@ -185,7 +185,7 @@ public class StartScreen extends JPanel implements ActionListener
     {
       super.paintComponent(g);
       g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-    } // End of paintComponent method
+    }
   }
 
   /**
@@ -204,7 +204,6 @@ public class StartScreen extends JPanel implements ActionListener
 
       textHolder = new JPanel();
       textHolder.setLayout(new BoxLayout(textHolder, BoxLayout.PAGE_AXIS));
-
 
       text = new JTextArea();
       text.setBackground(new Color(0x333333));
@@ -301,8 +300,6 @@ public class StartScreen extends JPanel implements ActionListener
     }
   }
 
-
-
   /**
    * Overrides action performed.
    * Detects which button is clicked, gets the text and passes it along to buttonClicked
@@ -343,15 +340,20 @@ public class StartScreen extends JPanel implements ActionListener
         moreInfo.setVisible(false);
         beginScreen.setVisible(false);
         break;
-      default:
-        // Very important to reset the screen so that pause works right
+      case "\t\tRESUME\t\t":
         startUp.setVisible(true);
         moreInfo.setVisible(false);
         beginScreen.setVisible(false);
         startMethod();
         break;
+      default:
+        // Very important to reset the screen so that pause works right
+        startUp.setVisible(true);
+        moreInfo.setVisible(false);
+        beginScreen.setVisible(false);
+        start.setText("\t\tRESUME\t\t");
+        startMethod();
+        break;
     }
   }
-
-
 }

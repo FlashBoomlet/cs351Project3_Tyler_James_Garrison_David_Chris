@@ -1190,6 +1190,11 @@ public class CountryData
     return (cornExports + soyExports + riceExports + wheatExports + otherExports);
   }
 
+  /**
+   * Sign a bill into action
+   *
+   * @param p -PolicyData that is being added
+   */
   public void signBill(PolicyData p)
   {
     //Update GMO
@@ -1200,13 +1205,23 @@ public class CountryData
     conventional *= p.getConventional();
     //Update Corn
     cornProduction *= p.getCorn();
+    cornExports *= p.getCorn();
+    cornImports *= p.getCorn();
     //Update Soy
     soyProduction *= p.getSoy();
+    soyExports *= p.getSoy();
+    soyImports *= p.getSoy();
     //Update Rice
+    riceExports *= p.getRice();
+    riceImports *= p.getRice();
     riceProduction *= p.getRice();
     //Update Wheat
+    wheatImports *= p.getWheat();
+    wheatExports *= p.getWheat();
     wheatProduction *= p.getWheat();
     //Update Other
     otherProduction *= p.getOther();
+    otherExports *= p.getOther();
+    otherImports *= p.getOther();
   }
 }

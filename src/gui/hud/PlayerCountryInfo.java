@@ -221,12 +221,10 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     double othertotal = cd.getOtherTotal(true);
     double otherneed = cd.getCountryConsumptionOther(true);
 
-
     AvailableCropsBar otherBar = new AvailableCropsBar("Other",cropColor[4], 100,50,45,MAX_WIDTH-20,MAX_HEIGHT);
 
     availableCrops.add(otherBar);
   }
-
 
   private void initCrops()
   {
@@ -244,8 +242,6 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
       soyTotal = cd.getSoyTotal(true);
       otherTotal = cd.getOtherTotal(true);
 
-
-
     // Update the slice information
     cropSlices[0].updateSlice(cornTotal,cropColor[0], "Corn");
     cropSlices[1].updateSlice(wheatTotal, cropColor[1],  "Wheat" );
@@ -258,7 +254,6 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     {
       cropArray.add(cropSlices[i]);
     }
-
 
     Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
     Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);
@@ -274,14 +269,11 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     double conventional = 0;
     double gmo = 0;
 
+    CountryData cd = playerCountry.getCountryData();
 
-
-      CountryData cd = playerCountry.getCountryData();
-
-      organic = cd.getOrganic(true);
-      conventional = cd.getConventional(true);
-      gmo = cd.getGmo(true);
-
+    organic = cd.getOrganic(true);
+    conventional = cd.getConventional(true);
+    gmo = cd.getGmo(true);
 
     landSlices[0].updateSlice(organic*100,cropColor[5] , "Organic");
     landSlices[1].updateSlice(conventional*100,cropColor[6],  "Conventional" );
@@ -320,7 +312,6 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
     {
       hungryArray.add(hungrySlices[i]);
     }
-
 
     Rectangle landRect = new Rectangle(0,0,MAX_WIDTH/2-5,MAX_WIDTH/2-5);
     Rectangle keyRect = new Rectangle(0,0,MAX_WIDTH/2,MAX_WIDTH/2);

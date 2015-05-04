@@ -835,8 +835,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     }
   }
 
-
-
   private void fancyShow()
   {
     /*
