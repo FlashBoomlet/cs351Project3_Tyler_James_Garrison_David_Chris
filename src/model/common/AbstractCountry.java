@@ -1,4 +1,4 @@
-package worldfoodgame.common;
+package model.common;
 
 import java.awt.image.BufferedImage;
 

@@ -191,7 +191,7 @@ public class Game
       try
       {
         tickerHeight = (int) (frameHeight*(.10));
-        feedPanelHeight = (int) (frameHeight/25);
+        feedPanelHeight = (int) (frameHeight/25f);
         final int NAV_WIDTH = (int) Math.floor(frameWidth/4);
         final int NAV_HEIGHT = (int) Math.floor(NAV_WIDTH/2);
         final int NAV_X = frameWidth-NAV_WIDTH;
@@ -239,7 +239,8 @@ public class Game
         policySelector = new CardSelector(275,75,600,500,"POLICY",trigger);
         infoPanel.setCardSelector(policySelector, "POLICY");
 
-        navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam, worldPresenter);
+        navMap = new NavMap(NAV_X, NAV_Y, NAV_WIDTH, NAV_HEIGHT, frameWidth,frameHeight,cam,
+                             worldPresenter);
 
         ticker = new Ticker(0,frameHeight-tickerHeight-20,NAV_X,tickerHeight);
 

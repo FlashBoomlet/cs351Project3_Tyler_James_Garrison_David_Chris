@@ -1,6 +1,6 @@
-package worldfoodgame.common;
+package model.common;
 
-import worldfoodgame.common.CropZoneData.EnumCropZone;
+import model.common.CropZoneData.EnumCropZone;
 
 public abstract class AbstractScenario
 {

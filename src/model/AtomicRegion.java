@@ -1,10 +1,6 @@
 package model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.awt.geom.Path2D;
 
 import gui.displayconverters.MapConverter;
@@ -34,7 +30,7 @@ public class AtomicRegion implements Region, CropIdeals
   private int OTHER_MAX_LOW;
   private int OTHER_RAIN_HIGH;
   private int OTHER_RAIN_LOW;
-
+  private Collection<LandTile> landTiles = new ArrayList<>();
 
 
   /**
@@ -253,6 +249,25 @@ public class AtomicRegion implements Region, CropIdeals
     }
     clearCells(leftovers3);
   }
+
+
+  @Override
+  public boolean containsMapPoint(MapPoint mapPoint)
+  {
+    for (MiniArea area : perimeter)
+    {
+      if(area.containsMapPoint(mapPoint)) return true;
+    }
+    return false;
+  }
+
+
+  @Override
+  public void addLandTile(LandTile tile)
+  {
+    landTiles.add(tile);
+  }
+
 
   /**
    * Sets the remaining cells to have no crops.

@@ -1,8 +1,6 @@
-package worldfoodgame.common;
+package model.common;
 
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The AbstractClimateData class should be extended by a class that
  * holds the climate data used in Milestone II.

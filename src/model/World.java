@@ -65,9 +65,17 @@ public class World
     }*/
   }
 
+
+  public int getCurrentYear()
+  {
+    return getCurrentDate().get(Calendar.YEAR);
+  }
+
+
   private class LoadWorldArray extends Thread
   {
     private Thread t;
+
     LoadWorldArray()
     {
       this.start();

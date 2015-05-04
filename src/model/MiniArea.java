@@ -22,4 +22,7 @@ public interface MiniArea
   void setPerimeter(List<MapPoint> perimeter);
 
   void setLandCells(WorldArray worldArray, HashSet<WorldCell> cells, MapConverter mapConverter);
+
+
+  boolean containsMapPoint(MapPoint mapPoint);
 }

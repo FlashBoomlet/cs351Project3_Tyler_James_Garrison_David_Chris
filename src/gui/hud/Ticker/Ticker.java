@@ -45,11 +45,11 @@ public class Ticker extends JPanel
   Font font = new Font("Tahoma", Font.BOLD, 14);
 
   private final static String[] testStrings =
-    {
-      "Cost of Soylent Green Is Rising As Birthrates Fall In China",
-      "Chocolate Chips Outlawed As Scone Ingredient; Scone Farmers Rejoice",
-      "Lorem Ipsum Dolor Sit Amet"
-    };
+      {
+          "Cost of Soylent Green Is Rising As Birthrates Fall In China",
+          "Chocolate Chips Outlawed As Scone Ingredient; Scone Farmers Rejoice",
+          "Lorem Ipsum Dolor Sit Amet"
+      };
   private static List<String> marquisArray = new ArrayList<>();
   private static final String SPACING = "   ";
 

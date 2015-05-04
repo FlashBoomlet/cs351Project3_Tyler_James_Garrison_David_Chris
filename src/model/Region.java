@@ -45,4 +45,10 @@ public interface Region
   public void setFirstCrops();
 
   public void setCrops();
+
+
+  boolean containsMapPoint(MapPoint mapPoint);
+
+
+  void addLandTile(LandTile tile);
 }

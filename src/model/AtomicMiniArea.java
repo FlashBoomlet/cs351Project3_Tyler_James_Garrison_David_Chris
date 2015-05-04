@@ -5,6 +5,7 @@ import gui.displayconverters.MapConverter;
 import java.awt.Polygon;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.HashSet;
 
@@ -18,6 +19,7 @@ import java.util.HashSet;
 public class AtomicMiniArea implements MiniArea
 {
   private List<MapPoint> perimeter;
+  private Path2D perim = new Path2D.Double();
   private String name;
 
   @Override
@@ -43,6 +45,13 @@ public class AtomicMiniArea implements MiniArea
   @Override
   public void setPerimeter(List<MapPoint> perimeter)
   {
+    perim.moveTo(perimeter.get(0).getLon(), perimeter.get(0).getLat());
+    for (int i = 1; i < perimeter.size(); i++)
+    {
+      MapPoint mp = perimeter.get(i);
+      perim.lineTo(mp.getLon(), mp.getLat());
+    }
+    perim.closePath();
     this.perimeter = perimeter;
   }
 
@@ -96,5 +105,12 @@ public class AtomicMiniArea implements MiniArea
         }
       }
     }
+  }
+
+
+  @Override
+  public boolean containsMapPoint(MapPoint mapPoint)
+  {
+    return perim.contains(mapPoint.getLon(), mapPoint.getLat());
   }
 }

@@ -1,4 +1,4 @@
-package worldfoodgame.common;
+package model.common;
 
 /**
  * The AbstractCountryBorderData class should be extended by a class that

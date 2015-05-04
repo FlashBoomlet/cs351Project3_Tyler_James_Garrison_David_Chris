@@ -1,4 +1,4 @@
-package worldfoodgame.common;
+package model.common;
 
 /**
  * The AbstractCropLocations class should be extended by a class that

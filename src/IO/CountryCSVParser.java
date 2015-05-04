@@ -156,7 +156,7 @@ public class CountryCSVParser {
         data.setGmo( Double.parseDouble(atributes[31]) );
 
         data.setShippingLat(Double.parseDouble(atributes[32]));
-        data.setShippingLon( Double.parseDouble(atributes[33]) );
+        data.setShippingLon(Double.parseDouble(atributes[33]));
 
         currentRegion.setOfficialCountry();
         currentRegion.setCountryData(data);
