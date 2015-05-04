@@ -2,11 +2,16 @@ package IO;
 
 
 import model.LandTile;
+import model.Region;
 import model.TileManager;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static model.LandTile.FIELD.*;
@@ -16,80 +21,63 @@ import static model.LandTile.FIELD.ELEVATION;
 /**
  @author david
  created: 2015-03-22
- <p/>
- description: */
+ description:
+
+ IO class dedicated to generating and parsing land data.  Nested RawDataParser class is used for
+ generating
+
+ */
 public class LandDataIO
 {
 
-  private static final double DATA_ARC_STEP = 0.041666666;
-  private static final int DATA_ROWS = 3600;
-  private static final int DATA_COLS = 8640;
-  private static String DEFAULT_FILE = "resources/data/landtile-rawdata/land-data.bil";
+  private static String DEFAULT_BACKUP = "resources/data/landtile-rawdata/datatiles.bak";
+  private static String DEFAULT_FILE = "resources/data/land-data.bil";
+
 
   public static void main(String[] args)
   {
-    RawDataConverter.DATA_FIELD[] fields =
-        {
-            RawDataConverter.DATA_FIELD.BIOC1,
-            RawDataConverter.DATA_FIELD.BIOC2,
-            RawDataConverter.DATA_FIELD.BIOC3,
-            RawDataConverter.DATA_FIELD.BIOC4,
-        };
-    long start = System.currentTimeMillis();
-    validateFile(DEFAULT_FILE);
-    System.out.printf("took %fs to read file%n", (System.currentTimeMillis()-start)/1000f);
+    List<Region> regions = new ArrayList(new AreaXMLLoader().getRegions());
+    testVisual(parseFile(DEFAULT_FILE, regions), new Dimension(1500,500));
   }
 
-
-  private static void test()
+  /* test a loaded tilemanager's contents visually */
+  static void testVisual(final TileManager mgr, final Dimension winSize)
   {
-    TileManager mgr = TileManager.createEmptyTileManager();
-    String root = "resources/data/landtile-rawdata/";
-    Collection<RawDataConverter.DATA_FIELD> fields = new ArrayList<>();
-    fields.add(RawDataConverter.DATA_FIELD.BIOC1);
-    writeToFile(mgr, "resources/data/landtile-rawdata/land-data.bil");
-  }
-
-
-
-  private static void validateFile(String file)
-  {
-    TileManager mgr = parseFile(file);
-    Map<RawDataConverter.DATA_FIELD, Float> avgs = new HashMap<>();
-    Map<RawDataConverter.DATA_FIELD, Integer> counts = new HashMap<>();
-
-    int nulls = 0;
-    int no_data = 0;
-    for(LandTile t : mgr.allTiles())
-    {
-      if(t == null) nulls++;
-      else if(t == LandTile.NO_DATA) no_data++;
-      else
+    JFrame win =  new JFrame();
+    win.setSize(winSize);
+    JPanel panel = new JPanel(){
+      @Override
+      public void paintComponent(Graphics g)
       {
-        for(RawDataConverter.DATA_FIELD field : RawDataConverter.DATA_FIELD.values())
-        {
-          if(!avgs.containsKey(field))
-          {
-            avgs.put(field, t.getData(field.landTileField));
-            counts.put(field, 1);
-          }
-          else
-          {
-            float avg = avgs.get(field);
-            int count = counts.get(field);
-            avg = (avg * count + t.getData(field.landTileField)) / (++count);
-            avgs.put(field, avg);
-            counts.put(field, count);
-          }
-        }
+        for(LandTile tile : mgr.allTiles()) paintTile(tile, (Graphics2D) g);
       }
-    }
-    System.out.println("nulls : " + nulls);
-    System.out.println("no_data : " + no_data);
-    for(RawDataConverter.DATA_FIELD f: RawDataConverter.DATA_FIELD.values())
-    {
-      System.out.printf("%s average : %f%n", f.toString(), avgs.get(f));
-    }
+
+      /* define how to paint the LandTile */
+      private void paintTile(LandTile tile, Graphics2D g)
+      {
+        Rectangle2D rect = tileToRect(tile);
+
+        /* arbitrarily use countryname hash to make a color */
+        g.setColor(new Color(tile.getIntData(COUNTRYID), true));
+        g.fill(rect);
+      }
+
+      private Rectangle2D tileToRect(LandTile tile)
+      {
+        double height = winSize.getHeight()/180;
+        double width = winSize.getWidth()/360;
+        double x = width * (tile.getLon() + 180);
+        double y = -height * (tile.getLat() - 90);
+        return new Rectangle2D.Double(x, y, width, height);
+      }
+    };
+    panel.setSize(winSize);
+    panel.setPreferredSize(winSize);
+    win.setContentPane(panel);
+    win.pack();
+    win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    win.setVisible(true);
+    win.repaint();
   }
 
 
@@ -123,6 +111,67 @@ public class LandDataIO
     }
 
     return mgr;
+  }
+
+  public static TileManager parseFile(String filename, List<Region> countries)
+  {
+    TileManager mgr = parseFile(filename);
+    Map<Integer, Region> map = new HashMap<>();
+    for(Region r: countries) map.put(r.getName().hashCode(), r);
+    for(LandTile t: mgr.dataTiles())
+    {
+      int hash = t.getIntData(COUNTRYID);
+      Region region = map.get(hash);
+      region.addLandTile(t);
+    }
+    return mgr;
+  }
+
+
+  private static void validateFile(String file)
+  {
+    TileManager mgr = parseFile(file);
+    Map<RawDataConverter.DATA_FIELD, Float> avgs = new HashMap<>();
+    Map<RawDataConverter.DATA_FIELD, Integer> counts = new HashMap<>();
+
+    int nulls = 0;
+    int no_data = 0;
+    for (LandTile t : mgr.allTiles())
+    {
+      if (t == null)
+      {
+        nulls++;
+      }
+      else if (t == LandTile.NO_DATA)
+      {
+        no_data++;
+      }
+      else
+      {
+        for (RawDataConverter.DATA_FIELD field : RawDataConverter.DATA_FIELD.values())
+        {
+          if (!avgs.containsKey(field))
+          {
+            avgs.put(field, t.getData(field.landTileField));
+            counts.put(field, 1);
+          }
+          else
+          {
+            float avg = avgs.get(field);
+            int count = counts.get(field);
+            avg = (avg * count + t.getData(field.landTileField)) / (++count);
+            avgs.put(field, avg);
+            counts.put(field, count);
+          }
+        }
+      }
+    }
+    System.out.println("nulls : " + nulls);
+    System.out.println("no_data : " + no_data);
+    for (RawDataConverter.DATA_FIELD f : RawDataConverter.DATA_FIELD.values())
+    {
+      System.out.printf("%s average : %f%n", f.toString(), avgs.get(f));
+    }
   }
 
 
@@ -160,10 +209,18 @@ public class LandDataIO
   private static class RawDataConverter
   {
 
+    /* constants describe the shape of the binary files from which raw data is read */
+    private static final double DATA_ARC_STEP = 0.041666666;
+    private static final int DATA_ROWS = 3600;
+    private static final int DATA_COLS = 8640;
+
+    /* default root of raw data.  Note that this directory is listed in the .gitignore file, because
+      these are LARGE files.  I (David) have them on my computer, and
+     */
     private static final String DEFAULT_ROOT = "resources/data/landtile-rawdata/";
     private static final int NO_DATA_DEFAULT_CURR = -9999;
     private static final int NO_DATA_DEFAULT_PROJ = -32768;
-    private final Map<LandTile, DataPoint> map = new ConcurrentHashMap<>();
+    private final Map<LandTile, DataPoint> datamap = new ConcurrentHashMap<>();
     private final TileManager manager;
     private String rootDirectory;
 
@@ -175,9 +232,27 @@ public class LandDataIO
     }
 
 
+    static void createNewDataFile(String filename)
+    {
+      createNewDataFile(DATA_FIELD.values(), filename);
+    }
+
+
+    static void createNewDataFile(DATA_FIELD fields[], String filename)
+    {
+      TileManager mgr = TileManager.createEmptyTileManager();
+      RawDataConverter rdc = new RawDataConverter(mgr,
+                                                  DEFAULT_ROOT);
+      rdc.appendData(Arrays.asList(fields));
+      mgr.retainAll(rdc.getCompleteTiles());
+      System.out.printf("%d data tiles%n", mgr.dataTiles().size());
+      writeToFile(mgr.dataTiles(), filename);
+    }
+
+
     private void appendData(Collection<DATA_FIELD> fields)
     {
-      final Map<Runnable, Boolean> done = new ConcurrentHashMap<>();
+      final Map<DATA_FIELD, Boolean> done = new ConcurrentHashMap<>();
       for (final DATA_FIELD field : fields)
       {
         Runnable target = new Runnable()
@@ -186,32 +261,29 @@ public class LandDataIO
           public void run()
           {
             readField(field);
+            System.out.println(field + " is done reading");
             setField(field);
-            done.put(this, true);
-          }
-
-          @Override
-          public String toString()
-          {
-            return field.toString();
+            System.out.println(field + " is done setting");
+            done.put(field, true);
+            System.out.println(field + " registered done");
           }
         };
 
-        done.put(target, false);
+        done.put(field, false);
         Thread t = new Thread(target);
         t.start();
       }
 
       int total = done.keySet().size();
-      while(true)
+      while (true)
       {
         int numDone = 0;
-        for(Runnable r : done.keySet()) if(done.get(r)) numDone++;
-        if(total - numDone < 1) break;
-        if(total - numDone < 5)
+        for (DATA_FIELD field: done.keySet()) if (done.get(field)) numDone++;
+        if (total - numDone < 1) break;
+        if (total - numDone < 3)
         {
-          System.out.printf("%d left of %d%n", total-numDone, total);
-          for(Runnable r : done.keySet()) if(!done.get(r)) System.out.println(r);
+          System.out.printf("%d left of %d%n", total - numDone, total);
+          for (DATA_FIELD field : done.keySet()) if (!done.get(field)) System.out.println(field);
           try
           {
             Thread.sleep(2000);
@@ -221,6 +293,15 @@ public class LandDataIO
           }
         }
       }
+    }
+
+
+    private Collection<LandTile> getCompleteTiles()
+    {
+      Collection<LandTile> tiles = new ArrayList<>();
+      for (LandTile t : datamap.keySet()) if (datamap.get(t).hasAllData()) tiles.add(t);
+      System.out.printf("got %d complete tiles%n", tiles.size());
+      return tiles;
     }
 
 
@@ -240,18 +321,15 @@ public class LandDataIO
             double lon = -180 + col * DATA_ARC_STEP;
 
             LandTile tile = manager.getTile(lon, lat);
-            if (!map.containsKey(tile)) map.put(tile, new DataPoint());
+            if (!datamap.containsKey(tile)) datamap.put(tile, new DataPoint());
 
-            DataPoint point = map.get(tile);
+            DataPoint point = datamap.get(tile);
 
             byte first = (byte) stream.read();
             byte second = (byte) stream.read();
 
             float data = twoByteToSignedInt(first, second);
             if (!(data == field.noDataVal)) point.putData(field, data);
-            else
-            {
-            }
           }
         }
       }
@@ -266,9 +344,18 @@ public class LandDataIO
 
     private void setField(DATA_FIELD field)
     {
-      for (LandTile tile : map.keySet())
+      int count = 0;
+      for (LandTile tile : datamap.keySet())
       {
-        tile.putData(field.landTileField, map.get(tile).getData(field) * DATA_FIELD.SCALE);
+        long start = System.currentTimeMillis();
+        DataPoint dataPoint = datamap.get(tile);
+        if(dataPoint.hasAllData()) tile.putData(field.landTileField, dataPoint.getData(field) * DATA_FIELD.SCALE);
+        long end = System.currentTimeMillis();
+        if(end-start > 1000) System.out.println("taking a long time to put data into a single " +
+                                                "landtile: " + (end - start));
+
+        if(++count%10000 == 0) System.out.println("put data in " + count + " tiles for field " +
+                                                  field);
       }
     }
 
@@ -280,33 +367,60 @@ public class LandDataIO
     }
 
 
-    static void createNewDataFile()
+    public static Collection<LandTile> retainAndIDRegions(TileManager mgr, List<Region> regions)
     {
-      createNewDataFile(DATA_FIELD.values());
-    }
-
-
-    static void createNewDataFile(DATA_FIELD fields[])
-    {
-      TileManager mgr = TileManager.createEmptyTileManager();
-      RawDataConverter rdc = new RawDataConverter(mgr,
-                                                  DEFAULT_ROOT);
-      rdc.appendData(Arrays.asList(fields));
-      mgr.retainAll(rdc.getCompleteTiles());
-      System.out.printf("%d data tiles%n", mgr.dataTiles().size());
-      writeToFile(mgr.dataTiles(), DEFAULT_FILE);
-    }
-
-
-    private Collection<LandTile> getCompleteTiles()
-    {
+      Region last = regions.get(0);
       Collection<LandTile> tiles = new ArrayList<>();
-      for (LandTile t : map.keySet()) if (map.get(t).hasAllData()) tiles.add(t);
-      System.out.printf("got %d complete tiles%n", tiles.size());
+      int count = 0;
+      for (LandTile tile : mgr.allTiles())
+      {
+        if (last.containsMapPoint(tile.getCenter()))
+        {
+          tile.putData(LandTile.FIELD.COUNTRYID, last.getName().hashCode());
+          tiles.add(tile);
+          count++;
+        }
+        else
+        {
+          for (Region region : regions)
+          {
+            count++;
+            if (region.containsMapPoint(tile.getCenter()))
+            {
+              last = region;
+              tile.putData(LandTile.FIELD.COUNTRYID, last.getName().hashCode());
+              tiles.add(tile);
+              break;
+            }
+          }
+        }
+        if (tiles.size() % 1000 == 1) System.out.println("done placing " + tiles.size() + " tiles");
+      }
+      System.out.printf("took %d checks to place tiles%n", count);
+      count = 0;
+      int count2 = 0;
+      for (LandTile t : mgr.allTiles())
+      {
+        if (tiles.contains(t))
+        {
+          count++;
+        }
+        else
+        {
+          count2++;
+        }
+      }
+      System.out.println("contained : " + count + "; not contained " + count2);
+      mgr.retainAll(tiles);
       return tiles;
     }
 
 
+    /**
+     DATA_FIELD enum describes the raw data set from which all land data is drawn.  Each field
+     has an associated filename, no-data value (value that represents a placeholder in the source
+     file) and an associated field in the WorldCell class.
+     */
     public enum DATA_FIELD
     {
       BIOC1("bioc1.bil", NO_DATA_DEFAULT_CURR, CURRENT_ANNUAL_MEAN_TEMPERATURE),
@@ -347,8 +461,7 @@ public class LandDataIO
       BIOP17("biop17.bil", NO_DATA_DEFAULT_PROJ, PROJECTED_PRECIPITATION_OF_DRIEST_QUARTER),
       BIOP18("biop18.bil", NO_DATA_DEFAULT_PROJ, PROJECTED_PRECIPITATION_OF_WARMEST_QUARTER),
       BIOP19("biop19.bil", NO_DATA_DEFAULT_PROJ, PROJECTED_PRECIPITATION_OF_COLDEST_QUARTER),
-      ELEV("altitude.bil", NO_DATA_DEFAULT_CURR, ELEVATION),
-      ;
+      ELEV("altitude.bil", NO_DATA_DEFAULT_CURR, ELEVATION),;
 
       static final int SIZE = values().length;
       static final float SCALE = 0.1f;

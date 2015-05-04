@@ -2,10 +2,9 @@ package model;
 
 
 import gui.displayconverters.MapConverter;
-import java.awt.Polygon;
+
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.HashSet;
 
@@ -69,7 +68,7 @@ public class AtomicMiniArea implements MiniArea
    * @param worldArray that you would like to update
    * @param cells that you wish to update
    */
-  public void setLandCells (WorldArray worldArray, HashSet <WorldCell> cells, MapConverter mapConverter)
+  public void setLandCells (WorldArray worldArray, HashSet<WorldCell> cells, MapConverter mapConverter)
   {
     Path2D.Float tempPerimeter = new Path2D.Float();
     MapPoint current = perimeter.get(0);

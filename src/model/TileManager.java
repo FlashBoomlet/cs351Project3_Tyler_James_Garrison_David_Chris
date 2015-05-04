@@ -2,6 +2,7 @@ package model;
 
 
 import model.common.AbstractClimateData;
+
 import static model.common.AbstractScenario.*;
 
 import java.io.FileOutputStream;
@@ -25,6 +26,7 @@ import java.util.*;
 
 public class TileManager
 {
+
   public static final LandTile NO_DATA = new LandTile(-180, 0); /* in pacific */
 
   public static final int EARTH_CIRCUMFERENCE = 40000; /* approximate, in km */
@@ -65,10 +67,12 @@ public class TileManager
   private List<LandTile> dataTiles;
   private double randomPercent = 1f;
 
+
   public TileManager()
   {
-    for(LandTile[] row : tiles) Arrays.fill(row, NO_DATA);
+    for (LandTile[] row : tiles) Arrays.fill(row, NO_DATA);
   }
+
 
   public static TileManager createEmptyTileManager()
   {
@@ -76,6 +80,7 @@ public class TileManager
     initTiles(mgr.tiles);
     return mgr;
   }
+
 
   /* initialize a new tile set with proper latitude and longitude center points.
     This is really only used for making tiles for a new data set*/
@@ -92,20 +97,6 @@ public class TileManager
         tileset[row][col] = new LandTile(lon, lat);
       }
     }
-  }
-
-
-  /**
-   * @return all the tiles in this manager in a List
-   */
-  public List<LandTile> allTiles()
-  {
-    if (allTiles == null)
-    {
-      allTiles = new ArrayList<>();
-      for (LandTile[] arr : tiles) allTiles.addAll(Arrays.asList(arr));
-    }
-    return allTiles;
   }
 
 
@@ -127,16 +118,17 @@ public class TileManager
     return Math.toDegrees(Math.asin(measure)) + 0.5 * DLAT;
   }
 
+
   /**
-   * Get a tile by longitude and latitude
-   *
-   * @param lon
-   *     degrees longitude
-   * @param lat
-   *     degrees latitude
-   *
-   * @return the tile into which the specified longitude and latitude coordinates
-   * fall.  If no tile exists at that point, NO_DATA is returned
+   Get a tile by longitude and latitude
+
+   @param lon
+   degrees longitude
+   @param lat
+   degrees latitude
+
+   @return the tile into which the specified longitude and latitude coordinates
+   fall.  If no tile exists at that point, NO_DATA is returned
    */
   public LandTile getTile(double lon, double lat)
   {
@@ -184,8 +176,8 @@ public class TileManager
 
 
   /**
-   * Mutates all the tile data based on projections maintained within each tile
-   * and noise added randomly.
+   Mutates all the tile data based on projections maintained within each tile
+   and noise added randomly.
    */
   public void stepTileData()
   {
@@ -206,31 +198,23 @@ public class TileManager
     }
   }
 
-  public void retainAll(Collection<LandTile> toRetain)
-  {
-    for(LandTile t : toRetain) if(!allTiles().contains(t)) removeTile(t);
-  }
-
 
   /**
-   * Returns a Collection of the tiles held by this TileManager that actually
-   * contain data.  This, in effect, excludes tiles that would be over ocean and
-   * those at the extremes of latitude.  For all tiles, use allTiles();
-   *
-   * @return a Collection holding only those tiles for which there exists raster
-   * data.
+   Returns a Collection of the tiles held by this TileManager that actually
+   contain data.  This, in effect, excludes tiles that would be over ocean and
+   those at the extremes of latitude.  For all tiles, use allTiles();
+
+   @return a Collection holding only those tiles for which there exists raster
+   data.
    */
   public List<LandTile> dataTiles()
   {
-    if (null == dataTiles)
+    dataTiles = new ArrayList<>();
+    for (LandTile t : allTiles())
     {
-      dataTiles = new ArrayList<>();
-      for (LandTile t : allTiles())
-      {
-        if (NO_DATA != t) dataTiles.add(t);
-      }
+      if (NO_DATA != t) dataTiles.add(t);
     }
-    return dataTiles;
+    return  dataTiles;
   }
 
 
@@ -303,20 +287,31 @@ public class TileManager
 
 
   /**
-   * Calculates the delta value used to add noise to tiles, given a maximum and
-   * minimum value for the parameter, and two random numbers in range [0,1]
-   * To use this for the annual rainfall delta, use 0 as the minimum.
-   *
-   * @param min
-   *     minimum value in the range of the data
-   * @param max
-   *     maximum value in the range of the data
-   * @param r1
-   *     first random number between 0 and 1
-   * @param r2
-   *     second random number between 0 and 1
-   *
-   * @return the delta value used to randomize climate data
+   @return all the tiles in this manager in a List
+   */
+  public List<LandTile> allTiles()
+  {
+    allTiles = new ArrayList<>();
+    for (LandTile[] arr : tiles) allTiles.addAll(Arrays.asList(arr));
+    return allTiles;
+  }
+
+
+  /**
+   Calculates the delta value used to add noise to tiles, given a maximum and
+   minimum value for the parameter, and two random numbers in range [0,1]
+   To use this for the annual rainfall delta, use 0 as the minimum.
+
+   @param min
+   minimum value in the range of the data
+   @param max
+   maximum value in the range of the data
+   @param r1
+   first random number between 0 and 1
+   @param r2
+   second random number between 0 and 1
+
+   @return the delta value used to randomize climate data
    */
   public float calcTileDelta(double min, double max, double r1, double r2)
   {
@@ -325,14 +320,14 @@ public class TileManager
 
 
   /**
-   * Calculates the actual amount to add to a given parameter in a LandTile, given
-   * the delta value, the distance between the tile from which noise is being added
-   * and a random number in range [0,2]
-   *
-   * @param delta
-   *     calculated delta value
-   * @param distance
-   * @param r3
+   Calculates the actual amount to add to a given parameter in a LandTile, given
+   the delta value, the distance between the tile from which noise is being added
+   and a random number in range [0,2]
+
+   @param delta
+   calculated delta value
+   @param distance
+   @param r3
    */
   public float scaleDeltaByDistance(double delta, double distance, double r3)
   {
@@ -340,13 +335,33 @@ public class TileManager
   }
 
 
+  public void retainAll(Collection<LandTile> toRetain)
+  {
+    for (LandTile t : toRetain) putTile(t);
+    int count = 0;
+    for (int row = 0; row < ROWS; row++)
+    {
+
+      for (int col = 0; col < COLS; col++)
+      {
+        if (!toRetain.contains(tiles[row][col]))
+        {
+          tiles[row][col] = NO_DATA;
+          count++;
+        }
+      }
+    }
+    System.out.println(count + " tiles converted to NO_DATA");
+  }
+
+
   /**
-   * Add a given tile to the data set.
-   * This should really only be used when reading in a new set of tiles from
-   * a file.
-   *
-   * @param tile
-   *     LandTile to add
+   Add a given tile to the data set.
+   This should really only be used when reading in a new set of tiles from
+   a file.
+
+   @param tile
+   LandTile to add
    */
   public void putTile(LandTile tile)
   {
@@ -357,11 +372,11 @@ public class TileManager
 
 
   /**
-   * Registers a tile as having been associated with a country.  Due to gaps in the
-   * country data, if a set of tiles covering all the land is desired, use dataTiles()
-   *
-   * @param tile
-   *     tile to register
+   Registers a tile as having been associated with a country.  Due to gaps in the
+   country data, if a set of tiles covering all the land is desired, use dataTiles()
+
+   @param tile
+   tile to register
    */
   public void registerCountryTile(LandTile tile)
   {
@@ -370,11 +385,11 @@ public class TileManager
 
 
   /**
-   * Returns a Collection of tiles that have been registered with a country.
-   * This is dependent on the usage of registerCountryTile() at initial data
-   * creation. (Also maybe should be refactored to another location?)
-   *
-   * @return Collection of those LandTiles that have been registered with a Country
+   Returns a Collection of tiles that have been registered with a country.
+   This is dependent on the usage of registerCountryTile() at initial data
+   creation. (Also maybe should be refactored to another location?)
+
+   @return Collection of those LandTiles that have been registered with a Country
    */
   public List<LandTile> countryTiles()
   {
@@ -383,14 +398,14 @@ public class TileManager
 
 
   /**
-   * remove a given tile from the underlying set of tiles.  This has the effect
-   * of placing a NO_DATA tile at the location of the given tile in the full
-   * projection (assuming the given tile was found)
-   *
-   * @param tile
-   *     tile to remove
-   *
-   * @return true if the tile was found and removed
+   remove a given tile from the underlying set of tiles.  This has the effect
+   of placing a NO_DATA tile at the location of the given tile in the full
+   projection (assuming the given tile was found)
+
+   @param tile
+   tile to remove
+
+   @return true if the tile was found and removed
    */
   public boolean removeTile(LandTile tile)
   {
@@ -439,8 +454,8 @@ public class TileManager
 
 
   /**
-   * Exception used if accessors from the AbstractClimateData class are given
-   * invalid coordinates
+   Exception used if accessors from the AbstractClimateData class are given
+   invalid coordinates
    */
   static class NoDataException extends IllegalArgumentException
   {

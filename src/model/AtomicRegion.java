@@ -1,7 +1,6 @@
 package model;
 
 import java.util.*;
-import java.awt.geom.Path2D;
 
 import gui.displayconverters.MapConverter;
 import model.common.CropIdeals;
@@ -116,7 +115,7 @@ public class AtomicRegion implements Region, CropIdeals
    * @return  All cells in this region.
    */
   @Override
-  public HashSet<WorldCell> getAllCells ()
+  public HashSet<? extends WorldCell> getAllCells()
   {
     return landCells;
   }
@@ -125,7 +124,7 @@ public class AtomicRegion implements Region, CropIdeals
    * @return All cells for arable land.
    */
   @Override
-  public HashSet<WorldCell> getArableCells ()
+  public HashSet<? extends WorldCell> getArableCells()
   {
     return relevantCells;
   }
@@ -506,7 +505,7 @@ public class AtomicRegion implements Region, CropIdeals
     int counter = 0;
     for (WorldCell cell: leftovers)
     {
-      relevantCells.add(cell);
+      relevantCells.add(cell);http://try.kotlinlang.org/#/Examples/Basic syntax walk-through/Use when/Use when.kt
       counter++;
       if (counter == length)
       {

@@ -22,9 +22,9 @@ public interface Region
 
   String getFlag();
 
-  public HashSet<WorldCell> getAllCells ();
+  public HashSet<? extends WorldCell> getAllCells();
 
-  public HashSet<WorldCell> getArableCells ();
+  public HashSet<? extends WorldCell> getArableCells();
 
   void setFlag(String flagLocation);
 
