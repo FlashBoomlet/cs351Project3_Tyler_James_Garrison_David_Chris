@@ -35,6 +35,8 @@ public class StatPane extends JPanel
   public StatPane(String name,int width,int height)
   {
     //init
+    super();
+    setSize( width, height);
     barGraphsPanel = new JPanel();
     titleLable = new JLabel(name);
     JPanel titlePane = new JPanel();
@@ -53,21 +55,7 @@ public class StatPane extends JPanel
 
     barGraphsPanel.setBackground(GUI_BACKGROUND);
     barGraphsPanel.setBorder(new EmptyBorder(1, 1, 1, 1));
-
-    LayoutManager layout;
-    if( name == "REGION(S) CROP DATA:" )
-    {
-      //This is the issue here:
-      //layout = new GridLayout(AttributeGenerator.getCropsLength()+1,1);
-
-      //This next line probably shouldn't be here:
-      layout = new BoxLayout(barGraphsPanel, BoxLayout.Y_AXIS);
-    }
-    else
-    {
-      layout = new BoxLayout(barGraphsPanel, BoxLayout.Y_AXIS);
-    }
-    barGraphsPanel.setLayout(layout);
+    barGraphsPanel.setLayout(new BoxLayout(barGraphsPanel, BoxLayout.Y_AXIS));
 
     //wire
     titlePane.add(titleLable);

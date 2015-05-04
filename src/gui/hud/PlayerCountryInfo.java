@@ -101,6 +101,8 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
 
   public void updatePlayerCountry(GUIRegion playerCountry)
   {
+    pieHolder.removeAll();
+
     this.playerCountry = playerCountry;
     initCrops();
     initHungry();

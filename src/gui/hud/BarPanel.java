@@ -74,7 +74,7 @@ public class BarPanel extends JPanel
     label.setFont(GUI_FONT);
     label.setForeground(ColorsAndFonts.GUI_TEXT_COLOR);
     label.setHorizontalAlignment(SwingConstants.LEFT);
-    label.setVerticalAlignment(SwingConstants.BOTTOM);
+    label.setVerticalAlignment(SwingConstants.TOP);
 
     if( showAdjust )
     {

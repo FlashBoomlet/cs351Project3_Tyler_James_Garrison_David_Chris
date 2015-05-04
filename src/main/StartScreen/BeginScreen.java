@@ -3,9 +3,14 @@ package main.StartScreen;
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.WorldPresenter;
+import gui.displayconverters.DisplayUnitConverter;
+import gui.hud.BarPanel;
+import gui.hud.PieChart.ChartKey;
+import gui.hud.PieChart.PieChart;
+import gui.hud.PieChart.Slice;
+import gui.hud.StatPane;
 import main.Trigger;
-import model.PolicyData;
-import model.Region;
+import model.CountryData;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -15,9 +20,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static gui.ColorsAndFonts.BAR_GRAPH_NEG;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 
 /**
@@ -36,10 +44,29 @@ class BeginScreen extends JPanel implements ActionListener
   private JLabel selectedCountryLabel;
   Collection<GUIRegion> guiRegions;
   ArrayList<GUIRegion> guiRegionsOfficial = new ArrayList<>();
-  Color backGround = new Color(0, 255, 254);
+  Color backGround = ColorsAndFonts.GUI_BACKGROUND;
+  Color foreGroundColor = ColorsAndFonts.GUI_TEXT_COLOR;
   private LowerLeft left;
   private RightLeft right;
   private MiniMapDisplay miniMap;
+  private DisplayUnitConverter converter = new DisplayUnitConverter();
+  boolean metricUnits = true;
+
+
+  private ArrayList<Slice> landArray = new ArrayList<>();
+  Slice[] landSlices = {
+    new Slice(0, new Color(102,255,51,155), "Organic"),
+    new Slice(0, new Color(153,102,51,155),  "Conventional" ),
+    new Slice(0, new Color(255,80,80,155), "GMO" ) };
+  private ArrayList<Slice> cropArray = new ArrayList<>();
+  Slice[] cropSlices = {
+    new Slice(0, new Color(235,235,51,155), "Corn"),
+    new Slice(0, new Color(255,153,0,155),  "Wheat" ),
+    new Slice(0, new Color(230,230,230,155), "Rice" ),
+    new Slice(0, new Color(194,163,133,155), "Soy"),
+    new Slice(0, new Color(255,102,255,155), "Other")
+  };
+
 
 
   /*
@@ -68,7 +95,8 @@ class BeginScreen extends JPanel implements ActionListener
     this.frameWidth = main.Game.frameWidth;
     this.frameHeight = main.Game.frameHeight;
 
-    setOpaque(false);
+    setOpaque(true);
+    setBackground(backGround);
     setLocation(0, 0);
 
     setSize(frameWidth, frameHeight);
@@ -100,7 +128,8 @@ class BeginScreen extends JPanel implements ActionListener
     buttonCon.add(beginGame);
     selectedCountryLabel = new JLabel("United States of America");
     buttonCon.add(selectedCountryLabel);
-    add( buttonCon, BorderLayout.SOUTH);
+    selectedCountryLabel.setVisible(false);
+    add(buttonCon, BorderLayout.SOUTH);
   }
 
   /**
@@ -143,6 +172,7 @@ class BeginScreen extends JPanel implements ActionListener
     // Null color basically
     private final Color BORDER_COL = new Color(0.0f,0.0f,0.0f,0.0f);
 
+
     private CountrySelect()
     {
       super();
@@ -184,6 +214,7 @@ class BeginScreen extends JPanel implements ActionListener
       for (GUIRegion r : guiRegionsOfficial)
       {
         JLabel tempLabel = new JLabel(r.getName());
+        tempLabel.setForeground(foreGroundColor);
         if (r.getName().equalsIgnoreCase("United States of America")) {
           selectedCountry = r;
         }
@@ -194,6 +225,8 @@ class BeginScreen extends JPanel implements ActionListener
       JScrollPane scrollPane = new JScrollPane(countries);
       scrollPane.setOpaque(false);
       scrollPane.setLocation(0, 0);
+      //scrollPane.setBorder(BorderFactory.createEmptyBorder());
+      scrollPane.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(5,5,5,5, Color.LIGHT_GRAY), PADDING_BORDER));
       scrollPane.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
       scrollPane.setPreferredSize(new Dimension(width, height));
       scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(scrollW, 10));
@@ -232,7 +265,8 @@ class BeginScreen extends JPanel implements ActionListener
       JLabel temp = (JLabel) e.getSource();
 
       temp.setOpaque(true);
-      temp.setBackground(Color.WHITE);
+      temp.setForeground(Color.RED);
+      temp.setBackground(Color.LIGHT_GRAY);
     }
 
     @Override
@@ -241,6 +275,7 @@ class BeginScreen extends JPanel implements ActionListener
       JLabel temp = (JLabel) e.getSource();
 
       temp.setOpaque(false);
+      temp.setForeground(foreGroundColor);
       temp.setBackground(backGround );
     }
 
@@ -248,9 +283,8 @@ class BeginScreen extends JPanel implements ActionListener
 
   private void refreshDisplay()
   {
-    left.repaint();
-    right.repaint();
-    miniMap.repaint();
+    left.statsRefresh();
+    right.rightRefresh();
   }
 
   /**
@@ -258,6 +292,7 @@ class BeginScreen extends JPanel implements ActionListener
    */
   private class CountryPreview extends JPanel
   {
+
     private CountryPreview()
     {
       super();
@@ -310,43 +345,321 @@ class BeginScreen extends JPanel implements ActionListener
 
   private class LowerLeft extends JPanel
   {
+    private StatPane stats;
+
     /**
      * Constructor
      */
     private LowerLeft()
     {
       super();
-      setOpaque( true );
-      setBackground(Color.CYAN);
+      setOpaque(false);
+
+      setLayout(new GridLayout(2, 1));
+      // The dimensions are irrelevant layout overrides
+      stats = new StatPane(selectedCountry.getName() + "'s Data:",frameWidth,frameHeight);
+      stats.setOpaque(false);
+      add(stats);
+
+      statsRefresh();
     }
 
-    @Override
-    public void paintComponent(Graphics g)
+    private void statsRefresh()
     {
-      Graphics2D g2d = (Graphics2D) g;
-      g2d.setColor( Color.BLACK );
-      g2d.drawString(selectedCountry.getName(),10, 40 );
+      //Stats Panel
+      stats.clearBarPlots();
+      displayStats(stats);
+      stats.revalidate();
+    }
+
+    /**
+     * Override paint
+     * @param g graphics you wish to have
+     */
+    @Override
+    public void paint(Graphics g)
+    {
+      super.paint(g);
+    }
+
+    /**
+     * Controls the presentation logic for displaying the general data
+     * in the info panel for the specified region(s).
+     *
+     * @param statPane GUI element to 'write' to.
+     */
+    private void displayStats(StatPane statPane)
+    {
+      double population = 0;
+      double medianAge = 0;
+      double birthRate = 0;
+      double mortality = 0;
+      double migration = 0;
+      double undernourish = 0;
+
+      statPane.setTitle(selectedCountry.getName() + "'s Data:" );
+
+      if(selectedCountry != null )
+      {
+        CountryData cd = selectedCountry.getCountryData();
+        population = cd.getPopulation(metricUnits);
+        medianAge = cd.getMedianAge(metricUnits);
+        birthRate = cd.getBirthRate(metricUnits);
+        mortality = cd.getMortality(metricUnits);
+        migration = cd.getMigration(metricUnits);
+        undernourish = cd.getUndernourish(metricUnits);
+      }
+
+
+    /*
+     * General Country Data
+     */
+      BarPanel bp1 = getBarPanel( population, "Population" , 1, false );
+      statPane.addBar(bp1);
+      BarPanel bp2 = getBarPanel( medianAge, "Median Age" , 122, false );
+      statPane.addBar(bp2);
+      BarPanel bp3 = getBarPanel( birthRate, "Birth Rate" , 100, false );
+      statPane.addBar(bp3);
+      BarPanel bp4 = getBarPanel( mortality, "Mortality Rate" , 100, false );
+      statPane.addBar(bp4);
+      BarPanel bp5 = getBarPanel( migration, "Migration Rate" , 100, false );
+      statPane.addBar(bp5);
+      BarPanel bp6 = getBarPanel( undernourish, "Unnourished" , 100, false );
+      statPane.addBar(bp6);
+    }
+
+
+    /**
+     * Returns the current DisplayConverter object.
+     */
+    public DisplayUnitConverter getConverter()
+    {
+      return converter;
+    }
+
+
+    /**
+     * long (and ugly) method to handel the tedious logic of displaying each
+     * region attribute in the appropriate way, with the appropriate color.
+     *<p>
+     * ie. $ 2.23 for money, 34.23 F° for temperature etc...
+     */
+    private BarPanel getBarPanel(double value, String name, double totalPercent, boolean adjustable)
+    {
+      // somewhat sensible defaults.
+      //RegionAttributes converted = getConverter().convertAttributes(attributesSet);
+      int FULL_BAR = 1; // TO CREATE A LABEL, overloading the concept of bar.
+      String PrimaryLabel = name;
+      Color barColor = BAR_GRAPH_NEG;
+      double ratio = Math.abs(value / totalPercent);
+
+      // I don't want the java to string method, I want the number how I want it
+      NumberFormat formatter = new DecimalFormat("#,###");
+      NumberFormat percentFormatter = new DecimalFormat("#,##0.0#");
+
+      String secondaryLabel = formatter.format(value);
+
+      switch(name)
+      {
+        case "Population":
+          ratio = 0;
+          break;
+        case "Median Age":
+          barColor = Color.YELLOW;
+          secondaryLabel += getConverter().getYearsSymbol(metricUnits);
+          break;
+        case "Birth Rate":
+        case "Mortality Rate":
+        case "Migration Rate":
+          barColor = Color.GREEN;
+          secondaryLabel += getConverter().getRateSymbol(metricUnits);
+          break;
+        case "Unnourished":
+          barColor = Color.RED;
+          secondaryLabel += getConverter().getRateSymbol(metricUnits);
+          break;
+        case "Corn":
+          barColor = new Color(0xEBEB33);
+          secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+          break;
+        case "Wheat":
+          barColor = new Color(0xFF9900);
+          secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+          break;
+        case "Rice":
+          barColor = new Color(0xE6E6E6);
+          secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+          break;
+        case "Soy":
+          barColor = new Color(0xC2A385);
+          secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+          break;
+        case "Other":
+          barColor = new Color(0xFF66FF);
+          secondaryLabel += " " + getConverter().getLandUsedSymbol(metricUnits);
+          break;
+        case "Organic":
+          barColor = new Color(0x66FF33);
+          secondaryLabel = percentFormatter.format(value*100);
+          secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
+          break;
+        case "Conventional":
+          barColor = new Color(0x996633);
+          secondaryLabel = percentFormatter.format(value*100);
+          secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
+          break;
+        case "GMO":
+          barColor = new Color(0xFF5050);
+          secondaryLabel = percentFormatter.format(value*100);
+          secondaryLabel += " " + getConverter().getPercentSymbol(metricUnits);
+          break;
+        default:
+          ratio = 0;
+          // no nothing, fall back on the above default values.
+      }
+      return new BarPanel(barColor, ratio, PrimaryLabel, secondaryLabel, adjustable);
     }
   }
 
   private class RightLeft extends JPanel
   {
+    private JPanel pieHolderTop;
+    private JPanel pieHolderBottom;
+
+
     /**
      * Constructor
      */
     private RightLeft()
     {
       super();
-      setOpaque( true );
-      setBackground(Color.PINK);
+      setOpaque(false);
+
+      setLayout(new GridLayout(2,1));
+
+      pieHolderTop = new JPanel();
+      pieHolderTop.setOpaque(false);
+      pieHolderTop.setLayout(new GridLayout(1,2));
+
+      pieHolderBottom = new JPanel();
+      pieHolderBottom.setOpaque(false);
+      pieHolderBottom.setLayout(new GridLayout(1,2));
+
+      add(pieHolderBottom);
+      add(pieHolderTop);
+
+      rightRefresh();
     }
 
+
+    /**
+     * Override paint
+     * @param g graphics you wish to have
+     */
     @Override
-    public void paintComponent(Graphics g)
+    public void paint(Graphics g)
     {
-      Graphics2D g2d = (Graphics2D) g;
-      g2d.setColor( Color.BLACK );
-      g2d.drawString(selectedCountry.getName(),10, 40 );
+      super.paint(g);
+    }
+
+
+    private void rightRefresh()
+    {
+      //Crops Data
+      pieHolderTop.removeAll();
+      pieHolderBottom.removeAll();
+
+      displayCrops();
+      displayLand();
+
+      repaint();
+    }
+
+    /**
+     * Controls the presentation logic for displaying the crop data
+     * in the info panel for the specified region(s).
+     *
+     */
+    private void displayCrops()
+    {
+
+      double cornTotal = 0;
+      double wheatTotal = 0;
+      double riceTotal = 0;
+      double soyTotal = 0;
+      double otherTotal = 0;
+
+
+      if( selectedCountry != null  )
+      {
+        CountryData cd = selectedCountry.getCountryData();
+
+        cornTotal = cd.getCornTotal(metricUnits);
+        wheatTotal = cd.getWheatTotal(metricUnits);
+        riceTotal = cd.getRiceTotal(metricUnits);
+        soyTotal = cd.getSoyTotal(metricUnits);
+        otherTotal = cd.getOtherTotal(metricUnits);
+
+      }
+
+      // Update the slice information
+      cropSlices[0].updateSlice(cornTotal, new Color(235,235,51,100), "Corn");
+      cropSlices[1].updateSlice(wheatTotal, new Color(255,153,0,100),  "Wheat" );
+      cropSlices[2].updateSlice(riceTotal, new Color(230,230,230,100), "Rice" );
+      cropSlices[3].updateSlice(soyTotal, new Color(194,163,133,100), "Soy");
+      cropSlices[4].updateSlice(otherTotal, new Color(255,102,255,100), "Other");
+
+      cropArray.clear();
+      for( int i = 0; i < cropSlices.length ; i++)
+      {
+        cropArray.add(cropSlices[i]);
+      }
+
+      int chartWidth = frameWidth/8 ;
+      Rectangle landRect = new Rectangle(0,0,chartWidth,chartWidth);
+      Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
+
+      pieHolderTop.add(new PieChart(landRect, cropArray));
+      pieHolderTop.add(new ChartKey(keyRect, cropArray));
+    }
+
+    /**
+     * Controls the presentation logic for displaying the data on the Land
+     * in the info panel for the specified region(s).
+     *
+     */
+    private void displayLand()
+    {
+      double organic = 0;
+      double conventional = 0;
+      double gmo = 0;
+
+
+      if( selectedCountry != null) {
+        CountryData cd = selectedCountry.getCountryData();
+
+        organic = cd.getOrganic(metricUnits);
+        conventional = cd.getConventional(metricUnits);
+        gmo = cd.getGmo(metricUnits);
+      }
+
+      // Update the slice information
+      landSlices[0].updateSlice(organic*100, new Color(102,255,51,100), "Organic");
+      landSlices[1].updateSlice(conventional*100, new Color(153,102,51,100),  "Conventional" );
+      landSlices[2].updateSlice(gmo*100, new Color(255,80,80,100), "GMO" );
+
+      landArray.clear();
+      for( int i = 0; i < landSlices.length ; i++)
+      {
+        landArray.add(landSlices[i]);
+      }
+
+      int chartWidth = frameWidth/8 ;
+      Rectangle landRect = new Rectangle(0,0,chartWidth,chartWidth);
+      Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
+
+      pieHolderBottom.add(new PieChart(landRect, landArray));
+      pieHolderBottom.add(new ChartKey(keyRect, landArray));
     }
   }
 
@@ -357,14 +670,6 @@ class BeginScreen extends JPanel implements ActionListener
       super();
       setOpaque(true);
       setBackground( Color.WHITE );
-    }
-
-    @Override
-    public void paintComponent(Graphics g)
-    {
-      Graphics2D g2d = (Graphics2D) g;
-      g2d.setColor( Color.BLACK );
-      g2d.drawString(selectedCountry.getName(),10, 40 );
     }
   }
 }
