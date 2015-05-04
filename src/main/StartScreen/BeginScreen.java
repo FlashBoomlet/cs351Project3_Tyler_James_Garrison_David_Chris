@@ -5,6 +5,7 @@ import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.displayconverters.DisplayUnitConverter;
 import gui.hud.BarPanel;
+import gui.hud.MiniViewBox;
 import gui.hud.PieChart.ChartKey;
 import gui.hud.PieChart.PieChart;
 import gui.hud.PieChart.Slice;
@@ -285,6 +286,7 @@ class BeginScreen extends JPanel implements ActionListener
   {
     left.statsRefresh();
     right.rightRefresh();
+    miniMap.updateMiniDisplay();
   }
 
   /**
@@ -665,11 +667,28 @@ class BeginScreen extends JPanel implements ActionListener
 
   private class MiniMapDisplay extends JPanel
   {
+    private MiniViewBox miniViewBox;
+
     private MiniMapDisplay()
     {
       super();
-      setOpaque(true);
-      setBackground( Color.WHITE );
+      setOpaque(false);
+      setLayout(new GridLayout(1,1));
+
+      miniViewBox = new MiniViewBox(" ",frameWidth, frameHeight);
+
+      miniViewBox.setPreferredSize(new Dimension(frameWidth/2, (frameHeight / 2)));
+      this.add(miniViewBox);
+    }
+
+    private void updateMiniDisplay()
+    {
+      ArrayList<GUIRegion> grListTemp = new ArrayList<>();
+      grListTemp.add(selectedCountry);
+      miniViewBox.setTitle(selectedCountry.getName());
+      miniViewBox.setAlph(0.0f);
+      miniViewBox.setDrawableRegions(grListTemp);
+      miniViewBox.getRegionView();
     }
   }
 }

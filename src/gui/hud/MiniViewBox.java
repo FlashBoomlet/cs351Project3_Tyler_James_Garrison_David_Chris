@@ -97,7 +97,7 @@ public class MiniViewBox extends JPanel
      a definition for displaying a nicely scaled and located aggregation of
      polygons representing region borders
    */
-  private JPanel getRegionView()
+  public JPanel getRegionView()
   {
     setSize(getWidth(),getHeight()*(3/4));
     return new JPanel()
