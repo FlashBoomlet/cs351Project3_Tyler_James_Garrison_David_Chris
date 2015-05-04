@@ -94,14 +94,13 @@ public class PlayerCountryInfo extends JPanel implements ActionListener
   };
 
 
-
   //players country for access to information
   private GUIRegion playerCountry;
-
 
   public void updatePlayerCountry(GUIRegion playerCountry)
   {
     pieHolder.removeAll();
+    availableCrops.removeAll();
 
     this.playerCountry = playerCountry;
     initCrops();

@@ -52,6 +52,7 @@ class BeginScreen extends JPanel implements ActionListener
   private MiniMapDisplay miniMap;
   private DisplayUnitConverter converter = new DisplayUnitConverter();
   boolean metricUnits = true;
+  private Timer timer;
 
 
   private ArrayList<Slice> landArray = new ArrayList<>();
@@ -103,6 +104,7 @@ class BeginScreen extends JPanel implements ActionListener
     setSize(frameWidth, frameHeight);
     setLayout(new BorderLayout());
 
+
     beginGame = new JButton("BEGIN");
     beginGame.addActionListener(this);
 
@@ -132,6 +134,7 @@ class BeginScreen extends JPanel implements ActionListener
     selectedCountryLabel.setVisible(false);
     add(buttonCon, BorderLayout.SOUTH);
   }
+
 
   /**
    * Overrides action performed.
@@ -282,11 +285,26 @@ class BeginScreen extends JPanel implements ActionListener
 
   }
 
+
+  /**
+   * Override paint
+   * @param g graphics you wish to have
+   */
+  @Override
+  public void paintComponent(Graphics g)
+  {
+    super.paintComponent(g);
+  }
+
+
   private void refreshDisplay()
   {
     left.statsRefresh();
     right.rightRefresh();
     miniMap.updateMiniDisplay();
+    left.repaint();
+    right.repaint();
+    miniMap.repaint();
   }
 
   /**
@@ -343,6 +361,17 @@ class BeginScreen extends JPanel implements ActionListener
       add(lowerCon);
       refreshDisplay();
     }
+
+    /**
+     * Override paint
+     * @param g graphics you wish to have
+     */
+    @Override
+    public void paint(Graphics g)
+    {
+      super.paint(g);
+    }
+
   }
 
   private class LowerLeft extends JPanel
@@ -379,9 +408,9 @@ class BeginScreen extends JPanel implements ActionListener
      * @param g graphics you wish to have
      */
     @Override
-    public void paint(Graphics g)
+    public void paintComponent(Graphics g)
     {
-      super.paint(g);
+      super.paintComponent(g);
     }
 
     /**
@@ -559,9 +588,9 @@ class BeginScreen extends JPanel implements ActionListener
      * @param g graphics you wish to have
      */
     @Override
-    public void paint(Graphics g)
+    public void paintComponent(Graphics g)
     {
-      super.paint(g);
+      super.paintComponent(g);
     }
 
 
@@ -690,5 +719,16 @@ class BeginScreen extends JPanel implements ActionListener
       miniViewBox.setDrawableRegions(grListTemp);
       miniViewBox.getRegionView();
     }
+
+    /**
+     * Override paint
+     * @param g graphics you wish to have
+     */
+    @Override
+    public void paintComponent(Graphics g)
+    {
+      super.paintComponent(g);
+    }
+
   }
 }
