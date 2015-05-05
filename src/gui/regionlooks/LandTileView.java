@@ -13,18 +13,23 @@ import java.awt.geom.Point2D;
 
 
 /**
- @Author David Ringo
+ @author David Ringo
  created: 2015.05.05
  class:   cs351
  project: cs351Project3_Tyler_James_Garrison_David_Chris
  description:
 
+ General RegionView for viewing LandTile data fields.  Implemented for the four views originally
+ in Tyler, Tim and David's codebase.  Others can be added too.
+ Basic strategy is to find minimum and maximum values for a given field and scale colors through
+ either a restricted range of hues in the HSL colorspace or through greyscale, where white
+ represents the max and black the min.
  */
 public class LandTileView implements RegionView
 {
 
-  MapConverter converter = new EquirectangularConverter();
-  private LandTile.FIELD field;
+  private final MapConverter converter = new EquirectangularConverter();
+  private final LandTile.FIELD field;
   private float max;
   private float min;
   private boolean init = true;
@@ -66,7 +71,7 @@ public class LandTileView implements RegionView
   }
 
 
-  static Color getScaledColor(LandTile tile, LandTile.FIELD field, float min, float max)
+  private static Color getScaledColor(LandTile tile, LandTile.FIELD field, float min, float max)
   {
     float scale = (tile.getData(field) - min) / (max - min);
     switch (field)
