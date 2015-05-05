@@ -131,6 +131,47 @@ public class Trigger
     r.setAsPlayer();
     playerCountryInfo.updatePlayerCountry(r);
     if( playerCountryDisplay != null ) playerCountryDisplay.updatePlayerCountry(r);
-    System.out.println( "You have selected to play as: " + name );
+    System.out.println("You have selected to play as: " + name);
+
+    HashMap<GUIRegion, Integer> rel = new HashMap<>();
+    for (GUIRegion gr: WorldPresenter.getAllRegions()) {
+      if (gr.getOfficialCountry() && !gr.getPlayerStatus()) {
+        rel.put(gr, 1);
+      }
+    }
+    r.setRelationshipMap(rel);
+  }
+
+  /**
+   * Alter data for a random event
+   *
+   * @param red (Random Event Data) that occured
+   */
+  public void randomEvent(RandomEventData red)
+  {
+    if( r != null )
+    {
+      r.randomEvent(red);
+      sendAlert( "ALERT!", red.getDescription() );
+    }
+    else
+    {
+      System.out.println("Please Select Country");
+    }
+  }
+
+  public void signTreaty(TreatyData treatyData)
+  {
+    if( r != null ) {
+      // Make a call to adjust the data.
+      sendAlert("News", treatyData.getTreaty());
+      newsAlert(new News("Breaking! In " + name + " they have signed a bill that " + treatyData.getDescription()));
+
+      r.signTreaty(treatyData);
+    }
+    else
+    {
+      System.out.println( "Please Select Country" );
+    }
   }
 }

@@ -1,5 +1,6 @@
 package gui.hud;
 
+import IO.TreatyCSVParser;
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.hud.PieChart.ChartKey;
@@ -7,6 +8,7 @@ import gui.hud.PieChart.PieChart;
 import gui.hud.PieChart.Slice;
 import main.Trigger;
 import model.CountryData;
+import model.TreatyData;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -43,6 +45,7 @@ public class TreatySelector extends JPanel
   Font CARD_FONT = new Font("SansSerif", Font.BOLD, 12);
   public static final EmptyBorder PADDING_BORDER = new EmptyBorder(2, 2, 2, 2);
   private final static Color BORDER_COL = ColorsAndFonts.GUI_TEXT_COLOR.darker();
+  private ArrayList<TreatyData> masterTreatyData = new ArrayList<>();
 
   /**
    * Treaty Selector is a User Interface to select trade between countries
@@ -62,6 +65,8 @@ public class TreatySelector extends JPanel
     height = (int) area.getHeight();
 
     this.trigger = trigger;
+    new TreatyCSVParser(this);
+
     this.label = label;
 
     setOpaque(true);
@@ -81,11 +86,9 @@ public class TreatySelector extends JPanel
     title.setHorizontalAlignment(SwingConstants.LEFT);
     topCon.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, BORDER_COL), PADDING_BORDER));
 
-
     topCon.addMouseListener(this);
     topCon.addMouseMotionListener(this);
     topCon.setName("topCon");
-
 
     /*
      * Make-shift close custom button so I can place it where ever I would like and make it look amazing
@@ -121,8 +124,6 @@ public class TreatySelector extends JPanel
     add(middleCon, BorderLayout.CENTER);
 
 
-
-
     /*
      * Make-shift close custom button so I can place it where ever I would like and make it look amazing
      */
@@ -142,18 +143,18 @@ public class TreatySelector extends JPanel
     request.add(requestLabel);
 
 
-
     bottomCon = new JPanel();
     bottomCon.setOpaque(false);
     bottomCon.setLocation(0,middleCon.getY()+middleCon.getHeight());
     bottomCon.setSize(width,(int)(height*(.10)));
-    bottomCon.setLayout(new GridLayout(1,2));
+    bottomCon.setLayout(new GridLayout(1,3));
     JLabel initial = new JLabel( "     " + "Initial: " );
     initial.setForeground(new Color(0xA0A0A0));
     initial.setFont(CARD_FONT);
-    initial.setHorizontalAlignment(SwingConstants.LEFT);
+    initial.setHorizontalAlignment(SwingConstants.RIGHT);
     bottomCon.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, BORDER_COL), PADDING_BORDER));
     bottomCon.add(initial);
+    bottomCon.add(new JTextArea());
     JPanel holder2 = new JPanel();
     holder2.setOpaque(false);
     holder2.setLayout(new FlowLayout(SwingConstants.RIGHT,0,0));
@@ -226,6 +227,11 @@ public class TreatySelector extends JPanel
       case "CLOSE":
         this.setVisible(false);
         setLocation(x,y);
+        break;
+      case "REQUEST":
+        trigger.signTreaty( masterTreatyData.get(0) );
+        this.setLocation(x,y);
+        this.setVisible(false);
         break;
       default:
         break;
@@ -429,4 +435,14 @@ public class TreatySelector extends JPanel
       landData.add(new ChartKey(keyRect, landArray));
     }
   }
+
+
+  /**
+   * Functions to help out with creating and bringing in the treaty data
+   */
+  public void add(TreatyData d)
+  {
+    masterTreatyData.add(d);
+  }
+
 }

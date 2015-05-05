@@ -26,7 +26,7 @@ import java.util.Date;
 public class DatePanel extends JPanel
 {
   private static final int INSET = 5;
-  private static final String DATE_PATTERN = "EEE, MMM d, YYYY";
+  private static final String DATE_PATTERN = "MMM, YYYY";
   private static final Font DATE_FONT = ColorsAndFonts.TOP_FONT;
   private static final Color guiBackground = ColorsAndFonts.OCEANS;
   private static Calendar currentDate = Calendar.getInstance();

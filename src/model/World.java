@@ -1,11 +1,14 @@
 package model;
 
 
+import IO.RandomEventCSVParser;
+import IO.WorldDataParser;
 import IO.LandDataIO;
 import gui.GUIRegion;
 import gui.WorldPresenter;
 import gui.hud.DatePanel;
 import main.SettingsScreen;
+import main.Trigger;
 
 import java.util.*;
 
@@ -31,28 +34,35 @@ public class World
   private TileManager tileManager;
 
 
-  /**
-   Class constructor. To build a world one must have a collection of regions.
+  private ArrayList<RandomEventData> masterRandomEventData = new ArrayList<>();
+  private ArrayList<Integer> eventDispatchList = new ArrayList<>();
+  private Trigger trigger;
 
-   @param world
-   collection of regions that we represent the world
+  /**
+   * Class constructor. To build a world one must have a collection of regions.
+   * @param world collection of regions that we represent the world
+   * @param trigger that dispatches events
    */
-  public World(Collection<Region> world)
+  public World(Collection<Region> world, Trigger trigger)
   {
-    this(world, Calendar.getInstance());
+    this(world, Calendar.getInstance(), trigger);
   }
 
 
   /**
-   One can also build a world starting at a particular date.
-
-   @param world
+   * One can also build a world starting at a particular date.
+   * @param world
+   * @param trigger that dispatches events
    */
-  public World(Collection<Region> world, Calendar cal)
+  public World(Collection<Region> world, Calendar cal ,Trigger trigger)
   {
     this.world = world;
     System.out.println(world.size());
     this.currentDate = cal;
+    this.trigger = trigger;
+    new RandomEventCSVParser(this);
+    // Have some initial random events
+    calculateRandomEventTimes();
     loadWorldArray();
   }
 
@@ -154,7 +164,14 @@ public class World
     DatePanel.updateRatio(currentDate.get(Calendar.DAY_OF_YEAR) / 365.0, currentDate.get(
         Calendar.YEAR));
 
-    if (currentDate.get(Calendar.YEAR) == 2050)
+    if( eventDispatchList.contains(currentDate.get(Calendar.DAY_OF_YEAR)) )
+    {
+      // Dispatch random event
+      Random rand = new Random();
+      trigger.randomEvent(masterRandomEventData.get(rand.nextInt(masterRandomEventData.size()-1)) );
+    }
+
+    if( currentDate.get(Calendar.YEAR) == 2050 )
     {
       //Call to finish game
       main.Game.gameFinished();
@@ -167,7 +184,11 @@ public class World
       for (GUIRegion gr : worldPresenter.getAllRegions())
       {
         //Check to ensure it should be updated so that we don't waste time
-        if (gr.getOfficialCountry()) gr.iterateYear();
+        if( gr.getOfficialCountry() )
+        {
+          calculateRandomEventTimes();
+          gr.iterateYear();
+        }
       }
       while (true)
       {
@@ -300,6 +321,25 @@ public class World
           }
         }
     }
+  }
+
+  private void calculateRandomEventTimes()
+  {
+    Random rand = new Random();
+    int randomNum = rand.nextInt(5);
+
+    eventDispatchList.clear();
+    for( int i = 0; i < randomNum; i ++ )
+    {
+      eventDispatchList.add(rand.nextInt(365));
+    }
+  }
+  /**
+   * Functions to help out with creating and bringing in the random event data
+   */
+  public void addEvent(RandomEventData red)
+  {
+    masterRandomEventData.add(red);
   }
 
 

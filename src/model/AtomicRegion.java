@@ -1,5 +1,7 @@
 package model;
 
+import java.util.*;
+import java.awt.geom.Path2D;
 
 import java.awt.geom.Rectangle2D;
 import java.util.*;
@@ -25,6 +27,9 @@ public class AtomicRegion implements Region, CropIdeals
   private List<MiniArea> perimeter;
   private String name;
   private String flagLocation;
+  private HashSet<WorldCell> landCells = new HashSet<>();
+  private HashSet<WorldCell> relevantCells = new HashSet<>();
+  private HashMap<Region, Integer> relationshipMap= new HashMap<>();
   private CountryData data = null;
   private boolean officialCountry = false;
   private int OTHER_AVG_HIGH;
@@ -35,7 +40,6 @@ public class AtomicRegion implements Region, CropIdeals
   private int OTHER_RAIN_LOW;
   private Collection<LandTile> landTiles = new HashSet<>();
   private Collection<LandTile> relevantTiles = new HashSet<>();
-
 
   /**
    @return name
@@ -992,6 +996,11 @@ public class AtomicRegion implements Region, CropIdeals
   public void setOfficialCountry()
   {
     officialCountry = true;
+  }
+
+  public void setRelationshipMap(HashMap<Region, Integer> rel)
+  {
+    relationshipMap.putAll(rel);
   }
 
 

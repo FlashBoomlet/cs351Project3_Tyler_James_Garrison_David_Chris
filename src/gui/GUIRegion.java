@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -45,6 +46,9 @@ public class GUIRegion
   public static ArrayList<GUIRegion> importedFrom = new ArrayList<>();
   public static Collection<GUIRegion> preferedTrade = main.Game.getWorldPresenter().getAllRegions();
   public static ArrayList<PolicyData> policiesMade = new ArrayList<>();
+  public static ArrayList<RandomEventData> eventsThatHaveOccured = new ArrayList<>();
+  public static ArrayList<TreatyData> treatiesMade = new ArrayList<>();
+  public static HashMap<GUIRegion, Integer> relationshipMap = new HashMap<>();
 
   /**
    * Loads the region's flag.
@@ -404,5 +408,32 @@ public class GUIRegion
   {
     data.signBill(policyData);
     policiesMade.add(policyData);
+  }
+
+  /**
+   * Sign a Treaty into effect
+   *
+   * @param treatyData -TreatyData that is being added
+   */
+  public void signTreaty(TreatyData treatyData)
+  {
+    data.signTreaty(treatyData);
+    treatiesMade.add(treatyData);
+  }
+
+  public void randomEvent(RandomEventData red)
+  {
+    data.randomEvent(red);
+    eventsThatHaveOccured.add(red);
+  }
+
+  /**
+   * Sets the relationship map
+   *
+   * @param rel -Hashmap of GUIRegion -> Integer
+   */
+  public void setRelationshipMap(HashMap<GUIRegion, Integer> rel)
+  {
+    relationshipMap.putAll(rel);
   }
 }

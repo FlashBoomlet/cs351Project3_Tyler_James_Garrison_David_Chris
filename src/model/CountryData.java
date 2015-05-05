@@ -1230,4 +1230,74 @@ public class CountryData
     otherExports *= p.getOther();
     otherImports *= p.getOther();
   }
+
+  /**
+   * Sign a treaty into effect
+   *
+   * @param treatyData -TreatyData that is being added
+   */
+  public void signTreaty(TreatyData treatyData)
+  {
+    //Update GMO
+    gmo *= treatyData.getGmo();
+    //Update Organic
+    organic *= treatyData.getOrganic();
+    //Update Conventional
+    conventional *= treatyData.getConventional();
+    //Update Corn
+    cornProduction *= treatyData.getCorn();
+    cornExports *= treatyData.getCorn();
+    cornImports *= treatyData.getCorn();
+    //Update Soy
+    soyProduction *= treatyData.getSoy();
+    soyExports *= treatyData.getSoy();
+    soyImports *= treatyData.getSoy();
+    //Update Rice
+    riceExports *= treatyData.getRice();
+    riceImports *= treatyData.getRice();
+    riceProduction *= treatyData.getRice();
+    //Update Wheat
+    wheatImports *= treatyData.getWheat();
+    wheatExports *= treatyData.getWheat();
+    wheatProduction *= treatyData.getWheat();
+    //Update Other
+    otherProduction *= treatyData.getOther();
+    otherExports *= treatyData.getOther();
+    otherImports *= treatyData.getOther();
+  }
+
+  /**
+   * Random event data altering method
+   *
+   * @param red the Random Event that occurred
+   */
+  public void randomEvent(RandomEventData red)
+  {
+    //Update GMO
+    gmo *= red.getGmo();
+    //Update Organic
+    organic *= red.getOrganic();
+    //Update Conventional
+    conventional *= red.getConventional();
+    //Update Corn
+    cornProduction *= red.getCorn();
+    cornExports *= red.getCorn();
+    cornImports *= red.getCorn();
+    //Update Soy
+    soyProduction *= red.getSoy();
+    soyExports *= red.getSoy();
+    soyImports *= red.getSoy();
+    //Update Rice
+    riceExports *= red.getRice();
+    riceImports *= red.getRice();
+    riceProduction *= red.getRice();
+    //Update Wheat
+    wheatImports *= red.getWheat();
+    wheatExports *= red.getWheat();
+    wheatProduction *= red.getWheat();
+    //Update Other
+    otherProduction *= red.getOther();
+    otherExports *= red.getOther();
+    otherImports *= red.getOther();
+  }
 }
