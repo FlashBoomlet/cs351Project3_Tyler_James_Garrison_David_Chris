@@ -59,7 +59,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
   private static JButton policy;
   private static JButton trade;
   private static CardSelector policySelector;
-  private static CardSelector tradeSelector;
+  private static TreatySelector treatySelector;
   /*
    * Variables
    */
@@ -216,6 +216,23 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
   }
 
   /**
+   * Set the Treaty Selector
+   * @param selector component
+   * @param name of the cardSelector
+   */
+  public void setTreatySelector(TreatySelector selector, String name)
+  {
+    switch (name)
+    {
+      case "POLICY":
+        treatySelector = selector;
+        treatySelector.setVisible(false);
+        break;
+      default:
+    }
+  }
+
+  /**
    * Overrides action performed.
    * Detects which button is clicked and either pauses the game or shows the settings
    *
@@ -235,7 +252,8 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     else if( name == "TRADE" )
     {
       //Create and place custom trade/treaty module here
-      //tradeSelector.setVisible( true );
+      treatySelector.updateCountry(officialRegions.get(0));
+      treatySelector.setVisible( true );
     }
   }
 
@@ -331,9 +349,6 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
     double mortality = 0;
     double migration = 0;
     double undernourish = 0;
-
-
-
 
     if( singeCountry )
     {
@@ -644,6 +659,7 @@ public class InfoPanel extends JPanel implements Observer, ActionListener
   public void clearDisplay()
   {
     policySelector.setVisible(false);
+    treatySelector.setVisible(false);
     miniViewBox.setTitle(" ");
     miniViewBox.setDrawableRegions(null);
     stats.clearBarPlots();
