@@ -45,6 +45,7 @@ public class GUIRegion
   public static ArrayList<GUIRegion> importedFrom = new ArrayList<>();
   public static Collection<GUIRegion> preferedTrade = main.Game.getWorldPresenter().getAllRegions();
   public static ArrayList<PolicyData> policiesMade = new ArrayList<>();
+  public static ArrayList<RandomEventData> eventsThatHaveOccured = new ArrayList<>();
 
   /**
    * Loads the region's flag.
@@ -401,5 +402,11 @@ public class GUIRegion
   {
     data.signBill(policyData);
     policiesMade.add(policyData);
+  }
+
+  public void randomEvent(RandomEventData red)
+  {
+    data.randomEvent(red);
+    eventsThatHaveOccured.add(red);
   }
 }

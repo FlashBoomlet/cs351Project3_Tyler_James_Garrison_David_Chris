@@ -212,7 +212,7 @@ public class Game
         List<Region> allRegions = new ArrayList<>(xmlRegions);
         allRegions.addAll(xmlRegions);
 
-        world = new World(allRegions);
+        world = new World(allRegions,trigger);
         MapConverter converter = new EquirectangularConverter();
 
         worldPresenter = new WorldPresenter(converter, world);

@@ -6,6 +6,7 @@ import gui.hud.PlayerCountryInfo;
 import gui.hud.Ticker.News;
 import gui.hud.Ticker.Ticker;
 import model.PolicyData;
+import model.RandomEventData;
 
 /**
  * Trigger is a system that you reference to update things.
@@ -132,5 +133,11 @@ public class Trigger
     playerCountryInfo.updatePlayerCountry(r);
     if( playerCountryDisplay != null ) playerCountryDisplay.updatePlayerCountry(r);
     System.out.println( "You have selected to play as: " + name );
+  }
+
+  public void randomEvent(RandomEventData red)
+  {
+    r.randomEvent(red);
+    sendAlert( "ALERT!", red.getDescription() );
   }
 }

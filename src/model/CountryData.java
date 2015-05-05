@@ -1224,4 +1224,39 @@ public class CountryData
     otherExports *= p.getOther();
     otherImports *= p.getOther();
   }
+
+  /**
+   * Random event data altering method
+   *
+   * @param red the Random Event that occurred
+   */
+  public void randomEvent(RandomEventData red)
+  {
+    //Update GMO
+    gmo *= red.getGmo();
+    //Update Organic
+    organic *= red.getOrganic();
+    //Update Conventional
+    conventional *= red.getConventional();
+    //Update Corn
+    cornProduction *= red.getCorn();
+    cornExports *= red.getCorn();
+    cornImports *= red.getCorn();
+    //Update Soy
+    soyProduction *= red.getSoy();
+    soyExports *= red.getSoy();
+    soyImports *= red.getSoy();
+    //Update Rice
+    riceExports *= red.getRice();
+    riceImports *= red.getRice();
+    riceProduction *= red.getRice();
+    //Update Wheat
+    wheatImports *= red.getWheat();
+    wheatExports *= red.getWheat();
+    wheatProduction *= red.getWheat();
+    //Update Other
+    otherProduction *= red.getOther();
+    otherExports *= red.getOther();
+    otherImports *= red.getOther();
+  }
 }
