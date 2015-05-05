@@ -622,6 +622,7 @@ public class CardSelector extends JPanel
         sponsor.setName(d.getSponsor());
 
         trigger.sponsoredBill(d);
+        this.setVisible(false);
         break;
       default:
         break;

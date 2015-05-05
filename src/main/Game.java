@@ -17,6 +17,7 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class Game
   int tickerHeight;
   final float NAV_HEIGHT_SCALE = (float) .25;
   final float NAV_WIDTH_SCALE = (float) 1.6;
-  private final static int DEFAULT_TIME_SPEED = 2000;
+  private final static int DEFAULT_TIME_SPEED = 250;
   private int feedPanelHeight;
   private static Collection<Region> xmlRegions = new LinkedList<>();
   public static Collection<Region> getXmlRegions()
@@ -367,6 +368,7 @@ public class Game
             }
     );
     GameplayControl.updateDisplaySpeed();
+
   }
 
   /**

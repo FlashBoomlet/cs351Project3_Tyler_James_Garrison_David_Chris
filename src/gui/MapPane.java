@@ -254,6 +254,7 @@ public class MapPane extends JPanel
     @Override
     public void actionPerformed(ActionEvent e)
     {
+      System.out.println( "Next world trigger");
       presenter.setWorldForward(365);
     }
   };
@@ -342,6 +343,10 @@ public class MapPane extends JPanel
 
     getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('a'), "mortalityview");
     getActionMap().put("mortalityview", mortalityOverlay);
+
+    getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke('n'), "nextYear");
+    getActionMap().put("nextYear", stepWorld);
+
 
     /* OSX quirk, maybe: "4" does not fire repeatedly on hold, regardless of
        modifiers (e.g. "pressed"). This holds for all single keys tested.

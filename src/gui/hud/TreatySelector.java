@@ -1,5 +1,6 @@
 package gui.hud;
 
+import IO.TreatyCSVParser;
 import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.hud.PieChart.ChartKey;
@@ -7,6 +8,7 @@ import gui.hud.PieChart.PieChart;
 import gui.hud.PieChart.Slice;
 import main.Trigger;
 import model.CountryData;
+import model.TreatyData;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -43,6 +45,7 @@ public class TreatySelector extends JPanel
   Font CARD_FONT = new Font("SansSerif", Font.BOLD, 12);
   public static final EmptyBorder PADDING_BORDER = new EmptyBorder(2, 2, 2, 2);
   private final static Color BORDER_COL = ColorsAndFonts.GUI_TEXT_COLOR.darker();
+  private ArrayList<TreatyData> masterTreatyData = new ArrayList<>();
 
   /**
    * Treaty Selector is a User Interface to select trade between countries
@@ -62,6 +65,8 @@ public class TreatySelector extends JPanel
     height = (int) area.getHeight();
 
     this.trigger = trigger;
+    new TreatyCSVParser(this);
+
     this.label = label;
 
     setOpaque(true);
@@ -81,11 +86,9 @@ public class TreatySelector extends JPanel
     title.setHorizontalAlignment(SwingConstants.LEFT);
     topCon.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, BORDER_COL), PADDING_BORDER));
 
-
     topCon.addMouseListener(this);
     topCon.addMouseMotionListener(this);
     topCon.setName("topCon");
-
 
     /*
      * Make-shift close custom button so I can place it where ever I would like and make it look amazing
@@ -121,8 +124,6 @@ public class TreatySelector extends JPanel
     add(middleCon, BorderLayout.CENTER);
 
 
-
-
     /*
      * Make-shift close custom button so I can place it where ever I would like and make it look amazing
      */
@@ -140,7 +141,6 @@ public class TreatySelector extends JPanel
     requestLabel.setForeground(closeColor);
     requestLabel.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, requestColor), PADDING_BORDER));
     request.add(requestLabel);
-
 
 
     bottomCon = new JPanel();
@@ -429,4 +429,14 @@ public class TreatySelector extends JPanel
       landData.add(new ChartKey(keyRect, landArray));
     }
   }
+
+
+  /**
+   * Functions to help out with creating and bringing in the policy data
+   */
+  public void add(TreatyData d)
+  {
+    masterTreatyData.add(d);
+  }
+
 }
