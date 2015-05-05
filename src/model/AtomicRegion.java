@@ -1,10 +1,6 @@
 package model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.awt.geom.Path2D;
 
 import gui.displayconverters.MapConverter;
@@ -26,6 +22,7 @@ public class AtomicRegion implements Region, CropIdeals
   private String flagLocation;
   private HashSet<WorldCell> landCells = new HashSet<>();
   private HashSet<WorldCell> relevantCells = new HashSet<>();
+  private HashMap<Region, Integer> relationshipMap= new HashMap<>();
   private CountryData data = null;
   private boolean officialCountry = false;
   private int OTHER_AVG_HIGH;
@@ -34,8 +31,6 @@ public class AtomicRegion implements Region, CropIdeals
   private int OTHER_MAX_LOW;
   private int OTHER_RAIN_HIGH;
   private int OTHER_RAIN_LOW;
-
-
 
   /**
    * @return name
@@ -900,6 +895,11 @@ public class AtomicRegion implements Region, CropIdeals
   public void setOfficialCountry()
   {
     officialCountry = true;
+  }
+
+  public void setRelationshipMap(HashMap<Region, Integer> rel)
+  {
+    relationshipMap.putAll(rel);
   }
 
 

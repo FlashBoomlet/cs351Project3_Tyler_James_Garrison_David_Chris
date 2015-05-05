@@ -8,6 +8,7 @@ import gui.displayconverters.MapConverter;
 import gui.hud.*;
 import gui.hud.Ticker.Ticker;
 import main.StartScreen.StartScreen;
+import main.finishScreen.FinishScreen;
 import model.Region;
 import model.World;
 
@@ -417,7 +418,7 @@ public class Game
       // Add Start Screen
       layeredPane.add(startPanel, new Integer(99));
 
-      // Add Start Screen
+      // Add Finish Screen
       layeredPane.add(finishPanel, new Integer(101) );
       finishPanel.setVisible(false);
 

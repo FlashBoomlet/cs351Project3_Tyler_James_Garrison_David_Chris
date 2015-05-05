@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -47,6 +48,7 @@ public class GUIRegion
   public static ArrayList<PolicyData> policiesMade = new ArrayList<>();
   public static ArrayList<RandomEventData> eventsThatHaveOccured = new ArrayList<>();
   public static ArrayList<TreatyData> treatiesMade = new ArrayList<>();
+  public static HashMap<GUIRegion, Integer> relationshipMap = new HashMap<>();
 
   /**
    * Loads the region's flag.
@@ -420,5 +422,15 @@ public class GUIRegion
   {
     data.randomEvent(red);
     eventsThatHaveOccured.add(red);
+  }
+
+  /**
+   * Sets the relationship map
+   *
+   * @param rel -Hashmap of GUIRegion -> Integer
+   */
+  public void setRelationshipMap(HashMap<GUIRegion, Integer> rel)
+  {
+    relationshipMap.putAll(rel);
   }
 }
