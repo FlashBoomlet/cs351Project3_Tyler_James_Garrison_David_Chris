@@ -1,5 +1,6 @@
 package model;
 
+
 import java.util.*;
 import java.awt.geom.Path2D;
 
@@ -18,18 +19,23 @@ import static model.common.EnumCropType.*;
  Represent a homogeneous area. Defined by a perimeter and various planting
  attributes. The class acts as a kind of container for the parsed XML data.
 
+ Heavily modified from original representation.  Should consider refactor. - dmr
+
  @author winston riley
+
  Restructured by:
- @author Tyler Lynch <lyncht@unm.edu> */
+ @author Tyler Lynch <lyncht@unm.edu>
+
+ Further restructuring, code porting
+ @author david
+ */
 public class AtomicRegion implements Region, CropIdeals
 {
 
   private List<MiniArea> perimeter;
   private String name;
   private String flagLocation;
-  private HashSet<WorldCell> landCells = new HashSet<>();
-  private HashSet<WorldCell> relevantCells = new HashSet<>();
-  private HashMap<Region, Integer> relationshipMap= new HashMap<>();
+  private HashMap<Region, Integer> relationshipMap = new HashMap<>();
   private CountryData data = null;
   private boolean officialCountry = false;
   private int OTHER_AVG_HIGH;
@@ -40,6 +46,7 @@ public class AtomicRegion implements Region, CropIdeals
   private int OTHER_RAIN_LOW;
   private Collection<LandTile> landTiles = new HashSet<>();
   private Collection<LandTile> relevantTiles = new HashSet<>();
+
 
   /**
    @return name
@@ -131,6 +138,12 @@ public class AtomicRegion implements Region, CropIdeals
   }
 
 
+  public void setRelationship(HashMap<Region, Integer> rel)
+  {
+    relationshipMap.putAll(rel);
+  }
+
+
   private class CropNum
   {
 
@@ -164,8 +177,12 @@ public class AtomicRegion implements Region, CropIdeals
         priority = 4;
       }
     }
-  }  /**
-   Sets crops each year after the first in arable land cells.
+  }
+
+
+  /**
+   Places crops in something resembling an optimal configuration.
+   This code was ported to LandTile representation from WorldCell.  Should still work. - dmr
    */
   public void setCrops()
   {
@@ -177,15 +194,16 @@ public class AtomicRegion implements Region, CropIdeals
     HashSet<LandTile> leftovers2 = new HashSet<>();
     HashSet<LandTile> leftovers3 = new HashSet<>();
     LinkedList<CropNum> cropPriority = new LinkedList<>();
-    //double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
     double arableTotal = data.getArableOpen(true);
     arableTotal = arableTotal + data.getCornLand(true);
     arableTotal = arableTotal + data.getRiceLand(true);
     arableTotal = arableTotal + data.getOtherLand(true);
     arableTotal = arableTotal + data.getWheatLand(true);
     arableTotal = arableTotal + data.getSoyLand(true);
-    int cellsNeeded = (int) arableTotal / 100;
-    setPriority(arableTotal, cellsNeeded, cropPriority);
+
+    int tilesNeeded = (int) arableTotal / TileManager.TILE_AREA;
+    setPriority(arableTotal, tilesNeeded, cropPriority);
+
     //Ideal placement
     for (LandTile cell : relevantTiles)
     {
@@ -222,6 +240,7 @@ public class AtomicRegion implements Region, CropIdeals
       clearCells(leftovers);
       return;
     }
+
     //Acceptable placement
     for (LandTile cell : leftovers)
     {
@@ -258,6 +277,7 @@ public class AtomicRegion implements Region, CropIdeals
       clearCells(leftovers2);
       return;
     }
+
     //Poor placement
     CropNum current;
     for (LandTile cell : leftovers2)
@@ -345,16 +365,16 @@ public class AtomicRegion implements Region, CropIdeals
     HashSet<LandTile> leftovers2 = new HashSet<>();
     HashSet<LandTile> leftovers3 = new HashSet<>();
     LinkedList<CropNum> cropPriority = new LinkedList<>();
-    double arableTotal = 0;
-    //double arableTotal = data.getArableOpen(true) + data.getCornLand(true) + data.getRiceLand(true) + data.getOtherLand(true) + data.getWheatLand(true) + data.getSoyLand(true);
+    double arableTotal;
     arableTotal = data.getArableOpen(true);
     arableTotal = arableTotal + data.getCornLand(true);
     arableTotal = arableTotal + data.getRiceLand(true);
     arableTotal = arableTotal + data.getOtherLand(true);
     arableTotal = arableTotal + data.getWheatLand(true);
     arableTotal = arableTotal + data.getSoyLand(true);
-    int cellsNeeded = (int) arableTotal / 100;
-    setPriority(arableTotal, cellsNeeded, cropPriority);
+    int tilesNeeded = (int) arableTotal / TileManager.TILE_AREA;
+    setPriority(arableTotal, tilesNeeded, cropPriority);
+
     //Ideal placement
     for (LandTile cell : landTiles)
     {
@@ -389,7 +409,7 @@ public class AtomicRegion implements Region, CropIdeals
     }
     if (cropPriority.isEmpty())
     {
-      finalizeCells(leftovers, cellsNeeded);
+      finalizeCells(leftovers, tilesNeeded);
       return;
     }
     //Acceptable placement
@@ -426,7 +446,7 @@ public class AtomicRegion implements Region, CropIdeals
     }
     if (cropPriority.isEmpty())
     {
-      finalizeCells(leftovers2, cellsNeeded);
+      finalizeCells(leftovers2, tilesNeeded);
       return;
     }
     //Poor placement
@@ -452,7 +472,7 @@ public class AtomicRegion implements Region, CropIdeals
         leftovers3.add(tile);
       }
     }
-    finalizeCells(leftovers3, cellsNeeded);
+    finalizeCells(leftovers3, tilesNeeded);
     calculateYield();
   }
 
@@ -996,11 +1016,6 @@ public class AtomicRegion implements Region, CropIdeals
   public void setOfficialCountry()
   {
     officialCountry = true;
-  }
-
-  public void setRelationshipMap(HashMap<Region, Integer> rel)
-  {
-    relationshipMap.putAll(rel);
   }
 
 

@@ -35,12 +35,19 @@ public class LandTileView implements RegionView
   private boolean init = true;
 
 
+  /**
+   Construct a new LandTileView for a given FIELD
+   @param field FIELD to be rendered by this view
+   */
   public LandTileView(LandTile.FIELD field)
   {
     this.field = field;
   }
 
 
+  /**
+   @return identifying String
+   */
   @Override
   public String toString()
   {
@@ -48,46 +55,82 @@ public class LandTileView implements RegionView
   }
 
 
+  /**
+   Specify drawing behavior for the LandTileView
+   @param g       Graphics context to draw on
+   @param gRegion GuiRegion to render
+   */
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
+
     Graphics2D g2 = (Graphics2D) g;
+
+    /* get range of values if not already determined.
+      Range is read from disk when LandTiles are loaded, so order of operations matters, and with
+      all RegionViews being made in a static context (see RegionViewFactory) the *correct*
+      ordering is probably not guaranteed.  Hence the  initialization check here.
+     */
     if (init)
     {
       init = false;
       max = LandTile.getMax(field);
       min = LandTile.getMin(field);
     }
+
+
+    boolean active = gRegion.isActive();
+
     for (LandTile tile : gRegion.getLandTiles())
     {
       Point2D pt = converter.mapPointToPoint(tile.getCenter());
+
+      /* data is coarse.  Try to fill the gaps appropriately */
       double width = converter.lonToX(TileManager.DLON) * 1.3;
       double height = -converter.latToY(TileManager.DLAT) * 1.3;
+
+      /* scale the height to counter Equal Area projection distortion used in TileManager */
       height = height * (1 + Math.abs(Math.sin(Math.toRadians(tile.getLat()))));
 
-      g2.setColor(getScaledColor(tile, field, min, max));
+      /* make the pretty colors...make it lighter if region is active */
+      Color color = getScaledColor(tile.getData(field), field, min, max);
+      color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 220);
+      if(active) color = color.brighter();
+
+      /* file the shape */
+      g2.setColor(color);
       g2.fill(new Ellipse2D.Double(pt.getX() - width / 2, pt.getY() - height / 2, width, height));
     }
   }
 
 
-  private static Color getScaledColor(LandTile tile, LandTile.FIELD field, float min, float max)
+  /* make a color for a value somewhere in between min and max values, given the FIELD from which
+  that value came
+   */
+  private static Color getScaledColor(float data, LandTile.FIELD field, float min, float max)
   {
-    float scale = (tile.getData(field) - min) / (max - min);
+    float scale = (data - min) / (max - min);
     switch (field)
     {
+
+      /* four defined cases: values are not awful. Mostly calibrated by eyeballing the hue spectrum
+      and trial and error */
       case CURRENT_ANNUAL_PRECIPITATION:
         return Color.getHSBColor((float) (Math.sqrt(Math.log(scale+1))), 0.4f, 0.8f);
-      case CURRENT_ANNUAL_MEAN_TEMPERATURE:
-        return Color.getHSBColor((-scale + 1)*.5f+.1f, 0.5f, 0.8f);
       case CURRENT_MIN_TEMPERATURE_OF_COLDEST_MONTH:
         return Color.getHSBColor(scale*.3f+.5f, 0.4f, 0.8f);
+
+
+      /* Mean and Max temps use inverted scale.  Makes colors more intuitive, says I */
+      case CURRENT_ANNUAL_MEAN_TEMPERATURE:
+      return Color.getHSBColor((-scale + 1)*.5f+.1f, 0.5f, 0.8f);
       case CURRENT_MAX_TEMPERATURE_OF_WARMEST_MONTH:
         return Color.getHSBColor((-scale + 1)*.25f, 0.4f, 0.8f);
+
+
+      default:
+        /* default behavior makes a greyscale color */
+        return new Color(scale, scale, scale);
     }
-    float val = (tile.getData(field) - min) / (max - min);
-    return new Color(val, val, val);
-
   }
-
 }
