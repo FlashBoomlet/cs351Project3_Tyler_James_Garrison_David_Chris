@@ -1226,6 +1226,41 @@ public class CountryData
   }
 
   /**
+   * Sign a treaty into effect
+   *
+   * @param treatyData -TreatyData that is being added
+   */
+  public void signTreaty(TreatyData treatyData)
+  {
+    //Update GMO
+    gmo *= treatyData.getGmo();
+    //Update Organic
+    organic *= treatyData.getOrganic();
+    //Update Conventional
+    conventional *= treatyData.getConventional();
+    //Update Corn
+    cornProduction *= treatyData.getCorn();
+    cornExports *= treatyData.getCorn();
+    cornImports *= treatyData.getCorn();
+    //Update Soy
+    soyProduction *= treatyData.getSoy();
+    soyExports *= treatyData.getSoy();
+    soyImports *= treatyData.getSoy();
+    //Update Rice
+    riceExports *= treatyData.getRice();
+    riceImports *= treatyData.getRice();
+    riceProduction *= treatyData.getRice();
+    //Update Wheat
+    wheatImports *= treatyData.getWheat();
+    wheatExports *= treatyData.getWheat();
+    wheatProduction *= treatyData.getWheat();
+    //Update Other
+    otherProduction *= treatyData.getOther();
+    otherExports *= treatyData.getOther();
+    otherImports *= treatyData.getOther();
+  }
+
+  /**
    * Random event data altering method
    *
    * @param red the Random Event that occurred

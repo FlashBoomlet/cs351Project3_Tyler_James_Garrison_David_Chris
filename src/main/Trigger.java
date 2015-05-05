@@ -7,6 +7,7 @@ import gui.hud.Ticker.News;
 import gui.hud.Ticker.Ticker;
 import model.PolicyData;
 import model.RandomEventData;
+import model.TreatyData;
 
 /**
  * Trigger is a system that you reference to update things.
@@ -135,9 +136,36 @@ public class Trigger
     System.out.println( "You have selected to play as: " + name );
   }
 
+  /**
+   * Alter data for a random event
+   *
+   * @param red (Random Event Data) that occured
+   */
   public void randomEvent(RandomEventData red)
   {
-    r.randomEvent(red);
-    sendAlert( "ALERT!", red.getDescription() );
+    if( r != null )
+    {
+      r.randomEvent(red);
+      sendAlert( "ALERT!", red.getDescription() );
+    }
+    else
+    {
+      System.out.println("Please Select Country");
+    }
+  }
+
+  public void signTreaty(TreatyData treatyData)
+  {
+    if( r != null ) {
+      // Make a call to adjust the data.
+      sendAlert("News", treatyData.getTreaty());
+      newsAlert(new News("Breaking! In " + name + " they have signed a bill that " + treatyData.getDescription()));
+
+      r.signTreaty(treatyData);
+    }
+    else
+    {
+      System.out.println( "Please Select Country" );
+    }
   }
 }

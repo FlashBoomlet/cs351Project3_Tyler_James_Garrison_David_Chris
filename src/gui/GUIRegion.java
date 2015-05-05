@@ -46,6 +46,7 @@ public class GUIRegion
   public static Collection<GUIRegion> preferedTrade = main.Game.getWorldPresenter().getAllRegions();
   public static ArrayList<PolicyData> policiesMade = new ArrayList<>();
   public static ArrayList<RandomEventData> eventsThatHaveOccured = new ArrayList<>();
+  public static ArrayList<TreatyData> treatiesMade = new ArrayList<>();
 
   /**
    * Loads the region's flag.
@@ -402,6 +403,17 @@ public class GUIRegion
   {
     data.signBill(policyData);
     policiesMade.add(policyData);
+  }
+
+  /**
+   * Sign a Treaty into effect
+   *
+   * @param treatyData -TreatyData that is being added
+   */
+  public void signTreaty(TreatyData treatyData)
+  {
+    data.signTreaty(treatyData);
+    treatiesMade.add(treatyData);
   }
 
   public void randomEvent(RandomEventData red)

@@ -147,13 +147,14 @@ public class TreatySelector extends JPanel
     bottomCon.setOpaque(false);
     bottomCon.setLocation(0,middleCon.getY()+middleCon.getHeight());
     bottomCon.setSize(width,(int)(height*(.10)));
-    bottomCon.setLayout(new GridLayout(1,2));
+    bottomCon.setLayout(new GridLayout(1,3));
     JLabel initial = new JLabel( "     " + "Initial: " );
     initial.setForeground(new Color(0xA0A0A0));
     initial.setFont(CARD_FONT);
-    initial.setHorizontalAlignment(SwingConstants.LEFT);
+    initial.setHorizontalAlignment(SwingConstants.RIGHT);
     bottomCon.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, BORDER_COL), PADDING_BORDER));
     bottomCon.add(initial);
+    bottomCon.add(new JTextArea());
     JPanel holder2 = new JPanel();
     holder2.setOpaque(false);
     holder2.setLayout(new FlowLayout(SwingConstants.RIGHT,0,0));
@@ -226,6 +227,11 @@ public class TreatySelector extends JPanel
       case "CLOSE":
         this.setVisible(false);
         setLocation(x,y);
+        break;
+      case "REQUEST":
+        trigger.signTreaty( masterTreatyData.get(0) );
+        this.setLocation(x,y);
+        this.setVisible(false);
         break;
       default:
         break;
