@@ -18,7 +18,6 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -211,7 +210,6 @@ public class Game
         defaultScreen.setBackground(ColorsAndFonts.OCEANS);
 
         List<Region> allRegions = new ArrayList<>(xmlRegions);
-        allRegions.addAll(xmlRegions);
 
         world = new World(allRegions,trigger);
         world.setPresenter(worldPresenter);
@@ -265,7 +263,7 @@ public class Game
         trigger.setPlayCountryInfo(playerCountryInfo);
 
         initFrame();
-        setupControlls();
+        setupControls();
 
         this.interrupt();
       }
@@ -334,7 +332,7 @@ public class Game
   /**
    * init and configures the timers and key bindings for the main game controls.
    */
-  private void setupControlls()
+  private void setupControls()
   {
     worldTime = new Timer(DEFAULT_TIME_SPEED, new AbstractAction()
     {

@@ -88,11 +88,8 @@ public class WorldPresenter extends Observable
    */
   public void setModelRegions(Collection<Region> regions)
   {
-    System.out.println("setModelRegions...");
     RegionView backG = regionViewFactory.getViewFromDistance(CAM_DISTANCE.LONG);
-    System.out.println("wrapping regions");
     modelRegions = wrapRegions(regions, backG);
-    System.out.println("returning from setModelRegions");
   }
 
   /*
@@ -102,14 +99,11 @@ public class WorldPresenter extends Observable
   private Collection<GUIRegion> wrapRegions(Collection<Region> regions, RegionView regionView)
   {
     Collection<GUIRegion> guiRs = new ArrayList<>();
-    int count = 0;
     for (Region region : regions)
     {
-      if(++count % 10 == 0) System.out.println("wrapped " + count + " regions");
       GUIRegion guir = new GUIRegion(region, mpConverter, regionView);
       guiRs.add(guir);
     }
-    System.out.println("done");
     return guiRs;
   }
 

@@ -2,7 +2,6 @@ package model;
 
 
 import IO.RandomEventCSVParser;
-import IO.WorldDataParser;
 import IO.LandDataIO;
 import gui.GUIRegion;
 import gui.WorldPresenter;
@@ -57,7 +56,6 @@ public class World
   public World(Collection<Region> world, Calendar cal ,Trigger trigger)
   {
     this.world = world;
-    System.out.println(world.size());
     this.currentDate = cal;
     this.trigger = trigger;
     new RandomEventCSVParser(this);
@@ -168,7 +166,10 @@ public class World
     {
       // Dispatch random event
       Random rand = new Random();
-      trigger.randomEvent(masterRandomEventData.get(rand.nextInt(masterRandomEventData.size()-1)) );
+      if(!masterRandomEventData.isEmpty())
+      {
+        trigger.randomEvent(masterRandomEventData.get(rand.nextInt(masterRandomEventData.size())));
+      }
     }
 
     if( currentDate.get(Calendar.YEAR) == 2050 )

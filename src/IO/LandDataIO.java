@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static model.LandTile.FIELD.*;
-import static model.LandTile.FIELD.ELEVATION;
 
 
 /**
@@ -29,20 +28,20 @@ import static model.LandTile.FIELD.ELEVATION;
 public class LandDataIO
 {
 
-  public static String DEFAULT_FILE = "resources/data/land-data.bil";
-  private static String DEFAULT_BACKUP = "resources/data/landtile-rawdata/datatiles.bak";
+  public static final String DEFAULT_FILE = "resources/data/land-data.bil";
+  private static final String DEFAULT_BACKUP = "resources/data/landtile-rawdata/datatiles.bak";
   private static boolean DEBUG = true;
 
 
   public static void main(String[] args)
   {
-    List<Region> regions = new ArrayList(new AreaXMLLoader().getRegions());
+    List<Region> regions = new ArrayList<>(new AreaXMLLoader().getRegions());
     testVisual(parseFile(DEFAULT_FILE, regions), new Dimension(1500, 500));
   }
 
 
   /* test a loaded tilemanager's contents visually */
-  static void testVisual(final TileManager mgr, final Dimension winSize)
+  private static void testVisual(final TileManager mgr, final Dimension winSize)
   {
     JFrame win = new JFrame();
     win.setSize(winSize);
@@ -82,7 +81,7 @@ public class LandDataIO
     panel.setPreferredSize(winSize);
     win.setContentPane(panel);
     win.pack();
-    win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    win.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     win.setVisible(true);
     win.repaint();
   }
@@ -100,7 +99,7 @@ public class LandDataIO
    @param countries
    Regions to place tiles in
 
-   @return Tilemanager holding all the tiles loaded
+   @return TileManager holding all the tiles loaded
    */
   public static TileManager parseFile(String filename, Collection<Region> countries)
   {
@@ -125,25 +124,18 @@ public class LandDataIO
    @param filename
    File to load
 
-   @return Tilemanager holding all the tiles loaded
+   @return TileManager holding all the tiles loaded
    */
-  static TileManager parseFile(String filename)
+  private static TileManager parseFile(String filename)
   {
     TileManager mgr = new TileManager();
     try (FileInputStream in = new FileInputStream(filename))
     {
-      long start = System.currentTimeMillis();
-      long count = 0;
       byte bytes[] = new byte[LandTile.FIELD.SIZE_IN_BYTES];
       ByteBuffer buf = ByteBuffer.allocate(LandTile.FIELD.SIZE_IN_BYTES);
       LandTile tile;
       while (in.read(bytes) != -1)
       {
-        if (++count % 10000 == 0 && DEBUG)
-        {
-          System.out.printf("read %d tiles in %fs%n",
-                            count, (System.currentTimeMillis() - start) / 1000d);
-        }
         buf.clear();
         buf.put(bytes);
         tile = new LandTile(buf);
@@ -154,15 +146,6 @@ public class LandDataIO
     catch (IOException e)
     {
       e.printStackTrace();
-    }
-    if(DEBUG)
-    {
-      for(LandTile.FIELD f : LandTile.FIELD.FLOAT_FIELDS)
-      {
-        System.out.println(f);
-        System.out.println(LandTile.getMax(f));
-        System.out.println(LandTile.getMin(f));
-      }
     }
     return mgr;
   }
@@ -231,7 +214,7 @@ public class LandDataIO
   }
 
 
-  public static void writeToFile(Collection<LandTile> tiles, String filename)
+  private static void writeToFile(Collection<LandTile> tiles, String filename)
   {
     try (FileOutputStream out = new FileOutputStream(filename))
     {
@@ -247,6 +230,13 @@ public class LandDataIO
   }
 
 
+  /*
+   This class is used for generating new data sets from the raster data available from
+   http://www.worldclim.org/
+   The data created is always dependent on the TileManager the class is instantiated with for
+   how to bin the data points.
+   The raster files are *NOT* being kept in the repository due to their large size
+   */
   private static class RawDataConverter
   {
 
@@ -263,7 +253,7 @@ public class LandDataIO
     private static final int NO_DATA_DEFAULT_PROJ = -32768;
     private final Map<LandTile, DataPoint> datamap = new ConcurrentHashMap<>();
     private final TileManager manager;
-    private String rootDirectory;
+    private final String rootDirectory;
 
 
     private RawDataConverter(TileManager manager, String root)
@@ -273,12 +263,17 @@ public class LandDataIO
     }
 
 
-    static void createNewDataFile(String filename)
+    /* make a new data file in the specified location.  This creates a file with all the data fields
+      available, and culls tiles for which there is not complete data. */
+    private static void createNewDataFile(String filename)
     {
       createNewDataFile(DATA_FIELD.values(), filename);
     }
 
 
+    /* make a new data file in the specified location, using only the fields give.  The file size
+      is identical to that of a file with all fields filled, the difference being that this
+      version will write out 0 to all fields not included */
     static void createNewDataFile(DATA_FIELD fields[], String filename)
     {
       TileManager mgr = TileManager.createEmptyTileManager();
@@ -306,7 +301,6 @@ public class LandDataIO
             setField(field);
             System.out.println(field + " is done setting");
             done.put(field, true);
-            System.out.println(field + " registered done");
           }
         };
 
@@ -323,7 +317,6 @@ public class LandDataIO
         if (total - numDone < 1) break;
         if (total - numDone < 3)
         {
-          System.out.printf("%d left of %d%n", total - numDone, total);
           for (DATA_FIELD field : done.keySet()) if (!done.get(field)) System.out.println(field);
           try
           {
@@ -331,6 +324,7 @@ public class LandDataIO
           }
           catch (InterruptedException e)
           {
+            System.err.println("shouldn't be interrupted here... appendData()");
           }
         }
       }
@@ -341,7 +335,6 @@ public class LandDataIO
     {
       Collection<LandTile> tiles = new ArrayList<>();
       for (LandTile t : datamap.keySet()) if (datamap.get(t).hasAllData()) tiles.add(t);
-      System.out.printf("got %d complete tiles%n", tiles.size());
       return tiles;
     }
 
@@ -385,27 +378,13 @@ public class LandDataIO
 
     private void setField(DATA_FIELD field)
     {
-      int count = 0;
       for (LandTile tile : datamap.keySet())
       {
-        long start = System.currentTimeMillis();
         DataPoint dataPoint = datamap.get(tile);
-        if (dataPoint.hasAllData())
+        if (dataPoint.hasData(field))
         {
           tile.putData(field.landTileField, dataPoint.getData(field) *
                                             DATA_FIELD.SCALE);
-        }
-        long end = System.currentTimeMillis();
-        if (end - start > 1000)
-        {
-          System.out.println("taking a long time to put data into a single " +
-                             "landtile: " + (end - start));
-        }
-
-        if (++count % 10000 == 0)
-        {
-          System.out.println("put data in " + count + " tiles for field " +
-                             field);
         }
       }
     }
@@ -516,9 +495,9 @@ public class LandDataIO
 
       static final int SIZE = values().length;
       static final float SCALE = 0.1f;
-      String filename;
-      int noDataVal;
-      LandTile.FIELD landTileField;
+      final String filename;
+      final int noDataVal;
+      final LandTile.FIELD landTileField;
 
 
       DATA_FIELD(String filename, int noData, LandTile.FIELD landTileField)
@@ -539,9 +518,9 @@ public class LandDataIO
     private static class DataPoint
     {
 
-      float data[] = new float[DATA_FIELD.SIZE];
-      int points[] = new int[DATA_FIELD.SIZE];
-      boolean hasData[] = new boolean[DATA_FIELD.SIZE];
+      final float[] data = new float[DATA_FIELD.SIZE];
+      final int[] points = new int[DATA_FIELD.SIZE];
+      final boolean[] hasData = new boolean[DATA_FIELD.SIZE];
 
 
       public DataPoint()

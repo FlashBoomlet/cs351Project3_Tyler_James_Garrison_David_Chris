@@ -79,11 +79,11 @@ public class LandTileView implements RegionView
       case CURRENT_ANNUAL_PRECIPITATION:
         return Color.getHSBColor((float) (Math.sqrt(Math.log(scale+1))), 0.4f, 0.8f);
       case CURRENT_ANNUAL_MEAN_TEMPERATURE:
-        return Color.getHSBColor(scale*.4f+.18f, 0.5f, 0.8f);
+        return Color.getHSBColor((-scale + 1)*.5f+.1f, 0.5f, 0.8f);
       case CURRENT_MIN_TEMPERATURE_OF_COLDEST_MONTH:
         return Color.getHSBColor(scale*.3f+.5f, 0.4f, 0.8f);
       case CURRENT_MAX_TEMPERATURE_OF_WARMEST_MONTH:
-        return Color.getHSBColor(scale*.25f, 0.4f, 0.8f);
+        return Color.getHSBColor((-scale + 1)*.25f, 0.4f, 0.8f);
     }
     float val = (tile.getData(field) - min) / (max - min);
     return new Color(val, val, val);
