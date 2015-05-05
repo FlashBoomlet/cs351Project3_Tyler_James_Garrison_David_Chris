@@ -1,15 +1,15 @@
 package model;
 
 /**
- * Data structure for Treaties
+ * Data structure for Random Events
  *
  * @author Tyler Lynch <lyncht@unm.edu>
  * @since 5.5.2015
  */
-public class TreatyData
+public class RandomEventData
 {
   int id;
-  String treaty;
+  String event;
   String tag;
   String description;
   double likelyhood;
@@ -29,7 +29,7 @@ public class TreatyData
   /**
    *
    */
-  public TreatyData() { /* Do Nothing */ }
+  public RandomEventData() { /* Do Nothing */ }
 
   public int getId()
   {
@@ -41,14 +41,14 @@ public class TreatyData
     this.id = id;
   }
 
-  public String getTreaty()
+  public String getEvent()
   {
-    return treaty;
+    return event;
   }
 
-  public void setTreaty(String treaty)
+  public void setEvent(String event)
   {
-    this.treaty = treaty;
+    this.event = event;
   }
 
   public String getTag()

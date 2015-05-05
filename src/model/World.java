@@ -1,6 +1,7 @@
 package model;
 
 
+import IO.RandomEventCSVParser;
 import IO.WorldDataParser;
 import gui.GUIRegion;
 import gui.WorldPresenter;
@@ -40,6 +41,8 @@ public class World
   public static final String MAX = "resources/data/tmax.txt";
   public static final String MIN = "resources/data/tmin.txt";
 
+  private ArrayList<RandomEventData> masterRandomEventData = new ArrayList<>();
+
   /**
    * Class constructor. To build a world one must have a collection of regions.
    * @param world collection of regions that we represent the world
@@ -58,6 +61,8 @@ public class World
     this.world = world;
     this.currentDate = cal;
     new LoadWorldArray();
+    new RandomEventCSVParser(this);
+    System.out.println( masterRandomEventData.get(0).getDescription() );
     /*
     for (Region area: world)
     {
@@ -319,5 +324,13 @@ public class World
           }
         }
     }
+  }
+
+  /**
+   * Functions to help out with creating and bringing in the random event data
+   */
+  public void addEvent(RandomEventData red)
+  {
+    masterRandomEventData.add(red);
   }
 }

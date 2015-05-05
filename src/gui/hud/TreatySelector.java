@@ -432,7 +432,7 @@ public class TreatySelector extends JPanel
 
 
   /**
-   * Functions to help out with creating and bringing in the policy data
+   * Functions to help out with creating and bringing in the treaty data
    */
   public void add(TreatyData d)
   {
