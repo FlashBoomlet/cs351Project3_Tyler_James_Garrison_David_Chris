@@ -8,10 +8,7 @@ import static model.common.EnumCropType.*;
 
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -32,6 +29,10 @@ public class LandTile
   public static final LandTile NO_DATA = new LandTile(-180, 0); /* in Pacific, no man's land */
   private static final Map<FIELD, Float> maxVals = new HashMap<>();
   private static final Map<FIELD, Float> minVals = new HashMap<>();
+  private static final Random RNG = new Random();
+  private static final float RANDOM_VARIANCE = 0.01f;
+  private static final double RANDOMNESS_FACTOR = 1d;
+
   private final Map<FIELD, Float> floatData = new HashMap<>();
   private final Map<FIELD, Integer> intData = new HashMap<>();
 
@@ -240,19 +241,14 @@ public class LandTile
   }
 
 
-  public void putData(FIELD field, float val)
-  {
-    if (isFloatField(field))
-    {
-      floatData.put(field, val);
-    }
-    else
-    {
-      intData.put(field, (int) val);
-    }
-  }
+  /**
+   Set this LandTile's data for a given field
 
-
+   @param field
+   FIELD to set
+   @param val
+   value to set
+   */
   public void putData(FIELD field, int val)
   {
     if (isIntField(field))
@@ -266,6 +262,7 @@ public class LandTile
   }
 
 
+  
   public EnumCropType getCrop()
   {
     return currentCrop;
@@ -279,9 +276,46 @@ public class LandTile
   }
 
 
-  public void stepTile(float percentage)
+  public void step(Calendar calendar)
   {
+    int currentYear = calendar.get(Calendar.YEAR);
 
+
+    for (FIELD field : CURRENT_FIELDS)
+    {
+      float curr = getData(field);
+      float proj = getData(currentToProjected(field));
+      curr = interpolate(curr, proj, (float) currentYear / World.END_YEAR);
+      curr *= RNG.nextGaussian() * RANDOM_VARIANCE * RANDOMNESS_FACTOR;
+      putData(field, curr);
+    }
+  }
+
+
+  public static float interpolate(float start, float end, float percentage)
+  {
+    return start + (end - start) * percentage;
+  }
+
+
+  /**
+   Set this LandTile's data for a given field
+
+   @param field
+   FIELD to set
+   @param val
+   value to set
+   */
+  public void putData(FIELD field, float val)
+  {
+    if (isFloatField(field))
+    {
+      floatData.put(field, val);
+    }
+    else
+    {
+      intData.put(field, (int) val);
+    }
   }
 
 
@@ -450,7 +484,7 @@ public class LandTile
     }
 
 
-    public FIELD currentToProjected(FIELD current)
+    public static FIELD currentToProjected(FIELD current)
     {
       return FIELD.values()[current.ordinal() + CURRENT_FIELDS.length];
     }

@@ -47,6 +47,8 @@ public class RegionViewFactory
       new LandTileView(LandTile.FIELD.CURRENT_MIN_TEMPERATURE_OF_COLDEST_MONTH);
   private final static RegionView PRECIPITATION_VIEW =
       new LandTileView(LandTile.FIELD.CURRENT_ANNUAL_PRECIPITATION);
+  private static final RegionView CROP_VIEW =
+      new LandTileView(null);
   private final static RegionView BIRTH_RATE_VIEW = new RegionBirthRateView();
   private final static RegionView MIGRATION_RATE_VIEW = new RegionMigrationRateView();
   private final static RegionView MORTALITY_RATE_VIEW = new RegionMortalityRateView();
@@ -145,6 +147,9 @@ public class RegionViewFactory
       case GMO:
         return GMO_VIEW;
 
+      case CROPS:
+        return CROP_VIEW;
+
       default:
         return DEFAULT_LOOK;
     }
@@ -173,6 +178,6 @@ public class RegionViewFactory
     POPULATION,
     AVG_TEMPERATURE,
     HIGH_TEMPERATURE,
-    LOW_TEMPERATURE
+    CROPS, LOW_TEMPERATURE
   }
 }

@@ -1,12 +1,6 @@
 package model;
 
 
-import model.common.AbstractClimateData;
-
-import static model.common.AbstractScenario.*;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.*;
 
 
@@ -60,11 +54,11 @@ public class TileManager
 
   private LandTile[][] tiles = new LandTile[ROWS][COLS];
 
-
   private List<LandTile> countryTiles = new ArrayList<>();
   private List<LandTile> allTiles;
   private List<LandTile> dataTiles;
   private double randomPercent = 1f;
+  private int lastYear;
 
 
   public TileManager()
@@ -177,12 +171,17 @@ public class TileManager
   /**
    Mutates all the tile data based on projections maintained within each tile
    and noise added randomly.
+   * @param calendar
    */
-  public void updateTiles()
+  public void updateTiles(Calendar calendar)
   {
+    if(calendar.get(Calendar.YEAR) == lastYear) return;
+    lastYear = calendar.get(Calendar.YEAR);
+
     List<LandTile> tiles = dataTiles();
     for (LandTile tile : tiles)
     {
+      tile.step(calendar);
     }
 
     /* shuffle tiles before adding noise */
@@ -191,7 +190,7 @@ public class TileManager
     /* take ten percent of tiles, add noise */
     for (LandTile tile : tiles.subList(0, tiles.size() / 10))
     {
-      addNoiseByTile(tile);
+      /* noise adding is now done per tile in tile.step()*/
     }
   }
 
@@ -212,6 +211,17 @@ public class TileManager
       if (NO_DATA != t) dataTiles.add(t);
     }
     return dataTiles;
+  }
+
+
+  /**
+   @return all the tiles in this manager in a List
+   */
+  public List<LandTile> allTiles()
+  {
+    allTiles = new ArrayList<>();
+    for (LandTile[] arr : tiles) allTiles.addAll(Arrays.asList(arr));
+    return allTiles;
   }
 
 
@@ -276,17 +286,6 @@ public class TileManager
         }
       }
     }
-  }
-
-
-  /**
-   @return all the tiles in this manager in a List
-   */
-  public List<LandTile> allTiles()
-  {
-    allTiles = new ArrayList<>();
-    for (LandTile[] arr : tiles) allTiles.addAll(Arrays.asList(arr));
-    return allTiles;
   }
 
 
@@ -365,32 +364,6 @@ public class TileManager
 
 
   /**
-   Registers a tile as having been associated with a country.  Due to gaps in the
-   country data, if a set of tiles covering all the land is desired, use dataTiles()
-
-   @param tile
-   tile to register
-   */
-  public void registerCountryTile(LandTile tile)
-  {
-    countryTiles.add(tile);
-  }
-
-
-  /**
-   Returns a Collection of tiles that have been registered with a country.
-   This is dependent on the usage of registerCountryTile() at initial data
-   creation. (Also maybe should be refactored to another location?)
-
-   @return Collection of those LandTiles that have been registered with a Country
-   */
-  public List<LandTile> countryTiles()
-  {
-    return countryTiles;
-  }
-
-
-  /**
    remove a given tile from the underlying set of tiles.  This has the effect
    of placing a NO_DATA tile at the location of the given tile in the full
    projection (assuming the given tile was found)
@@ -445,17 +418,4 @@ public class TileManager
     return col >= 0 && col < COLS && row >= 0 && row < ROWS;
   }
 
-
-  /**
-   Exception used if accessors from the AbstractClimateData class are given
-   invalid coordinates
-   */
-  static class NoDataException extends IllegalArgumentException
-  {
-
-    public NoDataException(String msg)
-    {
-      super(msg);
-    }
-  }
 }

@@ -40,7 +40,8 @@ public class OverlaySelect extends JPanel
       "Median Age",
       "Birth Rate",
       "Migration Rate",
-      "Mortality Rate"
+      "Mortality Rate",
+      "Crop Distribution"
     };
 
   /**
@@ -135,6 +136,9 @@ public class OverlaySelect extends JPanel
           case 19:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.MORTALITY);
             break;
+          case 20:
+            MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.CROPS);
+            break;
           default:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.NONE);
         }
@@ -171,6 +175,7 @@ public class OverlaySelect extends JPanel
     else if( overlay == "BIRTHS" ) overlaySelector.setSelectedIndex(17);
     else if( overlay == "MIGRATION" ) overlaySelector.setSelectedIndex(18);
     else if( overlay == "MORTALITY" ) overlaySelector.setSelectedIndex(19);
+    else if( overlay == "CROPS" ) overlaySelector.setSelectedIndex(20);
     else overlaySelector.setSelectedIndex(0);
   }
 }

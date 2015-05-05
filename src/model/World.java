@@ -26,6 +26,7 @@ import java.util.*;
 public class World
 {
 
+  public static final int END_YEAR = 2050;
   private static int totalUpdates = 0;
   private Collection<Region> world;
   private WorldPresenter worldPresenter;
@@ -159,6 +160,8 @@ public class World
     int previousYear = currentDate.get(Calendar.YEAR);
     currentDate.add(Calendar.DATE, numOfDays);
 
+    tileManager.updateTiles(currentDate);
+
     DatePanel.updateRatio(currentDate.get(Calendar.DAY_OF_YEAR) / 365.0, currentDate.get(
         Calendar.YEAR));
 
@@ -172,7 +175,7 @@ public class World
       }
     }
 
-    if( currentDate.get(Calendar.YEAR) == 2050 )
+    if( currentDate.get(Calendar.YEAR) == END_YEAR)
     {
       //Call to finish game
       main.Game.gameFinished();
@@ -200,7 +203,7 @@ public class World
           break;
         }
       }
-      tileManager.updateTiles();
+      tileManager.updateTiles(currentDate);
       main.Game.getWorldFeedPanel().update();
     }
 

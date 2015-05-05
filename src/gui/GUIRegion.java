@@ -1,7 +1,6 @@
 package gui;
 
 import gui.displayconverters.MapConverter;
-import gui.hud.NavMap;
 import gui.regionlooks.RegionView;
 import model.*;
 
@@ -11,7 +10,6 @@ import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

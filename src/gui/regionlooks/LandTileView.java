@@ -1,6 +1,7 @@
 package gui.regionlooks;
 
 
+import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
@@ -93,8 +94,32 @@ public class LandTileView implements RegionView
       height = height * (1 + Math.abs(Math.sin(Math.toRadians(tile.getLat()))));
 
       /* make the pretty colors...make it lighter if region is active */
-      Color color = getScaledColor(tile.getData(field), field, min, max);
-      color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 220);
+      Color color;
+      if(field == null)
+      {
+        switch(tile.getCrop())
+        {
+          case CORN:
+            color = new Color(155, 151, 53);
+            break;
+          case SOY:
+            color = new Color(105, 234, 100);
+            break;
+          case WHEAT:
+            color = new Color(207, 160, 122);
+            break;
+          case RICE:
+            color = new Color(62, 163, 193);
+            break;
+          case OTHER_CROPS:
+            color = new Color(167, 142, 209);
+            break;
+          default:
+            color = Color.white;
+            break;
+        }
+      }
+      else color = getScaledColor(tile.getData(field), field, min, max);
       if(active) color = color.brighter();
 
       /* file the shape */
