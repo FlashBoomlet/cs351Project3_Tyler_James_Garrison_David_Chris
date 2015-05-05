@@ -70,6 +70,13 @@ class BeginScreen extends JPanel implements ActionListener
   };
 
 
+  private PieChart landPie;
+  private ChartKey landKey;
+  private PieChart cropPie;
+  private ChartKey cropKey;
+  private MiniViewBox miniViewBox;
+  private StatPane stats;
+
 
   /*
    * Components for the begin screen
@@ -86,6 +93,12 @@ class BeginScreen extends JPanel implements ActionListener
       StartScreen.buttonAction("BEGIN");
     }
   };
+
+  public final EmptyBorder PADDING_BORDER = new EmptyBorder(0, 0, 0, 0);
+  // Null color basically
+  private final Color BORDER_COL = new Color(0.0f,0.0f,0.0f,0.0f);
+
+
 
   /**
    * Constructor
@@ -120,8 +133,10 @@ class BeginScreen extends JPanel implements ActionListener
      */
     countrySelect = new CountrySelect();
     countryPreview = new CountryPreview();
+    countryPreview.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, Color.LIGHT_GRAY), PADDING_BORDER));
     contentHolder.add(countrySelect);
     contentHolder.add(countryPreview);
+    contentHolder.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.LIGHT_GRAY), PADDING_BORDER));
     add(contentHolder, BorderLayout.NORTH);
 
     JPanel buttonCon = new JPanel();
@@ -134,7 +149,6 @@ class BeginScreen extends JPanel implements ActionListener
     selectedCountryLabel.setVisible(false);
     add(buttonCon, BorderLayout.SOUTH);
   }
-
 
   /**
    * Overrides action performed.
@@ -172,10 +186,6 @@ class BeginScreen extends JPanel implements ActionListener
    */
   private class CountrySelect extends JPanel implements MouseListener
   {
-    public final EmptyBorder PADDING_BORDER = new EmptyBorder(2, 2, 2, 2);
-    // Null color basically
-    private final Color BORDER_COL = new Color(0.0f,0.0f,0.0f,0.0f);
-
 
     private CountrySelect()
     {
@@ -187,9 +197,9 @@ class BeginScreen extends JPanel implements ActionListener
        * Measurements for the JScrollPane
        */
       int width = (int) ((frameWidth/2)*(.5));
-      int height = (int) (frameHeight*(.75));
+      int height = (int) (frameHeight*(.80));
       int x = ((frameWidth/4)-(width/2));
-      int y = (frameHeight-height)/4;
+      int y = (frameHeight-height)/10;
       int scrollW = 10;
 
       /*
@@ -294,6 +304,16 @@ class BeginScreen extends JPanel implements ActionListener
   public void paintComponent(Graphics g)
   {
     super.paintComponent(g);
+
+    /*
+     * Force the animation to work or else!!!!!! -TLynch
+     */
+    landPie.repaint();
+    landKey.repaint();
+    cropPie.repaint();
+    cropKey.repaint();
+    miniViewBox.repaint();
+    stats.repaint();
   }
 
 
@@ -302,9 +322,6 @@ class BeginScreen extends JPanel implements ActionListener
     left.statsRefresh();
     right.rightRefresh();
     miniMap.updateMiniDisplay();
-    left.repaint();
-    right.repaint();
-    miniMap.repaint();
   }
 
   /**
@@ -333,6 +350,7 @@ class BeginScreen extends JPanel implements ActionListener
        * Add a constructor for something to this
        */
       miniMap = new MiniMapDisplay();
+      miniMap.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), PADDING_BORDER));
       add(miniMap);
 
       /*
@@ -376,7 +394,6 @@ class BeginScreen extends JPanel implements ActionListener
 
   private class LowerLeft extends JPanel
   {
-    private StatPane stats;
 
     /**
      * Constructor
@@ -388,7 +405,7 @@ class BeginScreen extends JPanel implements ActionListener
 
       setLayout(new GridLayout(2, 1));
       // The dimensions are irrelevant layout overrides
-      stats = new StatPane(selectedCountry.getName() + "'s Data:",frameWidth,frameHeight);
+      stats = new StatPane(selectedCountry.getName() + "'s Population Data:",frameWidth,frameHeight);
       stats.setOpaque(false);
       add(stats);
 
@@ -428,7 +445,7 @@ class BeginScreen extends JPanel implements ActionListener
       double migration = 0;
       double undernourish = 0;
 
-      statPane.setTitle(selectedCountry.getName() + "'s Data:" );
+      statPane.setTitle(selectedCountry.getName() + "'s Population Data:" );
 
       if(selectedCountry != null )
       {
@@ -646,12 +663,14 @@ class BeginScreen extends JPanel implements ActionListener
         cropArray.add(cropSlices[i]);
       }
 
-      int chartWidth = frameWidth/8 ;
+      int chartWidth = (frameWidth/8)-10 ;
       Rectangle landRect = new Rectangle(0,0,chartWidth,chartWidth);
       Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
 
-      pieHolderTop.add(new PieChart(landRect, cropArray));
-      pieHolderTop.add(new ChartKey(keyRect, cropArray));
+      cropPie = new PieChart(landRect, cropArray);
+      cropKey = new ChartKey(keyRect, cropArray);
+      pieHolderTop.add(cropPie);
+      pieHolderTop.add(cropKey);
     }
 
     /**
@@ -685,18 +704,19 @@ class BeginScreen extends JPanel implements ActionListener
         landArray.add(landSlices[i]);
       }
 
-      int chartWidth = frameWidth/8 ;
+      int chartWidth = (frameWidth/8)-10 ;
       Rectangle landRect = new Rectangle(0,0,chartWidth,chartWidth);
       Rectangle keyRect = new Rectangle(0,0,chartWidth,chartWidth);
 
-      pieHolderBottom.add(new PieChart(landRect, landArray));
-      pieHolderBottom.add(new ChartKey(keyRect, landArray));
+      landPie = new PieChart(landRect, landArray);
+      landKey = new ChartKey(keyRect, landArray);
+      pieHolderBottom.add(landPie);
+      pieHolderBottom.add(landKey);
     }
   }
 
   private class MiniMapDisplay extends JPanel
   {
-    private MiniViewBox miniViewBox;
 
     private MiniMapDisplay()
     {
