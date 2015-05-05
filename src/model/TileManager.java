@@ -175,13 +175,14 @@ public class TileManager
    */
   public void updateTiles(Calendar calendar)
   {
+
     if(calendar.get(Calendar.YEAR) == lastYear) return;
     lastYear = calendar.get(Calendar.YEAR);
 
     List<LandTile> tiles = dataTiles();
     for (LandTile tile : tiles)
     {
-      tile.step(calendar);
+//      tile.step(calendar);
     }
 
     /* shuffle tiles before adding noise */
