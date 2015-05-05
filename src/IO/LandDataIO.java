@@ -22,35 +22,38 @@ import static model.LandTile.FIELD.ELEVATION;
  @author david
  created: 2015-03-22
  description:
-
- IO class dedicated to generating and parsing land data.  Nested RawDataParser class is used for
- generating
-
- */
+ <p/>
+ IO class dedicated to generating and parsing land data.  Nested RawDataParser class is used
+ for
+ generating a new set o */
 public class LandDataIO
 {
 
+  public static String DEFAULT_FILE = "resources/data/land-data.bil";
   private static String DEFAULT_BACKUP = "resources/data/landtile-rawdata/datatiles.bak";
-  private static String DEFAULT_FILE = "resources/data/land-data.bil";
+  private static boolean DEBUG = true;
 
 
   public static void main(String[] args)
   {
     List<Region> regions = new ArrayList(new AreaXMLLoader().getRegions());
-    testVisual(parseFile(DEFAULT_FILE, regions), new Dimension(1500,500));
+    testVisual(parseFile(DEFAULT_FILE, regions), new Dimension(1500, 500));
   }
+
 
   /* test a loaded tilemanager's contents visually */
   static void testVisual(final TileManager mgr, final Dimension winSize)
   {
-    JFrame win =  new JFrame();
+    JFrame win = new JFrame();
     win.setSize(winSize);
-    JPanel panel = new JPanel(){
+    JPanel panel = new JPanel()
+    {
       @Override
       public void paintComponent(Graphics g)
       {
-        for(LandTile tile : mgr.allTiles()) paintTile(tile, (Graphics2D) g);
+        for (LandTile tile : mgr.allTiles()) paintTile(tile, (Graphics2D) g);
       }
+
 
       /* define how to paint the LandTile */
       private void paintTile(LandTile tile, Graphics2D g)
@@ -62,15 +65,19 @@ public class LandDataIO
         g.fill(rect);
       }
 
+
+      /* Rectangle defined in terms of winSize...  Fills the window */
       private Rectangle2D tileToRect(LandTile tile)
       {
-        double height = winSize.getHeight()/180;
-        double width = winSize.getWidth()/360;
+        double height = winSize.getHeight() / 180;
+        double width = winSize.getWidth() / 360;
         double x = width * (tile.getLon() + 180);
         double y = -height * (tile.getLat() - 90);
         return new Rectangle2D.Double(x, y, width, height);
       }
     };
+
+    /* set up the gui */
     panel.setSize(winSize);
     panel.setPreferredSize(winSize);
     win.setContentPane(panel);
@@ -81,7 +88,46 @@ public class LandDataIO
   }
 
 
-  public static TileManager parseFile(String filename)
+  /**
+   Load a TileManager from a file.  If the file was not written in the correct format, it will not
+   load tiles correctly.  New files can be generated from the raw data using RawDataParser nested
+   class.  The Regions given will be used to associate the tiles with each region, based on the
+   countryID associated with each tile.  IDs are generated from the country name's hashcode,
+   currently.  If names change, the raw data will need to be parsed again
+
+   @param filename
+   File to load
+   @param countries
+   Regions to place tiles in
+
+   @return Tilemanager holding all the tiles loaded
+   */
+  public static TileManager parseFile(String filename, Collection<Region> countries)
+  {
+    TileManager mgr = parseFile(filename);
+    Map<Integer, Region> map = new HashMap<>();
+    for (Region r : countries) map.put(r.getName().hashCode(), r);
+    for (LandTile t : mgr.dataTiles())
+    {
+      int hash = t.getIntData(COUNTRYID);
+      Region region = map.get(hash);
+      region.addLandTile(t);
+    }
+    return mgr;
+  }
+
+
+  /**
+   Load a TileManager from a file.  If the file was not written in the correct format, it will not
+   load tiles correctly.  New files can be generated from the raw data using RawDataParser nested
+   class
+
+   @param filename
+   File to load
+
+   @return Tilemanager holding all the tiles loaded
+   */
+  static TileManager parseFile(String filename)
   {
     TileManager mgr = new TileManager();
     try (FileInputStream in = new FileInputStream(filename))
@@ -93,7 +139,7 @@ public class LandDataIO
       LandTile tile;
       while (in.read(bytes) != -1)
       {
-        if (++count % 10000 == 0)
+        if (++count % 10000 == 0 && DEBUG)
         {
           System.out.printf("read %d tiles in %fs%n",
                             count, (System.currentTimeMillis() - start) / 1000d);
@@ -109,25 +155,20 @@ public class LandDataIO
     {
       e.printStackTrace();
     }
-
-    return mgr;
-  }
-
-  public static TileManager parseFile(String filename, List<Region> countries)
-  {
-    TileManager mgr = parseFile(filename);
-    Map<Integer, Region> map = new HashMap<>();
-    for(Region r: countries) map.put(r.getName().hashCode(), r);
-    for(LandTile t: mgr.dataTiles())
+    if(DEBUG)
     {
-      int hash = t.getIntData(COUNTRYID);
-      Region region = map.get(hash);
-      region.addLandTile(t);
+      for(LandTile.FIELD f : LandTile.FIELD.FLOAT_FIELDS)
+      {
+        System.out.println(f);
+        System.out.println(LandTile.getMax(f));
+        System.out.println(LandTile.getMin(f));
+      }
     }
     return mgr;
   }
 
 
+  /* test method reads a file and checks averages of values across the set */
   private static void validateFile(String file)
   {
     TileManager mgr = parseFile(file);
@@ -136,7 +177,7 @@ public class LandDataIO
 
     int nulls = 0;
     int no_data = 0;
-    for (LandTile t : mgr.allTiles())
+    for (LandTile t : mgr.dataTiles())
     {
       if (t == null)
       {
@@ -278,7 +319,7 @@ public class LandDataIO
       while (true)
       {
         int numDone = 0;
-        for (DATA_FIELD field: done.keySet()) if (done.get(field)) numDone++;
+        for (DATA_FIELD field : done.keySet()) if (done.get(field)) numDone++;
         if (total - numDone < 1) break;
         if (total - numDone < 3)
         {
@@ -349,13 +390,23 @@ public class LandDataIO
       {
         long start = System.currentTimeMillis();
         DataPoint dataPoint = datamap.get(tile);
-        if(dataPoint.hasAllData()) tile.putData(field.landTileField, dataPoint.getData(field) * DATA_FIELD.SCALE);
+        if (dataPoint.hasAllData())
+        {
+          tile.putData(field.landTileField, dataPoint.getData(field) *
+                                            DATA_FIELD.SCALE);
+        }
         long end = System.currentTimeMillis();
-        if(end-start > 1000) System.out.println("taking a long time to put data into a single " +
-                                                "landtile: " + (end - start));
+        if (end - start > 1000)
+        {
+          System.out.println("taking a long time to put data into a single " +
+                             "landtile: " + (end - start));
+        }
 
-        if(++count%10000 == 0) System.out.println("put data in " + count + " tiles for field " +
-                                                  field);
+        if (++count % 10000 == 0)
+        {
+          System.out.println("put data in " + count + " tiles for field " +
+                             field);
+        }
       }
     }
 

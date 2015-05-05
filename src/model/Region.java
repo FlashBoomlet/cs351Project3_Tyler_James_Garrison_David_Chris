@@ -2,6 +2,7 @@ package model;
 
 import gui.displayconverters.MapConverter;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -22,33 +23,34 @@ public interface Region
 
   String getFlag();
 
-  public HashSet<? extends WorldCell> getAllCells();
-
-  public HashSet<? extends WorldCell> getArableCells();
-
   void setFlag(String flagLocation);
 
   List<MiniArea> getPerimeter();
 
   void setPerimeter(List<MiniArea> perimeter);
 
-  public void setLandCells(WorldArray worldArray, MapConverter converter);
+  void addLandTiles(Collection<LandTile> tiles);
 
-  public void setCountryData(CountryData data);
+  void setCountryData(CountryData data);
 
-  public CountryData getCountryData();
+  CountryData getCountryData();
 
-  public void setOfficialCountry();
+  void setOfficialCountry();
 
-  public boolean getOfficialCountry();
+  boolean getOfficialCountry();
 
-  public void setFirstCrops();
+  void setFirstCrops();
 
-  public void setCrops();
-
+  void setCrops();
 
   boolean containsMapPoint(MapPoint mapPoint);
 
 
   void addLandTile(LandTile tile);
+
+
+  Collection<LandTile> getArableCells();
+
+
+  Collection<LandTile> getLandTiles();
 }

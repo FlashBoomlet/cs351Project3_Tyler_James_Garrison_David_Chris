@@ -1,8 +1,13 @@
 package model;
 
 import main.SettingsScreen;
+import model.common.EnumCropType;
 
+import java.util.Collection;
 import java.util.HashSet;
+
+import static model.common.EnumCropType.*;
+
 
 /**
  * @author Tyler Lynch <lyncht@unm.edu>
@@ -896,11 +901,11 @@ public class CountryData
 
   private void calculateProduction(Region region)
   {
-    HashSet<WorldCell> relevantCells = region.getArableCells();
+    Collection<LandTile> relevantCells = region.getArableCells();
     int [] landNums = new int [15];
-    for (WorldCell cell : relevantCells) {
+    for (LandTile cell : relevantCells) {
       switch(cell.getCrop()) {
-        case "Corn":
+        case CORN:
           if (cell.getCropState() == 1)
           {
             landNums[0] = landNums[0] + 1;
@@ -914,7 +919,7 @@ public class CountryData
             landNums[2] = landNums[2] + 1;
           }
           break;
-        case "Wheat":
+        case WHEAT:
           if (cell.getCropState() == 1)
           {
             landNums[3] = landNums[3] + 1;
@@ -928,7 +933,8 @@ public class CountryData
             landNums[5] = landNums[5] + 1;
           }
           break;
-        case "Rice":
+        case RICE:
+
           if (cell.getCropState() == 1)
           {
             landNums[9] = landNums[9] + 1;
@@ -942,7 +948,7 @@ public class CountryData
             landNums[11] = landNums[11] + 1;
           }
           break;
-        case "Soy":
+        case SOY:
           if (cell.getCropState() == 1)
           {
             landNums[6] = landNums[6] + 1;
@@ -956,7 +962,7 @@ public class CountryData
             landNums[8] = landNums[8] + 1;
           }
           break;
-        case "Other":
+        case OTHER_CROPS:
           if (cell.getCropState() == 1)
           {
             landNums[12] = landNums[12] + 1;

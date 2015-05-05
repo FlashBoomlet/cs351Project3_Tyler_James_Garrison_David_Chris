@@ -1,6 +1,7 @@
 package gui.regionlooks;
 
 import gui.Camera;
+import model.LandTile;
 
 
 /**
@@ -38,10 +39,14 @@ public class RegionViewFactory
   private final static RegionView SOY_VIEW = new RegionSoyView();
   private final static RegionView OTHER_VIEW = new RegionOtherView();
   private final static RegionView ORGANIC_VIEW = new RegionOrganicView();
-  private final static RegionView AVG_TEMPERATURE_VIEW = new RegionAverageTemperatureView();
-  private final static RegionView HIGH_TEMPERATURE_VIEW = new RegionHighTemperatureView();
-  private final static RegionView LOW_TEMPERATURE_VIEW = new RegionLowTemperatureView();
-  private final static RegionView PRECIPITATION_VIEW = new RegionPrecipitationView();
+  private final static RegionView AVG_TEMPERATURE_VIEW =
+      new LandTileView(LandTile.FIELD.CURRENT_ANNUAL_MEAN_TEMPERATURE);
+  private final static RegionView HIGH_TEMPERATURE_VIEW =
+      new LandTileView(LandTile.FIELD.CURRENT_MAX_TEMPERATURE_OF_WARMEST_MONTH);
+  private final static RegionView LOW_TEMPERATURE_VIEW =
+      new LandTileView(LandTile.FIELD.CURRENT_MIN_TEMPERATURE_OF_COLDEST_MONTH);
+  private final static RegionView PRECIPITATION_VIEW =
+      new LandTileView(LandTile.FIELD.CURRENT_ANNUAL_PRECIPITATION);
   private final static RegionView BIRTH_RATE_VIEW = new RegionBirthRateView();
   private final static RegionView MIGRATION_RATE_VIEW = new RegionMigrationRateView();
   private final static RegionView MORTALITY_RATE_VIEW = new RegionMortalityRateView();

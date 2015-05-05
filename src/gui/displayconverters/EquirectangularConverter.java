@@ -94,8 +94,8 @@ public class EquirectangularConverter extends MapConverter
   @Override
   public Point mapPointToPoint(MapPoint mp)
   {
-    int x = (int) (lonToX(mp.getLon()) * SCALING_FACTOR);
-    int y = (int) (latToY(mp.getLat()) * SCALING_FACTOR);
+    int x = (int) (lonToX(mp.getLon()));
+    int y = (int) (latToY(mp.getLat()));
     return new Point(x, y);
   }
 
@@ -176,4 +176,5 @@ public class EquirectangularConverter extends MapConverter
     }
     return lines;
   }
+
 }

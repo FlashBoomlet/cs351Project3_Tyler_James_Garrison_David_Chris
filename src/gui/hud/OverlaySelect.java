@@ -104,6 +104,7 @@ public class OverlaySelect extends JPanel
             break;
           case 9:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.AVG_TEMPERATURE);
+            System.out.println("set that thing");
             break;
           case 10:
             MapPane.presenter.setCurrentOverlay(RegionViewFactory.Overlay.HIGH_TEMPERATURE);

@@ -57,7 +57,6 @@ public class TileManager
   public static final double NOISE_RADIUS = 100; /* in km */
 
   private static final Random RNG = new Random();
-  private World world;
 
   private LandTile[][] tiles = new LandTile[ROWS][COLS];
 
@@ -179,13 +178,11 @@ public class TileManager
    Mutates all the tile data based on projections maintained within each tile
    and noise added randomly.
    */
-  public void stepTileData()
+  public void updateTiles()
   {
     List<LandTile> tiles = dataTiles();
     for (LandTile tile : tiles)
     {
-      int currentYear = world.getCurrentYear();
-      tile.stepTile(END_YEAR - currentYear);
     }
 
     /* shuffle tiles before adding noise */
@@ -214,12 +211,15 @@ public class TileManager
     {
       if (NO_DATA != t) dataTiles.add(t);
     }
-    return  dataTiles;
+    return dataTiles;
   }
 
 
-  /* adds noise to the parameters of all the tiles within the NOISE_RADIUS of
-    a given tile */
+  /*
+    reimplement this in terms of new LandTile data format, if adding noise in a given radius is
+    desired.
+   */
+  @Deprecated
   private void addNoiseByTile(LandTile tile)
   {
     int centerRow = latToRow(tile.getLat());
@@ -232,22 +232,17 @@ public class TileManager
     int minCol = centerCol - (int) (NOISE_RADIUS / DX_KM);
     int maxCol = centerCol + (int) (NOISE_RADIUS / DX_KM);
 
-    /* get the source tile's data.
-      All noise is added as a function of these values */
-    float minTemp = tile.getMinAnnualTemp();
-    float maxTemp = tile.getMaxAnnualTemp();
-    float pmTemp = tile.getAvgNightTemp();
-    float amTemp = tile.getAvgDayTemp();
-    float rain = tile.getRainfall();
-
-    /* noise is also a function of two random numbers in range [0,1]
-    (generated once per source?) */
+    /*
+    noise is a function of two random numbers in range [0,1]
+    (generated once per source?)
+    */
     double r1 = RNG.nextDouble();
     double r2 = RNG.nextDouble();
 
-    float dMaxMinTemp = calcTileDelta(minTemp, maxTemp, r1, r2);
-    float dAMPMTemp = calcTileDelta(pmTemp, amTemp, r1, r2);
-    float dRainfall = calcTileDelta(0, rain, r1, r2);
+    /*
+    use calcTileDelta here to get delta vals for given fields
+    min, max r1 and r2 are params to use
+    */
 
     LandTile neighbor;
 
@@ -276,9 +271,7 @@ public class TileManager
 
           double r3 = RNG.nextDouble() * 2;
 
-          float toAddMaxMin = scaleDeltaByDistance(dMaxMinTemp, dist, r3);
-          float toAddAMPM = scaleDeltaByDistance(dAMPMTemp, dist, r3);
-          float toAddRain = scaleDeltaByDistance(dRainfall, dist, r3);
+          /* can use scaleDeltaByDistance() here to add noise to various fields */
 
         }
       }

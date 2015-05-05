@@ -66,10 +66,6 @@ public class GUIRegion
     }
   }
 
-  public void setLandCells(WorldArray worldArray)
-  {
-    region.setLandCells(worldArray, converter);
-  }
 
   /**
    * Get the center of shipping location
@@ -242,6 +238,13 @@ public class GUIRegion
     ny = new NextYear();
     ny.start();
   }
+
+
+  public Collection<LandTile> getLandTiles()
+  {
+    return region.getLandTiles();
+  }
+
 
   private class NextYear extends Thread
   {

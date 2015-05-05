@@ -212,10 +212,12 @@ public class Game
         allRegions.addAll(xmlRegions);
 
         world = new World(allRegions);
+        world.setPresenter(worldPresenter);
         MapConverter converter = new EquirectangularConverter();
 
         worldPresenter = new WorldPresenter(converter, world);
         worldPresenter.setBackgroundRegions(xmlRegions);
+        worldPresenter.setModelRegions(xmlRegions);
 
         settingsScreen = new SettingsScreen(frameWidth,frameHeight,worldPresenter);
         new CountryCSVParser( worldPresenter.getAllRegions() );

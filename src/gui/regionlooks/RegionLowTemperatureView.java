@@ -40,22 +40,7 @@ class RegionLowTemperatureView implements RegionView
 
         Camera.CAM_DISTANCE distance = WorldPresenter.calcDistance(main.Game.getCamera());
         if (!gRegion.isActive() && distance == Camera.CAM_DISTANCE.CLOSE_UP || distance == Camera.CAM_DISTANCE.MEDIUM) {
-          HashSet<WorldCell> relevantCells = gRegion.getRegion().getAllCells();
-          for (WorldCell cell : relevantCells) {
-            int cellX = (int) converter.lonToX(cell.getLon());
-            int cellY = (int) converter.latToY(cell.getLat());
-            if(cameraBounds.contains(cellX, cellY)){
-              int select = (int) ((cell.getAnnualLow() + 50.0) * LIMIT);
-              if (select < 0) select = 0;
-              if (select < colors.length)
-                color = colors[select];
-              else
-                color = colors[colors.length - 1];
-
-              g.setColor(color);
-              g.fillOval(cellX, cellY, 990, 680);
-            }
-          }
+          /* implement shit here */
         }
       }
     }
