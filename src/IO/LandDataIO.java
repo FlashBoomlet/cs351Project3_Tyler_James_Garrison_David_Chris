@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static model.LandTile.FIELD.*;
+import static model.LandTile.Field.*;
 
 
 /**
@@ -23,8 +23,15 @@ import static model.LandTile.FIELD.*;
  description:
  <p/>
  IO class dedicated to generating and parsing land data.  Nested RawDataParser class is used
- for
- generating a new set o */
+ for generating a new set of data from the files that can be found from worldclim.org.  Raw data
+ files are NOT a part of the repo.  Must be downloaded and named appropriately.  Files must be
+ generic binary files and fit the class constants (2.5 arc-minute resolution, 8640 data columns,
+ 3600 data rows) If they are not, the class constants must be modified.
+ Projection raw data files are only available as GeoTiffs and must be converted to two-byte unsigned
+ int ENVI format for reading.
+ If you really want to mess with this and are unsure of how to do so, consult David Ringo
+ davidringo@unm.edu
+ */
 public class LandDataIO
 {
 
@@ -131,8 +138,8 @@ public class LandDataIO
     TileManager mgr = new TileManager();
     try (FileInputStream in = new FileInputStream(filename))
     {
-      byte bytes[] = new byte[LandTile.FIELD.SIZE_IN_BYTES];
-      ByteBuffer buf = ByteBuffer.allocate(LandTile.FIELD.SIZE_IN_BYTES);
+      byte bytes[] = new byte[LandTile.Field.SIZE_IN_BYTES];
+      ByteBuffer buf = ByteBuffer.allocate(LandTile.Field.SIZE_IN_BYTES);
       LandTile tile;
       while (in.read(bytes) != -1)
       {
@@ -286,6 +293,10 @@ public class LandDataIO
     }
 
 
+    /* threaded multiple DataField reading function.  Reads each field in a separate thread and
+      returns once all threads have completed.  Occassionally hangs up... not sure why.  Be careful.
+      Takes 10-15 minutes to read all the DataFields from file (39 60Mb files)
+     */
     private void appendData(Collection<DATA_FIELD> fields)
     {
       final Map<DATA_FIELD, Boolean> done = new ConcurrentHashMap<>();
@@ -331,6 +342,9 @@ public class LandDataIO
     }
 
 
+    /* return all the LandTiles in this RawDataReader for which their associated DataPoint
+      hasAllData();
+     */
     private Collection<LandTile> getCompleteTiles()
     {
       Collection<LandTile> tiles = new ArrayList<>();
@@ -339,6 +353,10 @@ public class LandDataIO
     }
 
 
+    /* read a single DataField from a file determined by the field's filename
+      values are stored in the DataPoint map as they are read, and binned according to the
+      TileManager's projection
+     */
     private void readField(DATA_FIELD field)
     {
       long start = System.currentTimeMillis();
@@ -390,6 +408,7 @@ public class LandDataIO
     }
 
 
+    /* helper for converting bytes to signed int values */
     private static int twoByteToSignedInt(byte first, byte second)
     {
       /* raster data is little-endian, two-byte signed ints */
@@ -397,7 +416,11 @@ public class LandDataIO
     }
 
 
-    public static Collection<LandTile> retainAndIDRegions(TileManager mgr, List<Region> regions)
+    /* associates the LandTiles in a TileManager with a given list of Regions, using the region
+    name hashcode values as IDs (unlikely to change, though if they do, they can be regenerated
+    easily enough).
+     */
+    private static Collection<LandTile> retainAndIDRegions(TileManager mgr, List<Region> regions)
     {
       Region last = regions.get(0);
       Collection<LandTile> tiles = new ArrayList<>();
@@ -406,7 +429,7 @@ public class LandDataIO
       {
         if (last.containsMapPoint(tile.getCenter()))
         {
-          tile.putData(LandTile.FIELD.COUNTRYID, last.getName().hashCode());
+          tile.putData(LandTile.Field.COUNTRYID, last.getName().hashCode());
           tiles.add(tile);
           count++;
         }
@@ -418,7 +441,7 @@ public class LandDataIO
             if (region.containsMapPoint(tile.getCenter()))
             {
               last = region;
-              tile.putData(LandTile.FIELD.COUNTRYID, last.getName().hashCode());
+              tile.putData(LandTile.Field.COUNTRYID, last.getName().hashCode());
               tiles.add(tile);
               break;
             }
@@ -497,16 +520,16 @@ public class LandDataIO
       static final float SCALE = 0.1f;
       final String filename;
       final int noDataVal;
-      final LandTile.FIELD landTileField;
+      final LandTile.Field landTileField;
 
 
-      DATA_FIELD(String filename, int noData, LandTile.FIELD landTileField)
+
+      DATA_FIELD(String filename, int noData, LandTile.Field landTileField)
       {
         this.landTileField = landTileField;
         this.filename = filename;
         noDataVal = noData;
       }
-
 
       int idx()
       {
@@ -515,6 +538,7 @@ public class LandDataIO
     }
 
 
+    /* nested helper class maintains running means of all fields read for a given LandTile */
     private static class DataPoint
     {
 
@@ -523,7 +547,7 @@ public class LandDataIO
       final boolean[] hasData = new boolean[DATA_FIELD.SIZE];
 
 
-      public DataPoint()
+      private DataPoint()
       {
         Arrays.fill(data, 0);
         Arrays.fill(points, 0);
@@ -531,7 +555,7 @@ public class LandDataIO
       }
 
 
-      public void putData(DATA_FIELD field, float val)
+      private void putData(DATA_FIELD field, float val)
       {
         hasData[field.idx()] = true;
         data[field.idx()] =
@@ -540,20 +564,20 @@ public class LandDataIO
       }
 
 
-      public boolean hasData(DATA_FIELD field)
+      private boolean hasData(DATA_FIELD field)
       {
         return hasData[field.idx()];
       }
 
 
-      public boolean hasAllData()
+      private boolean hasAllData()
       {
         for (boolean b : hasData) if (!b) return false;
         return true;
       }
 
 
-      public float getData(DATA_FIELD field)
+      private float getData(DATA_FIELD field)
       {
         return data[field.idx()];
       }

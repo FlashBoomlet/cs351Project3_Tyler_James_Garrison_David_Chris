@@ -1,12 +1,12 @@
 package gui.regionlooks;
 
 
-import gui.ColorsAndFonts;
 import gui.GUIRegion;
 import gui.displayconverters.EquirectangularConverter;
 import gui.displayconverters.MapConverter;
 import model.LandTile;
 import model.TileManager;
+import model.common.EnumCropType;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -25,22 +25,23 @@ import java.awt.geom.Point2D;
  Basic strategy is to find minimum and maximum values for a given field and scale colors through
  either a restricted range of hues in the HSL colorspace or through greyscale, where white
  represents the max and black the min.
+
  */
 public class LandTileView implements RegionView
 {
 
   private final MapConverter converter = new EquirectangularConverter();
-  private final LandTile.FIELD field;
+  private final LandTile.Field field;
   private float max;
   private float min;
   private boolean init = true;
 
 
   /**
-   Construct a new LandTileView for a given FIELD
-   @param field FIELD to be rendered by this view
+   Construct a new LandTileView for a given Field
+   @param field Field to be rendered by this view
    */
-  public LandTileView(LandTile.FIELD field)
+  public LandTileView(LandTile.Field field)
   {
     this.field = field;
   }
@@ -70,7 +71,10 @@ public class LandTileView implements RegionView
     /* get range of values if not already determined.
       Range is read from disk when LandTiles are loaded, so order of operations matters, and with
       all RegionViews being made in a static context (see RegionViewFactory) the *correct*
-      ordering is probably not guaranteed.  Hence the  initialization check here.
+      ordering is probably not guaranteed.  Hence the initialization check here.
+      Range is not read on demand, since this method is called NumberOfCountries *
+      NumberOfRepaintsPerSecond times per second, and involves quick, but not insignificant
+      hashmap lookups.
      */
     if (init)
     {
@@ -94,32 +98,7 @@ public class LandTileView implements RegionView
       height = height * (1 + Math.abs(Math.sin(Math.toRadians(tile.getLat()))));
 
       /* make the pretty colors...make it lighter if region is active */
-      Color color;
-      if(field == null)
-      {
-        switch(tile.getCrop())
-        {
-          case CORN:
-            color = new Color(155, 151, 53);
-            break;
-          case SOY:
-            color = new Color(105, 234, 100);
-            break;
-          case WHEAT:
-            color = new Color(207, 160, 122);
-            break;
-          case RICE:
-            color = new Color(62, 163, 193);
-            break;
-          case OTHER_CROPS:
-            color = new Color(167, 142, 209);
-            break;
-          default:
-            color = Color.white;
-            break;
-        }
-      }
-      else color = getScaledColor(tile.getData(field), field, min, max);
+      Color color = getScaledColor(tile.getData(field), field, min, max);
       if(active) color = color.brighter();
 
       /* file the shape */
@@ -129,10 +108,10 @@ public class LandTileView implements RegionView
   }
 
 
-  /* make a color for a value somewhere in between min and max values, given the FIELD from which
+  /* make a color for a value somewhere in between min and max values, given the Field from which
   that value came
    */
-  private static Color getScaledColor(float data, LandTile.FIELD field, float min, float max)
+  private static Color getScaledColor(float data, LandTile.Field field, float min, float max)
   {
     float scale = (data - min) / (max - min);
     switch (field)
@@ -157,5 +136,32 @@ public class LandTileView implements RegionView
         /* default behavior makes a greyscale color */
         return new Color(scale, scale, scale);
     }
+  }
+
+  private static Color getScaledColor(EnumCropType c, LandTile.Field field, float min, float max)
+  {
+    Color color;
+    switch(c)
+    {
+      case CORN:
+        color = new Color(155, 151, 53);
+        break;
+      case SOY:
+        color = new Color(105, 234, 100);
+        break;
+      case WHEAT:
+        color = new Color(207, 160, 122);
+        break;
+      case RICE:
+        color = new Color(62, 163, 193);
+        break;
+      case OTHER_CROPS:
+        color = new Color(167, 142, 209);
+        break;
+      default:
+        color = Color.white;
+        break;
+    }
+    return color;
   }
 }

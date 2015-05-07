@@ -3,10 +3,9 @@ package model;
 
 import model.common.EnumCropType;
 
-import static model.LandTile.FIELD.*;
+import static model.LandTile.Field.*;
 import static model.common.EnumCropType.*;
 
-import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -27,14 +26,14 @@ public class LandTile
 {
 
   public static final LandTile NO_DATA = new LandTile(-180, 0); /* in Pacific, no man's land */
-  private static final Map<FIELD, Float> maxVals = new HashMap<>();
-  private static final Map<FIELD, Float> minVals = new HashMap<>();
+  private static final Map<Field, Float> maxVals = new HashMap<>();
+  private static final Map<Field, Float> minVals = new HashMap<>();
   private static final Random RNG = new Random();
-  private static final float RANDOM_VARIANCE = 0.01f;
+  private static final float RANDOM_VARIANCE = 0.5f;
   private static final double RANDOMNESS_FACTOR = 1d;
 
-  private final Map<FIELD, Float> floatData = new HashMap<>();
-  private final Map<FIELD, Integer> intData = new HashMap<>();
+  private final Map<Field, Float> floatData = new HashMap<>();
+  private final Map<Field, Integer> intData = new HashMap<>();
 
   private MapPoint center;
   private EnumCropType currentCrop = NONE;
@@ -75,7 +74,7 @@ public class LandTile
                         "Received: %d%n", SIZE_IN_BYTES, len));
     }
 
-    for (FIELD field : FIELD.values())
+    for (Field field : Field.byteBufferValues())
     {
       if (isFloatField(field))
       {
@@ -97,14 +96,14 @@ public class LandTile
   }
 
 
-  public static float getMax(FIELD field)
+  public static float getMax(Field field)
   {
     Float val = maxVals.get(field);
     return val == null ? 0 : val;
   }
 
 
-  public static float getMin(FIELD field)
+  public static float getMin(Field field)
   {
     Float val = minVals.get(field);
     return val == null ? 0 : val;
@@ -156,27 +155,34 @@ public class LandTile
   }
 
 
-  public float getData(FIELD field)
+  public float getData(Field field)
   {
     if (isFloatField(field))
     {
       return getFloatData(field);
     }
-    else
+    else if (isIntField(field))
     {
       return getIntData(field);
     }
+    else if(field == CROP_TYPE)
+    {
+      return currentCrop.ordinal();
+    }
+    else return 0f;
   }
 
 
-  private float getFloatData(FIELD field)
+  /* checks floatData map, return data if present, 0 otherwise */
+  private float getFloatData(Field field)
   {
     Float val = floatData.get(field);
     return val == null ? 0 : val;
   }
 
 
-  public int getIntData(FIELD field)
+  /* checks intData map, returns data if present, 0 otherwise */
+  public int getIntData(Field field)
   {
     Integer val = intData.get(field);
     return val == null ? 0 : val;
@@ -186,8 +192,8 @@ public class LandTile
   /**
    Updates the cell's crop for the next year.
 
-   @param newCrop
-   @param newState
+   @param newCrop   new EnumCropType to put in this LandTile
+   @param newState  new crop state to put in this LandTile
    */
   public void update(EnumCropType newCrop, Float newState)
   {
@@ -208,33 +214,50 @@ public class LandTile
   }
 
 
+  /**
+   @return  a ByteBuffer representing this LandTile according to the indexing scheme defined in the
+   Field enum in this class
+   */
   public ByteBuffer toByteBuffer()
   {
     ByteBuffer buf = ByteBuffer.allocate(SIZE_IN_BYTES);
-    for (FIELD field : FIELD.FLOAT_FIELDS) buf.putFloat(field.byteIndex(), getFloatData(field));
-    for (FIELD field : FIELD.INT_FIELDS) buf.putInt(field.byteIndex(), getIntData(field));
+    for (Field field : Field.FLOAT_FIELDS) buf.putFloat(field.byteIndex(), getFloatData(field));
+    for (Field field : Field.INT_FIELDS) buf.putInt(field.byteIndex(), getIntData(field));
     return buf;
   }
 
 
+  /**
+   @return the center longitude of this LandTile
+   */
   public double getLon()
   {
     return center.getLon();
   }
 
 
+  /**
+   @return the center latitiude of this LandTile
+   */
   public double getLat()
   {
     return center.getLat();
   }
 
 
+  /**
+   @return the center MapPoint of this tile. (model space)
+   */
   public MapPoint getCenter()
   {
     return center;
   }
 
 
+  /**
+   @return this tile's crop state (used by planting algorithm defined by Tyler, Tim and David's
+   Milestone II planting algorithm
+   */
   public float getCropState()
   {
     return cropState;
@@ -245,30 +268,65 @@ public class LandTile
    Set this LandTile's data for a given field
 
    @param field
-   FIELD to set
+   Field to set
    @param val
    value to set
+   @return true if data was successfully placed, false otherwise
    */
-  public void putData(FIELD field, int val)
+  public boolean putData(Field field, int val)
   {
+
     if (isIntField(field))
     {
       intData.put(field, val);
+      return true;
     }
-    else
+    else if (isFloatField(field))
     {
       floatData.put(field, Float.valueOf(val));
+      return true;
     }
+    return false;
   }
 
 
-  
+  /**
+   Overridden method that handles putting EnumCropType data in this LandTile (only if the field
+   parameter is Field.CROP_TYPE).  This does not incur planting penalties! Use this only if that
+   is the desired behavior.
+
+   @param field
+   Field enum to put data at.  If not CROP_TYPE, nothing is change, false is returned
+   @param crop
+   EnumCropType to put in this tile
+
+   @return true if data was successfully mutated, false otherwise
+   */
+  public boolean putData(Field field, EnumCropType crop)
+  {
+    if (field == CROP_TYPE)
+    {
+      currentCrop = crop;
+      return true;
+    }
+    return false;
+  }
+
+
+  /**
+   @return the current EnumCropType planted in this LandTile
+   */
   public EnumCropType getCrop()
   {
     return currentCrop;
   }
 
 
+  /**
+   Update this tile's crop state and crop for the first year
+   @param crop  EnumCropType to plant in this LandTile
+   @param state cropState to set
+   */
   public void updateFirstYear(EnumCropType crop, float state)
   {
     cropState = state;
@@ -276,22 +334,35 @@ public class LandTile
   }
 
 
+  /**
+   Step this tile based on the current date given in a Calendar object.  Data are interpolated
+   based on projections and mutated randomly with a normal distribution and constant variance and
+   randomness parameters (class local)
+   @param calendar  Calender object holding the current date
+   */
   public void step(Calendar calendar)
   {
     int currentYear = calendar.get(Calendar.YEAR);
 
 
-    for (FIELD field : CURRENT_FIELDS)
+    for (Field field : CURRENT_FIELDS)
     {
       float curr = getData(field);
       float proj = getData(currentToProjected(field));
       curr = interpolate(curr, proj, (float) currentYear / World.END_YEAR);
-      curr *= RNG.nextGaussian() * RANDOM_VARIANCE * RANDOMNESS_FACTOR;
+      curr += RNG.nextGaussian() * RANDOM_VARIANCE * RANDOMNESS_FACTOR;
       putData(field, curr);
     }
   }
 
 
+  /**
+   Interpolate across a range given a percentage in that range
+   @param start start of the range
+   @param end   end of the range
+   @param percentage  percentage to interpolate
+   @return the interpolated value
+   */
   public static float interpolate(float start, float end, float percentage)
   {
     return start + (end - start) * percentage;
@@ -300,29 +371,33 @@ public class LandTile
 
   /**
    Set this LandTile's data for a given field
-
-   @param field
-   FIELD to set
+   * @param field
+   Field to set
    @param val
-   value to set
+ value to set
+    @return true if data was put successfully, false otherwise
    */
-  public void putData(FIELD field, float val)
+  public boolean putData(Field field, float val)
   {
     if (isFloatField(field))
     {
       floatData.put(field, val);
+      return true;
     }
-    else
+    else if (isIntField(field))
     {
       intData.put(field, (int) val);
+      return true;
     }
+    return false;
   }
 
 
   /**
-   FIELD enum generalizes the binary format the LandTiles can be stored in
+   Field enum generalizes the binary format the LandTiles can be stored in and all the possible
+   data fields they may hold
    */
-  public enum FIELD
+  public enum Field
   {
     CURRENT_ANNUAL_MEAN_TEMPERATURE,
     CURRENT_DIURNAL_RANGE,
@@ -365,9 +440,10 @@ public class LandTile
     ELEVATION,
     LONGITUDE,
     LATITUDE,
-    COUNTRYID,;
+    COUNTRYID,
+    CROP_TYPE,;
 
-    public static final FIELD[] CURRENT_FIELDS =
+    public static final Field[] CURRENT_FIELDS =
         {
             CURRENT_ANNUAL_MEAN_TEMPERATURE,
             CURRENT_DIURNAL_RANGE,
@@ -390,7 +466,7 @@ public class LandTile
             CURRENT_PRECIPITATION_OF_COLDEST_QUARTER,
         };
 
-    public static final FIELD[] PROJECTED_FIELDS =
+    public static final Field[] PROJECTED_FIELDS =
         {
             PROJECTED_ANNUAL_MEAN_TEMPERATURE,
             PROJECTED_DIURNAL_RANGE,
@@ -413,7 +489,7 @@ public class LandTile
             PROJECTED_PRECIPITATION_OF_COLDEST_QUARTER,
         };
 
-    public static final FIELD[] FLOAT_FIELDS =
+    public static final Field[] FLOAT_FIELDS =
         {
             CURRENT_ANNUAL_MEAN_TEMPERATURE,
             CURRENT_DIURNAL_RANGE,
@@ -458,35 +534,43 @@ public class LandTile
             LATITUDE,
         };
 
-    public static final FIELD[] INT_FIELDS =
+    public static final Field[] INT_FIELDS =
         {
             COUNTRYID,
         };
 
-    public static final List<FIELD> INT_FIELD_LIST = Arrays.asList(INT_FIELDS);
-    public static final List<FIELD> FLOAT_FIELD_LIST = Arrays.asList(FLOAT_FIELDS);
+    public static final List<Field> INT_FIELD_LIST = Arrays.asList(INT_FIELDS);
+    public static final List<Field> FLOAT_FIELD_LIST = Arrays.asList(FLOAT_FIELDS);
 
-    /* FIELD enum must only reference data whose primitive size (in bytes) is 4 */
+    /* Field enum must only reference data whose primitive size (in bytes) is 4, could be
+     changed, later */
     public static final int FIELD_SIZE_IN_BYTES = 4;
-    public static final int SIZE = values().length;
-    public static final int SIZE_IN_BYTES = SIZE * FIELD_SIZE_IN_BYTES;
+    public static final int SIZE_IN_BYTES = byteBufferValues().size() * FIELD_SIZE_IN_BYTES;
 
 
-    public static boolean isFloatField(FIELD f)
+    public static boolean isFloatField(Field f)
     {
       return FLOAT_FIELD_LIST.contains(f);
     }
 
 
-    public static boolean isIntField(FIELD f)
+    public static boolean isIntField(Field f)
     {
       return INT_FIELD_LIST.contains(f);
     }
 
 
-    public static FIELD currentToProjected(FIELD current)
+    public static Field currentToProjected(Field current)
     {
-      return FIELD.values()[current.ordinal() + CURRENT_FIELDS.length];
+      return Field.values()[current.ordinal() + CURRENT_FIELDS.length];
+    }
+
+
+    public static Collection<Field> byteBufferValues()
+    {
+      Collection<Field> list = new ArrayList<>(FLOAT_FIELD_LIST);
+      list.addAll(INT_FIELD_LIST);
+      return list;
     }
 
 
@@ -498,7 +582,7 @@ public class LandTile
 
 
     /**
-     @return this FIELD's byte buffer index
+     @return this Field's byte buffer index
      */
     int byteIndex()
     {

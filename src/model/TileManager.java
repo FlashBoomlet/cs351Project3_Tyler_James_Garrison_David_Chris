@@ -54,19 +54,28 @@ public class TileManager
 
   private LandTile[][] tiles = new LandTile[ROWS][COLS];
 
-  private List<LandTile> countryTiles = new ArrayList<>();
   private List<LandTile> allTiles;
   private List<LandTile> dataTiles;
   private double randomPercent = 1f;
   private int lastYear;
 
 
+  /**
+   instantiate a new TileManager.  All tiles are LandTile.NO_DATA.  Use LandTileIO to create
+   a TileManager from land-data.bil file.
+   */
   public TileManager()
   {
     for (LandTile[] row : tiles) Arrays.fill(row, NO_DATA);
   }
 
 
+  /**
+   Creates a new TileManager with LandTiles that are empty of all data save Longitude and Latitude
+   This is really only useful when creating a new data file.
+
+   @return The minimally defined TileManager
+   */
   public static TileManager createEmptyTileManager()
   {
     TileManager mgr = new TileManager();
@@ -93,14 +102,18 @@ public class TileManager
   }
 
 
-  /* return the theoretical center longitude line of tiles in a given column */
+  /**
+   @return the approximate center longitude line of tiles in a given column
+   */
   public static double colToLon(int col)
   {
     return LON_RANGE * ((double) col) / COLS - MAX_LON + 0.5 * DLON;
   }
 
 
-  /* return the theoretical center latitude line of tiles in a given row */
+  /**
+   @return the approximate center latitude line of tiles in a given row
+   */
   public static double rowToLat(int row)
   {
     /* bring the row index into floating point range [-1,1] */
@@ -170,29 +183,29 @@ public class TileManager
 
   /**
    Mutates all the tile data based on projections maintained within each tile
-   and noise added randomly.
-   * @param calendar
+   and noise added randomly, given a Calendar that represents the current date.
+
+   @param calendar
+   Calendar object holding the current date, used to interpolate data
    */
   public void updateTiles(Calendar calendar)
   {
 
-    if(calendar.get(Calendar.YEAR) == lastYear) return;
+    if (calendar.get(Calendar.YEAR) == lastYear) return;
     lastYear = calendar.get(Calendar.YEAR);
-
+    System.out.println("updating tiles");
     List<LandTile> tiles = dataTiles();
     for (LandTile tile : tiles)
     {
-//      tile.step(calendar);
+      tile.step(calendar);
     }
 
-    /* shuffle tiles before adding noise */
-    Collections.shuffle(tiles);
-
-    /* take ten percent of tiles, add noise */
-    for (LandTile tile : tiles.subList(0, tiles.size() / 10))
-    {
-      /* noise adding is now done per tile in tile.step()*/
-    }
+    /* adding noise according to the old algorithm is deprecated, but would be done here.
+       shuffle list of tiles and for each tile in the first 10% addNoiseByTile
+       addNoiseByTile must be reimplemented as well.  Basic framework is still there, but fields
+       to add noise to must be defined using the new Field enum data access and setting interface
+       in the LandTiles
+     */
   }
 
 
@@ -328,6 +341,13 @@ public class TileManager
   }
 
 
+  /**
+   Similar to retainAll methods in the Java Collections Framework, this method retains all the
+   LandTiles in a given Collection, and removes (sets to NO_DATA) all the tiles not in it.
+
+   @param toRetain
+   Collection holding the LandTiles to retain
+   */
   public void retainAll(Collection<LandTile> toRetain)
   {
     for (LandTile t : toRetain) putTile(t);
@@ -344,7 +364,6 @@ public class TileManager
         }
       }
     }
-    System.out.println(count + " tiles converted to NO_DATA");
   }
 
 
@@ -367,7 +386,9 @@ public class TileManager
   /**
    remove a given tile from the underlying set of tiles.  This has the effect
    of placing a NO_DATA tile at the location of the given tile in the full
-   projection (assuming the given tile was found)
+   projection (assuming the given tile was found).  This uses direct equality comparison, rather
+   than a equals() function, as such a method may be cost prohibitive given the size of the
+   data contained in LandTiles.
 
    @param tile
    tile to remove
@@ -404,11 +425,6 @@ public class TileManager
       tiles[row][col] = NO_DATA;
     }
 
-    /* pull all tiles from method ref, to guarantee the list exists */
-    ret = ret || allTiles().remove(tile);
-    ret = ret || countryTiles.remove(tile);
-
-    /* ret is true iff the tile was a member of one of the underlying structures */
     return ret;
   }
 

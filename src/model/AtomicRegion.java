@@ -2,16 +2,11 @@ package model;
 
 
 import java.util.*;
-import java.awt.geom.Path2D;
 
-import java.awt.geom.Rectangle2D;
-import java.util.*;
-
-import gui.displayconverters.MapConverter;
 import model.common.CropIdeals;
 import model.common.EnumCropType;
 
-import static model.LandTile.FIELD.*;
+import static model.LandTile.Field.*;
 import static model.common.EnumCropType.*;
 
 
