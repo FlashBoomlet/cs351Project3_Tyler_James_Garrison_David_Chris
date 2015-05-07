@@ -65,7 +65,6 @@ public class LandTileView implements RegionView
   @Override
   public void draw(Graphics g, GUIRegion gRegion)
   {
-
     Graphics2D g2 = (Graphics2D) g;
 
     /* get range of values if not already determined.
