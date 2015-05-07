@@ -98,7 +98,9 @@ public class LandTileView implements RegionView
       height = height * (1 + Math.abs(Math.sin(Math.toRadians(tile.getLat()))));
 
       /* make the pretty colors...make it lighter if region is active */
-      Color color = getScaledColor(tile.getData(field), field, min, max);
+      Color color;
+      if(field == LandTile.Field.CROP_TYPE) color = getScaledColor(tile.getCrop(), tile);
+      else color = getScaledColor(tile.getData(field), field, min, max);
       if(active) color = color.brighter();
 
       /* file the shape */
@@ -138,7 +140,7 @@ public class LandTileView implements RegionView
     }
   }
 
-  private static Color getScaledColor(EnumCropType c, LandTile.Field field, float min, float max)
+  private static Color getScaledColor(EnumCropType c, LandTile tile)
   {
     Color color;
     switch(c)

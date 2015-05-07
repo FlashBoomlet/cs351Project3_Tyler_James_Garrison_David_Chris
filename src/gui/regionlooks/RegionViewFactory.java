@@ -48,7 +48,7 @@ public class RegionViewFactory
   private final static RegionView PRECIPITATION_VIEW =
       new LandTileView(LandTile.Field.CURRENT_ANNUAL_PRECIPITATION);
   private static final RegionView CROP_VIEW =
-      new LandTileView(null);
+      new LandTileView(LandTile.Field.CROP_TYPE);
   private final static RegionView BIRTH_RATE_VIEW = new RegionBirthRateView();
   private final static RegionView MIGRATION_RATE_VIEW = new RegionMigrationRateView();
   private final static RegionView MORTALITY_RATE_VIEW = new RegionMortalityRateView();
